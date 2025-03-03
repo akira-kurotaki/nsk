@@ -1,0 +1,300 @@
+﻿@{
+    // Layout = "~/Views/Shared/_LayoutBodyOnly.cshtml";
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+@model NskWeb.Areas.F102.Models.D102010.D102010Model
+
+@using (Html.BeginForm("Init", "D102010", FormMethod.Post, new { id = "D102010Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="table-responsive table-thead-container">
+        <div class="main_title btn_group_left mt_5">
+            <h3>危険段階データ取込（危険段階別料率）（テキスト）</h3>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <br />
+    <div class="table-responsive table-thead-container" style="height:50rem">
+        <!-- Information Section -->
+        <div class="btn_area">
+            <label>年産:</label>
+            <label style="padding-left: 180px;">@Model.D102010Info.SNensanHikiuke</label>
+            <br />
+            <label>共済目的:</label>
+            <label style="padding-left: 150px;">@Model.KyosaiMokutekiMeisho</label>
+            <br />
+        </div>
+        <br />
+        <br />
+
+        @* 添付ファイル エリア*@
+        <h4 class="sub_title">
+            取込
+        </h4>
+
+        <div style="display: flex; align-items: center; height: 1.5em;">
+            @Html.ValidationMessageFor(model => model.MessageArea, "", new { @class = "text-danger", @id = "validationMessage", style = "min-height: 1.5em; line-height: 1.5em; margin-top: 0.5rem; display: block;" })
+        </div>
+
+        <div class="table-responsive" style="width: 100%;">
+            <table class="table common_table" style="width: 100%; border: none;">
+                <colgroup class="td_label"></colgroup>
+                <tr>
+                    <td style="width: 300px;">取込ファイル<i class="required">必須</i></td>
+                    <td style="vertical-align: middle;">
+                        @Html.TextBoxFor(model => model.TorikomiFilePath, new
+                            {
+                                @style = "background-color: white; text-align:left; width:100%; border: none;",
+                                @class = "fileNameArea"
+                            })
+                    </td>
+                    <td style="width: 15%; text-align: center; border-top: none; border-bottom: none; border-right: none;">
+                        <label for="UploadFile" style="background-color:gainsboro; text-align: center;padding: 4px; width: 120px; border: 1px solid #ccc; cursor: pointer;">
+                            ファイル選択
+                        </label>
+                        <input type="file" id="UploadFile" name="UploadFile" style="display: none;" onchange="fnSearchFile();" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        @* ボタンエリア *@
+        <br />
+        <br />
+        <div style="display: flex; justify-content: flex-end; width: 100%; position: absolute; right: 5%; padding: 0;">
+            <button type="button" class="btn btn-primary mt_15" id="homeBtn" style="width: 120px;">戻る</button>
+            <button type="button" class="btn btn-warning mt_15" id="torikomiBtn" style="width: 120px;">取込</button>
+        </div>
+
+
+    </div>
+    @Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ00010", "取り込み"), "OK", "キャンセル")
+    @Html.Dialog("SystemError", "エラー", MessageUtil.Get("MF00001"), "閉じる")
+}
+
+@section scripts {
+    <script type="text/javascript">
+        window.onload = function() {
+            var torikomiBtn = document.getElementById('torikomiBtn');
+
+            var updateKengenFlg = @Model.UpdateKengenFlg.ToString().ToLower();
+            console.log(updateKengenFlg);
+            if (updateKengenFlg) {
+                torikomiBtn.disabled = false;
+            } else {
+                torikomiBtn.disabled = true;
+            }
+        }
+
+        function fnSearchFile() {
+            const fileInput = document.getElementById('UploadFile');
+            const file = fileInput.files[0]; // 最初のファイルを取得
+            const validationMessage = document.getElementById('validationMessage');
+
+            // エラーメッセージ初期化
+            if (validationMessage) {
+                validationMessage.textContent = "";
+                validationMessage.style.display = "none";
+            }
+
+            // ファイルが選択された場合
+            if (file) {
+                // ファイル名を表示
+                document.querySelector('.fileNameArea').value = file.name;
+            }
+        }
+
+        document.getElementById('homeBtn').addEventListener('click', function () {
+            // ホームに戻る
+           window.location.href = '/';
+        });
+        $(function () {
+        @* 取込ボタン *@
+            $("#torikomiBtn").click(function () {
+                console.log("test");
+                var validationError = 'input-validation-error';
+                const validationMessage = document.getElementById('validationMessage');
+                validationMessage.style.display = "block";
+                validationMessage.textContent = "";
+                $('#MessageArea').empty();
+                // 文字色を赤色に設定
+                validationMessage.style.setProperty('color', 'red', 'important');
+
+        @* 変数：アップロードファイルパス *@
+                var uploadFilePath = $("#UploadFile").val();
+        @* 変数：アップロードファイル名 *@
+                var uploadFileNm = uploadFilePath.substring(uploadFilePath.lastIndexOf("\\") + 1, uploadFilePath.lastIndexOf("."));
+
+                var message = "";
+                console.log(@ConfigUtil.Get("ClientValidationEnabled"));
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+        @* 属性チェック *@
+                    if (!$("#D102010Form").valid()) {
+        @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                        $('.input-validation-error:first').focus();
+                        console.log("test2");
+                        return;
+                    }
+
+                    var uploadFiles = [];
+                    console.log("test4");
+                    var files = $("#UploadFile").prop("files");
+                    var fileLength = files.length;
+                    for (var i = 0; i < fileLength; i++) {
+                        uploadFiles.push(files[i]);
+                    }
+
+        @* ［画面：アップロードファイル］にファイルが存在しない場合 *@
+                    var length = uploadFiles.length;
+                    if (length == 0) {
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = "@MessageUtil.Get("ME91005", "取込ファイル")";
+                        return;
+                    }
+
+        @* ［画面：アップロードファイル］ファイルタイプのチェック  *@
+                    var errorFlg = checkExtensionAllowed(uploadFiles);
+                    console.log("errorFlg ; " + errorFlg);
+                    if (!errorFlg) {
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = "@MessageUtil.Get("ME10050")";
+                        return;
+                    }
+
+        @* 最大ファイル合計サイズチェック *@
+                    var fileTotalSize = 0;
+                    for (var i = 0; i < length; i++) {
+                        var size = uploadFiles[i].size;
+                        fileTotalSize = fileTotalSize + size;
+                    }
+
+        @* ［画面：アップロードファイル］のサイズが許容ファイルサイズを超えている場合 *@
+                    // 許容ファイルサイズ
+                    var uploadFileMaxSize = 10485760; // TODO: aasettings.json にファイルサイズが追加されたら置き換える
+                    if (fileTotalSize > uploadFileMaxSize) {
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = "@MessageUtil.Get("ME91007", "10MB"))"; // TODO: aasettings.json にファイルサイズ（表示用）が追加されたら置き換える
+                        return;
+                    }
+
+        @* ファイル名称の禁止文字チェック *@
+                    const forbiddenChars = /[<>:"\/\\|?*]/;
+                    for (var j = 0; j < length; j++) {
+                        var fileName = uploadFiles[j].name;
+                        if (forbiddenChars.test(fileName)) {
+                            validationMessage.style.display = "block";
+                            validationMessage.textContent ="@MessageUtil.Get("ME90015", "ファイル名に「¥　/　:　*　?　\"　<　>　| 」")";
+                            return;
+                        }
+                    }
+
+        @* ［画面：アップロードファイル］のファイル名が100文字を超える場合 *@
+                    for (var j = 0; j < length; j++) {
+                        var fileName = uploadFiles[j].name;
+                        if (fileName.length > 100)
+                        {
+                            validationMessage.style.display = "block";
+                            validationMessage.textContent ="@MessageUtil.Get("ME91008", "100")";
+                            return;
+                        }
+                    }
+                }
+        @* 確認ダイアログ *@
+        @Html.ShowConfirm("insertDialog");
+            });
+
+        @* 取込ボタン:確認ダイアログにOKを押下後の処理 *@
+            $("#insertConfirm").click(function () {
+                var url = '@Url.Action("CreatBatchReport", "D102010", new { area = "F102" })';
+                var formData = new FormData($('#D102010Form').get(0));
+                var file = $('#UploadFile').prop('files')[0];
+                if (file == null) {
+                    var file = "";
+                }
+                formData.append('UploadFile', file, file.name);
+
+                 $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (data) {
+                    if (data.success) {
+                        // 処理成功時
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = data.message;
+                        validationMessage.style.setProperty('color', 'black', 'important');
+                    } else {
+                        // エラー時
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = data.message;
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // AJAXリクエストが失敗した場合
+                    validationMessage.style.display = "block";
+                    validationMessage.textContent = "@MessageUtil.Get("ME01645", "サーバーリクエスト")";
+                });
+            })
+        });
+
+        @* ファイル拡張子チェック *@
+                function checkExtensionAllowed(uploadFiles) {
+            var errorfileName = "";
+            var isAllowed = true;  // 初期値は true に設定
+            var length = uploadFiles.length;
+            var allowedExtension = "txt";  // 許可される拡張子
+            var extensions = allowedExtension.split(","); // 許可される拡張子を配列に分割
+            console.log("extensions ; " + extensions);
+            console.log("length ; " + length);
+
+            for (var i = 0; i < length; i++) {
+                var file = uploadFiles[i];
+                var fileName = file.name;
+                var mimeType = file.type;  // MIMEタイプの取得
+                console.log("fileName ; " + fileName);
+                console.log("MIME Type ; " + mimeType);
+
+                // MIMEタイプが 'text/plain' かどうかのチェック
+                if (mimeType !== "text/plain") {
+                    errorfileName = fileName;  // MIMEタイプが合わない場合はエラーを記録
+                    console.log("Error: MIME type is not text/plain");
+                    isAllowed = false;
+                    break;
+                }
+
+                // 拡張子のチェック
+                var point = fileName.lastIndexOf(".");
+                var type = fileName.substr(point + 1);  // 拡張子の取得
+                console.log("type ; " + type);
+                var isExtensionAllowed = false;
+
+                $.each(extensions, function (index, obj) {
+                    if (obj == type.toLowerCase()) {
+                        console.log("Extension is allowed");
+                        isExtensionAllowed = true;
+                        return false;  // `return false` は $.each のループを途中で抜ける
+                    }
+                });
+
+                if (!isExtensionAllowed) {
+                    errorfileName = fileName;
+                    console.log("Error: Extension is not allowed");
+                    isAllowed = false;
+                    break;  // 拡張子が許可されていない場合、ループを終了
+                }
+            }
+
+            if (!isAllowed) {
+                console.log("Error file name: " + errorfileName);
+            }
+
+            return isAllowed;
+        }
+
+
+    </script>
+}
