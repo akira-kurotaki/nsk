@@ -1,0 +1,122 @@
+﻿@model NskWeb.Areas.F105.Models.D105030.D105030Model
+@{
+    var startIndex = 400;
+    int tabIndex = startIndex;
+
+    string[] kengens = ["更新権限"];
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen))
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+
+<div id="Kumiaiinto" class="tab-pane" role="tabpanel" aria-labelledby="KumiaiintoTab">
+    <!-- 組合員等毎設定 -->
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "KumiaiintoForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+        @Html.HiddenFor(model => model.KumiaiintoSettei.Exists)
+        @Html.HiddenFor(model => model.KumiaiintoSettei.Xmin)
+
+        <div class="table-thead-container">
+            <h4 class="sub_title">組合員等毎設定入力</h4>
+            <div class="mb-3">
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KanyuState, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KanyuKeitai, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.ChiikiSyudanCd, null, new { @class = "text-danger" })</div>
+                <div>@Html.MessageAreaFor(model => model.KumiaiintoSettei.MessageArea4, "", new { @class = "text-danger", id = "MessageArea4" })</div>
+            </div>
+            <br />
+            <table class="table table-condensed table-sub-bordered">
+                <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+                <colgroup style="width: 30%;"></colgroup>
+                <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+                <colgroup style="width: 30%;"></colgroup>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KanyuState,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KanyuState))
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <fieldset>
+                                <legend class="visually-hidden">表示順２</legend>
+                                @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState, 
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.MEMBER.ToString(),
+                                                  new { @id = "KumiaiintoSettei_KanyuState_1", @class = "magic-radio", tabindex = tabIndex++ })
+                                <label for="KumiaiintoSettei_KanyuState_1">加入</label>
+                                @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NO_MEMBER.ToString(),
+                                                  new { @id = "KumiaiintoSettei_KanyuState_2", @class = "magic-radio", tabindex = tabIndex++ })
+                                <label for="KumiaiintoSettei_KanyuState_2">未加入</label>
+                            </fieldset>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KanyuKeitai,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KanyuKeitai))
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.KumiaiintoSettei.KanyuKeitai,
+                                          Model.KumiaiintoSettei.KanyuKeitaiList,
+                                          "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.JidoKeizoku,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.JidoKeizoku))
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.KumiaiintoSettei.JidoKeizoku,
+                                          new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.Kaijo,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.Kaijo))
+                    </td>
+                    <td>
+                        @Model.KumiaiintoSettei.Kaijo
+                    </td>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KaijoHiduke,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KaijoHiduke))
+                    </td>
+                    <td>
+                        @DateUtil.GetJapaneseDate(Model.KumiaiintoSettei.KaijoHiduke)
+                    </td>
+                </tr>
+                @if (Model.KyosaiMokutekiCd == "")
+                {
+                    // ※共済目的が陸稲の場合
+                    <tr>
+                        <td>
+                            @Html.LabelFor(model => model.KumiaiintoSettei.ChiikiSyudanCd,
+                                     Html.DisplayNameFor(model => model.KumiaiintoSettei.ChiikiSyudanCd))
+                        </td>
+                        <td>
+                            @Html.EditorFor(model => model.KumiaiintoSettei.ChiikiSyudanCd, "",
+                                     new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++ } })
+                        </td>
+                        <td colspan="2" id="@Html.IdFor(model => model.KumiaiintoSettei.ChiikiSyudanNm)">
+                            @Model.KumiaiintoSettei.ChiikiSyudanNm
+                        </td>
+                    </tr>
+                }
+            </table>
+            <br />
+            <div class="table-responsive table-thead-container">
+                <div class="btn_area btn_group_right">
+                    <button type="button" class="btn btn-primary" id="RegistKanyuJokyo" name="RegistKanyuJokyo" tabindex=@tabIndex++ @buttonDisableAttr>
+                        登録
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

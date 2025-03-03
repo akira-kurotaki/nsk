@@ -1,0 +1,26 @@
+﻿@model SynMain.Areas.F900.Models.D900002.D900002Model
+@{
+    Layout = "~/Views/Shared/_LayoutBodyOnly.cshtml";
+    ViewBag.HeaderPatternId = Model.HeaderPatternId;
+}
+<div class="table-responsive table-thead-container">
+    <div class="main_title btn_group_left mt_5">
+        <h3>業務エラー</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+<div class="table-responsive table-thead-container" style="height:50rem">
+    下記の理由によりエラーが発生しました。<br />
+    <br />
+    <table style="margin-left:3rem">
+        <tr>
+            <td>発生日時：</td>
+            <td>@Model.ErrorTime</td>
+        </tr>
+        <tr>
+            <td>発生理由：</td>
+            <td><div style="white-space: pre-wrap;">@Model.ErrorReason</div></td>
+        </tr>
+    </table>
+</div>

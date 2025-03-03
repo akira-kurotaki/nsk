@@ -1,0 +1,82 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor Accessor
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msapplication-config" content="none" />
+    <title>農業保険システム ベースアプリケーション</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    @{
+        CoreConst.ScreenMode screenMode = Accessor.HttpContext.Session.GetString(CoreConst.SESS_SCREEN_MODE) == null ? CoreConst.ScreenMode.PC : (CoreConst.ScreenMode)Enum.Parse(typeof(CoreConst.ScreenMode), Accessor.HttpContext.Session.GetString(CoreConst.SESS_SCREEN_MODE));
+        if (screenMode == CoreConst.ScreenMode.Tablet)
+        {
+            <link rel="stylesheet" href="~/css/common-tablet.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/css/magic-check.css" asp-append-version="true" />
+        }
+        else
+        {
+            <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+            <link rel="stylesheet" href="~/css/magic-check.css" asp-append-version="true" />
+        }
+    }
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/lib/respond.js/dest/respond.min.js"></script>
+    <script src="~/lib/popper.js/dist/umd/popper.min.js"></script>
+    @{
+        if (true == ViewBag.DatePickerSeireki)
+        {
+            <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.js"></script>
+            <script src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+
+            @* 時間カレンダー用 *@
+            <link rel="stylesheet" href="~/lib/fontawesome-free/css/all.min.css" />
+            <link rel="stylesheet" href="~/lib/tempus-dominus/dist/css/tempus-dominus.min.css" />
+            <script src="~/lib/fontawesome-free/js/all.min.js"></script>
+            <script src="~/lib/tempus-dominus/dist/js/tempus-dominus.min.js"></script>
+        }
+        else
+        {
+            <script src="~/js/bootstrap-datepicker-custom.js"></script>
+            <script src="~/js/bootstrap-datepicker-custom.ja.min.js"></script>
+        }
+    }
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/js/core.js" asp-append-version="true"></script>
+    <script src="~/js/app.js" asp-append-version="true"></script>
+</head>
+<body class="main_bg">
+
+    <!-- header -->
+    @await Html.PartialAsync("_Header")
+    <!-- /header -->
+
+    <!-- contents -->
+    <div class="mdl_inner center-block">
+
+        <!-- main_area -->
+        <div class="main_area">
+
+            <!-- main_data -->
+            <div class="main_data">
+                @RenderBody()
+            </div>
+            <!-- /main_data -->
+
+        </div>
+        <!-- /main_area -->
+
+    </div>
+    <!-- /contents -->
+    @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,999 @@
+﻿@using NskWeb.Areas.F105.Models.D105030
+@model D105030Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>加入申込書入力（水稲）</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+    <tr>
+        <td>組合員等コード：</td>
+        <td colspan="2">@Model.KumiaiinToCd</td>
+    </tr>
+    <tr>
+        <td>氏名：</td>
+        <td colspan="2">@Model.FullNm</td>
+    </tr>
+    <tr>
+        <td>電話番号：</td>
+        <td colspan="2">@Model.Tel</td>
+    </tr>
+    <tr>
+        <td>支所：</td>
+        <td>@Model.ShishoCd</td>
+        <td>@Model.ShishoNm</td>
+    </tr>
+    <tr>
+        <td>市町村：</td>
+        <td>@Model.ShichosonCd</td>
+        <td>@Model.ShichosonNm</td>
+    </tr>
+    <tr>
+        <td>大地区：</td>
+        <td>@Model.DaichikuCd</td>
+        <td>@Model.DaichikuNm</td>
+    </tr>
+    <tr>
+        <td>小地区：</td>
+        <td>@Model.ShochikuCd</td>
+        <td>@Model.ShochikuNm</td>
+    </tr>
+    <tr>
+        <td>合併時識別：</td>
+        <td colspan="2">@Model.GappeijiShikibetu</td>
+    </tr>
+</table>
+<br />
+
+<ul id="myTab" class="nav nav-tabs mb-3" role="tablist">
+    <li role="presentation" class="nav-item">
+        <button type="button" id="HikiukeTab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#Hikiuke" role="tab" aria-controls="Hikiuke" aria-selected="true">
+            引受情報入力
+        </button>
+    </li>
+    <li role="presentation" class="nav-item">
+        <button type="button" id="KumiaiintoTab" class="nav-link" data-bs-toggle="tab" data-bs-target="#Kumiaiinto" role="tab" aria-controls="Kumiaiinto" aria-selected="false">
+            組合員等毎設定
+        </button>
+    </li>
+    <li role="presentation" class="nav-item">
+        <button type="button" id="RuibetuSetteiTab" class="nav-link" data-bs-toggle="tab" data-bs-target="#RuibetuSettei" role="tab" aria-controls="RuibetuSettei" aria-selected="false">
+            類別設定
+        </button>
+    </li>
+</ul>
+
+<div id="myTabContent" class="tab-content p-2 ">
+    <!-- 引受情報入力 -->
+    @await Html.PartialAsync("_D105030HikiukeInputTab", Model)
+
+    <!-- 組合員等毎設定 -->
+    @await Html.PartialAsync("_D105030KumiaiintoTab", Model)
+
+    <!-- 類別設定 -->
+    @await Html.PartialAsync("_D105030RuibetsuSetteiTab", Model)
+</div>
+<br/>
+<div class="table-responsive table-thead-container">
+    <div class="btn_area btn_group_right">
+        <button type="button" class="btn btn-primary" id="CheckHikiuke" name="CheckHikiuke">
+            チェック処理実行
+        </button>
+        <button type="button" class="btn btn-primary" id="Back" name="Back">
+            戻る
+        </button>
+    </div>
+</div>
+
+@* 引受情報登録確認ダイアログ *@
+@Html.Confirm("RegistHikiukeConfirm", "RegistHikiukeConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+@* 組合員等毎設定登録確認ダイアログ *@
+@Html.Confirm("RegistKanyuJokyoConfirm", "RegistKanyuJokyoConfirmOK", "確認",
+        MessageUtil.Get(Model.KumiaiintoSettei.Exists ? "MQ10018" : "MQ10019"), "OK", "キャンセル")
+
+@* 類別設定登録確認ダイアログ *@
+@Html.Confirm("RegistRuibetsuConfirm", "RegistRuibetsuConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+@* 統計単位地域コード、危険段階入力登録確認ダイアログ *@
+@Html.Confirm("RegistTokeiTaniConfirm", "RegistTokeiTaniConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+
+@* 引受検索結果ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("HikiukePagerDiscardEditsConfirm", "HikiukePagerConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+@* 類別設定ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("RuibetsuPagerDiscardEditsConfirm", "RuibetsuPagerConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+@* 統計単位地域コード、危険段階入力ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("TokeiTaniPagerDiscardEditsConfirm", "TokeiTaniPagerConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+
+@* クリア 編集内容破棄確認ダイアログ *@
+@Html.Confirm("ClearConfirm", "ClearConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "初期画面", "保存"), "OK", "キャンセル")
+@* 検索 編集内容破棄確認ダイアログ *@
+@Html.Confirm("SearchConfirm", "SearchConfirmOK", "確認",
+            MessageUtil.Get("MQ10025", "新しい検索結果", "保存"), "OK", "キャンセル")
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "加入申込書入力組合員等検索（共通）画面", "保存"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+        var hikiukePagerUrl = "";
+        var ruibetsuPagerUrl = "";
+        var kikenDankaiPagerUrl = "";
+
+        @* 引受検索結果ページャー *@
+        function hikiukeResultPagerClick(url) {
+            hikiukePagerUrl = url;
+            @Html.ShowDialog("HikiukePagerDiscardEditsConfirm");
+        };
+        $("#HikiukePagerConfirmOK").click(function () {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: hikiukePagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea2').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+            });
+        });
+
+
+        @* 類別設定ページャー *@
+        function ruibetsuResultPagerClick(url) {
+            ruibetsuPagerUrl = url;
+            @Html.ShowDialog("RuibetsuPagerDiscardEditsConfirm");
+        };
+        $("#RuibetsuPagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: ruibetsuPagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea5').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#RuibetsuSetteiResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+            });
+        });
+
+        @* 危険段階区分ページャー *@
+        function kikenDankaiKbnPagerClick(url) {
+            kikenDankaiPagerUrl = url;
+            @Html.ShowDialog("TokeiTaniPagerDiscardEditsConfirm");
+        };
+        $("#TokeiTaniPagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: kikenDankaiPagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea6').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#KikenDankaiKbnResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+            });
+        });
+
+        $(function () {
+            @* クリア処理 *@
+            $("#Clear").click(function(){
+                var recCnt = $("#HikiukeSearchResult_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("ClearConfirm");
+                } else {
+                    $("#ClearConfirmOK").click();
+                }
+            });
+            $("#ClearConfirmOK").click(function(){
+                var initLink = "@Url.Action("Index", "D105030", new { area = "F105" })";
+                location.href = initLink;
+            });
+
+            @* 引受情報検索処理 *@
+            $("#Search").click(function () {
+                var recCnt = $("#HikiukeSearchResult_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("SearchConfirm");
+                } else {
+                    $("#SearchConfirmOK").click();
+                }
+            });
+            $("#SearchConfirmOK").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                @* ２．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#HikiukeForm").valid();
+                if (!checkValid) {
+                    @* ２．１．１．エラーの場合
+                        エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                }
+
+                @* ２．２．独自チェック *@
+                @* ２．２．１．検索条件チェック *@
+                @* (1)	[画面：耕地番号（開始）]と[画面：耕地番号（終了）]に値が入力されている、
+                 かつ、[画面：耕地番号（開始）]＞[画面：耕地番号（終了）]の場合、
+                 エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                $("#SearchCondition_KouchiNoFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KouchiNoTo").removeClass("input-validation-error");
+                var kouchiNoFrom = $('#SearchCondition_KouchiNoFrom').val();
+                var kouchiNoTo = $('#SearchCondition_KouchiNoTo').val();
+                if (kouchiNoFrom && kouchiNoTo && kouchiNoFrom > kouchiNoTo) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["耕地番号(開始)", "耕地番号(終了)"])");
+                    $("#SearchCondition_KouchiNoFrom").addClass("input-validation-error");
+                }
+
+                @* (2)	[画面：表示順キー１]が空欄以外、かつ、[画面：表示順キー２]と同一の場合、
+                 エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                var displaySort1 = $('#SearchCondition_DisplaySort1').val();
+                var displaySort2 = $('#SearchCondition_DisplaySort2').val();
+                if (displaySort1 && displaySort2 && displaySort1 == displaySort2) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10012", "表示順キー1", "表示順キー2")");
+                    $("#SearchCondition_DisplaySort2").addClass("input-validation-error");
+                }
+
+
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                @* チェックエラーなしの場合 *@
+                if ($("#HikiukeForm").valid() && "" == message) {
+                    var url = "@Url.Action("SearchHikiuke", "D105030", new { area = "F105" })";
+                    var formData = new FormData($("#HikiukeForm").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false,  //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        if (undefined != data.resultArea.errorMessages && data.resultArea.errorMessages.length > 0) {
+                            $('#MessageArea1').addClass("text-danger").html(data.resultArea.errorMessages[0]);
+                            $("html, body").scrollTop($('#HikiukeForm').offset().top);
+                        }
+                        else {
+                            // バリデーションエラー表示部の更新
+                            $('#SearchResultMessage').html(data.messageArea.partialView);
+                            // 検索結果表示部の更新
+                            $('#SearchResult').html(data.resultArea.partialView);
+                            // 計算結果部の更新
+                            $('#CalcResult').html(data.calcArea.partialView);
+
+                            // 検索後のバリデータ再設定
+                            $("#HikiukeForm").validate().resetForm();
+                            $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                            $.validator.unobtrusive.parse('#SearchResult');
+
+                            // カンマ編集機能再設定
+                            loadNumberAddComma();
+
+                            $("html, body").scrollTop($('#SearchResult').offset().top);
+                        }
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                    });
+                }
+            });
+
+            @* 引受情報入力行挿入 *@
+            $("#AddHikiukeRow").click(function () {
+                var url = "@Url.Action("AddHikiukeRow", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea2').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResultMessage').html(data.messageArea.partialView);
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#HikiukeForm").validate().resetForm();
+                        $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 引受情報選択行削除  引受情報入力でチェックされた行を削除する。 *@
+            $("#DelHikiukeRows").click(function () {
+                var url = "@Url.Action("DelHikiukeRows", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea2').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResultMessage').html(data.messageArea.partialView);
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#HikiukeForm").validate().resetForm();
+                        $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+
+            });
+
+            @* // 引受情報全選択  引受情報入力のすべての行をチェック状態にする。  *@
+            $("#SelAllHikiuke").click(function () {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', true);
+
+            });
+
+            @* // 引受情報選択解除  引受情報入力のすべての行を未チェック状態にする。 *@
+            $("#UnSelAllHikiuke").click(function () {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', false);
+
+            });
+
+            @* 一括設定欄クリア  一括設定欄の入力内容をクリアする。 *@
+            $("#ClearIkkatu").click(function () {
+                var checkboxs = $("#accordionGisInput input[type='checkbox']");
+                checkboxs.prop('checked', false);
+
+                var textboxs = $("#accordionGisInput input[type='text']");
+                textboxs.val('');
+                // 非活性にする
+                textboxs.attr('readonly', 'readonly');
+
+                // メッセージクリア用にバリデーションチェックを行う
+                $("#HikiukeForm").valid();
+            });
+
+            @* GIS項目一括設定 一括設定欄の入力内容をGIS項目に設定する。 *@
+            $("#SetIkkatsuGIS").click(function () {
+               // １．入力チェック
+               // １．１．チェックボックス未選択チェック
+               // GIS項目の全てのチェックボックスが未選択の場合、[メッセージエリア２]に以下のメッセージを表示して処理を中止する。
+                var checkboxs = $("#accordionGisInput input[type='checkbox']:checked");
+                if (checkboxs.length == 0)
+                {
+                    var message = "@MessageUtil.Get("ME10009", "GIS項目一括設定対象")";
+                    $("#MessageArea2").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+                $("#MessageArea2").html("");
+
+                checkboxs.each(function(idx, checkbox) {
+                    var key = checkbox.id;
+                    key = key.replace("SearchCondition_Check", "");
+                    var gisValKey = `#SearchCondition_Ikkatsu${key}`;
+                    var resultValKey = `#SearchResult label[id$='__Gis${key}']`;
+                    var text = $(gisValKey).val();
+                    $(resultValKey).text(text);
+                    resultValKey = `#SearchResult input[id$='__Gis${key}']`;
+                    $(resultValKey).val(text);
+                });
+            });
+
+            @* 引受情報登録 引受情報の入力内容を登録する。*@
+            $("#RegistHikiuke").click(function () {
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                // 前回のメッセージをクリアする
+                messageArea2.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#HikiukeForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#HikiukeForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistHikiukeConfirm");
+                }
+
+            });
+
+            $("#RegistHikiukeConfirmOK").click(function () {
+                // ２．１．「OK」押下時、引受情報入力フォームデータの送信
+                // ２．１．１．引受情報入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistHikiuke", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea2').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea2').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 引受情報計算 引受情報の入力内容から計算結果を算出する。*@
+            $("#CalcHikiuke").click(function() {
+                @* 前回のメッセージをクリアする *@
+                $('#MessageArea3').html("");
+        
+                var url = "@Url.Action("CalcHikiuke", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea3').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#CalcResult').html(data.partialView);
+                    }
+                    $("html, body").scrollTop($('#CalcResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 加入状況、加入形態、自動継続特約有無登録 組合員等毎の加入状況、加入形態、自動継続特約有無を登録する。*@
+            $("#RegistKanyuJokyo").click(function() {
+                var messageArea4 = $("span[data-valmsg-for='MessageArea4']");
+                // 前回のメッセージをクリアする
+                messageArea4.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#HikiukeForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#HikiukeForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistKanyuJokyoConfirm");
+                }
+            });
+
+            $("#RegistKanyuJokyoConfirmOK").click(function () {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．１．組合員等毎設定フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistKanyuJokyo", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#KumiaiintoForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea4').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea4').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#Kumiaiinto').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 地域集団名更新 地域集団コードに該当する氏名または法人名を表示する。 *@
+            $("#KumiaiintoSettei_ChiikiSyudanCd").blur(function() {
+                var url = "@Url.Action("UpdateChiikiSyudanName", "D105030", new { area = "F105" })";
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: {chiikiSyudanCd: $(`#${this.id}`).val() }
+                }).done(function (data) {
+                    if (data.chiikiSyudanNm != null) {
+                        $('#@Html.IdFor(model => model.KumiaiintoSettei.ChiikiSyudanNm)').html(data.chiikiSyudanNm);
+                    }
+                    $("html, body").scrollTop($('#Kumiaiinto').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 類別設定情報入力行挿入 類別設定入力行を挿入する。*@
+            $("#AddRuibetsuRow").click(function() {
+                var url = "@Url.Action("AddRuibetsuRow", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea5').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#RuibetsuSetteiResult').html(data.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#RuibetuSetteiForm").validate().resetForm();
+                        $("#RuibetuSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#RuibetsuSetteiResult');
+                    }
+                    $("html, body").scrollTop($('#RuibetsuSetteiResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 類別設定情報選択行削除 類別設定入力でチェックされた行を削除する。 *@
+            $("#DelRuibetsuRows").click(function() {
+                var url = "@Url.Action("DelRuibetsuRows", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea5').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#RuibetsuSetteiResult').html(data.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#RuibetuSetteiForm").validate().resetForm();
+                        $("#RuibetuSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#RuibetsuSetteiResult');
+                    }
+
+                    $("html, body").scrollTop($('#RuibetsuSetteiResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 類別設定情報全選択 類別設定入力ですべての行をチェック状態にする。 *@
+            $("#SelAllRuibetsu").click(function() {
+                var checkboxs = $("#RuibetsuSetteiResult input[type='checkbox']");
+                checkboxs.prop('checked', true);
+            });
+
+            @* 類別設定情報選択解除 類別設定入力ですべての行を未チェック状態にする。*@
+            $("#UnSelAllRuibetsu").click(function() {
+                var checkboxs = $("#RuibetsuSetteiResult input[type='checkbox']");
+                checkboxs.prop('checked', false);
+            });
+
+            @* 類別設定情報登録 類別設定入力の入力内容を登録する。*@
+            $("#RegistRuibetsu").click(function() {
+                var messageArea5 = $("span[data-valmsg-for='MessageArea5']");
+                // 前回のメッセージをクリアする
+                messageArea5.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#RuibetuSetteiForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#RuibetuSetteiForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistRuibetsuConfirm");
+                }
+            });
+            $("#RegistRuibetsuConfirmOK").click(function() {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．類別設定入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistRuibetsu", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea5').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea5').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#RuibetuSettei').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 統計単位地域コード、危険段階区分入力行挿入 統計単位地域コード、危険段階区分入力行を挿入する。*@
+            $("#AddTokeiTaniRow").click(function() {
+                var url = "@Url.Action("AddTokeiTaniRow", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#KikenDankaiKbnForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea6').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#KikenDankaiKbnResult').html(data.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#KikenDankaiKbnForm").validate().resetForm();
+                        $("#KikenDankaiKbnForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#KikenDankaiKbnResult');
+
+                        updateTokeiTaniChiikiCdEvent();
+
+                    }
+                    $("html, body").scrollTop($('#KikenDankaiKbnResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 統計単位地域コード、危険段階区分選択行削除 統計単位地域コード、危険段階区分入力でチェックされた行を削除する。*@
+            $("#DelTokeiTaniRows").click(function() {
+                var url = "@Url.Action("DelTokeiTaniRows", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#KikenDankaiKbnForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea6').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#KikenDankaiKbnResult').html(data.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#KikenDankaiKbnForm").validate().resetForm();
+                        $("#KikenDankaiKbnForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#KikenDankaiKbnResult');
+
+                        updateTokeiTaniChiikiCdEvent();
+                    }
+                    $("html, body").scrollTop($('#KikenDankaiKbnResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 統計単位地域コード、危険段階区分全選択 統計単位地域コード、危険段階区分入力ですべての行をチェック状態にする。*@
+            $("#SelAllTokeiTani").click(function() {
+                var checkboxs = $("#KikenDankaiKbnResult input[type='checkbox']");
+                checkboxs.prop('checked', true);
+            });
+
+            @* 統計単位地域コード、危険段階区分選択解除 統計単位地域コード、危険段階区分入力ですべての行を未チェック状態にする。*@
+            $("#UnSelAllTokeiTani").click(function() {
+                var checkboxs = $("#KikenDankaiKbnResult input[type='checkbox']");
+                checkboxs.prop('checked', false);
+            });
+
+            @* 統計単位地域コード、危険段階区分登録 統計単位地域コード、危険段階区分の入力内容を登録する。*@
+            $("#RegistTokeiTani").click(function() {
+                var messageArea6 = $("span[data-valmsg-for='MessageArea6']");
+                // 前回のメッセージをクリアする
+                messageArea6.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#KikenDankaiKbnForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#KikenDankaiKbnForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistTokeiTaniConfirm");
+                }
+            });
+            $("#RegistTokeiTaniConfirmOK").click(function() {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．類別設定入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistTokeiTani", "D105030", new { area = "F105" })";
+                var formData = new FormData($("#KikenDankaiKbnForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea6').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea6').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#KikenDankaiKbnForm').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* GIS項目チェックボックス変更時処理 GIS項目のチェックボックス状態に応じて入力欄の活性・非活性を変更する。*@
+            $("#accordionGisInput input[type='checkbox']").change(function() {
+                // UpdateGisInput
+                var key = this.id;
+                var checked = this.checked;
+                key = key.replace("SearchCondition_Check", "");
+                var gisValKey = `#SearchCondition_Ikkatsu${key}`;
+                if (checked) {
+                    // 活性にする
+                    $(gisValKey)[0].readOnly = false;
+                } else {
+                    // 非活性にする
+                    $(gisValKey)[0].readOnly = true;
+                }
+            });
+
+            @* 引受情報チェック 入力内容が妥当かチェック処理を行う。*@
+            $("#CheckHikiuke").click(function() {
+                $('#MessageArea1').html("");
+
+                var url = "@Url.Action("CheckHikiuke", "D105030", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function (data) {
+                    if (data.result != 0 && data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+ 
+                    } else if (data.result == 0 && data.message != null) {
+                        $('#MessageArea1').removeClass("text-danger").html(data.message);
+
+                    }
+                    $("html, body").scrollTop(0);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+
+            @* 統計単位地域コードテキストボックス 統計単位地域コードに該当する統計単位地域名を表示する。 *@
+            updateTokeiTaniChiikiCdEvent();
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                @Html.ShowDialog("BackConfirm");
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D105036", new { area = "F105" })";
+                var url = "@Url.Action("Back", "D105030", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+        });
+
+        function updateTokeiTaniChiikiCdEvent() {
+            $("#KikenDankaiKbnResult input[id$='__TokeiTaniChiikiCd']").blur(function() {
+                var url = "@Url.Action("UpdateTokeiTanniChiikiName", "D105030", new { area = "F105" })";
+                var targetId = this.id;
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { tokeiTanniChiikiCd: $(`#${targetId}`).val() }
+                }).done(function (data) {
+                    if (data.tokeiTanniChiikiNm != null) {
+                        targetId = targetId.replace("TokeiTaniChiikiCd", "TokeiTaniChiikiNm");
+
+                        $(`td#${targetId}`).html(data.tokeiTanniChiikiNm);
+                        $(`input#${targetId}`).val(data.tokeiTanniChiikiNm);
+                    }
+                    $("html, body").scrollTop($('#KikenDankaiKbnResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+        }
+    </script>
+}

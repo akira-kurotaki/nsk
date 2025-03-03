@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Common\ReportBase.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Reports\P0041\P0041Report.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Reports\BaseSectionReport.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Reports\P1001\P1001Report.rpx">
+      <SubType>Component</SubType>
+    </None>
+    <None Update="Reports\P1002\P1002Report.rpx">
+      <SubType>Component</SubType>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,205 @@
+﻿<script type="text/javascript">
+
+    // ■都道府県マルチドロップダウンリスト
+    function getTodofukenDropDownListData() {
+
+        var indexed_array = {};
+        var hidModelPropertyName = ($("#hidModelPropertyName").val() || "");
+        if (hidModelPropertyName !== "") {
+            hidModelPropertyName = hidModelPropertyName + "_";
+        }
+        indexed_array["IsTodofuken"] = toBoolean($("#" + hidModelPropertyName + "TodofukenDropDownList_IsTodofuken").val() || "");
+        indexed_array["IsKumiaito"] = toBoolean($("#" + hidModelPropertyName + "TodofukenDropDownList_IsKumiaito").val() || "");
+        indexed_array["IsShisho"] = toBoolean($("#" + hidModelPropertyName + "TodofukenDropDownList_IsShisho").val() || "");
+        indexed_array["TodofukenCd"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_TodofukenCd").val() || "";
+        indexed_array["KumiaitoCd"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").val() || "";
+        indexed_array["ShishoCd"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").val() || "";
+        indexed_array["ShichosonCd"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").val() || "";
+        indexed_array["DaichikuCd"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").val() || "";
+        indexed_array["ShochikuCd"] = $("#" + hidModelPropertyName + "_TodofukenDropDownList_ShochikuCd").val() || "";
+        indexed_array["ShochikuCdFrom"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").val() || "";
+        indexed_array["ShochikuCdTo"] = $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").val() || "";
+
+        return indexed_array;
+    }
+
+    $(function () {
+        var hidModelPropertyName = ($("#hidModelPropertyName").val() || "");
+        if (hidModelPropertyName !== "") {
+            hidModelPropertyName = hidModelPropertyName + "_";
+        }
+        // 都道府県
+        $("#" + hidModelPropertyName + "TodofukenDropDownList_TodofukenCd").on('change', function () {
+
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo option").remove();
+
+            if ($(this).val() === '') {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", true);
+                return;
+            }
+
+            var data = getTodofukenDropDownListData();
+            var url = '@Url.Action("Todofuken", "C000000", new { area = "F000" })';
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                cache: false,
+                async: false,
+            }).done(function (data) {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", true);
+
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").append($('<option>').val('').text(''));
+
+                if (data.length > 0) {
+                    $.each(data, function (idx, obj) {
+                        $option = $('<option>').val(obj.Value).text(obj.Text)
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").append($option);
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            });
+        });
+
+        // 組合等
+        $("#" + hidModelPropertyName + "TodofukenDropDownList_KumiaitoCd").on('change', function () {
+
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo option").remove();
+
+            if ($(this).val() === '') {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", true);
+                return;
+            }
+
+            var data = getTodofukenDropDownListData();
+            var url = '@Url.Action("Kumiaito", "C000000", new { area = "F000" })';
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                cache: false,
+                async: false,
+            }).done(function (data) {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", true);
+
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").append($('<option>').val('').text(''));
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").append($('<option>').val('').text(''));
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").append($('<option>').val('').text(''));
+
+                var shishoData = data.Shisho;
+                var shichosonData = data.Shichoson;
+                var daichikuData = data.Daichiku;
+
+                if (shishoData.length > 0) {
+                    $.each(shishoData, function (idx1, obj1) {
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_ShishoCd").append($('<option>').val(obj1.Value).text(obj1.Text));
+                    });
+                }
+
+                if (shichosonData.length > 0) {
+                    $.each(shichosonData, function (idx2, obj2) {
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_ShichosonCd").append($('<option>').val(obj2.Value).text(obj2.Text));
+                    });
+                }
+
+                if (daichikuData.length > 0) {
+                    $.each(daichikuData, function (idx3, obj3) {
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").append($('<option>').val(obj3.Value).text(obj3.Text));
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            });
+        });
+
+        // 大地区
+        $("#" + hidModelPropertyName + "TodofukenDropDownList_DaichikuCd").on('change', function () {
+
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom option").remove();
+            $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo option").remove();
+
+            var daichiku = $(this).val();
+
+            if (daichiku === '') {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", true);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", true);
+                return;
+            }
+
+            var data = getTodofukenDropDownListData();
+            var url = '@Url.Action("Daichiku", "C000000", new { area = "F000" })';
+
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                cache: false,
+                async: false,
+            }).done(function (data) {
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").prop("disabled", false);
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").prop("disabled", false);
+
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").append($('<option>').val('').text(''));
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").append($('<option>').val('').text(''));
+                $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").append($('<option>').val('').text(''));
+
+                if (data.length > 0) {
+                    $.each(data, function (idx, obj) {
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCd").append($('<option>').val(obj.Value).text(obj.Text));
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdFrom").append($('<option>').val(obj.Value).text(obj.Text));
+                        $("#" + hidModelPropertyName + "TodofukenDropDownList_ShochikuCdTo").append($('<option>').val(obj.Value).text(obj.Text));
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            });
+        });
+
+    });
+</script>

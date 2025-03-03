@@ -1,0 +1,366 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="msapplication-config" content="none" />
+    <title>ベースアプリケーション</title>
+    <link rel="stylesheet" href="../lib/bootstrap/dist/css/bootstrap.css" />
+    <style type="text/css">
+        body {
+            font-family: 'ヒラギノ角ゴ Pro W3','Hiragino Kaku Gothic Pro','メイリオ',Meiryo,'ＭＳ Ｐゴシック','MS PGothic',sans-serif;
+            font-size: 1.6rem;
+            font-size: 1.6rem !important;
+        }
+
+        html {
+            font-size: 1.0rem;
+        }
+
+        html {
+            font-size: 62.5%;
+        }
+
+        html {
+            height: 100%
+        }
+
+        .clearfix {
+            *zoom: 1;
+        }
+
+            .clearfix:before, .clearfix:after {
+                display: table;
+                content: "";
+                line-height: 0;
+            }
+
+            .clearfix:after {
+                clear: both;
+            }
+
+        .main_bg {
+            background: url(../images/main_bg.jpg) center center no-repeat;
+            background-attachment: fixed;
+            min-height: 100%;
+            background-size: cover;
+            display: flex;
+            display: -ms-flexbox;
+            flex-direction: column;
+            -ms-flex-direction: column;
+            height: 100%;
+            color: #000;
+            min-width: 102rem;
+        }
+
+        .form-control {
+            font-size: 1.6rem;
+            height: 3.6rem;
+            color: #000;
+        }
+
+
+        /* **********************************************************
+        common_width
+        ********************************************************** */
+
+        .mdl_inner {
+            max-width: 80%;
+            background: #f3f7fd;
+            padding: 1.0rem;
+            position: relative;
+            margin: 0 10%;
+        }
+
+        .mdl_inner_top {
+            max-width: 80%;
+            min-width: 100rem;
+            position: relative;
+            margin: 0 auto;
+        }
+
+        /* **********************************************************
+        common_margin_padding
+        ********************************************************** */
+        .mt_5 {
+            margin-top: 0.5rem;
+        }
+
+        /* **********************************************************
+        top_menu
+        ********************************************************** */
+        .top_sp_menu {
+            margin-bottom: 0 !important;
+            border: none;
+            border-radius: 0;
+            box-shadow: 0rem 0.5rem 0.7rem #5c6e94;
+            z-index: 8;
+            min-height: 9.4rem;
+            background: #4279b1;
+        }
+
+            .top_sp_menu .navbar-header_pop {
+                background: #4279b1;
+                width: 100%;
+                height: 100%;
+            }
+
+        .navbar-header_pop .top_area {
+            position: absolute;
+            width: 100%;
+            z-index: 2;
+            min-width: 100rem;
+            font-size: 1.4rem;
+        }
+
+        .navbar-header_pop .logo_area {
+            width: 39.5rem;
+            float: left;
+        }
+
+        .top_sp_menu .logo_pop {
+            display: inline-block;
+            margin-top: 1.6rem;
+            width: 33rem;
+            height: 3.0rem !important;
+            background: url(../images/logo.png) left center no-repeat;
+            vertical-align: top;
+        }
+
+        /**pop_header*/
+        .pop_header {
+            min-width: 48.1rem;
+            min-height: 6.4rem;
+        }
+
+            .pop_header .mdl_inner_top {
+                min-width: 48.1rem;
+            }
+
+            .pop_header .navbar-header_pop .top_area {
+                min-width: 20rem;
+            }
+
+
+        .user_close_pop {
+            display: inline-block;
+            padding-top: 0rem;
+            padding-right: 2.5rem;
+            float: right;
+        }
+
+            .user_close_pop span {
+                display: block;
+                text-align: center;
+                padding: 1.0rem 0;
+                font-size: 1.8rem;
+                color: #fff;
+            }
+
+            .user_close_pop i {
+                font-style: normal;
+                text-decoration: underline;
+            }
+
+            .user_close_pop a:link,
+            .user_close_pop a:visited {
+                color: #fff;
+                text-decoration: none !important;
+            }
+
+            .user_close_pop a:hover {
+                text-decoration: none !important;
+            }
+
+        /* **********************************************************
+        main_area
+        ********************************************************** */
+        .mdl_inner, .main_area, .main_data {
+            display: flex;
+            display: -ms-flexbox;
+            flex: 1 0 auto;
+            -ms-flex: 1 0 auto;
+            flex-direction: column;
+            -ms-flex-direction: column;
+        }
+
+        .main_data {
+            background: #fff;
+            padding: 2.0rem;
+        }
+
+        .main_title {
+            margin-bottom: 0;
+            margin-top: 0;
+            padding-bottom: 0.5rem;
+            font-size: 2.4rem !important;
+            display: inline-block;
+        }
+
+            .main_title h3 {
+                border-bottom: 0.3rem solid #5194d9;
+                margin-bottom: 0;
+                margin-top: 0;
+                padding-bottom: 0.5rem;
+                font-size: 2.4rem !important;
+            }
+
+        /* **********************************************************
+        button_group
+        ********************************************************** */
+        .btn_group_left {
+            float: left;
+            display: inline-block;
+        }
+
+        /* **********************************************************
+        table
+        ********************************************************** */
+        .table {
+            border-bottom: 0.1rem solid #ddd;
+        }
+
+            .table > tbody > tr > td,
+            .table > tbody > tr > th,
+            .table > tfoot > tr > td,
+            .table > tfoot > tr > th,
+            .table > thead > tr > td,
+            .table > thead > tr > th {
+                vertical-align: middle;
+                padding-top: 0.8rem;
+                padding-left: 0.8rem;
+            }
+
+        /* **********************************************************
+        media
+        ********************************************************** */
+        @media screen and (max-width:1600px) {
+            .mdl_inner, .user_area .mdl_inner {
+                max-width: 85%;
+                box-sizing: border-box;
+                margin: 0 7.5%;
+            }
+
+            .mdl_inner_top {
+                max-width: 85%;
+            }
+        }
+
+        @media screen and (max-width:1366px) {
+            .mdl_inner, .user_area .mdl_inner {
+                max-width: 90%;
+                box-sizing: border-box;
+                margin: 0 5%;
+            }
+
+            .mdl_inner_top {
+                max-width: 90%;
+            }
+        }
+
+        @media screen and (max-width:1280px) {
+            .mdl_inner, .user_area .mdl_inner {
+                max-width: 95%;
+                box-sizing: border-box;
+                margin: 0 2.5%;
+            }
+
+            .mdl_inner_top {
+                max-width: 95%;
+            }
+        }
+
+        @media screen and (max-width:1024px) {
+            .navbar-header .logo_area {
+                width: 41rem;
+                margin-left: 1rem;
+            }
+
+            .mdl_inner_top {
+                max-width: 100%;
+            }
+
+            .navbar-header .user_area {
+                margin-right: 2rem;
+            }
+
+            .mdl_inner, .user_area .mdl_inner {
+                max-width: 100%;
+                box-sizing: border-box;
+                margin: 0;
+            }
+        }
+    </style>
+
+</head>
+<body class="main_bg" style="min-width: 100%;">
+    <!-- header -->
+    <nav class="navbar top_sp_menu pop_header" role="navigation">
+        <div class="navbar-header_pop">
+            <div class="mdl_inner_top">
+                <div class="top_area">
+                    <div class="logo_area"> <span class="logo_pop"> </span> </div>
+                    <div class="user_close_pop">
+                        <a title="閉じる" id="close" href="javascript:window.open('/Static/Close.html', '_self').close();">
+                            <span class="bi bi-x-lg d-grid"></span> <i> 閉じる</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- /header -->
+    <!-- contents -->
+    <div class="mdl_inner center-block">
+        <!-- main_area -->
+        <div class="main_area">
+            <!-- main_data -->
+            <div class="main_data">
+                <div class="table-responsive table-thead-container">
+                    <div class="main_title btn_group_left mt_5">
+                        <h3> システムエラー</h3>
+                    </div>
+                    <div class="clearfix">
+                    </div>
+                </div>
+                <br />
+                <div class="table-responsive table-thead-container" style="height: 50rem;">
+                    ユーザ認証エラーが発生しました。システム管理者に連絡してください。<br /> <br />
+                    <table style="margin-left: 3rem;">
+                        <tbody>
+                            <tr>
+                                <td> 発生日時：</td>
+                                <td> <span id="now"> </span> </td>
+                            </tr>
+                            <tr>
+                                <td> エラーコード：</td>
+                                <td> MF00007</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- /main_data -->
+        </div>
+        <!-- /main_area -->
+    </div>
+    <!-- /contents -->
+    <script type="text/javascript">
+        document.getElementById("now").innerHTML = getNow();
+
+        function getNow() {
+            var now = new Date();
+            var year = now.getFullYear();
+            var mon = ('00' + (now.getMonth() + 1)).slice(-2);
+            var day = ('00' + now.getDate()).slice(-2);
+            var hour = ('00' + now.getHours()).slice(-2);
+            var min = ('00' + now.getMinutes()).slice(-2);
+            var sec = ('00' + now.getSeconds()).slice(-2);
+            var s = year + "/" + mon + "/" + day + " " + hour + ":" + min + ":" + sec;
+            return s;
+        }
+
+    </script>
+</body>
+</html>

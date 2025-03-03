@@ -1,0 +1,135 @@
+﻿@model NskWeb.Areas.F000.Models.D000000.D000000Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+    CoreConst.ScreenMode screenMode = SessionUtil.Get<CoreConst.ScreenMode>(CoreConst.SESS_SCREEN_MODE, this.Context);
+}
+<div class="table-thead-container ">
+    <div class="main_title btn_group_left mt_5">
+        <h3>ポータル</h3>
+    </div>
+    <div class="clearfix"></div>
+
+</div>
+@using (Html.BeginForm("Decision", "D000000", FormMethod.Post, new { id = "D000000Form", spellcheck = "false", autocomplete = "off" }))
+{
+    <table>
+        <tr>
+            <td>共済目的コード</td>
+            <td>
+                @Html.EditorFor(model => model.D000000Info.SKyosaiMokutekiCd, "",
+                         new { htmlAttributes = new { @class = "form-control", maxlength = 2, title = "半角２桁", tabindex = 100 } })
+                <div>@Html.ValidationMessageFor(model => model.D000000Info.SKyosaiMokutekiCd, "", new { @class = "text-danger" })</div>
+            </td>
+            <td>
+                @Html.Label("", Model.D000000Info2.SKyosaiMokutekiCd)
+            </td>
+        </tr>
+        <tr>
+            <td>引受年産</td>
+            <td>
+                @Html.EditorFor(model => model.D000000Info.SNensanHikiuke, "",
+                         new { htmlAttributes = new { @class = "form-control", maxlength = 4, title = "半角４桁", tabindex = 101 } })
+                <div>@Html.ValidationMessageFor(model => model.D000000Info.SNensanHikiuke, "", new { @class = "text-danger" })</div>
+            </td>
+            <td>
+                @Html.Label("", Model.D000000Info2.SNensanHikiuke)
+            </td>
+        </tr>
+        <tr>
+            <td>評価年産</td>
+            <td>
+                @Html.EditorFor(model => model.D000000Info.SNensanHyoka, "",
+                         new { htmlAttributes = new { @class = "form-control", maxlength = 4, title = "半角４桁", tabindex = 102 } })
+                <div>@Html.ValidationMessageFor(model => model.D000000Info.SNensanHyoka, "", new { @class = "text-danger" })</div>
+            </td>
+            <td>
+                @Html.Label("", Model.D000000Info2.SNensanHyoka)
+            </td>
+        </tr>
+        <tr>
+            <td>引受年産の引受計算支所実行単位区分　</td>
+            <td colspan="2">
+                @Html.Label("", Model.D000000Info.SHikiukeJikkoTanniKbnHikiuke)
+            </td>
+        </tr>
+        <tr>
+            <td>評価年産の引受計算支所実行単位区分　</td>
+            <td colspan="2">
+                @Html.Label("", Model.D000000Info.SHikiukeJikkoTanniKbnHyoka)
+            </td>
+        </tr>
+        <tr>
+            <td colspan="3">
+                支所コード：[@Html.Label("", Model.ShishoCd)]、
+                支所グループコード：[@Html.Label("", Model.ShishoGroupId.ToString())]
+
+            </td>
+        </tr>
+        @foreach (var shishocd in Model.ShishoList)
+        {
+            <tr>
+                <td colspan="3">
+                    @Html.Label("", shishocd.ShishoCd)：@Html.Label("", shishocd.ShishoNm)
+            </td>
+        </tr>
+        }
+    </table>
+    <div class="mb-3">
+        <div class="col-md-offset-4 col-md-8">
+            <button type="submit" class="btn btn-warning mt_15">決定</button>
+        </div>
+    </div>
+
+}
+<div class="text-end">
+@*     @if (SessionUtil.Get<DateTime?>(F00Const.SESS_LAST_LOGIN_DATETIME, this.Context) != null)
+    {
+        <span>
+            前回のログイン日時は
+            @Model.VSyokuinRecords.LastLoginDate.Value.ToString(F00Const.YYYYMMDD_HHmm_WITH_SLASH)
+            です。
+        </span>
+    }
+ *@</div>
+
+@* @if (Model.PwdLabDisplay)
+{
+    <div class="text-end">最後にパスワードを変更してから6か月以上経過しました。</div>
+}
+ *@
+@section styles {
+    <style type="text/css">
+
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        function DispSearch(index){
+            var infoLink = '@Url.Action("", "D000020", new { area = "F000" })?@CoreConst.CHILD_WINDOW_ID=' + getChildId("D000000") + "&index=" + index;
+            //action = Url.Action("Link", "C000000", new { area = "F000" }) + "?" + InfraConst.MENU_REQUEST_QUERYSTRING + "=" + screenId;
+            if (!myWindow || myWindow.closed) {
+                myWindow = openWindowSize(infoLink);
+            }
+            else {
+                myWindow.close();
+                myWindow = openWindowSize(infoLink);
+            }
+
+        }
+
+        function openWindowSize(actionName) {
+            if ('@CoreConst.ScreenMode.Tablet' == '@screenMode') {
+                x = @Convert.ToInt32(F000Const.TabletOpenSizeD000020.TabletWidth);
+                y = @Convert.ToInt32(F000Const.TabletOpenSizeD000020.TabletHeight);
+                return windowSizeOpen(actionName, "D000020", x, y);
+            }
+            else if ('@CoreConst.ScreenMode.PC' == '@screenMode') {
+                x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+                y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+                return windowSizeOpen(actionName, "D000020", x, y);
+            }
+        }
+
+    </script>
+}

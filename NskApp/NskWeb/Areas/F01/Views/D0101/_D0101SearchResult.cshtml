@@ -1,0 +1,113 @@
+﻿@model NskWeb.Areas.F01.Models.D0101.D0101Model
+@{
+    var startIndex = 200;
+}
+
+@if (Model.SearchResult.TableRecords != null && Model.SearchResult.TableRecords.Count() > 0)
+{
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+
+    <div class="table-thead-container">
+        <table class="table table-bordered table-striped" style="width:200rem;">
+            <caption class="visually-hidden">検索結果</caption>
+            <thead class="sticky-top">
+                <tr>
+                    <th scope="col" style="width: 8%;">対象年度</th>
+                    <th scope="col" style="width: 10%;">加入者情報画面へ<br />の遷移</th>
+                    <th scope="col" style="width: 10%;">都道府県</th>
+                    <th scope="col" style="width: 15%;">組合等</th>
+                    <th scope="col" style="width: 15%;">支所</th>
+                    <th scope="col">氏名又は法人名</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int index = 0; index < Model.SearchResult.TableRecords.Count(); index++)
+                {
+                    var item = Model.SearchResult.TableRecords.ElementAt(index);
+                    <tr>
+                        @*対象年度*@
+                        <td class="table-without-wordbreak">@Html.Label("", item.Nendo == null ? "-" : NendoUtil.GetNendoDisp1(item.Nendo.Value))</td>
+                        @*加入者情報リンク*@
+                        <td>
+                            @if (AppConst.FLG_ON.Equals(Model.KanyushaReferenceFlag))
+                            {
+                                <label>加入者情報</label>
+                            }
+                            else
+                            {
+                                @Html.ActionLink("加入者情報", "Detail", "D0101", new { area = "F01", id = index }, new { @style = "cursor: pointer; text-decoration: underline;", tabindex = startIndex + index })
+                            }
+                            @Html.HiddenFor(model => model.SearchResult.TableRecords[index].NogyoshaId)
+                        </td>
+                        @*都道府県*@
+                        <td>@Html.Label("", item.TodofukenNm)</td>
+                        @*組合等*@
+                        <td>@Html.Label("", item.KumiaitoNm ?? string.Empty)</td>
+                        @*支所*@
+                        <td>@Html.Label("", item.ShishoNm ?? string.Empty)</td>
+                        @*氏名又は法人名*@
+                        <td>@Html.Label("", item.HojinFullNm ?? string.Empty)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+
+    @*「一覧表作成ボタン参照可否フラグ」＝"1"（参照不可）の場合、「■出力情報」カテゴリ以下すべての画面項目を非表示にする。*@
+    @if (!AppConst.FLG_ON.Equals(Model.CreateCSVReferenceFlag))
+    {
+        <h4 class="sub_title">出力情報</h4>
+        <div class="table-thead-container">
+            <div class="table-responsive table-thead-container">
+                <table style="width:100%">
+                    <caption class="visually-hidden">出力情報</caption>
+                    <colgroup style="width: 70%;"></colgroup>
+                    <colgroup style="width: 20%;"></colgroup>
+                    <colgroup style="width: 10%;"></colgroup>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <table class="table table-bordered common_table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="td_label" style="width:16rem;">文字コード</td>
+                                            <td>
+                                                @Html.RadioButtonFor(model => model.SearchResult.CharacterCode, CoreConst.CharacterCode.SJIS.ToString(),
+                                                         new { @id = "SearchCondition_CharacterCode_1", @class = "magic-radio", tabindex = 10000 })
+                                                <label for="SearchCondition_CharacterCode_1">Shift_JIS</label>
+                                                @Html.RadioButtonFor(model => model.SearchResult.CharacterCode, CoreConst.CharacterCode.UTF8.ToString(),
+                                                         new { @id = "SearchCondition_CharacterCode_2", @class = "magic-radio", tabindex = 10001 })
+                                                <label for="SearchCondition_CharacterCode_2">UTF-8</label>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                            <td>
+                            </td>
+                            <td>
+                                <table class="table common_table table_noborder">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <button id="CreateCSV" type="button" onclick="doCreateCSV()" class="btn btn-primary" tabindex="10002">
+                                                    一覧表作成
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+}

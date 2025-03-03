@@ -1,0 +1,38 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@model NskWeb.Areas.F204.Models.D204092.D204092Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>一括帳票出力</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D204092", FormMethod.Post, new { id = "D204092Form", spellcheck = "false", autocomplete = "off" }))
+{
+
+    <div class="table-responsive">
+        処理ID：@Model.OpeId
+    </div>
+
+
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="backBtn" tabindex="150">戻る</button>
+        </div>
+    </div>
+
+}
+
+@Html.Confirm("CreateClick", "CreateConfirm", new string[] { "isRealTime" }, "確認", "", "OK", "キャンセル")
+@Html.Dialog("CreatBatchReport", "メッセージ", "", "閉じる")
+
+@section styles {
+    <style type="text/css">
+    </style>
+}
+
+@section scripts {
+}

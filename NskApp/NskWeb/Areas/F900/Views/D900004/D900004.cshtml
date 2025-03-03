@@ -1,0 +1,17 @@
+﻿@{
+    Layout = "~/Views/Shared/_LayoutBodyOnly.cshtml";
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_2;
+
+    var screenTitle = "無効URLエラー";
+    var showMessage = "無効なURLが指定されました。";
+}
+<div class="table-responsive table-thead-container">
+    <div class="main_title btn_group_left mt_5">
+        <h3>@screenTitle</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+<div class="table-responsive table-thead-container" style="height:50rem">
+    @showMessage<br />
+</div>

@@ -1,0 +1,96 @@
+﻿@model NskWeb.Areas.F04.Models.D0401.D0401Model
+
+@if (Model.IsDataReflectionDisplayFlag)
+{
+    <div class="table-thead-container">
+        <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+        <h4 class="sub_title">@Model.DataReflection.Caption</h4>
+
+        <div class="mb-3" id="scrollMessageArea3">
+            @Html.MessageAreaFor(model => model.DataReflection.MessageArea3, string.Empty, new { @class = "text-danger" })
+        </div>
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <colgroup class="td_label"></colgroup>
+            <colgroup class="td_label"></colgroup>
+            <colgroup class="td_control" style="width: 27.2%;"></colgroup>
+            <tr>
+                @*取込対象*@
+                <td colspan="2">取込対象</td>
+                <td class="fixed-td-left">
+                    @Html.Label("", string.IsNullOrEmpty(Model.DataReflection.TorikomiNm) ? string.Empty : Model.DataReflection.TorikomiNm)
+                </td>
+            </tr>
+            <tr>
+                @*取込範囲*@
+                <td rowspan="4">取込範囲</td>
+
+                @*対象年度*@
+                <td>対象年度</td>
+                <td>
+                    @Html.Label("", Model.DataReflection.Nendo == null ? "-" : NendoUtil.GetNendoDisp1(Model.DataReflection.Nendo.Value))
+                </td>
+            </tr>
+            <tr>
+                @*都道府県*@
+                <td>都道府県</td>
+                <td>
+                    @Html.Label("", Model.DataReflection.TodofukenCd + CoreConst.SEPARATOR + Model.DataReflection.TodofukenNm)
+                </td>
+            </tr>
+            <tr>
+                @*組合等*@
+                <td>組合等</td>
+                <td>
+                    @Html.Label("", Model.DataReflection.KumiaitoCd + CoreConst.SEPARATOR + Model.DataReflection.KumiaitoNm)
+                </td>
+            </tr>
+            <tr>
+                @*支所*@
+                <td>支所</td>
+                <td>
+                    @Html.Label("", Model.DataReflection.ShishoCd + CoreConst.SEPARATOR + Model.DataReflection.ShishoCd)
+                </td>
+            </tr>
+            <tr>
+                @*アップロードファイル*@
+                <td>アップロードファイル</td>
+                <td>
+                    @Html.Label("", Model.DataReflection.TorikomiFilePath)
+                </td>
+            </tr>
+        </table>
+
+        <div class="btn_area btn_group_right">
+            @*02 一時テーブルへの取込済み*@
+            @if (AppConst.TorikomiSts.TEMPORARY_TABLE_IMPORTED.Equals(Model.DataReflection.TorikomiSts))
+            {
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataLock(@Model.DataReflection.BatchId)" class="btn btn-warning">データロック</a>
+            }
+            else if (AppConst.TorikomiSts.DATA_LOCKED.Equals(Model.DataReflection.TorikomiSts))
+            {
+                @*03 データロック済み*@
+                <a id="btnDelete" href="javascript:void(0)" onclick="doCsvExp(@Model.DataReflection.BatchId)" class="btn btn-warning">取込対象データCSV出力</a>
+
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataUnlock(@Model.DataReflection.BatchId)" class="btn btn-warning">データロック解除（処理キャンセル）</a>
+            }
+            else if (AppConst.TorikomiSts.BACKUP_DATA_OUTPUT.Equals(Model.DataReflection.TorikomiSts))
+            {
+                @*04 バックアップデータ出力済み*@
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataRef(@Model.DataReflection.BatchId)" class="btn btn-warning">データ反映</a>
+
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataUnlock(@Model.DataReflection.BatchId)" class="btn btn-warning">データロック解除（処理キャンセル）</a>
+            }
+            else if (AppConst.TorikomiSts.DATA_REFLECTED.Equals(Model.DataReflection.TorikomiSts))
+            {
+                @*05 データ反映済み*@
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataRefCommit(@Model.DataReflection.BatchId)" class="btn btn-warning">データ反映を確定</a>
+
+                <a id="btnDelete" href="javascript:void(0)" onclick="doDataRefCancel(@Model.DataReflection.BatchId)" class="btn btn-warning">データ反映前に戻す</a>
+            }
+        </div>
+        <div class="clearfix"></div>
+
+    </div>
+
+}

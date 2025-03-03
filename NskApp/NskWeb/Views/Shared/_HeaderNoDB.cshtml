@@ -1,0 +1,28 @@
+﻿<nav class="navbar top_sp_menu pop_header" role="navigation">
+    <div class="navbar-header_pop">
+        <div class="mdl_inner_top">
+            <div class="top_area">
+                <div class="logo_area">
+                    <span class="logo_pop"></span>
+                </div>
+
+                <div class="user_area">
+                    <div class="user_close_pop">
+                        <a href="javascript:void(0);" id="close" title="閉じる">
+                            <span class="bi bi-x-lg d-grid"></span>
+                            <i>閉じる</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<script type="text/javascript">
+    $(function () {
+        $('#close').click(function () {
+            window.open('@Url.Content("~/Static/Close.html")', '_self').close();
+        });
+    });
+</script>

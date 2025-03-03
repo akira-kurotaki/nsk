@@ -1,0 +1,169 @@
+﻿@{
+    string headerPatternId = ViewBag.HeaderPatternId == null ? CoreConst.HEADER_PATTERN_ID_1 : (string)ViewBag.HeaderPatternId;
+    var windowSizeD0009 = SessionUtil.Get<CoreConst.ScreenMode>(CoreConst.SESS_SCREEN_MODE, this.Context) is CoreConst.ScreenMode screenMode && screenMode == CoreConst.ScreenMode.Tablet ?
+        new string[] { "1920", "787.5" } : new string[] { "1000", "350" };
+}
+
+@if (CoreConst.HEADER_PATTERN_ID_2.Equals(headerPatternId))
+{
+    <nav class="navbar top_sp_menu pop_header" role="navigation">
+        <div class="navbar-header_pop">
+            <div class="mdl_inner_top">
+                <div class="top_area">
+                    <div class="logo_area">
+                        <span class="logo_pop"></span>
+                    </div>
+
+                    <div class="user_close_pop">
+                        <a href="javascript:void(0);" id="close" title="閉じる">
+                            <span class="bi bi-x-lg d-grid"></span>
+                            <i>閉じる</i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+else if (CoreConst.HEADER_PATTERN_ID_3.Equals(headerPatternId))
+{
+
+}
+else if (CoreConst.HEADER_PATTERN_ID_4.Equals(headerPatternId))
+{
+    <nav class="navbar top_sp_menu" role="navigation">
+        <div class="navbar-header">
+            <div class="mdl_inner_top">
+                <div class="top_area">
+                    <div class="logo_area">
+                        <span class="logo"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+}
+else
+{
+    <!-- page_top -->
+    <div class="page_top">
+        <p>
+            <a class="btn btn-default page_move" id="page_move_top" title="画面最上部へ移動">
+                <span class="bi bi-caret-up-fill page_move_triangle_top"></span>
+            </a>
+            <a class="btn btn-default page_move" id="page_move_bottom" title="画面最下部へ移動">
+                <span class="bi bi-caret-down-fill page_move_triangle_bottom"></span>
+            </a>
+        </p>
+    </div>
+    <!-- /page_top -->
+    CoreLibrary.Core.Dto.Syokuin syokuin = SessionUtil.Get<CoreLibrary.Core.Dto.Syokuin>(CoreConst.SESS_LOGIN_USER, this.Context);
+    string userInfo = (syokuin == null) ? string.Empty : syokuin.UserId;
+    string todofukenNm = (syokuin == null) ? string.Empty : CoreLibrary.Core.Utility.TodofukenUtil.GetTodofukenNm(syokuin.TodofukenCd);
+    string kumiaitoNm = (syokuin == null) ? string.Empty : CoreLibrary.Core.Utility.KumiaitoUtil.GetKumiaitoNm(syokuin.TodofukenCd, syokuin.KumiaitoCd);
+    <nav class="navbar top_sp_menu" role="navigation">
+        <div class="navbar-header">
+            <div class="mdl_inner_top">
+                <div class="top_area">
+                    <div class="logo_area">
+                        <a href="javascript:void(0);" id="top_menu" class="top_menu_a" title="メニュー" tabindex="2"><span class="top_menu"></span><span class="menu">メニュー</span></a>
+                        <span class="logo"></span>
+                    </div>
+
+                    <div class="user_area">
+                            <div class="user_organization">
+                                <span>都道府県：@todofukenNm</span>
+                                <span>組合等　：@kumiaitoNm</span>
+                            </div>
+                        <div class="user_info">
+                            <span>ユーザID：@userInfo</span>
+                            <a href="#UserInfoModify" data-bs-toggle="modal" title="ユーザ情報変更" style="outline:none;" tabindex="90">
+                                <span>ユーザ情報変更</span>
+                                <em class="bi bi-play-circle"></em>
+                            </a>
+                        </div>
+
+                        <div class="user_help">
+                            <span>システムの使い方</span>
+                            <a href="javascript:void(0);" id="user_help_menu" title="ヘルプ・FAQ" tabindex="91"><span>ヘルプ・FAQ</span><em class="bi bi-caret-down-fill"></em></a>
+                        </div>
+
+                        <div class="user_home">
+                            <a href="#RedirectToHome" id="toPortal" data-bs-toggle="modal" title="ポータル" tabindex="92">
+                                <span class="bi bi-house-fill"></span>
+                                <i>ポータル</i>
+                            </a>
+                        </div>
+
+                        <div class="user_login">
+                            <a href="#Logout" id="logout" data-bs-toggle="modal" title="ログアウト" tabindex="93">
+                                <span class="bi bi-box-arrow-right"></span>
+                                <i>ログアウト</i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+    @Html.Confirm("UserInfoModify", "UserInfoModifyConfirm", "確認", MessageUtil.Get("MQ00018", "ユーザ情報変更"), "OK", "キャンセル", false)
+    @Html.Confirm("RedirectToHome", "RedirectToHomeConfirm", "確認", MessageUtil.Get("MQ00019", "ポータル"), "OK", "キャンセル")
+    @Html.Confirm("Logout", "LogoutConfirm", "確認", MessageUtil.Get("MQ00021"), "OK", "キャンセル")
+}
+
+@* 西暦和暦変換の共通機能用 *@
+@Html.Hidden("SysDateForDateSeirekiToWareki", DateUtil.GetSysDateTime().ToString("yyyy/MM/dd"), new { @id = "sysDate_for_date_seireki_to_wareki" })
+
+<script type="text/javascript">
+    var myWindow;
+
+    $(function () {
+        $('#inquiry').click(function () {
+            var infoLink = '@Url.Action("Init", "D0009", new { area = "F00" })?@CoreConst.CHILD_WINDOW_ID=' + getChildId("D0009");
+            myWindow = windowSizeOpen(infoLink, "D0009", '@windowSizeD0009[0]', '@windowSizeD0009[1]');
+        });
+
+        $('#UserInfoModifyConfirm').click(function () {
+            $('#UserInfoModify').modal('hide');
+            myWindow = windowSizeOpen('@ConfigUtil.Get(InfraConst.USER_INFO_MODIFY_URL)?sm=@ScreenModeUtil.GetScreenMode(this.Context)', 'usermanagement', '1000', '600');
+        });
+
+        $('#toPortal').click(function () {
+            closeNavi();
+        });
+
+        $('#RedirectToHomeConfirm').click(function () {
+            location.href = "@Url.Action("Init", "D000000", new { area = "F000" })";
+        });
+
+        $('#logout').click(function () {
+            closeNavi();
+        });
+
+        $('#LogoutConfirm').click(function () {
+            location.href = "@Url.Action("Logout", "C000000", new { area = "F000" })";
+        });
+
+        $('#closeShinsei').click(function () {
+            closeNavi();
+        });
+
+        $('#CloseShinseiConfirm').click(function () {
+            window.open('@Url.Content("~/Static/Close.html")', '_self').close();
+        });
+
+        $('#close').click(function () {
+            window.open('@Url.Content("~/Static/Close.html")', '_self').close();
+        });
+
+        $('#toMain').click(function () {
+            var target_top = $("#main").offset().top;
+            $("html,body").scrollTop(target_top);
+        });
+    });
+
+    function closeReportWindow() {
+        var win = window.open('@Url.Action("Init", "C000001", new { area = "F000" })', 'report', "left=0,top=0,width=10,height=10,scrollbars=1,toolbar=0,menubar=0,staus=0,resizable=1");
+        win.close();
+    }
+</script>

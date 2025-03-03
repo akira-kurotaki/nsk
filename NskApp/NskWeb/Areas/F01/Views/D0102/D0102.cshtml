@@ -1,0 +1,288 @@
+﻿@model NskWeb.Areas.F01.Models.D0102.D0102Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div class="table-thead-container ">
+    <div class="main_title btn_group_left mt_5">
+        <h3>
+            加入者情報
+        </h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@* メッセージエリア1 *@
+<div class="mb-1 mt-1">
+    @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", @id = "MessageArea1" })
+</div>
+@using (Html.BeginForm("D0102", "D0102", FormMethod.Post, new { @id = "D0102Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div id="_D0102PartialResult1">
+        @await Html.PartialAsync("_D0102Partial1", Model)
+    </div>
+    <br />
+
+    <div class="btn_area">
+        @if (Model.CanUpdate)
+        {
+            <button type="button" class="btn btn-warning mt_back" id="insert" name="insert" tabindex = 142>
+                <h3 class="mt_3">登録</h3>（編集内容を保存して加入者一覧へ戻る）
+            </button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-warning mt_back" id="insert" name="insert" disabled tabindex=142>
+                <h3 class="mt_3">登録</h3>（編集内容を保存して加入者一覧へ戻る）
+            </button>
+        }
+        <br />
+        <br />
+        <button id="back" type="button" class="btn btn-primary mt_back" tabindex=143 data-bs-toggle="modal" data-bs-target="#backDialog">
+            戻る<br />（編集内容を取り消して加入者一覧へ戻る）
+        </button>
+    </div>
+}
+
+@* 申請書類等作成コンファーム *@
+@Html.Confirm("reportOutputClick", "reportOutput", "確認", MessageUtil.Get("MQ00010", "データベースに登録された内容で申請書類等"), "OK", "キャンセル")
+@Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ00006", "編集内容", "保存", "加入者一覧"), "OK", "キャンセル")
+@Html.Confirm("backDialog", "backConfirm", "確認", MessageUtil.Get("MQ01005", "加入者一覧", "登録"), "OK", "キャンセル")
+
+@section styles {
+    <style type="text/css">
+        .warning {
+            border: 0.1rem solid #555;
+            padding: 0.8rem;
+            margin: 0.2rem;
+        }
+
+        .common_table td {
+            padding: 0.5rem 2rem;
+        }
+
+        .common_table .td_label {
+            width: 16.6%;
+        }
+
+        .common_table .td_label1 {
+            width: 25%;
+            background-color: #ecf1fb;
+        }
+
+        .common_table.nopadding {
+            padding: 0rem 0rem 0rem 0rem;
+            margin: 0rem 0rem 0rem 0rem;
+            align-content: center;
+        }
+
+        .td_spe_color {
+            background-color: #fff !important;
+            border: 1px solid #ddd !important;
+        }
+
+        .row {
+            --bs-gutter-x: 0.5rem;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+        $(function () {
+            var validationError = 'input-validation-error';
+
+            @* 農業者情報は全て非活性とする *@
+            $("select[type!='hidden'][id^='D0102EntryContent_TodofukenDropDownList']").each(function () {
+                $(this).prop("disabled", true)
+            });
+
+            @* エラー項目を取得 *@
+            var errors = @Html.Raw(
+                Json.Serialize(
+                    Html.Encode(
+                    string.Join(
+                        Environment.NewLine,
+                        ViewData.ModelState
+                                .Where(x => x.Value.Errors.Count > 0)
+                                .Select(x => x.Key)
+                    )))
+                );
+            var errorCtrls = new Array();
+            errorCtrls = errors.split("&#xD;&#xA;");
+            for (i = 0; i < errorCtrls.length; i++) {
+                @* チェックボックエラー時に赤枠を設定 *@
+                var crtlFor = $("[type='checkbox'][name='" + errorCtrls[i] + "']").next().next("label");
+                crtlFor.addClass(validationError);
+
+                @* ラジオボタンエラー時に赤枠を設定 *@
+                var crtlForRadio = $("[type='radio'][name='" + errorCtrls[i] + "']").next("label");
+                crtlForRadio.addClass(validationError);
+            }
+
+            @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+            $('.input-validation-error:first').focus();
+
+            @*画面エラーのコントロール *@
+            scrollToErrorArea();
+
+            @* 耕地住所（フリガナ）の処理 *@
+                $("#_D0102PartialResult1").on("focusout", "#EntryContent_KouchiAddressKana", function () {
+                var convertedValue = convToHalfWidthKatakana($(this).val());
+                $(this).val([convertedValue]);
+            });
+
+            @* 登録イベントクライアント側の独自チェックを行う。*@
+            $("#insert").click(function () {
+                removeValidationErrorClass();
+                var messageArea = $("span[data-valmsg-for='MessageArea1']");
+                var msg = "";
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                var msg2 = "";
+
+       　　　　 @* 前回の独自チェックエラーメッセージをクリアする *@
+                messageArea.html("");
+                messageArea2.html("");
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                    @* 属性チェック *@
+                    var checkValid2 = $("#D0102Form").valid();
+                    var checkValid1 = inputRequriedCheck();
+                    if (checkValid2 && checkValid1) {
+        　　　　　　　　@* 耕地郵便番号の関連チェック *@
+                        var postalCd1 = $('#EntryContent_KouchiPostalCd1').val();
+                        var postalCd2 = $('#EntryContent_KouchiPostalCd2').val();
+                        if (postalCd1 == "" || postalCd2 == "") {
+                            if (postalCd1 != "" || postalCd2 != "")
+                            {
+                                $('#EntryContent_KouchiPostalCd1').addClass(validationError);
+                                $('#EntryContent_KouchiPostalCd2').addClass(validationError);
+                                msg2 = ConcatMessage(msg2, '@MessageUtil.Get("ME00020", "耕地郵便番号", "7", "")');
+                            }
+                        }
+                        @* 耕地形態のチェック *@
+                        var kouchiKeitai = $("input[name='EntryContent.KouchiKeitaiCd']:checked");
+                        if ('@F01Const.KochiKeitai.NotSelected.ToString("d")' == kouchiKeitai.val()) {
+                            $("[name='EntryContent.KouchiKeitaiCd']").next().addClass(validationError);
+                            msg2 = ConcatMessage(msg2, '@MessageUtil.Get("ME91001")');
+                        }
+
+                        @* 個人情報の取扱いのチェック *@
+                        if (!$("#EntryContent_KojinjohoToriatsukaiFlg").prop("checked")) {
+                            $("#EntryContent_KojinjohoToriatsukaiFlg").next().next().addClass(validationError);
+                            msg2 = ConcatMessage(msg2, '@MessageUtil.Get("ME00005", "個人情報の取扱いについて", "")');
+                        }
+                        if ("" != msg) {
+                            @*画面エラーのコントロール *@
+                            scrollToErrorArea();
+                            messageArea.html(msg);
+                            @*画面エラーのコントロール *@
+                            if (0 < $('#MessageArea1').length && $('#MessageArea1').html() != "") {
+                                $("html,body").scrollTop($("html, body").offset().top);
+                            }
+                            return;
+                        }
+
+                        if ("" != msg2) {
+                            messageArea2.html(msg2);
+                            @*画面エラーのコントロール *@
+                            scrollToErrorArea();
+                            return;
+                        }
+
+                    } else {
+                        scrollToErrorArea();
+                        return;
+                    }
+                }
+
+            　　@Html.ShowConfirm("insertDialog");
+            })
+
+            @* 申請書類等作成確認ダイアログの「OK」ボタンを押下 *@
+            $("#reportOutput").click(function () {
+                $("#reportOutputClick").modal('hide');
+                windowOpen('@Url.Action("Create", "D0102", new { area = "F01" })');
+            });
+
+            @* 登録ボタン：確認ダイアログにOKを押下後の処理 *@
+            $("#insertConfirm").click(function () {
+                var form = $("#D0102Form");
+                form.attr("action", "@Url.Action("Update", "D0102", new { area = "F01" })");
+                form.submit();
+            })
+
+            @* 戻るOKボタン押下 *@
+            $('#backConfirm').click(function () {
+                var url = "@Url.Action("Back", "D0102", new { area = "F01" })";
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: null,
+                    dataType: 'json',
+                    url: url,
+                    traditional: true,
+                }).done(function (data) {
+                    location.href = "@Url.Action("Init", "D0101", new { area = "F01" })";
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+
+        @* エラーのクリア *@
+        function removeValidationErrorClass() {
+            var validationError = 'input-validation-error';
+
+            $('input[type!=hidden],select').each(function (index, element) {
+                if ($(this).hasClass(validationError)) {
+                    $(this).removeClass(validationError);
+                }
+                if ($(this).next("label").hasClass(validationError)) {
+                    $(this).next("label").removeClass(validationError);
+                }
+                if ($(this).next().next("label").hasClass(validationError)) {
+                    $(this).next().next("label").removeClass(validationError);
+                }
+            });
+
+            $('.field-validation-valid').each(function (index, element) {
+                $(this).html("");
+            });
+
+            $('#MessageArea1').empty();
+            $('#MessageArea2').empty();
+
+        }
+
+        function scrollToErrorArea() {
+            @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+            $('.input-validation-error:first').focus();
+                @*画面エラーのコントロール *@
+                if (0 < $('#MessageArea1').length && $('#MessageArea1').html() != "") {
+                $("html,body").scrollTop($("html, body").offset().top);
+            }
+            @*画面エラーのコントロール *@
+            if (0 < $('#MessageArea2').length && $('#MessageArea2').html() != "") {
+                $("html,body").scrollTop($("html, body").offset().top);
+            }
+        }
+
+        function inputRequriedCheck() {
+            var inputRequriedFlg = true;
+            @* [画面：耕地形態]が未入力の場合 *@
+            var kouchiKeitai = $("input[name='EntryContent.KouchiKeitaiCd']:checked")
+            if (kouchiKeitai.length == 0) {
+                $("span[data-valmsg-for='EntryContent.KouchiKeitaiCd']").html("@MessageUtil.Get("ME00001", "耕地形態", "")");
+                $("[name='EntryContent.KouchiKeitaiCd']").next().addClass("input-validation-error");
+                inputRequriedFlg = false;
+            }
+
+            return inputRequriedFlg;
+        }
+
+    </script>
+}

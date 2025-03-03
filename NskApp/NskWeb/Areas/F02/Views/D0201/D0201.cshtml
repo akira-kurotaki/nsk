@@ -1,0 +1,517 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@model NskWeb.Areas.F02.Models.D0201.D0201Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>一括帳票出力</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D0201", FormMethod.Post, new { id = "D0201Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+   @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-responsive">
+        <h4 class="sub_title">一括帳票出力</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.SearchCondition.TodofukenDropDownList)
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @* 対象書類 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TargetReport, "対象書類")<i class="required">必須</i>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.TargetReport, new { @class = "form-select form-select-lg", tabindex = 100, @title = "選択項目" })
+                    <div>@Html.ValidationMessageFor(model => model.SearchCondition.TargetReport, "", new { @class = "text-danger" })</div>
+                </td>
+
+                @* 加入者管理コード *@
+                <td>@Html.LabelFor(model => model.SearchCondition.KanyushaCdFrom, "加入者管理コード")</td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                <div>
+                                    @Html.EditorFor(model => model.SearchCondition.KanyushaCdFrom, "",
+                                             new { htmlAttributes = new 
+                                                 {
+                                                     @class = "form-control",
+                                                     @maxlength = Html.GetFullStringLength(model => model.SearchCondition.KanyushaCdFrom),
+                                                     tabindex = 106,
+                                                     @type = "text",
+                                                     @inputmode = "numeric",
+                                                     @title = "半角数字" + Html.GetFullStringLength(model => model.SearchCondition.KanyushaCdFrom) + "桁"
+                                                 }
+                                             })
+                                </div>
+                            </td>
+                            <td><div class="text-center">～</div></td>
+                            <td style="width:45%">
+                                <div>
+                                    @Html.EditorFor(model => model.SearchCondition.KanyushaCdTo, "",
+                                             new { htmlAttributes = new 
+                                                 {
+                                                     @class = "form-control",
+                                                     @maxlength = Html.GetFullStringLength(model => model.SearchCondition.KanyushaCdTo),
+                                                     tabindex = 107,
+                                                     @type = "text",
+                                                     @inputmode = "numeric",
+                                                     @title = "半角数字" + Html.GetFullStringLength(model => model.SearchCondition.KanyushaCdTo)+ "桁"
+                                                 }
+                                             })
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>@Html.ValidationMessageFor(model => model.SearchCondition.KanyushaCdFrom, "", new { @class = "text-danger" })</div>
+                                <div>@Html.ValidationMessageFor(model => model.SearchCondition.KanyushaCdTo, "", new { @class = "text-danger" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                @* 対象年度 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.NendoFrom, "対象年度")<i class="required">必須</i></td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                <div>
+                                    @Html.NendoDropDownListFor(model => model.SearchCondition.NendoFrom, "", new { @class = "form-select form-select-lg", tabindex = 101, @title = "選択項目" })
+                                </div>
+                            </td>
+                            <td><div class="text-center">～</div></td>
+                            <td style="width:45%">
+                                <div>
+                                    @Html.NendoDropDownListFor(model => model.SearchCondition.NendoTo, "", new { @class = "form-select form-select-lg", tabindex = 102, @title = "選択項目" })
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>@Html.ValidationMessageFor(model => model.SearchCondition.NendoFrom, "", new { @class = "text-danger" })</div>
+                                <div>@Html.ValidationMessageFor(model => model.SearchCondition.NendoTo, "", new { @class = "text-danger" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+
+                @* 市町村 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShichosonCd, "市町村")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shichoson, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 108, @title = "選択項目" })
+                </td>
+            </tr>
+
+            <tr>
+                @* 都道府県 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.TodofukenCd, "都道府県")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 103, @title = "選択項目" })
+                </td>
+
+                @* 大地区 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd, "大地区")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 109, @title = "選択項目" })
+                </td>
+            </tr>
+
+            <tr>
+                @* 組合等 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.KumiaitoCd, "組合等")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 104, @title = "選択項目" })
+                </td>
+
+                @* 小地区 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom, "小地区")</td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuFrom, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 110, @title = "選択項目" })
+                            </td>
+                            <td><div class="text-center">～</div></td>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuTo, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 111, @title = "選択項目" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                @* 支所 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd, "支所")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 105, @title = "選択項目" })
+                </td>
+
+                @* 氏名又は法人名 *@
+                <td>@Html.LabelFor(model => model.SearchCondition.HojinFullNm, "氏名又は法人名")</td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.HojinFullNm, "",
+                                 new { htmlAttributes = new 
+                                     { 
+                                         @class = "form-control", 
+                                         @maxlength = Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.HojinFullNm), 
+                                         tabindex = 112,
+                                         @title = "全角" + Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.HojinFullNm) + "桁以内"
+                                     } 
+                                 })
+                    </div>
+                    <div>@Html.ValidationMessageFor(model => model.SearchCondition.HojinFullNm, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+
+    <table class="table table-condensed table-sub-bordered">
+        <caption class="visually-hidden">表示数／ソート順</caption>
+        <colgroup class="colgroup_background" style="width: 10%;"></colgroup>
+        <colgroup style="width: 18%;"></colgroup>
+        <colgroup style="width: 12%;"></colgroup>
+        <colgroup style="width: 18%;"></colgroup>
+        <colgroup style="width: 12%;"></colgroup>
+        <colgroup style="width: 18%;"></colgroup>
+        <colgroup style="width: 12%;"></colgroup>
+        <tr>
+            <td>@Html.LabelFor(model => model.SearchCondition.DisplayCount, "表示数")</td>
+            <td>
+                @Html.DropDownListFor(model => model.SearchCondition.DisplayCount, "display_count", new { @class = "form-select form-select-lg", tabindex = 140, @title = "選択項目" })
+            </td>
+            <td colspan="5" class="td_spe_color"></td>
+        </tr>
+        <tr>
+            <td>@Html.LabelFor(model => model.SearchCondition.DisplaySort1, "表示順")</td>
+            <td>
+                @Html.DropDownListFor(model => model.SearchCondition.DisplaySort1, new { @class = "form-select form-select-lg", tabindex = 141, @title = "選択項目" })
+            </td>
+            <td>
+                <fieldset>
+                    <legend class="visually-hidden">表示順１</legend>
+                    <div class="text-center">
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.DESC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder1_1", @class = "magic-radio", tabindex = 142 })
+                        <label for="SearchCondition_DisplaySortOrder1_1">降順</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.ASC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder1_2", @class = "magic-radio", tabindex = 143 })
+                        <label for="SearchCondition_DisplaySortOrder1_2">昇順</label>
+                    </div>
+                </fieldset>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.SearchCondition.DisplaySort2, new { @class = "form-select form-select-lg", tabindex = 144, @title = "選択項目" })
+            </td>
+            <td>
+                <fieldset>
+                    <legend class="visually-hidden">表示順２</legend>
+                    <div class="text-center">
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.DESC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder2_1", @class = "magic-radio", tabindex = 145 })
+                        <label for="SearchCondition_DisplaySortOrder2_1">降順</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.ASC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder2_2", @class = "magic-radio", tabindex = 146 })
+                        <label for="SearchCondition_DisplaySortOrder2_2">昇順</label>
+                    </div>
+                </fieldset>
+            </td>
+            <td>
+                @Html.DropDownListFor(model => model.SearchCondition.DisplaySort3, new { @class = "form-select form-select-lg", tabindex = 147, @title = "選択項目" })
+            </td>
+            <td>
+                <fieldset>
+                    <legend class="visually-hidden">表示順３</legend>
+                    <div class="text-center">
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.DESC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder3_1", @class = "magic-radio", tabindex = 148 })
+                        <label for="SearchCondition_DisplaySortOrder3_1">降順</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.ASC.ToString(),
+                                 new { @id = "SearchCondition_DisplaySortOrder3_2", @class = "magic-radio", tabindex = 149 })
+                        <label for="SearchCondition_DisplaySortOrder3_2">昇順</label>
+                    </div>
+                </fieldset>
+            </td>
+        </tr>
+    </table>
+
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="backBtn" tabindex="150">戻る</button>
+            @Html.ActionLink("クリア", "Clear", "D0201", new { area = "F02" }, new { @class = "btn btn-primary", tabindex = 151 })
+            <button type="button" class="btn btn-primary" id="Search" tabindex="152">
+                検索
+            </button>
+        </div>
+    </div>
+
+    if (Model.SearchCondition.IsResultDisplay)
+    {
+        <div class="table-responsive">
+            <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+            <h4 class="sub_title">検索結果</h4>
+            <div class="mb-3">
+                <div>@Html.MessageAreaFor(model => model.MessageArea2, "", new { })</div>
+                @* 一覧のエラーチェック表示用 *@
+                <div>@Html.MessageAreaFor(model => model.MessageArea3, "", new { @class = "text-danger", id = "MessageArea3" })</div>
+            </div>
+        </div>
+        if (0 < Model.SearchResult.TotalCount)
+        {
+            <div id="SearchResult">
+                @await Html.PartialAsync("_D0201SearchResult", Model)
+            </div>
+            <br />
+            <div>
+                @Html.Label("", "※画面で表示されているページ以外の選択は無効となります。")
+            </div>
+            <br />
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="CreateSelect" tabindex="1001">選択作成</button>
+                <button type="button" class="btn btn-primary" id="CreateAll" tabindex="1002">全件作成</button>
+            </div>
+        }
+    }
+    @Html.HiddenFor(Model => Model.SearchCondition.IsResultDisplay)
+}
+
+@Html.Confirm("CreateClick", "CreateConfirm", new string[] { "isRealTime" }, "確認", "", "OK", "キャンセル")
+@Html.Dialog("CreatBatchReport", "メッセージ", "", "閉じる")
+
+@section styles {
+    <style type="text/css">
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        @* ページャー *@
+        function pagerClick(url) {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: url,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea2').html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init","D900002",new {area="F900"})";
+            });
+        };
+
+        $(function () {
+            @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+            $('.input-validation-error:first').focus();
+
+            @* 対象年度の自動転記 *@
+            $("#SearchCondition_NendoFrom").blur(function () {
+                if ($("#SearchCondition_NendoTo").val() == "") {
+                    $("#SearchCondition_NendoTo").val($("#SearchCondition_NendoFrom").val());
+                }
+            });
+
+            @* 加入者管理コードの自動転記 *@
+            $("#SearchCondition_KanyushaCdFrom").blur(function () {
+                if ($("#SearchCondition_KanyushaCdTo").val() == "") {
+                    $("#SearchCondition_KanyushaCdTo").val($("#SearchCondition_KanyushaCdFrom").val());
+                }
+            });
+
+            @* 小地区（終了）の自動転記 *@
+            $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").blur(function () {
+                if ($("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val() == "") {
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val($("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").val());
+                }
+            });
+
+            @* 戻る *@
+            $("#backBtn").click(function () {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D0201", new { area = "F02" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 検索 *@
+            $("#Search").click(function () {
+                var messageArea1 = $("#MessageArea1");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var validationError = "input-validation-error";
+                var message = "";
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) { 
+                    @* 属性チェック *@
+                    if (!$("#D0201Form").valid()) {
+                        @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    @* 独自チェック *@
+                    @* [画面：保険年度（終了）] < [画面：保険年度（開始）]の場合、（メッセージID：ME90006) *@
+                    var nendoTo = $("#SearchCondition_NendoTo").val();
+                    var nendoFrom = $("#SearchCondition_NendoFrom").val();
+                    if (nendoTo && nendoFrom && Number(nendoTo) < Number(nendoFrom)) {
+                        message = ConcatMessage(message, "@MessageUtil.Get("ME90006")");
+                        $("#SearchCondition_NendoFrom").addClass("input-validation-error");
+                        $("#SearchCondition_NendoTo").addClass("input-validation-error");
+                    }
+                }
+
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                @* チェックエラーなしの場合 *@
+                var form = $("#D0201Form");
+                form.attr("action", "@Url.Action("Search", "D0201", new { area = "F02" })#@CoreConst.SEARCH_RESULT_DIV_ID");
+                form.attr("method", "post");
+                form.submit();
+            });
+
+            @* 選択作成 *@
+            $("#CreateSelect").click(function () {
+                var messageArea3 = $("#MessageArea3");
+                @* 前回のメッセージをクリアする *@
+                messageArea3.html("");
+
+                @* 独自チェック *@
+                @* １．１．検索結果の出力対象選択用チェックボックスが1件も選択されていない場合		
+	                [メッセージエリア２]にエラーメッセージを赤字で表示し、処理を中止する。	
+		            （メッセージID：ME90007、引数{0} ： "加入者") *@
+                var selects = [];
+                $("#SearchResult .selectCheck:checked").each(function (i) {
+                    selects[i] = $(this).data("index");
+                });
+                if (selects.length <= 0) {
+                    messageArea3.html('@MessageUtil.Get("ME90007", "加入者")');
+                    $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+                    return;
+                }
+
+                var url = '@Url.Action("CreateSelect", "D0201", new { area = "F02" })';
+                var data = {
+                    selects: selects,
+                };
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: data,
+                    dataType: 'json',
+                    url: url,
+                    traditional: true,
+                }).done(function (data) {
+                    @Html.ShowConfirm("CreateClick",
+                                        new System.Collections.Specialized.NameValueCollection(){{"isRealTime", "data.isRealTime"}},
+                                        "data.message")
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @*全件作成*@
+            $("#CreateAll").click(function () {
+                var messageArea3 = $("#MessageArea3");
+                @* 前回のメッセージをクリアする *@
+                messageArea3.html("");
+
+                var url = '@Url.Action("CreateAll", "D0201", new { area = "F02" })';
+                $.ajax({
+                    type: 'GET',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: null,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (data) {
+                    @Html.ShowConfirm("CreateClick",
+                                          new System.Collections.Specialized.NameValueCollection(){{"isRealTime", "data.isRealTime"}},
+                                          "data.message")
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+                
+            });
+
+            @* 帳票作成確認ダイアログの「OK」ボタンを押下 *@
+            $('#CreateConfirm').click(function () {
+                var isRealTime = $('#CreateClick').find('#isRealTime').val();
+                @* リアルタイム帳票の場合 *@
+                if (isRealTime === 'true')
+                {
+                    var url = '@Url.Action("CreatRealtimeReport", "D0201", new { area = "F02" })';
+                    reportWindow = windowOpen(url);
+                }
+                else if (isRealTime === 'false')
+                {
+                    @* バッチ帳票の場合 *@
+                    var url = '@Url.Action("CreatBatchReport", "D0201", new { area = "F02" })';
+                    $.ajax({
+                        type: 'GET',
+                        cache: false,
+                        contentType: "application/json; charset=utf-8",
+                        data: null,
+                        dataType: 'json',
+                        url: url,
+                    }).done(function (data) {
+                       @Html.ShowDialog("CreatBatchReport", "data.message")
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D90002", new { area = "F900" })";
+                    });
+                } else {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                }
+            });
+        })
+    </script>
+}

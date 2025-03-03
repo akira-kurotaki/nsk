@@ -1,0 +1,402 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@model NskWeb.Areas.F04.Models.D0401.D0401Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+    @* 取込対象ロップダウンリスト *@
+    List<SelectListItem> TorikomiList = new List<SelectListItem>();
+    Model.MTorikomiList.ForEach(t =>
+    {
+        TorikomiList.Add(new SelectListItem
+        {
+            Text = t.TorikomiNm,
+            Value = t.TorikomiCd.ToString()
+        });
+    });
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>ファイル取込</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D0401", FormMethod.Post, new { id = "D0401Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">一時テーブルへの一括更新データ取込</h4>
+
+        @* [メッセージエリア1] *@
+        <div class="mb-3" id="scrollMessageArea1">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">一時テーブルへの一括更新データ取込</caption>
+            <tr>
+                <td class="td_label" colspan="2">
+                    @Html.LabelFor(model => model.TorikomiCd, Html.DisplayNameFor(model => model.TorikomiCd))<i class="required">必須</i>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.TorikomiCd, TorikomiList, "", new { @class = "form-select form-select-lg", title = "選択項目", tabindex = 101 })
+                    <div>
+                        @Html.ValidationMessageFor(model => model.TorikomiCd, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td class="td_label" rowspan="4">取込範囲</td>
+                @* 対象年度 *@
+                <td>@Html.LabelFor(model => model.Nendo, "対象年度")<i class="required">必須</i></td>
+                <td>
+                    <div>
+                        @Html.NendoDropDownListFor(model => model.Nendo, "", new { @class = "form-select form-select-lg", tabindex = 102 })
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                @* 都道府県 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.TodofukenCd, "都道府県")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 103 })
+                </td>
+            </tr>
+            <tr>
+                @* 組合等 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.KumiaitoCd, "組合等")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 104 })
+                </td>
+            </tr>
+            <tr>
+                @* 支所 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.ShishoCd, "支所")</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 105 })
+                </td>
+            </tr>
+            <tr>
+                <td class="td_label" colspan="2">
+                    @Html.LabelFor(model => model.FilePath, Html.DisplayNameFor(model => model.FilePath))<i class="required">必須</i>
+                </td>
+                <td>
+                    <table class="table table-bordered common_table border-none tbl-r06-width-99-percent" style="width: 80%;">
+                        <tr class="border-none">
+                            <td class="border-none">
+                                <div class="display-flex">
+                                    <input id="UploadFile" name="UploadFile" type="file" style="display:none" title="アップロードするファイル" />
+                                    @Html.EditorFor(model => model.FilePath, new { htmlAttributes = new { @class = "form-control width-70-percent", @title = "アップロードするファイル1", tabindex = 106 } })
+                                    <button type="button" class="btn btn-primary " id="SelectBtn_1" name="Select1" tabindex="107">
+                                        参照
+                                    </button>
+                                    <p id="size1">@Model.FileSizeStr</p>
+                                    @Html.HiddenFor(m => m.FileSize)
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table-thead-container">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary " id="backBtn" tabindex="108">戻る</button>
+            <button type="button" class="btn btn-warning " id="importBtn" tabindex="109">データ取込</button>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="table-thead-container">
+        <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+        <h4 class="sub_title">ファイル取込一覧</h4>
+
+        <div class="btn_area btn_group_right">
+            <button type="submit" class="btn btn-primary" id="Display" name="Display" tabindex="110"
+                    formaction="@Url.Action("Reload", "D0401", new { area = "F04" })#@CoreConst.SEARCH_RESULT_DIV_ID">
+                再表示
+            </button>
+        </div>
+        <div class="clearfix"></div>
+
+        <div class="mb-3" id="scrollMessageArea2">
+            @Html.MessageAreaFor(model => model.MessageArea2, string.Empty)
+            @Html.MessageAreaFor(model => model.ErrorMessageArea2, string.Empty, new { @class = "text-danger" })
+        </div>
+    </div>
+    <div id="SearchResult">
+        @await Html.PartialAsync("_D0401SearchResult", Model)
+    </div>
+
+    <div id="DataReflection">
+        @await Html.PartialAsync("_D0401DataReflection", Model)
+    </div>
+
+}
+
+@Html.Dialog("SystemError", "エラー", MessageUtil.Get("MF00001"), "閉じる")
+@Html.Confirm("ImportDialog", "ImportConfirm", "確認", MessageUtil.Get("MQ90001", "取込処理のバッチ予約"), "OK", "キャンセル")
+@Html.Confirm("DataDetailDialog", "DataDetailConfirm", "確認", MessageUtil.Get("MQ91002", "取込処理のバッチ予約"), "OK", "キャンセル")
+
+@section styles {
+    <style type="text/css">
+
+        .table-spe-bordered {
+            border-bottom: none;
+            border-left: none;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+        @*スクロール設定 *@
+        $('.scroll-table').scroll(function () {
+            var _this = $(this);
+            _this.find('.fixed-td-top').css('top', this.scrollTop - 1);
+            _this.find('.fixed-td-left').css('left', this.scrollLeft);
+            _this.find('.fixed-th-both').css('left', this.scrollLeft);
+        });
+
+        @* ページャー *@
+        function pagerClick(url) {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: url,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea2').html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            }).always(function () {
+                @*スクロール設定*@
+                $('.scroll-table').scroll(function () {
+                    var _this = $(this);
+                    _this.find('.fixed-td-top').css('top', this.scrollTop - 1);
+                    _this.find('.fixed-td-left').css('left', this.scrollLeft);
+                    _this.find('.fixed-th-both').css('left', this.scrollLeft);
+                });
+            });
+        }
+
+        var batchId;
+
+        @*削除ボタン押下*@
+        function doDelete(batchIdChosen) {
+            $("#DataDetailDialog").modal("show");
+            batchId = batchIdChosen;
+        }
+
+        $(function () {
+            @* 戻る *@
+            $("#backBtn").click(function () {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D0401", new { area = "F04" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function (data) {
+                    location.href = backLink;
+                }).fail(function () {
+                    @Html.ShowDialog("SystemError");
+                });
+            });
+
+            @* 取込ボタン *@
+            $("#ImportBtn").click(function () {
+                var validationError = 'input-validation-error';
+
+                @* 前回の独自チェックエラーメッセージをクリアする *@
+                $("#UploadFile").removeClass(validationError);
+                $('#MessageArea1').empty();
+
+                @* 変数：アップロードファイルパス *@
+                var uploadFilePath = $("#UploadFile").val();
+                @* 変数：アップロードファイル名 *@
+                var uploadFileNm = uploadFilePath.substring(uploadFilePath.lastIndexOf("\\") + 1, uploadFilePath.lastIndexOf("."));
+
+                var message = "";
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                    @* 属性チェック *@
+                    if (!$("#D0401Form").valid()) {
+                        @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    var uploadFiles = [];
+
+                    var files = $("#UploadFile").prop("files");
+                    var fileLength = files.length;
+                    for (var i = 0; i < fileLength; i++) {
+                        uploadFiles.push(files[i]);
+                    }
+
+                    @* ［画面：アップロードファイル］にファイルが存在しない場合 *@
+                    var length = uploadFiles.length;
+                    if (length == 0) {
+                        message = ConcatMessage(message, "@MessageUtil.Get("ME91005", "アップロードするファイル")");
+                        $("#UploadFile").addClass(validationError);
+                    }
+
+                    @* ［画面：アップロードファイル］拡張子チェック  *@
+                    var errorfileName = ""
+                    var errorfileName = checkExtensionAllowed(uploadFiles);
+                    @* ［画面：アップロードファイル］にzip以外の拡張子が含まれている場合（大文字、小文字を区別しない） *@
+                    if ("" != errorfileName) {
+                        message = ConcatMessage(message, "@MessageUtil.Get("ME91006", "xxx")".replace("xxx", errorfileName));
+                        $("#UploadFile").addClass(validationError);
+                    }
+
+                    @* 最大ファイル合計サイズチェック *@
+                    var fileTotalSize = 0;
+                    for (var i = 0; i < length; i++) {
+                        var size = uploadFiles[i].size;
+                        fileTotalSize = fileTotalSize + size;
+                    }
+
+                    @* ［画面：アップロードファイル］のサイズが「(定数ID：D0401UploadFileMaxSize)の値」を超えている場合 *@
+                    var d0401UploadFileMaxSize = Number('@ConfigUtil.Get(InfraConst.D0401_UPLOAD_FILE_MAX_SIZE)');
+                    if (fileTotalSize > d0401UploadFileMaxSize) {
+                        message = ConcatMessage(message, "@MessageUtil.Get("ME91007", ConfigUtil.Get(InfraConst.D0401_UPLOAD_FILE_MAX_DISP_SIZE))");
+                    }
+
+                    @* ［画面：アップロードファイル］のファイル名が100文字を超える場合 *@
+                    for (var j = 0; j < length; j++) {
+                        var fileName = uploadFiles[j].name;
+                        if (fileName.length > 100)
+                        {
+                            message = ConcatMessage(message, "@MessageUtil.Get("ME91008", "100")");
+                            $("#UploadFile").addClass(validationError);
+                            break;
+                        }
+                    }
+
+                    @* エラーが存在する場合 *@
+                    if ("" != message) {
+
+                        var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                        messageArea1.html(message);
+                        @* 画面エラーのコントロール *@
+                            setMessageScroll();
+                        return false;
+                    }
+
+                    @* 確認ダイアログ *@
+                    @Html.ShowConfirm("ImportDialog");
+                });
+
+                @* 取込ボタン:確認ダイアログにOKを押下後の処理 *@
+                $("#ImportConfirm").click(function () {
+                    var url = "@Url.Action("Import", "D0401", new { area = "F04" })";
+                    var formData = new FormData($('#D0401Form').get(0));
+                    var file = $('#UploadFile').prop('files')[0];
+                    if (file == null) {
+                        var file = "";
+                    }
+                    formData.append('UploadFile', file, file.name);
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                    }).done(function (data) {
+                        if ("@MessageUtil.Get("MI90002")" != data.message) {
+                            $("#FilePath").addClass(validationError);
+                            $('.input-validation-error:first').focus();
+                            $('#MessageArea1').html(data.message);
+                        }
+                        else {
+                            $('#MessageArea1').html(data.message);
+                        }
+                    }
+                    }).fail(function () {
+                        @Html.ShowDialog("SystemError");
+                    });
+                });
+
+            @* 画面エラーのコントロール *@
+            function setMessageScroll() {
+                @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                if ($('#MessageArea1').html() != "" && 0 < $('#MessageArea1').length) {
+                    var target_top = $("#scrollMessageArea1").offset().top;
+                    $("html,body").scrollTop(target_top);
+                }
+                else if (0 < $('#MessageArea2').length && $('#MessageArea2').html() != "") {
+                    var target_top = $("#scrollMessageArea2").offset().top;
+                    $("html,body").scrollTop(target_top);
+                }
+                else if (0 < $('#MessageArea3').length && $('#MessageArea3').html() != "") {
+                    var target_top = $("#scrollMessageArea3").offset().top;
+                    $("html,body").scrollTop(target_top);
+                }
+            }
+
+            @* ファイル拡張子チェック *@
+            function checkExtensionAllowed(uploadFiles) {
+                var errorfileName = "";
+
+                var length = uploadFiles.length;
+                var allowedExtension = '@ConfigUtil.Get(InfraConst.D0401_UPLOAD_FILE_EXTENSION)';
+                var extensions = allowedExtension.split(",");
+                for (var i = 0; i < length; i++) {
+                    @* 拡張子取得 *@
+                    var fileName = uploadFiles[i].name;
+                    var point = fileName.lastIndexOf(".");
+                    var type = fileName.substr(point + 1);
+                    var isAllowed = false;
+                    $.each(extensions, function (index, obj) {
+                        if (obj == type.toLowerCase()) {
+                            isAllowed = true;
+                            return false;
+                        }
+                    });
+                    if (!isAllowed) {
+                        if ("" == errorfileName) {
+                            errorfileName = fileName;
+                        } else {
+                            errorfileName = errorfileName + "、" + fileName;
+                        }
+                    }
+                }
+                return errorfileName;
+            }
+
+            @*削除確認ダイアログのOk押下*@
+            $("#DeleteConfirm").click(function () {
+                var form = $("#D0401Form");
+                form.attr("action", "@Url.Action("Delete", "D0401", new { area = "F04" })?batchId=" + batchId + "#@CoreConst.SEARCH_RESULT_DIV_ID");
+                form.attr("method", "post");
+                form.submit();
+            });
+
+        });
+    </script>
+}

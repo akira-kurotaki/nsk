@@ -1,0 +1,138 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@model NskWeb.Areas.F990.Models.D990001.D990001Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div class="table-responsive table-thead-container ">
+    <div class="main_title btn_group_left mt_5">
+        <h3>都道府県ドロップダウン</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D990001", FormMethod.Post, new { id = "D990001Form" }))
+{
+    @Html.AntiForgeryToken()
+    // @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">都道府県ドロップダウン</h4>
+        <div class="mb-3">
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.TodofukenDropDownList)
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 30%;"></colgroup>
+            <tr>
+                @*都道府県*@
+                <td>@Html.DisplayNameFor(model => model.TodofukenDropDownList.TodofukenCd)</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 101 })
+                </td>
+            </tr>
+            <tr>
+                @*組合等*@
+                <td>@Html.DisplayNameFor(model => model.TodofukenDropDownList.KumiaitoCd)</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 102 })
+                </td>
+            </tr>
+            <tr>
+                @*支所*@
+                <td>@Html.DisplayNameFor(model => model.TodofukenDropDownList.ShishoCd)</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 103 })
+                </td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            <a id="backBtn" href="javascript:void(0)" class="btn btn-primary" tabindex="152">戻る</a>
+            <button type="button" class="btn btn-primary" id="ShowPart1" name="ShowPart1" tabindex="154">
+                都道府県～小地区まで表示に切替
+            </button>
+        </div>
+    </div>
+}
+
+@Html.Dialog("SystemError", "エラー", MessageUtil.Get("MF00001"), "閉じる")
+
+@section styles {
+    <style type="text/css">
+        .date-picker:first-child {
+            min-width: 15rem;
+        }
+
+        .table-spe-bordered {
+            border-bottom: none;
+            border-left: none;
+        }
+
+        .td_spe_color {
+            background-color: #fff !important;
+            border: none !important;
+        }
+
+        .colgroup_background {
+            background-color: #ecf1fb;
+        }
+
+        .table > tbody > tr > th,
+        .table > tbody > tr > td {
+            border: 1px solid #ddd;
+        }
+
+        .table > thead > tr > th {
+            border: 1px solid #ddd;
+            border-bottom-width: 2px;
+        }
+
+        .table {
+            --bs-table-striped-bg: rgba(0, 0, 0, 0.0);
+        }
+
+        .td_color {
+            color: #FF0000;
+            font-weight: bold !important;
+        }
+    </style>
+}
+
+@section scripts {
+    <script>
+
+        $(function () {
+        @* 戻る *@
+                $("#backBtn").click(function () {
+                    var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                    var url = "@Url.Action("Back", "D990001", new { area = "F990" })";
+
+                    $.ajax({
+                        type: 'GET',
+                        url: url,
+                        data: null,
+                        dataType: 'json',
+                        contentType: "application/json",
+                        cache: false,
+                        success: function (data) {
+                            location.href = backLink;
+                        },
+                        error: function (data) {
+                            location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                        }
+                    });
+                });
+
+        @* 都道府県～小地区まで表示に切替 *@
+                $("#ShowPart1").click(function () {
+                    location.href = "@Url.Action("Init", "D990001", new { area = "F990" })";
+                });
+            });
+
+    </script>
+}

@@ -1,0 +1,131 @@
+﻿@model RealtimeReportDriver.Models.IndexModel
+
+@{
+    ViewBag.Title = "リアルタイム帳票テストドライバー";
+}
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <h3>帳票出力条件</h3>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ReportControlId, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-1">
+                    <span class="badge text-bg-danger" style="width:4rem; font-weight:normal; font-size:1.1rem; margin-top:0.9rem">必須</span>
+                </div>
+                <div class="col-md-9">
+                    @Html.DropDownListFor(
+                             model => model.ReportControlId,
+                             new SelectList(Model.ReportControlIdOptions, "ControlId", "DisplayText"),
+                             "選択してください",
+                             new { @class = "form-select form-select-lg" })
+                    @Html.ValidationMessageFor(model => model.ReportControlId, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-1">
+                    <span class="badge text-bg-danger" style="width:4rem; font-weight:normal; font-size:1.1rem; margin-top:0.9rem">必須</span>
+                </div>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control" } })@*, @readonly = "readonly"*@
+                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.JoukenId, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-1">
+                    <span class="badge text-bg-danger" style="width:4rem; font-weight:normal; font-size:1.1rem; margin-top:0.9rem">必須</span>
+                </div>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.JoukenId, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.JoukenId, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.TodofukenCd, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-1">
+                    <span class="badge text-bg-danger" style="width:4rem; font-weight:normal; font-size:1.1rem; margin-top:0.9rem">必須</span>
+                </div>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.TodofukenCd, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.TodofukenCd, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.KumiaitoCd, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.KumiaitoCd, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.KumiaitoCd, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ShishoCd, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-9">
+                    @Html.EditorFor(model => model.ShishoCd, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.ShishoCd, "", new { @class = "text-danger col-md-12" })
+                </div>
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.LabelFor(model => model.ShishoList, htmlAttributes: new { @class = "control-label", style = "font-weight:normal;font-size:1.5rem;margin-top:0.7rem" })
+                </div>
+                <div class="col-md-9">
+                    <input class="form-control" asp-for="@Model.ShishoList[0]" />
+                </div>
+            </div>
+        </div>
+        @for (var i = 1; i < Model.ShishoList.Count; i++)
+        {
+            <div class="mb-3">
+                <div class="row">
+                    <div class="col-md-2">
+                    </div>
+                    <div class="col-md-9">
+                        <input class="form-control" asp-for="@Model.ShishoList[@i]" />
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <div>
+        <h3>帳票出力</h3>
+        <div class="col-md-4">
+            @Html.ActionLink("クリア", "Index", "Home", null, new { @class = "btn btn-warning mt_15" }) &nbsp;
+            <button type="button" class="btn btn-warning mt_15" id="CreateReport">リアルタイム帳票出力</button>
+        </div>
+    </div>
+}

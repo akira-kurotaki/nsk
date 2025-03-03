@@ -1,0 +1,10 @@
+﻿@model System.DateTime?
+
+@if (true == ViewBag.DatePickerYYYYMMDDHHMM)
+{
+    @Html.TextBoxFor(model => model, Model.HasValue ? ((DateTime)Model).ToString("yyyy/MM/dd HH:mm") : string.Empty, (object)ViewBag.htmlAttributes)
+}
+else
+{
+    @Html.TextBoxFor(model => model, DateUtil.GetJapaneseDate(Model), (object)ViewBag.htmlAttributes)
+}

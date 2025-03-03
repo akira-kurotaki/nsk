@@ -1,0 +1,6 @@
+@BaseDmpApi_HostAddress = http://localhost:5291
+
+GET {{BaseDmpApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

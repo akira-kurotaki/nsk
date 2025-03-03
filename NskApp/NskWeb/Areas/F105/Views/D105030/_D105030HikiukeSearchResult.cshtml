@@ -1,0 +1,317 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105030.D105030Model
+@{
+    var startIndex = 200;
+    int tabIndex = startIndex;
+
+    bool disableSanchiMeigara = false;
+    if (Model.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_RIKUTO)
+    {
+        disableSanchiMeigara = true;
+    }
+}
+
+<div class="table-thead-container">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("HikiukeResultPager", "hikiukeResultPagerClick", Model.HikiukeSearchResult.Pager)
+    </div>
+    @Html.HiddenFor(model => model.HikiukeSearchResult.AllRecCount)
+    <table class="table table-bordered" style="">
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th rowspan="4"></th>
+                <th rowspan="2">耕地番号</th>
+                <th colspan="2">地名地番</th>
+                <th>本地面積</th>
+                <th>引地面積</th>
+                <th>転作等の面積</th>
+                <th>種類</th>
+                <th>区分</th>
+            </tr>
+            <tr>
+                <th colspan="2">市町村</th>
+                <th colspan="2">産地銘柄</th>
+                <th>品種</th>
+                <th>田畑</th>
+                <th>収量等級</th>
+            </tr>
+            <tr>
+                <th>分筆番号</th>
+                <th>統計単収</th>
+                <th>実質基準単収</th>
+                <th>参酌</th>
+                <th>受委託者区分</th>
+                <th>所有者</th>
+                <th colspan="2">備考</th>
+            </tr>
+            <tr class="accordion m-0 p-0" id="accordionExample0"> 
+                <td colspan="8" class="m-0 p-0">
+                    <div class="accordion-item m-0 p-0">
+                        <h2 class="accordion-header m-0 p-0">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOneH" aria-expanded="true" aria-controls="collapseOneH"style="background-color: #ecf1fb;">
+                                GIS
+                            </button>
+                        </h2>
+                        <div id="collapseOneH" class="accordion-collapse collapse" data-bs-parent="#accordionExample0">
+                            <div class="accordion-body m-0 p-0">
+                                <table class="table table-bordered p-0 m-0 w-100">
+                                    <colgroup>
+                                        <col style="width: 20%;" />
+                                        <col style="width: 20%;" />
+                                        <col style="width: 20%;" />
+                                        <col style="width: 20%;" />
+                                        <col style="width: 20%;" />
+                                    </colgroup>
+                                    <thead style="background-color: #ecf1fb;">
+                                        <tr>
+                                            <th>局都道府県</th>
+                                            <th>市区町村</th>
+                                            <th colspan="2">大字</th>
+                                            <th>小字</th>
+                                        </tr>
+                                        <tr>
+                                            <th>地番</th>
+                                            <th>枝番</th>
+                                            <th>子版</th>
+                                            <th>孫番</th>
+                                            <th>RS区分</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.HikiukeSearchResult.DispRecords.Count(); i++)
+            {
+                string acordionId = $"accordion{i}";
+                string acordionParent = $"#{acordionId}";
+                string collapseId = $"collapse{i}";
+                string dataTarget = $"#{collapseId}";
+
+                string hiddenRow = string.Empty;
+                if (Model.HikiukeSearchResult.DispRecords[i].IsDelRec) {
+                    hiddenRow = "display: none;";
+                }
+
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow">
+                    <td rowspan="4">
+                        @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].KouchiXmin)
+                        @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisXmin)
+                        @Html.CheckBoxFor(model => model.HikiukeSearchResult.DispRecords[i].CheckSelect,
+                                    new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                    <td rowspan="2">
+                        @{
+                            Dictionary<string, object> kouchiNoAttrs = new()
+                            {
+                                { "class", "form-control" },
+                                { "tabindex", tabIndex++ },
+                                { "type", "text" }
+                            };
+                            if (!Model.HikiukeSearchResult.DispRecords[i].IsNewRec)
+                                kouchiNoAttrs.Add("readonly", "readonly");
+
+                        }
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].KouchiNo, "", new { htmlAttributes = kouchiNoAttrs })
+                    </td>
+                    <td colspan="2">
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].ChimeiChiban, "",
+                                                               new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, @type = "text"  } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].HonchiMenseki, "",
+                                                               new { htmlAttributes = new { @class = "form-control text-end number-add-comma", tabindex = tabIndex++, @type = "text", maxlength = "10", @inputmode = "numeric" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].HikukeMenseki, "",
+                                                               new { htmlAttributes = new { @class = "form-control text-end number-add-comma", tabindex = tabIndex++, @type = "text", maxlength = "10", @inputmode = "numeric"  } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].TensakutoMenseki, "",
+                                                               new { htmlAttributes = new { @class = "form-control text-end number-add-comma", tabindex = tabIndex++, @type = "text", maxlength = "10", @inputmode = "numeric" } })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Syurui,
+                                                               Model.HikiukeSearchResult.SyuruiList,
+                                                               "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Kbn,
+                                                               Model.HikiukeSearchResult.KbnList,
+                                                               "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <td colspan="2">
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Shichoson,
+                                                               Model.HikiukeSearchResult.ShichosonList,
+                                                               "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td colspan="2">
+                        @{
+                            Dictionary<string, object> attrs = new() {
+                                { "class", "form-select form-select-lg"},
+                                { "tabindex", tabIndex++}
+                            };
+                            if (disableSanchiMeigara)
+                                attrs.Add("disabled", "disabled");
+                        }
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].SanchiMeigara,
+                                    Model.HikiukeSearchResult.SanchiMeigaraList,
+                                    "", attrs)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Hinsyu,
+                                    Model.HikiukeSearchResult.HinsyuList,
+                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Tahata,
+                                    Model.HikiukeSearchResult.TahataList,
+                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].SyuryoTokyu,
+                                    Model.HikiukeSearchResult.SyuryoTokyuList,
+                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <td>
+                        @{
+                            Dictionary<string, object> bunpitsuNoAttrs = new() {
+                                { "class", "form-control" },
+                                { "tabindex", tabIndex++ },
+                                { "type", "text" }
+                            };
+                            if (!Model.HikiukeSearchResult.DispRecords[i].IsNewRec)
+                                bunpitsuNoAttrs.Add("readonly", "readonly");
+
+                        }
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].BunpitsuNo, "", new { htmlAttributes = bunpitsuNoAttrs })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].ToukeiTansyu, "",
+                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, @readonly = true, @type = "text", maxlength = "4", @inputmode = "numeric" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].JituryoKijunTansyu, "",
+                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, @type = "text", maxlength = "4", @inputmode = "numeric" } })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Sanjaku, "",
+                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].JuitakushaKbn,
+                                    Model.HikiukeSearchResult.JuitakusyaKbnList,
+                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Shoyusha, "",
+                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                    </td>
+                    <td colspan="2">
+                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Bikou, "",
+                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                    </td>
+                </tr>
+                <tr class="accordion m-0 p-0" id=@acordionId style="@hiddenRow">
+                    <td colspan="8" class="m-0 p-0">
+                        <div class="accordion-item m-0 p-0">
+                            <h2 class="accordion-header m-0 p-0">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target=@dataTarget aria-expanded="true" aria-controls=@collapseId style="background-color: #ffffff;">
+                                    GIS
+                                </button>
+                            </h2>
+                            <div id=@collapseId class="accordion-collapse collapse" data-bs-parent=@acordionParent>
+                                <div class="accordion-body m-0 p-0">
+                                    <table class="table table-bordered p-0 m-0 w-100">
+                                        <colgroup>
+                                            <col style="width: 20%;" />
+                                            <col style="width: 20%;" />
+                                            <col style="width: 20%;" />
+                                            <col style="width: 20%;" />
+                                            <col style="width: 20%;" />
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisKyokuTodofuken)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisKyokuTodofuken)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisKyokuTodofuken)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisShichoson)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisShichoson)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisShichoson)
+                                                    </label>
+                                                </td>
+                                                <td colspan="2">
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisOoaza)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisOoaza)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisOoaza)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoaza)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoaza)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoaza)
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisChiban)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisChiban)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisChiban)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisEdaban)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisEdaban)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisEdaban)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoban)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoban)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisKoban)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisMagoban)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisMagoban)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisMagoban)
+                                                    </label>
+                                                </td>
+                                                <td>
+                                                    @Html.HiddenFor(model => model.HikiukeSearchResult.DispRecords[i].GisRsKbn)
+                                                    <label id="@Html.IdFor(model => model.HikiukeSearchResult.DispRecords[i].GisRsKbn)">
+                                                        @Html.DisplayTextFor(model => model.HikiukeSearchResult.DispRecords[i].GisRsKbn)
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("HikiukeResultPager", "hikiukeResultPagerClick", Model.HikiukeSearchResult.Pager)
+    </div>
+</div>
+

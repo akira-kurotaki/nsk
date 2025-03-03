@@ -1,0 +1,63 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Dto\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NskAppModelLibrary\NskAppModelLibrary.csproj" />
+    <ProjectReference Include="..\NskReportLibrary\NskReportLibrary.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.0-rc.2.24473.5" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.0-rc.2.24473.5" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Models\P1001\P1001Model.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Models\P1001\P1001SearchCondition.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Models\P1001\P1001TableRecord.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="ReportCreators\P1001\P1001Creator.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="Reports\P0041\P0041Report.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Reports\P1001\P1001Report.rpx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\P1002\P1002Report.rpx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MESCIUS.ActiveReports.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Chart.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Chart.Win.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Image.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Excel.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.SpreadBuilder" Version="2.1.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.QueryDesigner" Version="1.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Word.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Html.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Xml.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Pdf.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Design.Win.ja" Version="18.0.2" />
+  </ItemGroup>
+</Project>

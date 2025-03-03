@@ -1,0 +1,398 @@
+﻿@using NskWeb.Areas.F01.Consts;
+@model NskWeb.Areas.F01.Models.D0102.D0102Model
+
+<h4>【加入者情報】</h4>
+
+<div style="display: flex; justify-content: space-between;margin-bottom: 1rem;">
+    @* メッセージエリア２ *@
+    <div class="mb-3">
+        @Html.MessageAreaFor(model => model.MessageArea2, "", new { @class = "text-danger", @id = "MessageArea2" })
+    </div>
+    <div style="margin-right:-1rem;">
+        @if (Model.CanReportOutput)
+        {
+            <button id="reportOutputBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportOutputClick" style="width: 16.9rem;" tabindex=100>
+                申請書類等作成
+            </button>
+        }
+        else
+        {
+            <button id="reportOutputBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#reportOutputClick" disabled style="width: 16.9rem;" tabindex=100>
+                申請書類等作成
+            </button>
+        }
+    </div>
+</div>
+
+<ul id="myTab" class="nav nav-tabs mb-3" role="tablist">
+    <li role="presentation" class="nav-item">
+        <button type="button" id="KihonjohoTab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#Kihonjoho" role="tab" aria-controls="Kihonjoho" aria-selected="true">
+            基本情報
+        </button>
+    </li>
+    <li role="presentation" class="nav-item">
+        <button type="button" id="SonohokaTab" class="nav-link" data-bs-toggle="tab" data-bs-target="#Sonohoka" role="tab" aria-controls="Sonohoka" aria-selected="false">
+            その他
+        </button>
+    </li>
+</ul>
+
+<div id="myTabContent" class="tab-content p-2 ">
+    <div id="Kihonjoho" class="tab-pane active" role="tabpanel" aria-labelledby="KihonjohoTab">
+        <table class="table table-bordered common_table" style="table-layout:fixed;">
+            <caption class="visually-hidden">基本情報</caption>
+            <colgroup class="td_label" style="width: 26.5%;"></colgroup>
+            <colgroup class="td_control" style="width: 25%;"></colgroup>
+            <colgroup class="td_label" style="width: 23.5%;"></colgroup>
+            <colgroup class="td_control_normal" style="width: 25%;"></colgroup>
+            <tr>
+                @* 1行目：対象年度 *@
+                <td>@Html.LabelFor(model => model.EntryContent.Nendo, @Html.DisplayNameFor(model => model.EntryContent.Nendo))<i class="required">必須</i></td>
+                <td>
+                    @Html.NendoDropDownListFor(model => model.EntryContent.Nendo, "", new
+                        {
+                            @class = "form-select form-select-lg",
+                            tabindex = 103,
+                            title = "選択項目"
+                        })
+                    @Html.ValidationMessageFor(model => model.EntryContent.Nendo, "", new { @class = "text-danger" })
+                </td>
+                <td colspan="2" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 2行目：加入者管理コード *@
+                <td>@Html.LabelFor(model => model.EntryContent.KanyushaCd, @Html.DisplayNameFor(model => model.EntryContent.KanyushaCd))</td>
+                <td>
+                    @Html.EditorFor(model => model.EntryContent.KanyushaCd,
+                        new { htmlAttributes = 
+                            new { 
+                                @class = "form-control", 
+                                @maxLength = Html.GetFullDigitLength(model => model.EntryContent.KanyushaCd),
+                                tabindex = 104, 
+                                @type="text", 
+                                @inputmode = "numeric",
+                                title = "半角数字" + Html.GetFullDigitLength(model => model.EntryContent.KanyushaCd)+ "桁"
+                            } 
+                        })
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KanyushaCd, "", new { @class = "text-danger" })</div>
+                </td>
+                <td colspan="2" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 3行目：都道府県 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.TodofukenCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.TodofukenCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.TodofukenCd, "", new { @class = "text-danger" })</div>
+                </td>
+
+                @* 3行目：組合等 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.KumiaitoCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.KumiaitoCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.KumiaitoCd, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 4行目：支所 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.ShishoCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.ShishoCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.ShishoCd, "", new { @class = "text-danger" })</div>
+                </td>
+                @* 4行目：市町村 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.ShichosonCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.ShichosonCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shichoson, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.ShichosonCd, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 5行目：大地区 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.DaichikuCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.DaichikuCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.DaichikuCd, "", new { @class = "text-danger" })</div>
+                </td>
+
+                @* 5行目：小地区 *@
+                <td>@Html.LabelFor(model => model.TodofukenDropDownList.ShochikuCd, @Html.DisplayNameFor(model => model.TodofukenDropDownList.ShochikuCd))</td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shochiku, Model.TodofukenDropDownList,
+                             "", new
+                             {
+                                 @class = "form-select form-select-lg",
+                                 title = "選択項目"
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.TodofukenDropDownList.ShochikuCd, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 6行目：氏名又は法人名（フリガナ）*@
+                <td>@Html.LabelFor(model => model.HojinFullKana, @Html.DisplayNameFor(model => model.HojinFullKana))</td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.HojinFullKana,
+                             new
+                             {
+                                 htmlAttributes = new
+                                 {
+                                     @class = "form-control",
+                                     maxlength = 30,
+                                     @disabled = true,
+                                     title = "半角カタカナ30桁以内"
+                                 }
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.HojinFullKana, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 7行目：氏名又は法人名 *@
+                <td>@Html.LabelFor(model => model.HojinFullNm, @Html.DisplayNameFor(model => model.HojinFullNm))</td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.HojinFullNm,
+                             new
+                             {
+                                 htmlAttributes = new
+                                 {
+                                     @class = "form-control",
+                                     maxlength = 30,
+                                     @disabled = true,
+                                     title = "全角30桁以内"
+                                 }
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.HojinFullNm, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 8行目：耕地郵便番号 *@
+                <td>@Html.LabelFor(model => model.EntryContent.KouchiPostalCd1, "耕地郵便番号")</td>
+                <td colspan="3">
+                    <fieldset>
+                        <legend class="visually-hidden">耕地郵便番号</legend>
+                        <div class="row row-cols-auto">
+                            <div class="col">
+                                @Html.EditorFor(model => model.EntryContent.KouchiPostalCd1,
+                                         new
+                                         {
+                                             htmlAttributes = new
+                                             {
+                                                 @class = "form-control",
+                                                 @maxlength = Html.GetFullDigitLength(model => model.EntryContent.KouchiPostalCd1),
+                                                 @style = "width:7rem",
+                                                 tabindex = 105,
+                                                 @type = "text",
+                                                 @inputmode = "numeric",
+                                                 title = "半角数字" + Html.GetFullDigitLength(model => model.EntryContent.KouchiPostalCd1) + "桁"
+                                             }
+                                         })
+                            </div>
+                            <div class="col">
+                                <span class="form-control-plaintext">－</span>
+                            </div>
+                            <div class="col">
+                                @Html.EditorFor(model => model.EntryContent.KouchiPostalCd2,
+                                         new
+                                         {
+                                             htmlAttributes = new
+                                             {
+                                                 @class = "form-control",
+                                                 @maxlength = Html.GetFullDigitLength(model => model.EntryContent.KouchiPostalCd2),
+                                                 @style = "width:9rem",
+                                                 tabindex = 106,
+                                                 @type = "text",
+                                                 @inputmode = "numeric",
+                                                 title = "半角数字" + Html.GetFullDigitLength(model => model.EntryContent.KouchiPostalCd2) + "桁"
+                                             }
+                                         })
+                            </div>
+                        </div>
+                    </fieldset>
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KouchiPostalCd1, "", new { @class = "text-danger" })</div>
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KouchiPostalCd2, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 9行目：耕地住所（フリガナ）*@
+                <td>@Html.LabelFor(model => model.EntryContent.KouchiAddressKana, @Html.DisplayNameFor(model => model.EntryContent.KouchiAddressKana))</td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.EntryContent.KouchiAddressKana,
+                             new
+                             {
+                                 htmlAttributes = new
+                                 {
+                                     @class = "form-control",
+                                     @maxLength = Html.GetWithinStringLengthMaxLength(model => model.EntryContent.KouchiAddressKana),
+                                     tabindex = 107,
+                                     title = "半角カタカナ" + Html.GetWithinStringLengthMaxLength(model => model.EntryContent.KouchiAddressKana) + "桁以内"
+                                 }
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KouchiAddressKana, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 10行目：耕地住所 *@
+                <td>@Html.LabelFor(model => model.EntryContent.KouchiAddress, @Html.DisplayNameFor(model => model.EntryContent.KouchiAddress))</td>
+                <td colspan="3">
+                    @Html.EditorFor(model => model.EntryContent.KouchiAddress,
+                             new
+                             {
+                                 htmlAttributes = new
+                                 {
+                                     @class = "form-control",
+                                     @maxLength = Html.GetWithinStringLengthMaxLength(model => model.EntryContent.KouchiAddress),
+                                     tabindex = 108,
+                                     title = "全角" + Html.GetWithinStringLengthMaxLength(model => model.EntryContent.KouchiAddress) + "桁以内"
+                                 }
+                             })
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KouchiAddress, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @* 11行目：耕地面積 *@
+                <td>@Html.LabelFor(model => model.EntryContent.KouchiMenseki, @Html.DisplayNameFor(model => model.EntryContent.KouchiMenseki))</td>
+                <td>
+                    @Html.EditorFor(
+                            model => model.EntryContent.KouchiMenseki,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control text-end number-add-comma",
+                                    @style = "",
+                                    @maxlength = Html.GetNumberDecFullMaxLength(model => model.EntryContent.KouchiMenseki),
+                                    tabindex = 109,
+                                    @type = "text",
+                                    @inputmode = "numeric",
+                                    @title = "半角数値（小数有、正数）整数部" + Html.GetNumberDecIntMaxLength(model => model.EntryContent.KouchiMenseki) + "桁以内　小数部" + Html.GetNumberDecDecMaxLength(model => model.EntryContent.KouchiMenseki) + "桁以内"
+                                }
+                            }
+                    )
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KouchiMenseki, "", new { @class = "text-danger" })</div>
+                </td>
+                <td colspan="2" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 12行目：耕地形態 *@
+                <td>
+                    @Html.DisplayNameFor(model => model.EntryContent.KouchiKeitaiCd)
+                    @if (Model.DisplayFlg)
+                    {
+                        <a href="javascript:void(0)" class="help_icon focus-ring rounded-2" id="JidoTokuyaku_CopyHelp" data-tooltip="@Model.Message" title="ヘルプ" tabindex="110"></a>
+                    }
+                    <i class="required">必須</i>
+                </td>
+                <td colspan="3">
+                    <div class="radio_group">
+                        <fieldset>
+                            <legend class="visually-hidden">耕地形態</legend>
+                            @Html.RadioButtonFor(model => model.EntryContent.KouchiKeitaiCd, ((int)F01Const.KochiKeitai.Hata).ToString(),
+                                     new { @id = "EntryContent_KeieiKeitaiCd1", @class = "magic-radio", tabindex = 111 })
+                            <label for="EntryContent_KeieiKeitaiCd1">畑</label>
+                            @Html.RadioButtonFor(model => model.EntryContent.KouchiKeitaiCd, ((int)F01Const.KochiKeitai.Ta).ToString(),
+                                     new { @id = "EntryContent_KeieiKeitaiCd2", @class = "magic-radio", tabindex = 112 })
+                            <label for="EntryContent_KeieiKeitaiCd2">田</label>
+                            @Html.RadioButtonFor(model => model.EntryContent.KouchiKeitaiCd, ((int)F01Const.KochiKeitai.Sonohoka).ToString(),
+                                     new { @id = "EntryContent_KeieiKeitaiCd3", @class = "magic-radio", tabindex = 113 })
+                            <label for="EntryContent_KeieiKeitaiCd3">その他</label>
+                            @Html.RadioButtonFor(model => model.EntryContent.KouchiKeitaiCd, ((int)F01Const.KochiKeitai.NotSelected).ToString(),
+                                     new { @id = "EntryContent_KeieiKeitaiCd0", @class = "magic-radio", tabindex = 114 })
+                            <label for="EntryContent_KeieiKeitaiCd0">未選択</label>
+                        </fieldset>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.EntryContent.KouchiKeitaiCd, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                @* 13行目：個人情報の取扱いについて *@
+                <td>@Html.DisplayNameFor(model => model.EntryContent.KojinjohoToriatsukaiFlg)</td>
+                <td colspan="3">
+                    <div>
+                        <fieldset>
+                            <legend class="visually-hidden">個人情報の取扱いについて</legend>
+                            @Html.CheckBoxFor(model => model.EntryContent.KojinjohoToriatsukaiFlg, new { @class = "magic-checkbox", tabindex = 115 })
+                            <label for="EntryContent_KojinjohoToriatsukaiFlg">同意している</label>
+                            <div>@Html.ValidationMessageFor(model => model.EntryContent.KojinjohoToriatsukaiFlg, "", new { @class = "text-danger" })</div>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                @* 14行目：申請年月日 *@
+                <td>@Html.LabelFor(model => model.EntryContent.KanyuShinseiYmd, @Html.DisplayNameFor(model => model.EntryContent.KanyuShinseiYmd))</td>
+                <td>
+                    <div class="input-group date date-picker">
+                        @Html.EditorFor(model => model.EntryContent.KanyuShinseiYmd,
+                                 new
+                                 {
+                                     @id = "EntryContent_KanyuShinseiYmd",
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         maxlength = 9,
+                                         tabindex = 116,
+                                         title = "和暦年月日（例：R04/03/01）"
+                                     }
+                                 })
+                        <div class="input-group-text input-group-addon" title="カレンダーを表示">
+                            <span class="bi bi-grid-3x3-gap-fill"></span>
+                        </div>
+                    </div>
+                    <div>@Html.ValidationMessageFor(model => model.EntryContent.KanyuShinseiYmd, "", new { @class = "text-danger" })</div>
+                </td>
+                <td colspan="2" class="td_spe_color">例：H30/11/01</td>
+            </tr>
+        </table>
+    </div>
+    <div id="Sonohoka" class="tab-pane" role="tabpanel" aria-labelledby="SonohokaTab">
+        <table class="table table-bordered common_table" style="table-layout:fixed;">
+            <caption class="visually-hidden">その他</caption>
+            <colgroup class="td_label" style="width: 26.5%;"></colgroup>
+            <colgroup class="td_control" style="width: 73.5%;"></colgroup>
+            <tr>
+                @* 備考 *@
+                <td>@Html.LabelFor(model => model.EntryContent.Biko, @Html.DisplayNameFor(model => model.EntryContent.Biko))</td>
+                <td>
+                    @Html.TextAreaFor(model => model.EntryContent.Biko, new
+                        {
+                            @class = "form-control biko_area",
+                            @maxLength = Html.GetWithinStringLengthMaxLength(model => model.EntryContent.Biko),
+                            tabindex = 117,
+                            style = "resize: none",
+                            @title = "全角" + Html.GetWithinStringLengthMaxLength(model => model.EntryContent.Biko) + "桁"
+                        })
+                    @Html.ValidationMessageFor(model => model.EntryContent.Biko, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+
+

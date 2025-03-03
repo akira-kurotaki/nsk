@@ -1,0 +1,63 @@
+﻿@model NskWeb.Areas.F02.Models.D0201.D0201Model
+@{
+    var startIndex = 200;
+}
+
+@if (Model.SearchResult.TableRecords != null && 0 < Model.SearchResult.TableRecords.Count())
+{
+    <div class="table-responsive">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped" style="width:200rem;">
+            <caption class="visually-hidden">検索結果</caption>
+            <thead class="sticky-top">
+                <tr>
+                    <th style="width: 1%;" class="text-center" scope="col">選<br />択</th>
+                    <th style="width: 8%;" scope="col">対象年度</th>
+                    <th style="width: 10%;" scope="col">加入者管理<br />コード</th>
+                    <th style="width: 10%;" scope="col">都道府県</th>
+                    <th style="width: 16%;" scope="col">組合等</th>
+                    <th style="width: 16%;" scope="col">支所</th>
+                    <th scope="col">氏名又は法人名</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int index = 0; index < Model.SearchResult.TableRecords.Count(); index++)
+                {
+                    var item = Model.SearchResult.TableRecords.ElementAt(index);
+
+                    <tr>
+                        @* 選択チェックボックス *@
+                        <td class="text-center">
+                            <div>
+                                @Html.CheckBoxFor(model => model.SearchResult.TableRecords[index].SelectCheck, new { @class = "magic-checkbox selectCheck magic-checkbox-no-label", data_index = index, tabindex = startIndex + index })
+                                <label for=@string.Concat("SearchResult_TableRecords_", index, "__SelectCheck")></label>
+                            </div>
+                        </td>
+
+                        @* 対象年度 *@
+                        <td class="table-without-wordbreak">@Html.Label("", item.Nendo == null ? "-" : NendoUtil.GetNendoDisp1(item.Nendo.Value))</td>
+                        @* 加入者管理コード *@
+                        <td class="table-without-wordbreak">@Html.Label("", item.KanyushaCd)</td>
+                        @* 都道府県 *@
+                        <td>@Html.Label("", item.TodofukenNm)</td>
+                        @* 組合等 *@
+                        <td>@Html.Label("", item.KumiaitoNm ?? string.Empty)</td>
+                        @* 支所 *@
+                        <td>@Html.Label("", item.ShishoNm ?? string.Empty)</td>
+                        @* 氏名又は法人名 *@
+                        <td>@Html.Label("", item.HojinFullNm ?? string.Empty)</td>
+
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[index].NogyoshaId)
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+}

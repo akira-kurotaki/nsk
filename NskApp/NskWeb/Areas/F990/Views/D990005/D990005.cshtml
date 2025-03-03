@@ -1,0 +1,395 @@
+﻿@model NskWeb.Areas.F990.Models.D990005.D990005Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+    ViewBag.Title = "CheckInput";
+}
+
+@if (null != ViewBag.Message && "" != ViewBag.Message)
+{
+    <script type="text/javascript">
+        alert("@ViewBag.Message");
+    </script>
+}
+<div class="table-responsive table-thead-container ">
+    <div class="main_title btn_group_left mt_5">
+        <h3>05_入力チェック、ツールチップテスト</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Create", "D990005", new { area = "F990" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="form-horizontal">
+        <h4>CheckInput</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Numeric, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.Numeric,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.Numeric, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">数字、必須</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberPositive, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.NumberPositive,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetNumberPositiveMaxLength(model => model.NumberPositive),
+                                 @type = "text"
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.NumberPositive, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">整数：8桁</p>
+            <p class="col-md-3">NumberPositive：@Html.GetNumberPositiveMaxLength(model => model.NumberPositive)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberDec, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.NumberDec,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetNumberDecFullMaxLength(model => model.NumberDec)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.NumberDec, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">桁数：8桁, 小数部：2桁</p>
+            <p class="col-md-3">NumberDecFullMaxLength：@Html.GetNumberDecFullMaxLength(model => model.NumberDec)</p>
+            <p class="col-md-3">NumberDecIntMaxLength：@Html.GetNumberDecIntMaxLength(model => model.NumberDec)</p>
+            <p class="col-md-3">NumberDecDecMaxLength：@Html.GetNumberDecDecMaxLength(model => model.NumberDec)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberSign, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.NumberSign,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetNumberSignMaxLength(model => model.NumberSign),
+                                 @type = "text"
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.NumberSign, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">整数：5桁</p>
+            <p class="col-md-3">NumberSign：@Html.GetNumberSignMaxLength(model => model.NumberSign)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.NumberSignDec, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.NumberSignDec,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetNumberSignDecFullMaxLength(model => model.NumberSignDec)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.NumberSignDec, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">桁数：5桁, 小数部：1桁</p>
+            <p class="col-md-3">NumberSignDecFullMaxLength：@Html.GetNumberSignDecFullMaxLength(model => model.NumberSignDec)</p>
+            <p class="col-md-3">NumberSignDecIntMaxLength：@Html.GetNumberSignDecIntMaxLength(model => model.NumberSignDec)</p>
+            <p class="col-md-3">NumberSignDecDecMaxLength：@Html.GetNumberSignDecDecMaxLength(model => model.NumberSignDec)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.HalfWidthAlphaNum, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HalfWidthAlphaNum,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.HalfWidthAlphaNum, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.HalfWidthAlphaNumSymbol, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HalfWidthAlphaNumSymbol,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.HalfWidthAlphaNumSymbol, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.EmailAddress, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.EmailAddress, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            @maxlength = Html.GetStringLengthMaxLength(model => model.EmailAddress)
+                        }
+                    })
+
+                @Html.ValidationMessageFor(model => model.EmailAddress, "", new { @class = "text-danger" })
+                <p class="col-md-3">StringLength：@Html.GetStringLengthMaxLength(model => model.EmailAddress)</p>
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.DateGYMD, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <div class="input-group date date-picker">
+                    @Html.EditorFor(model => model.DateGYMD,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 9
+                             }
+                         })
+                    <div class="input-group-text input-group-addon" title="カレンダーを表示">
+                        <span class="bi bi-grid-3x3-gap-fill"></span>
+                    </div>
+                </div>
+                @Html.ValidationMessageFor(model => model.DateGYMD, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.Hiragana, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Hiragana,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+
+                @Html.ValidationMessageFor(model => model.Hiragana, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.FullWidthKatakana, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FullWidthKatakana,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+
+                @Html.ValidationMessageFor(model => model.FullWidthKatakana, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.HalfWidthKatakana, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.HalfWidthKatakana,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+
+                @Html.ValidationMessageFor(model => model.HalfWidthKatakana, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ExceptGaiji, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.ExceptGaiji,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 maxlength = 15
+                             }
+                         })
+
+                @Html.ValidationMessageFor(model => model.ExceptGaiji, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.WithinStringLength, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.WithinStringLength,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetWithinStringLengthMaxLength(model => model.WithinStringLength)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.WithinStringLength, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">半角英数記号、5文字以内</p>
+            <p class="col-md-3">WithinStringLength：@Html.GetWithinStringLengthMaxLength(model => model.WithinStringLength)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.WithinNumericLength, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.WithinNumericLength,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetWithinDigitLengthMaxLength(model => model.WithinNumericLength)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.WithinNumericLength, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">数字、5桁以内</p>
+            <p class="col-md-3">WithinDigitLength：@Html.GetWithinDigitLengthMaxLength(model => model.WithinNumericLength)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.FullStringLength, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.FullStringLength,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetFullStringLength(model => model.FullStringLength)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.FullStringLength, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">外字以外、全桁：5文字</p>
+            <p class="col-md-3">FullStringLength：@Html.GetFullStringLength(model => model.FullStringLength)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.FullNumericLength, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.FullNumericLength,
+                         new
+                         {
+                             htmlAttributes = new
+                             {
+                                 @class = "form-control",
+                                 @maxlength = Html.GetFullDigitLength(model => model.FullNumericLength)
+                             }
+                         })
+                @Html.ValidationMessageFor(model => model.FullNumericLength, "", new { @class = "text-danger" })
+            </div>
+            <p class="col-md-3">数字、全桁：5桁</p>
+            <p class="col-md-3">FullDigitLength：@Html.GetFullDigitLength(model => model.FullNumericLength)</p>
+        </div>
+
+        <hr />
+        <div class="form-group">
+            @Html.LabelFor(model => model.ProhibitWord, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-7">
+                @Html.EditorFor(model => model.ProhibitWord, new
+                    {
+                        htmlAttributes = new
+                        {
+                            @class = "form-control",
+                            maxlength = 15
+                        }
+                    })
+
+                @Html.ValidationMessageFor(model => model.ProhibitWord, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <hr />
+        <br>
+        <div class="form-group">
+            <label for="ToolTipTest1">１対１で対応するラベルと入力項目のToolTip表示テスト</label>
+            <input id="ToolTipTest1" title="１対１で対応するラベルと入力項目のToolTip表示テスト" />
+        </div>
+
+        <br>
+        <div class="form-group">
+            <label for="ToolTipTest2">ラベルに対して入力項目が複数ある場合のToolTip表示テスト</label>
+            <input id="ToolTipTest2" title="ラベルに対して入力項目が複数ある場合のToolTip表示テスト" />
+            <input id="ToolTipTest2" title="ラベルに対して入力項目が複数ある場合のToolTip表示テスト" />
+        </div>
+
+        <br>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+
+    </div>
+}
+
+<div>
+    @Html.ActionLink("戻る", "Init", "D0000", new { area = "F00" }, new { @class = "btn btn-warning mt_15" })
+</div>
+
+@section Scripts {
+}

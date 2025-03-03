@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\CoreLibrary\CommonLibrary\CommonLibrary.csproj" />
+    <ProjectReference Include="..\..\Core\CoreLibrary\CoreLibrary\CoreLibrary.csproj" />
+    <ProjectReference Include="..\..\Core\CoreLibrary\ModelLibrary\ModelLibrary.csproj" />
+    <ProjectReference Include="..\NskAppModelLibrary\NskAppModelLibrary.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Core\Dto\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MESCIUS.ActiveReports.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Chart.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Chart.Win.ja" Version="18.0.2" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Image.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Excel.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.SpreadBuilder" Version="2.1.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.QueryDesigner" Version="1.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Word.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Html.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Xml.ja" Version="18.0.0" />
+    <PackageReference Include="MESCIUS.ActiveReports.Export.Pdf.ja" Version="18.0.0" />
+  </ItemGroup>
+</Project>

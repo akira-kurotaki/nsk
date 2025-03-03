@@ -1,0 +1,79 @@
+﻿@model NskWeb.Areas.F105.Models.D105030.D105030Model
+@{
+    var startIndex = 700;
+    int tabIndex = startIndex;
+}
+<div class="mb-3">
+    @for (int i = 0; i < Model.KikenDankaiKbn.DispRecords.Count; i++)
+    {
+        <!-- 行ｎ -->
+        <div>@Html.ValidationMessageFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiCd, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KikenDankaiKbn.DispRecords[i].KikenDankaiKbn, null, new { @class = "text-danger" })</div>
+    }
+    <div>@Html.MessageAreaFor(model => model.RuibetsuSettei.MessageArea6, "", new { @class = "text-danger", id = "MessageArea6" })</div>
+</div>
+<div class="clearfix"></div>
+
+<div class="table-thead-container" style="width: 70%;">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("KikenDankaiKbnPager", "kikenDankaiKbnPagerClick", Model.KikenDankaiKbn.Pager)
+    </div>
+    @Html.HiddenFor(model => model.KikenDankaiKbn.AllRecCount)
+    <table class="table table-bordered" style="">
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th></th>
+                <th>統計単位地域コード</th>
+                <th>統計単位地域名</th>
+                <th>危険段階区分（危険段階料率）</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.KikenDankaiKbn.DispRecords.Count(); i++)
+            {
+                string hiddenRow = string.Empty;
+                if (Model.KikenDankaiKbn.DispRecords[i].IsDelRec)
+                {
+                    hiddenRow = "display: none;";
+                }
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow">
+                    <td>
+                        @Html.HiddenFor(model => model.KikenDankaiKbn.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.KikenDankaiKbn.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.KikenDankaiKbn.DispRecords[i].Xmin)
+                        @Html.HiddenFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiNm)
+                        @Html.CheckBoxFor(model => model.KikenDankaiKbn.DispRecords[i].CheckSelect,
+                                    new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> attrs = new()
+                            {
+                                { "class", "form-control" },
+                                { "tabindex", tabIndex++ },
+                                { "type", "text" }
+                            };
+                            if (!Model.KikenDankaiKbn.DispRecords[i].IsNewRec)
+                                attrs.Add("readonly", "readonly");
+
+                        }
+                        @Html.EditorFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiCd, "",
+                                 new { htmlAttributes = attrs })
+                    </td>
+                    <td id="@Html.IdFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiNm)">
+                        @Html.DisplayTextFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiNm)
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.KikenDankaiKbn.DispRecords[i].KikenDankaiKbn,
+                                    Model.KikenDankaiKbn.KikenDankaiKbnList,
+                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("KikenDankaiKbnPager", "kikenDankaiKbnPagerClick", Model.KikenDankaiKbn.Pager)
+    </div>
+</div>

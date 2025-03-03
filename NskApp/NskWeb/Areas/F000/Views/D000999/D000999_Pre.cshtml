@@ -1,0 +1,339 @@
+﻿@{
+    //Layout = "~/Views/Shared/_LayoutLogin.cshtml";
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_2;
+}
+
+@model NskWeb.Areas.F000.Models.D000999.D000999Model
+<h3 style="text-align: center;">簡易ログイン画面</h3>
+<hr />
+@using (Html.BeginForm("Login", "D000999"))
+{
+    <div class="form-horizontal">
+        <div class="mb-3">
+            @Html.LabelFor(model => model.UserId, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.EditorFor(model => model.UserId, new { htmlAttributes = new { @class = "form-control", maxlength = 20 } })
+                @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="mb-3">
+            @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "control-label col-md-4" })
+            <div class="col-md-8">
+                @Html.PasswordFor(model => model.Password, new { @class = "form-control", maxlength = 100 })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="col-md-offset-1 col-md-11">
+                @Html.MessageAreaFor(model => model.MessageArea, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="mb-3">
+            <div class="col-md-offset-4 col-md-8">
+                <button type="submit" class="btn btn-warning mt_15">ログイン</button>
+            </div>
+        </div>
+    </div>
+}
+
+<hr />
+<br />
+
+@using (Html.BeginForm("DebugLogin", "D000999"))
+{
+    <div class="table-responsive">
+        下記の権限でログインします
+
+        <table class="table common_table table-bordered table-condensed">
+            <colgroup class="td_label"></colgroup>
+            <colgroup class="td_normal"></colgroup>
+            <tr>
+                <td>ユーザID</td>
+                <td>
+                    @Html.EditorFor(model => model.UserId, "", new { htmlAttributes = new { @class = "form-control", maxlength = 11 } })
+                </td>
+            </tr>
+            <tr>
+                <td>ユーザ管理番号</td>
+                <td>
+                    @Html.EditorFor(model => model.UserKanriNo, "", new { htmlAttributes = new { @class = "form-control", maxlength = 4 } })
+                </td>
+            </tr>
+            <tr>
+                <td>都道府県コード</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(
+                                             model => model.TodofukenCd,
+                                             "",
+                                             new { htmlAttributes = new 
+                                                 { 
+                                                     @class = "form-control", 
+                                                     @style = "width:6rem",
+                                                     @maxlength = Html.GetWithinStringLengthMaxLength(model => model.TodofukenCd)
+                                                 }
+                                             })
+                                    @Html.ValidationMessageFor(model => model.TodofukenCd, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <div>@Html.TextBoxFor(model => model.TodofukenNm, new { @style = "background-color: white;border:none;text-align:left;", @disabled = "true" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>組合等コード</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(
+                                             model => model.KumiaitoCd,
+                                             "",
+                                             new { htmlAttributes = new 
+                                                 { 
+                                                     @class = "form-control",
+                                                     @style = "width:8rem",
+                                                     @maxlength = Html.GetWithinStringLengthMaxLength(model => model.KumiaitoCd)
+                                                 }
+                                             })
+                                    @Html.ValidationMessageFor(model => model.KumiaitoCd, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <div>@Html.TextBoxFor(model => model.KumiaitoNm, new { @style = "background-color: white;border:none;text-align:left;", @disabled = "true" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>支所コード</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    @Html.EditorFor(
+                                             model => model.ShishoCd,
+                                             "",
+                                             new { htmlAttributes = new 
+                                                 { 
+                                                     @class = "form-control", 
+                                                     @style = "width:6rem",
+                                                     @maxlength = Html.GetWithinStringLengthMaxLength(model => model.ShishoCd)
+                                                 }
+                                             })
+                                    @Html.ValidationMessageFor(model => model.ShishoCd, "", new { @class = "text-danger" })
+                                </div>
+                            </td>
+                            <td>&nbsp;&nbsp;&nbsp;</td>
+                            <td>
+                                <div>@Html.TextBoxFor(model => model.ShishoNm, new { @style = "background-color: white;border:none;text-align:left;", @disabled = "true" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td>ユーザ管理権限</td>
+                <td>
+                    @Html.DropDownListFor(
+                             model => model.UserKanriKengen,
+                             new { @class = "form-select form-select-lg" }
+                             )
+                </td>
+            </tr>
+            <tr>
+                <td>氏名</td>
+                <td>
+                    @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control", maxlength = 30 } })
+                </td>
+            </tr>
+            <tr>
+                <td>氏名カナ</td>
+                <td>
+                    @Html.EditorFor(model => model.NameKana, new { htmlAttributes = new { @class = "form-control", maxlength = 30 } })
+                </td>
+            </tr>
+            <tr>
+                <td>連絡先電話番号</td>
+                <td>
+                    @Html.EditorFor(model => model.Tel, new { htmlAttributes = new { @class = "form-control", maxlength = 13 } })
+                </td>
+            </tr>
+            <tr>
+                <td>メールアドレス</td>
+                <td>
+                    @Html.EditorFor(model => model.Mail, new { htmlAttributes = new { @class = "form-control", maxlength = 50 } })
+                </td>
+            </tr>
+            <tr>
+                <td>システム利用者区分</td>
+                <td>
+                    @Html.DropDownListFor(
+                             model => model.SystemRiyoKbn,
+                             new { @class = "form-select form-select-lg" }
+                             )
+                    <br />※2:都道府県連合会職員、6:申請者は使用しない
+                </td>
+            </tr>
+            <tr>
+                <td>画面操作権限ID</td>
+                <td>
+                    @Html.EditorFor(model => model.ScreenSosaKengenId, new { htmlAttributes = new { @class = "form-control", maxlength = 4 } })
+                </td>
+            </tr>
+            <tr>
+                <td>支所グループID</td>
+                <td>
+                    @Html.EditorFor(model => model.ShishoGroupId, new { htmlAttributes = new { @class = "form-control", maxlength = 4 } })
+                </td>
+            </tr>
+            <tr>
+                <td>ユーザ管理権限</td>
+                <td>
+                    @Html.DropDownListFor(
+                             model => model.UserKanriKengen,
+                             new { @class = "form-select form-select-lg" }
+                             )
+                </td>
+            </tr>
+            <tr>
+                <td>画面表示モード</td>
+                <td>
+                    <table>
+                        <tr>
+                            <td>
+                                <div>
+                                    @Html.RadioButtonFor(
+                                             model => model.ScreenMode, "1",
+                                             new { @id = "ScreenMode1", @class = "magic-radio" }
+                                             )
+                                    <label for="ScreenMode1">PC</label>
+                                    @Html.RadioButtonFor(
+                                             model => model.ScreenMode, "2",
+                                             new { @id = "ScreenMode2", @class = "magic-radio" }
+                                             )
+                                    <label for="ScreenMode2">Tablet</label>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area" style="text-align: center;">
+            <button type="submit" class="btn btn-warning mt_15" name="DebugLogin" value="DebugLogin">ログイン</button>
+        </div>
+    </div>
+}
+
+@section styles {
+    <style>
+        .main_data {
+            padding-right: 3.5rem;
+        }
+
+        .location_box {
+            display: none;
+        }
+
+        hr {
+            margin-top: 20px;
+            margin-bottom: 20px;
+            border-top: none;
+        }
+
+        .table > tbody > tr > th,
+        .table > tbody > tr > td {
+            border: 1px solid #ddd;
+        }
+
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+
+        function getData() {
+
+            var indexed_array = {};
+
+            indexed_array['TodofukenCd'] = $('#TodofukenCd').val();
+            indexed_array['KumiaitoCd'] = $('#KumiaitoCd').val();
+            indexed_array['ShishoCd'] = $('#ShishoCd').val();
+
+            return indexed_array;
+        }
+
+        $(function () {
+            $('#TodofukenCd').on("blur", function (e) {
+                var data = getData();
+                var url = '@Url.Action("Todofuken", "D000999", new { area = "F000" })';
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    url: url,
+                    success: function (data) {
+                        $('#TodofukenNm').val(data.TodofukenNm).text(data.TodofukenNm);
+                        $('#KumiaitoNm').val(data.KumiaitoNm).text(data.KumiaitoNm);
+                        $('#ShishoNm').val(data.ShishoNm).text(data.ShishoNm);
+                    }
+                })
+            });
+        });
+
+        $(function () {
+            $('#KumiaitoCd').on("blur", function (e) {
+                var data = getData();
+                var url = '@Url.Action("Kumiaito", "D000999", new { area = "F000" })';
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    url: url,
+                    success: function (data) {
+                        $('#KumiaitoNm').val(data.KumiaitoNm).text(data.KumiaitoNm);
+                        $('#ShishoNm').val(data.ShishoNm).text(data.ShishoNm);
+                    }
+                })
+            });
+        });
+
+        $(function () {
+            $('#ShishoCd').on("blur", function (e) {
+                var data = getData();
+                var url = '@Url.Action("Shisho", "D000999", new { area = "F000" })';
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(data),
+                    dataType: 'json',
+                    url: url,
+                    success: function (data) {
+                        $('#ShishoNm').val(data.ShishoNm).text(data.ShishoNm);
+                    }
+                })
+            });
+        });
+
+    </script>
+}

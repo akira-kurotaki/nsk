@@ -1,0 +1,76 @@
+﻿@using NskWeb.Common.Menu
+@{
+    var menu = SessionUtil.Get<List<NskMenuItem>>(CoreConst.SESS_MENU_LIST, this.Context) == null ? new List<NskMenuItem>() : SessionUtil.Get<List<NskMenuItem>>(CoreConst.SESS_MENU_LIST, this.Context);
+    var tabindex = 3;
+}
+<i></i>
+@foreach (var item in menu)
+{
+    <div>
+        <h4 id="@item.MenuId">
+            <a href="javascript:void(0);" class="normal_style tab" tabindex="@(tabindex++)"><b class="eq_active_h4_b">@item.Text</b></a>
+        </h4>
+        @if (item.ChildItems != null)
+        {
+            string preMenuId = "";
+            int lvl = 1;
+            int x = 0;
+            string tagData = "";
+
+            <div id="div_@item.MenuId" style="display:none;">
+                @foreach (var chileditem in item.ChildItems)
+                {
+                    if (lvl < chileditem.MenuLevel)
+                    {
+                        x = 1;
+                        tagData = "<div id = 'div_" + preMenuId + "' style = 'display:none;' > ";
+                        @Html.Raw(tagData)
+                    }
+                    else if (lvl > chileditem.MenuLevel)
+                    {
+                        for (int i=chileditem.MenuLevel; i < lvl; i++)
+                        {
+                            tagData = "</div>";
+                            @Html.Raw(tagData)
+                        }
+                    }
+                    preMenuId = chileditem.MenuId;
+                    lvl = chileditem.MenuLevel;
+                    string screenId = chileditem.ScreenId;
+                    string action = "javascript:void(0);";
+                    string h4Class = "item_" + (chileditem.MenuLevel > 3 ? 3 : chileditem.MenuLevel.ToString());
+                    if ("#".Equals(screenId))
+                    {
+                        <h4 id="@chileditem.MenuId" class="@h4Class">
+                            <a href="@action" class="normal_style tab" tabindex="@(tabindex++)"><b class="eq_active_h4_b">@chileditem.Text</b></a>
+                        </h4>
+
+                    }
+                    else
+                    {
+                        <h4 id="@chileditem.MenuId" class="@h4Class">
+                            @if (!"".Equals(screenId))
+                            {
+                                action = Url.Action("Link", "C000000", new { area = "F000" }) + "?" + InfraConst.MENU_REQUEST_QUERYSTRING + "=" + screenId + (!string.IsNullOrEmpty(chileditem.OpeId) ? "&" + InfraConst.MENU_OPE_REQUEST_QUERYSTRING +"=" + chileditem.OpeId : "");
+                                <a href="@action" class="normal_style" tabindex="@(tabindex++)"><b class="eq_active_h4_b">@chileditem.Text</b></a>
+                            }
+                            else
+                            {
+                                <a href="@action" class="normal_style" tabindex="@(tabindex++)"><b class="eq_active_h4_b notlink">@chileditem.Text</b></a>
+                            }
+                        </h4>
+                    }
+
+                }
+
+                @if (lvl > 1){
+                    for (int i = 1; i < lvl; i++)
+                    {
+                        tagData = "</div>";
+                        @Html.Raw(tagData)
+                    }
+                }
+            </div>
+        }
+    </div>
+}

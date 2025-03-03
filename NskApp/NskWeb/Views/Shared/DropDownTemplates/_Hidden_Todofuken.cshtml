@@ -1,0 +1,24 @@
+﻿@model ITodofukenDropDownList
+@using CoreLibrary.Core.Dto;
+
+@Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.IsTodofuken, Model), Model.IsTodofuken)
+@Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.IsKumiaito, Model), Model.IsKumiaito)
+@Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.IsShisho, Model), Model.IsShisho)
+@Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.ModelPropertyName, Model), Model.ModelPropertyName, new { @id = "hidModelPropertyName" })
+@{
+    if (Model.IsTodofuken)
+    {
+        @Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model), Model.TodofukenCd, new { @id = "hidTodofukenCd" })
+    }
+    if (Model.IsKumiaito)
+    {
+        @Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model), Model.KumiaitoCd, new { @id = "hidKumiaitoCd" })
+    }
+    if (Model.IsShisho)
+    {
+        @Html.Hidden(TodofukenDropDownListUtil.GetName(TodofukenDropDownListUtil.KbnSbt.Shisho, Model), Model.ShishoCd, new { @id = "hidShishoCd" })
+    }
+    @* 利用可能な支所一覧 *@
+    var shishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, this.Context);
+    Model.ShishoList = shishoList;
+}

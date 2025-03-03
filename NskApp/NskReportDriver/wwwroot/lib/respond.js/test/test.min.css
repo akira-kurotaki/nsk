@@ -1,0 +1,8 @@
+/**
+ * Minified by jsDelivr using clean-css v4.1.9.
+ * Original file: /npm/respond.js@1.4.2/test/test.css
+ * 
+ * Do NOT use SRI with dynamically generated files! More information: https://www.jsdelivr.com/using-sri-with-dynamic-files
+ */
+body{background:#000;color:#333;font-family:Helvetica,sans-serif}p{width:60%;min-width:18.75em;max-width:43.75em;margin:2em auto;background:#fff;padding:20px}a{color:#333}#attribute-test{display:none}@media only screen and (min-width:18.75em){body{background:#ff0}}@media only screen and (min-width:30em) and (max-width:38.75em){body{background:green}}@media screen and (min-width:38.75em),only print,projector{body{background:red}}@media screen and (min-width:50em){body{background:#00f}}@media screen and (min-width:68.75em){body{background:orange}}@media screen and (min-width:1200px){body{background:navy}}@media only screen and (min-width:1250px) and (min--moz-device-pixel-ratio:1.5),only screen and (min-width:1250px) and (-moz-min-device-pixel-ratio:1.5),only screen and (min-width:1250px) and (-o-min-device-pixel-ratio:3/2),only screen and (min-width:1250px) and (-webkit-min-device-pixel-ratio:1.5),only screen and (min-width:1250px) and (min-device-pixel-ratio:1.5),only screen and (min-width:1250px) and (min-resolution:1.5dppx),screen and (min-width:1250px){body{background-color:pink}}
+/*# sourceMappingURL=/sm/b5f2bf85cfd0b03f085112e347dd70312b47e3200b46d044735e41f44d8cb311.map */

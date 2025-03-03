@@ -1,0 +1,64 @@
+﻿@model NskWeb.Areas.F105.Models.D105030.D105030Model
+@{
+    var startIndex = 300;
+    int tabIndex = startIndex;
+
+}
+
+<table class="table table-bordered" style="">
+    <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+    <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+    <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+    <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+
+    <tbody>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.FudesuGokei,
+                         Html.DisplayNameFor(model => model.CalcResult.FudesuGokei))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.FudesuGokei)
+            </td>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.HikiukeFudesu,
+                         Html.DisplayNameFor(model => model.CalcResult.HikiukeFudesu))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.HikiukeFudesu)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.HikiukeMensekiGokei,
+                         Html.DisplayNameFor(model => model.CalcResult.HikiukeMensekiGokei))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.HikiukeMensekiGokei)
+            </td>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.TensakutoMensekiGokei,
+                         Html.DisplayNameFor(model => model.CalcResult.TensakutoMensekiGokei))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.TensakutoMensekiGokei)
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.HonchiMensekiGokei,
+                         Html.DisplayNameFor(model => model.CalcResult.HonchiMensekiGokei))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.HonchiMensekiGokei)
+            </td>
+            <td>
+                @Html.LabelFor(model => model.CalcResult.HikiukeKai,
+                         Html.DisplayNameFor(model => model.CalcResult.HikiukeKai))
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.CalcResult.HikiukeKai)
+            </td>
+        </tr>
+    </tbody>
+</table>

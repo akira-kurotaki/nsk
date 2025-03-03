@@ -1,0 +1,354 @@
+﻿@model NskWeb.Areas.F990.Models.D990002.D990002Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+    ViewBag.DatePickerSeireki = true;
+    ViewBag.DatePickerYYYYMMDDHHMM = true;
+}
+<div class="table-responsive table-thead-container ">
+    <div class="main_title btn_group_left mt_5">
+        <h3>システムロック</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("D990002", "D990002", FormMethod.Post, new { @id = "D990002Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">システムロック情報登録</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.TodofukenDropDownList)
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">システムロック情報登録</caption>
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 80%;"></colgroup>
+            <tr>
+                @* システム区分 *@
+                <td>
+                    @Html.LabelFor(model => model.SystemKbn, "システム区分")
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SystemKbn, "system_kbn", CoreConst.DisplayMode.KbnCdNm, "", new { @class = "form-select form-select-lg", @title = "選択項目" })
+                    <div>@Html.ValidationMessageFor(model => model.SystemKbn, "", new { @class = "text-danger" })</div>
+                </td>
+            </tr>
+            <tr>
+                @*都道府県*@
+                <td>
+                    @Html.LabelFor(model => model.TodofukenDropDownList.TodofukenCd,
+                             Html.DisplayNameFor(model => model.TodofukenDropDownList.TodofukenCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", @title = "選択項目" })
+                </td>
+            </tr>
+
+            <tr>
+                @* ロック開始日時 *@
+                <td>@Html.LabelFor(model => model.LockStart, "ロック開始日時")</td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:40%">
+                                <div class="input-group date datetimepicker-hhmm" id="dtp_LockStart" data-target-input="nearest">
+                                    @Html.EditorFor(model => model.LockStart,
+                                             new
+                                             {
+                                                 htmlAttributes = new
+                                                 {
+                                                     @class = "form-control datetimepicker-input",
+                                                     @data_target = "#dtp_LockStart",
+                                                     maxlength = 16,
+                                                     title = "西暦日時（例：2024/11/12 11:22）"
+                                                 }
+                                             })
+                                    <div class="input-group-text" data-target="#dtp_LockStart" data-toggle="datetimepicker" title="カレンダーを表示">
+                                        <span class="bi bi-grid-3x3-gap-fill"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div>例：2024/11/12 11:22</div></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>@Html.ValidationMessageFor(model => model.LockStart, "", new { @class = "text-danger" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr>
+                @* ロック終了日時 *@
+                <td>@Html.LabelFor(model => model.LockEnd, "ロック終了日時")</td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:40%">
+                                <div class="input-group date datetimepicker-hhmm" id="dtp_LockEnd" data-target-input="nearest">
+                                    @Html.EditorFor(model => model.LockEnd,
+                                             new
+                                             {
+                                                 htmlAttributes = new
+                                                 {
+                                                     @class = "form-control datetimepicker-input",
+                                                     @data_target = "#dtp_LockEnd",
+                                                     maxlength = 16,
+                                                     title = "西暦日時（例：2024/11/12 11:22）"
+                                                 }
+                                             })
+                                    <div class="input-group-text" data-target="#dtp_LockEnd" data-toggle="datetimepicker" title="カレンダーを表示">
+                                        <span class="bi bi-grid-3x3-gap-fill"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td><div>例：2024/11/12 11:22</div></td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div>@Html.ValidationMessageFor(model => model.LockEnd, "", new { @class = "text-danger" })</div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @*ロック実行処理*@
+                <td>
+                    @Html.LabelFor(model => model.LockShori,
+                             Html.DisplayNameFor(model => model.LockShori))
+                </td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.LockShori, "",
+                                 new { htmlAttributes = new { @class = "form-control", maxlength = 30, title = "全角30桁以内" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.LockShori, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+            <tr>
+                @*ロック実行ユーザID*@
+                <td>
+                    @Html.LabelFor(model => model.UserId,
+                             Html.DisplayNameFor(model => model.UserId))
+                </td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.UserId, "",
+                                 new { htmlAttributes = new { @class = "form-control", maxlength = 30, title = "全角30桁以内" } })
+                    </div>
+                    @Html.ValidationMessageFor(model => model.UserId, "", new { @class = "text-danger" })
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            <a id="backBtn" href="javascript:void(0)" class="btn btn-primary">戻る</a>
+            <button type="button" class="btn btn-warning" id="insert" name="insert">登録</button>
+            @Html.ActionLink("クリア", "Clear", "D990002", new { area = "F990" }, new { @class = "btn btn-primary" })
+        </div>
+    </div>
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">データロック</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea2, "", new { @id = "MessageArea2" })
+        </div>
+    </div>
+    <div id="SearchResult">
+        @await Html.PartialAsync("_D990002DataLock", Model)
+    </div>
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">システムロック</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea3, "", new { @id = "MessageArea3" })
+        </div>
+    </div>
+    <div id="SearchResult">
+        @await Html.PartialAsync("_D990002SysLock", Model)
+    </div>
+}
+
+@Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ90001", "システムロック"), "OK", "キャンセル")
+
+@section styles {
+    <style type="text/css">
+        .date-picker:first-child {
+            min-width: 15rem;
+        }
+
+        .table-spe-bordered {
+            border-bottom: none;
+            border-left: none;
+        }
+
+        .td_spe_color {
+            background-color: #fff !important;
+            border: none !important;
+        }
+
+        .colgroup_background {
+            background-color: #ecf1fb;
+        }
+
+        .table > tbody > tr > th,
+        .table > tbody > tr > td {
+            border: 1px solid #ddd;
+        }
+
+        .table > thead > tr > th {
+            border: 1px solid #ddd;
+            border-bottom-width: 2px;
+        }
+
+        .table {
+            --bs-table-striped-bg: rgba(0, 0, 0, 0.0);
+        }
+
+        .td_color {
+            color: #FF0000;
+            font-weight: bold !important;
+        }
+
+        .table_noborder {
+            border: 0px;
+            float: right;
+        }
+
+            .table_noborder > thead > tr > th,
+            .table_noborder > tbody > tr > th,
+            .table_noborder > tfoot > tr > th,
+            .table_noborder > thead > tr > td,
+            .table_noborder > tbody > tr > td,
+            .table_noborder > tfoot > tr > td {
+                border: 0px;
+            }
+
+    </style>
+}
+@section scripts {
+    <script>
+        $(function () {
+            @* 登録イベントクライアント側の独自チェックを行う。*@
+            $("#insert").click(function () {
+                removeValidationErrorClass();
+                var messageArea = $("span[data-valmsg-for='MessageArea1']");
+                var msg = "";
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                var msg2 = "";
+
+                @* 前回の独自チェックエラーメッセージをクリアする *@
+                messageArea.html("");
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                    @* 属性チェック *@
+                    var checkValid2 = $("#D990002Form").valid();
+                    var checkValid1 = inputRequriedCheck();
+
+                    if (checkValid2 && checkValid1) {
+                        if ("" != msg) {
+                            @*画面エラーのコントロール *@
+                            scrollToErrorArea();
+                            messageArea.html(msg);
+                            @*画面エラーのコントロール *@
+                            if (0 < $('#MessageArea1').length && $('#MessageArea1').html() != "") {
+                                $("html,body").scrollTop($("html, body").offset().top);
+                            }
+                            return;
+                        }
+
+                        if ("" != msg2) {
+                            messageArea2.html(msg2);
+                            @*画面エラーのコントロール *@
+                            scrollToErrorArea();
+                            return;
+                        }
+
+                    } else {
+                        scrollToErrorArea();
+                        return;
+                    }
+                }
+
+                @Html.ShowConfirm("insertDialog");
+            })
+
+            @* 登録ボタン：確認ダイアログにOKを押下後の処理 *@
+            $("#insertConfirm").click(function () {
+                var form = $("#D990002Form");
+                form.attr("action", "@Url.Action("Insert", "D990002", new { area = "F990" })");
+                form.submit();
+            })
+
+            @* 戻る *@
+            $("#backBtn").click(function () {
+                var backLink = "@Url.Action("Init", "D000001", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D990002", new { area = "F990" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+        @* エラーのクリア *@
+        function removeValidationErrorClass() {
+            var validationError = 'input-validation-error';
+
+            $('input[type!=hidden],select').each(function (index, element) {
+                if ($(this).hasClass(validationError)) {
+                    $(this).removeClass(validationError);
+                }
+                if ($(this).next("label").hasClass(validationError)) {
+                    $(this).next("label").removeClass(validationError);
+                }
+                if ($(this).next().next("label").hasClass(validationError)) {
+                    $(this).next().next("label").removeClass(validationError);
+                }
+            });
+
+            $('.field-validation-valid').each(function (index, element) {
+                $(this).html("");
+            });
+
+            $('#MessageArea1').empty();
+            $('#MessageArea2').empty();
+        }
+
+        function scrollToErrorArea() {
+            @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+            $('.input-validation-error:first').focus();
+            @*画面エラーのコントロール *@
+            if (0 < $('#MessageArea1').length && $('#MessageArea1').html() != "") {
+                $("html,body").scrollTop($("html, body").offset().top);
+            }
+            @*画面エラーのコントロール *@
+            if (0 < $('#MessageArea2').length && $('#MessageArea2').html() != "") {
+                $("html,body").scrollTop($("html, body").offset().top);
+            }
+        }
+
+        function inputRequriedCheck() {
+            var inputRequriedFlg = true;
+
+            return inputRequriedFlg;
+        }
+
+    </script>
+}

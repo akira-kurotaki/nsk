@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="15528.19" DocumentName="ActiveReports Document" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; font-style: inherit; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; font-style: inherit; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; font-style: inherit; ddo-char-set: 186" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="0" BackColor="16777215" />
+    <Section Type="Detail" Name="Detail" Height="9739.843" BackColor="16777215">
+      <Control Type="AR.Label" Name="Label4" Left="299.9055" Top="4300.159" Width="1306.772" Height="286.2992" Caption="■基本情報" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label5" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="4586.458" Width="3397.606" Height="286.2992" Caption="都道府県" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox4" DataField="=TodofukenNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.512" Top="4586.458" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label6" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="4872.757" Width="3397.606" Height="286.2992" Caption="組合等" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox5" DataField="=KumiaitoNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.511" Top="4872.757" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label7" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="5159.056" Width="3397.606" Height="286.2992" Caption="支所" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox6" DataField="=ShishoNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="5159.056" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label8" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="5445.356" Width="3397.606" Height="286.2992" Caption="市町村" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox7" DataField="=ShichosonNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="5445.356" Width="6011.149" Height="286.2992" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label9" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="5731.654" Width="3397.606" Height="286.2992" Caption="大地区" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox8" DataField="=DaichikuNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="5731.654" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label10" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="6017.954" Width="3397.606" Height="286.2992" Caption="小地区" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox9" DataField="=ShochikuNm" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="6017.954" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label11" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="6304.254" Width="3397.606" Height="286.2992" Caption="耕地面積" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox10" DataField="=KouchiMenseki" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="6304.254" Width="4965.732" Height="286.2992" Text="" OutputFormat="#,##0.0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox11" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="8663.244" Top="6304.254" Width="1045.417" Height="286.2992" Text="㎡" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label12" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="6590.551" Width="3397.606" Height="286.2992" Caption="耕地形態" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox12" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.51" Top="6590.551" Width="6011.149" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.CheckBox" Name="CheckBox1" DataField="=IsKouchiKeitaiCdHata" BorderTopStyle="1" BorderBottomStyle="1" Left="3751.937" Top="6590.551" Width="261.3543" Height="286.2992" Caption="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label13" BorderTopStyle="1" BorderBottomStyle="1" Left="4067.717" Top="6590.551" Width="1227.402" Height="286.2992" Caption="畑" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.CheckBox" Name="CheckBox2" DataField="=IsKouchiKeitaiCdTa" BorderTopStyle="1" BorderBottomStyle="1" Left="5187.401" Top="6590.551" Width="261.3543" Height="286.2992" Caption="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label14" BorderTopStyle="1" BorderBottomStyle="1" Left="5487.874" Top="6590.551" Width="792.5666" Height="286.2992" Caption="田" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.CheckBox" Name="CheckBox3" DataField="=IsKouchiKeitaiCdOther" BorderTopStyle="1" BorderBottomStyle="1" Left="6593.386" Top="6590.551" Width="261.3543" Height="286.2992" Caption="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label15" BorderTopStyle="1" BorderBottomStyle="1" Left="6888.189" Top="6590.551" Width="862.2989" Height="286.2992" Caption="その他" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.CheckBox" Name="CheckBox4" DataField="=IsKouchiKeitaiCdNone" BorderTopStyle="1" BorderBottomStyle="1" Left="8464.819" Top="6590.551" Width="261.3543" Height="286.2992" Caption="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label17" BorderTopStyle="1" BorderBottomStyle="1" Left="8793.071" Top="6590.551" Width="805.0397" Height="286.2993" Caption="未選択" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label18" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="6876.851" Width="3397.606" Height="286.2992" Caption="個人情報の取扱いについて" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox13" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="3697.512" Top="6876.851" Width="6011.149" Height="286.2992" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.CheckBox" Name="CheckBox5" DataField="=KojinjohoToriatsukaiFlg" BorderTopStyle="1" BorderBottomStyle="1" Left="3751.937" Top="6876.851" Width="261.3543" Height="286.2992" Caption="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label19" BorderTopStyle="1" BorderBottomStyle="1" Left="4067.717" Top="6876.851" Width="1488.756" Height="286.2992" Caption="同意している" Style="font-family: ＭＳ ゴシック; font-size: 11pt; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label20" Left="299.9055" Top="7449.451" Width="1306.772" Height="286.2992" Caption="■その他" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label21" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="7735.75" Width="14635.84" Height="286.2992" Caption="備考" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox14" DataField="=Biko" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="299.9055" Top="8022.048" Width="14635.84" Height="1717.795" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: char-wrap" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label22" Left="9441.071" Top="1717.796" Width="1045.417" Height="286.2992" Caption="耕地住所" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox15" DataField="=KochiAddress" Left="10770.52" Top="1717.796" Width="4443.023" Height="572.5984" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: char-wrap" LineSpacing="3" />
+      <Control Type="AR.Label" Name="Label23" Left="9441.071" Top="2290.395" Width="1045.417" Height="286.2992" Caption="氏名" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox16" DataField="=HojinFullNm" Left="10770.52" Top="2290.394" Width="3397.606" Height="1145.197" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: char-wrap" LineSpacing="3" />
+      <Control Type="AR.Label" Name="Label24" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="9463.743" Top="3721.891" Width="2090.835" Height="311.811" Caption="加入者管理コード" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="KanyushaCd1" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="11554.58" Top="3721.891" Width="261.3543" Height="311.811" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd2" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="11815.94" Top="3721.891" Width="261.3543" Height="311.811" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd3" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="12077.29" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd4" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="12338.65" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd5" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="12600" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd6" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="12861.35" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd7" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="13122.71" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd8" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="13384.06" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd9" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="13645.42" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd10" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="13906.77" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd12" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="14429.48" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd11" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="14168.12" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="KanyushaCd13" BorderLeftStyle="13" BorderTopStyle="13" BorderRightStyle="13" BorderBottomStyle="13" Left="14690.83" Top="3721.891" Width="261.3543" Height="311.811" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="HidKanyushaCd" DataField="=KanyushaCd" Visible="0" Left="11531.91" Top="3435.591" Width="3397.606" Height="286.2992" Text="" Style="font-family: ＭＳ ゴシック; font-size: 11pt; ddo-char-set: 1; ddo-shrink-to-fit: true" />
+      <Control Type="AR.Label" Name="Label28" Left="0" Top="308.9764" Width="15528.19" Height="429.1654" Caption="加入者情報（単票）" Style="font-family: ＭＳ ゴシック; font-size: 16pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="TextBox2" DataField="KanyuShinseiYmdJaYY" Left="13158.43" Top="1145.197" Width="702.9921" Height="286.2992" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="TextBox3" DataField="KanyuShinseiYmdMM" Left="14241.26" Top="1145.197" Width="283.4646" Height="286.2992" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="TextBox17" DataField="KanyuShinseiYmdDD" Left="14901.73" Top="1145.197" Width="283.4646" Height="286.2992" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="TextBox18" DataField="NendoJa" Left="6902.362" Top="691.6536" Width="1045.417" Height="429.1655" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 16pt; font-weight: bold; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label29" Left="13821.73" Top="1145.197" Width="261.3543" Height="286.2992" Caption="年" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label30" Left="14474.84" Top="1145.197" Width="261.3544" Height="286.2992" Caption="月" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label31" Left="15134.74" Top="1145.197" Width="261.3544" Height="286.2992" Caption="日" Style="font-family: ＭＳ ゴシック; font-size: 11pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label32" Left="6715.276" Top="691.6536" Width="255.1181" Height="429.1654" Caption="（" Style="font-family: ＭＳ ゴシック; font-size: 16pt; font-weight: bold; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label33" Left="7914.898" Top="691.6536" Width="923.5276" Height="429.1654" Caption="年分）" Style="font-family: ＭＳ ゴシック; font-size: 16pt; font-weight: bold; text-align: left; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" />
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[public void Detail_Format()
+{
+	// 加入管理者管理コード
+	if(this.HidKanyushaCd.Value != null && !string.IsNullOrEmpty(this.HidKanyushaCd.Value.ToString()))
+	{
+		var kanyushaCd = this.HidKanyushaCd.Value.ToString();
+		this.KanyushaCd1.Text = kanyushaCd.Substring(0, 1);	
+		this.KanyushaCd2.Text = kanyushaCd.Substring(1, 1);	
+		this.KanyushaCd3.Text = kanyushaCd.Substring(2, 1);	
+		this.KanyushaCd4.Text = kanyushaCd.Substring(3, 1);	
+		this.KanyushaCd5.Text = kanyushaCd.Substring(4, 1);	
+		this.KanyushaCd6.Text = kanyushaCd.Substring(5, 1);	
+		this.KanyushaCd7.Text = kanyushaCd.Substring(6, 1);	
+		this.KanyushaCd8.Text = kanyushaCd.Substring(7, 1);	
+		this.KanyushaCd9.Text = kanyushaCd.Substring(8, 1);	
+		this.KanyushaCd10.Text = kanyushaCd.Substring(9, 1);	
+		this.KanyushaCd11.Text = kanyushaCd.Substring(10, 1);	
+		this.KanyushaCd12.Text = kanyushaCd.Substring(11, 1);	
+		this.KanyushaCd13.Text = kanyushaCd.Substring(12, 1);	
+	}
+}
+
+
+
+]]></Script>
+  <PageSettings LeftMargin="850" RightMargin="454" TopMargin="850" BottomMargin="567" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>

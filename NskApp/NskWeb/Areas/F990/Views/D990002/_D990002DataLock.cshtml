@@ -1,0 +1,47 @@
+﻿@model NskWeb.Areas.F990.Models.D990002.D990002Model
+
+@if (Model.DataLocks.Locks != null && Model.DataLocks.Locks.Count() > 0)
+{
+    <div class="table-thead-container">
+        <table class="table table-bordered table-striped" style="width:200rem;">
+            <caption class="visually-hidden">データロック一覧</caption>
+            <thead class="sticky-top">
+                <tr>
+                    <th scope="col">システム区分</th>
+                    <th scope="col">都道府県</th>
+                    <th scope="col">組合等</th>
+                    <th scope="col">支所</th>
+                    <th scope="col">ロック開始日時</th>
+                    <th scope="col">ロック終了日時</th>
+                    <th scope="col">ロック実行ユーザ</th>
+                    <th scope="col">ロック実行処理</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int index = 0; index < Model.DataLocks.Locks.Count(); index++)
+                {
+                    var item = Model.DataLocks.Locks.ElementAt(index);
+                    <tr>
+                        @*システム区分*@
+                        <td>@Html.Label("", item.SystemKbnNm)</td>
+                        @*都道府県コード*@
+                        <td>@Html.Label("", TodofukenUtil.GetTodofukenNm(item.TodofukenCd))</td>
+                        @*組合等コード*@
+                        <td>@Html.Label("", item.KumiaitoNm)</td>
+                        @*支所コード*@
+                        <td>@Html.Label("", item.ShishoNm)</td>
+                        @*ロック開始日時*@
+                        <td>@Html.Label("", item.LockDate == null ? string.Empty : ((DateTime)item.LockDate).ToString("yyyy/MM/dd HH:mm"))</td>
+                        @*ロック終了日時*@
+                        <td>@Html.Label("", item.LockEndDate == null ? string.Empty : ((DateTime)item.LockEndDate).ToString("yyyy/MM/dd HH:mm"))</td>
+                        @*ロック実行ユーザ*@
+                        <td>@Html.Label("", item.LockUserId ?? string.Empty)</td>
+                        @*ロック実行処理*@
+                        <td>@Html.Label("", item.LockShori ?? string.Empty)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+}

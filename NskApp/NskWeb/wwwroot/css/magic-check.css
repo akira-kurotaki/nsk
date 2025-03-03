@@ -1,0 +1,136 @@
+@keyframes hover-color {
+    from {
+        border-color: #c0c0c0;
+    }
+
+    to {
+        border-color: #0271ed;
+    }
+}
+
+.magic-radio {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+.magic-checkbox {
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+}
+
+    .magic-radio[disabled], .magic-checkbox[disabled] {
+        cursor: not-allowed;
+    }
+
+    .magic-radio + label, .magic-checkbox + input + label {
+        position: relative;
+        padding-left: 3.0rem;
+        cursor: pointer;
+        vertical-align: middle;
+    }
+
+        .magic-radio + label:hover:before, .magic-checkbox + input + label:hover:before {
+            animation-duration: 0.4s;
+            animation-fill-mode: both;
+            animation-name: hover-color;
+        }
+
+        .magic-radio + label:before, .magic-checkbox + input + label:before {
+            position: absolute;
+            box-sizing: border-box;
+            top: 0.1rem;
+            left: 0;
+            display: inline-block;
+            width: 2.0rem;
+            height: 2.0rem;
+            content: '';
+            border: 0.1rem solid #757575;
+            background-color: #fff;
+        }
+
+        .magic-radio + label:after, .magic-checkbox + input + label:after {
+            position: absolute;
+            display: none;
+            content: '';
+        }
+
+    .magic-radio[disabled] + label, .magic-checkbox[disabled] + input + label {
+        cursor: not-allowed;
+    }
+
+        .magic-radio[disabled] + label:hover, .magic-radio[disabled] + label:before, .magic-radio[disabled] + label:after, .magic-checkbox[disabled] + input + label:hover, .magic-checkbox[disabled] + input + label:before, .magic-checkbox[disabled] + input + label:after {
+            cursor: not-allowed;
+        }
+
+            .magic-radio[disabled] + label:hover:before, .magic-checkbox[disabled] + input + label:hover:before {
+                animation-name: none;
+            }
+
+    .magic-radio:checked + label:before, .magic-checkbox:checked + input + label:before {
+        animation-name: none;
+    }
+
+    .magic-radio:checked + label:after, .magic-checkbox:checked + input + label:after {
+        display: block;
+    }
+
+.magic-radio + label:before {
+    border-radius: 50%;
+}
+
+.magic-radio + label:after {
+    top: 0.7rem;
+    left: 0.6rem;
+    width: 0.8rem;
+    height: 0.8rem;
+    border-radius: 50%;
+    background: #0271ed;
+}
+
+.magic-radio:checked + label:before {
+    border: 0.1rem solid #0271ed;
+}
+
+.magic-checkbox + input + label:before {
+    border-radius: 0.3rem;
+}
+
+.magic-checkbox + input + label:after {
+    top: 0.3rem;
+    left: 0.7rem;
+    box-sizing: border-box;
+    width: 0.6rem;
+    height: 1.2rem;
+    transform: rotate(45deg);
+    border-width: 0.2rem;
+    border-style: solid;
+    border-color: #fff;
+    border-top: 0;
+    border-left: 0;
+}
+
+.magic-checkbox:checked + input + label:before {
+    border: #0271ed;
+    background: #0271ed;
+}
+
+.magic-radio:focus + label:before {
+    border-color: #0271ed;
+    border-radius: 50%;
+    box-shadow: 0 0 0.5rem #0271ed;
+}
+
+.magic-checkbox:focus + input + label:before {
+    border-color: #0271ed;
+    box-shadow: 0 0 0.5rem #0271ed;
+}
+
+.magic-checkbox-no-label + input + label:before {
+    top: -1rem;
+    left: 0.4rem;
+}
+
+.magic-checkbox-no-label + input + label:after {
+    top: -0.75rem;
+    left: 1.05rem;
+}
