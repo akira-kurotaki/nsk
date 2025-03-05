@@ -1,0 +1,182 @@
+﻿@model NskWeb.Areas.F502.Models.D502010.D502010Model
+@{
+	ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+
+@using (Html.BeginForm("Init", "D501010", FormMethod.Post, new { id = "D501010Form", spellcheck = "false", autocomplete = "off" }))
+{
+	@Html.AntiForgeryToken()
+	<div>
+		<div class="main_title btn_group_left mt_5">
+			<h3>加入申請</h3>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+	<br />
+
+	<table>
+		<tbody>
+			<tr>
+				<td>組合員等コード：</td>
+				<td>@Model.nogyosha.KumiaiintoCd</td>
+			</tr>
+			<tr>
+				<td>氏名：</td>
+				<td>@Model.nogyosha.HojinFullNm</td>
+			</tr>
+			<tr>
+				<td>支所：</td>
+				<td>@Model.nogyosha.ShishoCd@CoreConst.FULL_WIDTH_SPACE@Model.ShishoNm</td>
+			</tr>
+			<tr>
+				<td>大地区：</td>
+				<td>@Model.nogyosha.DaichikuCd@CoreConst.FULL_WIDTH_SPACE@Model.DaichikuNm</td>
+			</tr>
+			<tr>
+				<td>小地区：</td>
+				<td>@Model.nogyosha.ShochikuCd@CoreConst.FULL_WIDTH_SPACE@Model.ShochikuNm</td>
+			</tr>
+			<tr>
+				<td>市町村：</td>
+				<td>@Model.nogyosha.ShichosonCd@CoreConst.FULL_WIDTH_SPACE@Model.ShichosonNm</td>
+			</tr>
+		</tbody>
+	</table>
+
+	<br />
+
+	<div class="table-responsive">
+		<h4 class="sub_title">設定状況</h4>
+		<div class="mb-3">
+			@Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", @id = "MessageArea1" })
+		</div>
+		@if (Model.tableRecords.Count > 0)
+		{
+			<table class="table common_table table-bordered table-condensed" style="text-align:center;">
+				<colgroup>
+					<col style="width: 3%;" />
+					<col style="width: 10%;" />
+					<col style="width: 5%;" />
+					<col style="width: 6%;" />
+					<col style="width: 10%;" />
+					<col style="width: 10%;" />
+					<col style="width: 10%;" />
+					<col style="width: 10%;" />
+					<col style="width: 10%;" />
+				</colgroup>
+
+				<tr class="td_label">
+					<th></th>
+					<th class="center-align">共済目的</th>
+					<th class="center-align">年産</th>
+					<th class="center-align">引受回</th>
+					<th class="center-align">入力済み耕地筆数</th>
+					<th class="center-align">組合員等毎設定</th>
+					<th class="center-align">類区分毎設定</th>
+					<th class="center-align">料率設定</th>
+					<th class="center-align">引受計算実施日</th>
+				</tr>
+				@foreach (var item in Model.tableRecords)
+				{
+					<tr>
+						<td>
+							<button type="button" class="btn btn-primary mt_15" name="detailInfoBtn" data-param="@item.共済目的コード">詳細</button>
+						</td>
+						<td class="center-align">@item.共済目的</td>
+						<td class="center-align">@item.年産</td>
+						<td class="center-align">@item.引受回</td>
+						<td class="right-align">@item.入力済み耕地筆数</td>
+						<td class="center-align">@item.組合員等毎設定</td>
+						<td class="center-align">@item.類区分毎設定</td>
+						<td class="center-align">@item.料率設定</td>
+						<td class="center-align">@item.引受計算実施日?.ToString("yyyy/MM/dd")</td>
+					</tr>
+				}
+			</table>
+		}
+	</div>
+
+	<br />
+	<br />
+
+	<div style="display: flex; justify-content: flex-end;">
+		<button type="button" class="btn btn-primary mt_15" id="backBtn" style="width: 120px;">戻る</button>
+	</div>
+}
+
+@Html.Confirm("CheckPrevious", "CheckPrevDisplay", "確認", "", "OK", "キャンセル")
+
+@section styles {
+	<style>
+		/* テーブルのスタイル */
+		table {
+			width: 30%;
+			border-collapse: separate; /* セル間のスペースを維持 */
+			border-spacing: 10px; /* 列間の空白を10pxに設定 */
+			border: none; /* テーブルの枠線を非表示に */
+		}
+
+		th, td {
+			padding: 8px;
+			text-align: left;
+			border: none; /* セルの枠線を非表示に */
+		}
+
+		.center-align {
+			text-align: center;
+		}
+
+		.right-align {
+			text-align: right;
+		}
+	</style>
+}
+
+@section scripts {
+	<script type="text/javascript">
+		$(function () {
+
+			@* 戻る *@
+			$("#backBtn").click(function ()
+			{
+				$("#CheckPrevious .modal-body").html("@MessageUtil.Get("MQ00019", "農業者一覧")");
+				@Html.ShowConfirm("CheckPrevious");
+				$("#CheckPrevDisplay").off('click').on('click', function ()
+				{
+					var backLink = "@Url.Action("Init", "D0101", new { area = "F01" })"; @* TODO: 農業者一覧へ戻る *@
+					location.href = backLink;
+				});
+			});
+
+			@* 詳細 *@
+			$(document).on("click", "button[name=detailInfoBtn]", function ()
+			{
+				$("#CheckPrevious .modal-body").html("@MessageUtil.Get("MQ00019", "加入申し込み入力")");
+				@Html.ShowConfirm("CheckPrevious");
+				$("#CheckPrevDisplay").off('click').on('click', function ()
+				{
+					@*	画面遷移：NSK_105030D_加入申込書入力（水稲）	*@
+					@*			 NSK_105050D_加入申込書入力（陸稲）	*@
+					@*			 NSK_105070D_加入申込書入力（麦)		*@
+					
+					var targetLink = "";
+					switch($(this).data('param'))
+					{
+						case "11":
+							targetLink = "@Url.Action("Init", "D105030", new { area = "F105" })";
+						break;
+						case "20":
+							targetLink = "@Url.Action("Init", "D105050", new { area = "F105" })";
+						break;
+						case "30":
+							targetLink = "@Url.Action("Init", "D105070", new { area = "F105" })";
+						break;
+					}
+
+					location.href = targetLink;
+				});
+			});
+
+		});　// function end
+	</script>
+}
