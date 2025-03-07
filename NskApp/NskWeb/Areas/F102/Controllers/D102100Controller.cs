@@ -374,7 +374,7 @@ namespace NskWeb.Areas.F102.Controllers
             // ファイル対象リスト
             var files = Request.Form.Files;
             // 許容する拡張子
-            var allowedExtension = ".txt";
+            var allowedExtension = ".csv";
             // 許容ファイルサイズ
             var uploadFileMaxSize = 10485760; // TODO: aasettings.json にファイルサイズが追加されたら置き換える
             // 許容ファイルサイズ（表示用）
