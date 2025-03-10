@@ -350,8 +350,8 @@ namespace NskWeb.Areas.F102.Controllers
         {
             if (Directory.Exists(targetPath))
             {
-                // アップロードフォルダの削除
-                Directory.Delete(targetPath, true);
+                // フォルダの削除
+                FolderUtil.DeleteTempFolder(targetPath);
             }
         }
         #endregion
