@@ -16,7 +16,9 @@ using ModelLibrary.Models;
 using NskAppModelLibrary.Models;
 using NskAppModelLibrary.Context;
 using NskWeb.Areas.F000.Models.D000999;
+using NskWeb.Areas.F102.Consts;
 using System.IO.Compression;
+using NskWeb.Areas.F102.Models.D102010;
 
 namespace NskWeb.Areas.F102.Controllers
 {
@@ -32,32 +34,9 @@ namespace NskWeb.Areas.F102.Controllers
     [Area("F102")]
     public class D102050Controller : CoreController
     {
-        #region メンバー定数
-        /// <summary>
-        /// 画面ID(D2010)
-        /// </summary>
-        private static readonly string SCREEN_ID_D102050 = "D102050";
-
-        /// <summary>
-        /// セッションキー(D102010)
-        /// </summary>
-        private static readonly string SESS_D102050 = "D102050_SCREEN";
-        /// <summary>
-        /// 予約を実行した処理名
-        /// </summary>
-        private static readonly string D102050_REPORT_YOYAKU_SHORI_NM = "NSK_102050D";
-        /// <summary>
-        /// バッチ名
-        /// </summary>
-        private static readonly string D102050_BATCH_NM = "危険段階データ取込（危険段階地域区分）（テキスト）";
-
-        private readonly IWebHostEnvironment _webHostEnvironment;
-
         public D102050Controller(ICompositeViewEngine viewEngine, IWebHostEnvironment webHostEnvironment) : base(viewEngine)
         {
-            _webHostEnvironment = webHostEnvironment;
         }
-        #endregion
 
 
 
@@ -67,7 +46,7 @@ namespace NskWeb.Areas.F102.Controllers
 
             // ログインユーザの参照・更新可否判定
             // 画面IDをキーとして、画面マスタ、画面機能権限マスタを参照し、ログインユーザに本画面の権限がない場合は業務エラー画面を表示する。
-            if (!ScreenSosaUtil.CanReference(SCREEN_ID_D102050, HttpContext))
+            if (!ScreenSosaUtil.CanReference(F102Const.SCREEN_ID_D102050, HttpContext))
             {
                 throw new AppException("ME90003", MessageUtil.Get("ME90003"));
             }
@@ -87,7 +66,7 @@ namespace NskWeb.Areas.F102.Controllers
                 // 「ログイン情報」を取得する
                 VSyokuinRecords = getJigyoDb<NskAppContext>().VSyokuins.Where(t => t.UserId == Syokuin.UserId).Single()
             };
-            var updateKengen = ScreenSosaUtil.CanUpdate(SCREEN_ID_D102050, HttpContext);
+            var updateKengen = ScreenSosaUtil.CanUpdate(F102Const.SCREEN_ID_D102050, HttpContext);
             model.UpdateKengenFlg = updateKengen;
 
             NSKPortalInfoModel md = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
@@ -99,9 +78,8 @@ namespace NskWeb.Areas.F102.Controllers
 
             }
 
-            logger.Debug("@@@@@@@@@@@@@@@@@ 222");
             logger.Debug(md.SKyosaiMokutekiCd);
-            logger.Debug("@@@@@@@@@@@@@@@@@ 222");
+
             try
             {
                 var kyosai = getJigyoDb<NskAppContext>().M00010共済目的名称s
@@ -117,8 +95,8 @@ namespace NskWeb.Areas.F102.Controllers
             }
 
             // 初期表示情報をセッションに保存する
-            SessionUtil.Set(SESS_D102050, model, HttpContext);
-            return View(SCREEN_ID_D102050, model);
+            SessionUtil.Set(F102Const.SESS_D102050, model, HttpContext);
+            return View(F102Const.SCREEN_ID_D102050, model);
         }
 
         #region バッチ登録イベント
@@ -131,12 +109,38 @@ namespace NskWeb.Areas.F102.Controllers
         public ActionResult CreatBatchReport([Bind("TorikomiFilePath")] D102050Model form)
         {
             logger.Debug("START CreatBatchReport");
-            var model = SessionUtil.Get<D102050Model>(SESS_D102050, HttpContext);
+            var model = SessionUtil.Get<D102050Model>(F102Const.SESS_D102050, HttpContext);
             logger.Debug(model == null);
             // セッションに自画面のデータが存在しない場合
             if (model == null)
             {
                 return Json(new { success = false, message = MessageUtil.Get("ME01645", "セッション情報の取得") });
+            }
+
+            // バッチ予約状況取得引数の設定
+            BatchUtil.GetBatchYoyakuListParam param = new()
+            {
+                SystemKbn = ConfigUtil.Get(CoreLibrary.Core.Consts.CoreConst.APP_ENV_SYSTEM_KBN),
+                TodofukenCd = Syokuin.TodofukenCd,
+                KumiaitoCd = Syokuin.KumiaitoCd,
+                ShishoCd = Syokuin.ShishoCd,
+                BatchNm = F102Const.BATCH_ID_NSK_102051B
+            };
+            // 総件数取得フラグ
+            bool boolAllCntFlg = false;
+            // 件数（出力パラメータ）
+            int intAllCnt = 0;
+            // エラーメッセージ（出力パラメータ）
+            string message = string.Empty;
+
+            // バッチ予約状況取得（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
+            List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+
+            // バッチ予約が存在し、かつ未実行のバッチが含まれている場合
+            if (intAllCnt >= 1 && batchYoyakuList.Exists(b => b.BatchStatus == BatchUtil.BATCH_STATUS_WAITING))
+            {
+                // メッセージ表示して処理を中止する
+                return Json(new { success = false, message = MessageUtil.Get("ME10019", "危険段階データ取込（危険段階地域区分）") });
             }
 
             // 独自チェック
@@ -305,8 +309,8 @@ namespace NskWeb.Areas.F102.Controllers
                 Syokuin.ShishoCd,
                 DateUtil.GetSysDateTime(),
                 Syokuin.UserId,
-                D102050_REPORT_YOYAKU_SHORI_NM,
-                D102050_BATCH_NM,
+                F102Const.SCREEN_ID_NSK_D102050,
+                F102Const.BATCH_ID_NSK_102051B,
                 strJoukenId,
                 displayJouken,
                 AppConst.FLG_OFF,
@@ -377,17 +381,8 @@ namespace NskWeb.Areas.F102.Controllers
             var errMessage = string.Empty;
             // ファイルサイズの合計値
             var fileTotalSize = 0;
-            // ファイル名の最大文字数
-            var fileNameMaxLength = 100;
             // ファイル対象リスト
             var files = Request.Form.Files;
-            // 許容する拡張子
-            var allowedExtension = ".csv";
-            // 許容ファイルサイズ
-            var uploadFileMaxSize = 10485760; // TODO: aasettings.json にファイルサイズが追加されたら置き換える
-            // 許容ファイルサイズ（表示用）
-            var uploadFileMaxDispSize = "10MB"; // TODO: aasettings.json にファイルサイズが追加されたら置き換える
-            var extensions = allowedExtension.Split(',');
 
             try
             {
@@ -406,19 +401,27 @@ namespace NskWeb.Areas.F102.Controllers
                 var fileExtension = Path.GetExtension(fileName).Replace(".", "");
                 var fileNameWithoutPath = Path.GetFileName(fileName);
 
-                // ファイル名が100文字以内かチェック
-                if (fileName.Length > fileNameMaxLength)
+                // 【追加】拡張子とMIMEタイプのチェック
+                if (fileExtension != F102Const.allowedExtension || uploadFile.ContentType != F102Const.allowedMimeType)
                 {
-                    errMessage = MessageUtil.Get("ME91008", $"{fileNameMaxLength}");
+                    errMessage = MessageUtil.Get("ME10050");
+                    ModelState.AddModelError("TorikomiFilePath", "");
+                    return errMessage;
+                }
+
+                // ファイル名文字数をチェック
+                if (fileName.Length > F102Const.fileNameMaxLength)
+                {
+                    errMessage = MessageUtil.Get("ME91008", $"{F102Const.fileNameMaxLength}");
                     ModelState.AddModelError("TorikomiFilePath", "");
                     return errMessage;
                 }
 
                 // アップロードするファイルサイズがuploadFileMaxSizeを超えている場合
-                if (fileTotalSize > uploadFileMaxSize)
+                if (fileTotalSize > F102Const.uploadFileMaxSize)
                 {
                     errMessage = MessageUtil.Get("ME10049");
-                    ModelState.AddModelError("MessageArea", MessageUtil.Get("ME01421", uploadFileMaxDispSize));
+                    ModelState.AddModelError("MessageArea", MessageUtil.Get("ME01421", F102Const.uploadFileMaxDispSize));
                     ModelState.AddModelError("TorikomiFilePath", "");
                     return errMessage;
                 }

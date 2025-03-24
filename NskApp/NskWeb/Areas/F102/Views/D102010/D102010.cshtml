@@ -258,8 +258,8 @@
                 console.log("fileName ; " + fileName);
                 console.log("MIME Type ; " + mimeType);
 
-                // MIMEタイプが 'text/plain' かどうかのチェック
-                if (mimeType !== "text/plain") {
+                // MIMEタイプが 'text/csv' かどうかのチェック
+                if (mimeType !== "text/csv") {
                     errorfileName = fileName;  // MIMEタイプが合わない場合はエラーを記録
                     console.log("Error: MIME type is not text/plain");
                     isAllowed = false;
