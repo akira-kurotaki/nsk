@@ -912,7 +912,8 @@ select:disabled::-ms-expand {
     position: absolute;
     top: -0.7rem;
     left: 0;
-    z-index: 1000;
+    /*z-index: 1000;*/
+    z-index: 1050; /* sticky-top の上になるように値を変更 */
 }
 
 .left_area_user {

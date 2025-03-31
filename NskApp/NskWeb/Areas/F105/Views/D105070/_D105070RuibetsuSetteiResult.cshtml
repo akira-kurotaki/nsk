@@ -1,0 +1,151 @@
+﻿@model NskWeb.Areas.F105.Models.D105070.D105070Model
+@{
+    var startIndex = 600;
+    int tabIndex = startIndex;
+
+    string disableSelectButton = string.Empty;
+    if (!ScreenSosaUtil.CanUpdate("", Context))
+    {
+        disableSelectButton = "disabled";
+    }
+}
+
+<div class="mb-3">
+    @for (int i = 0; i < Model.RuibetsuSettei.DispRecords.Count(); i++)
+    {
+        <!-- 行ｎ -->
+        <div>@Html.ValidationMessageFor(model => model.RuibetsuSettei.DispRecords[i].RuiKbn, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.RuibetsuSettei.DispRecords[i].HikiukeHoushiki, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.RuibetsuSettei.DispRecords[i].HoshoWariai, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.RuibetsuSettei.DispRecords[i].FuhoWariai, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.RuibetsuSettei.DispRecords[i].ZensousaiKijunTansyu, null, new { @class = "text-danger" })</div>
+    }
+    <div>@Html.MessageAreaFor(model => model.RuibetsuSettei.MessageArea5, "", new { @class = "text-danger", id = "MessageArea5" })</div>
+</div>
+<br />
+<div class="clearfix"></div>
+<div class="table-thead-container">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("RuibetsuResultPager", "ruibetsuResultPagerClick", Model.RuibetsuSettei.Pager)
+    </div>
+    @Html.HiddenFor(model => model.RuibetsuSettei.AllRecCount)
+    <table class="table table-bordered" style="">
+        <colgroup>
+            <col style="width: 1%;" />
+            <col style="width: 1%;" />
+            <col style="width: 1%;" />
+            <col style="width: 15%;" />
+            <col style="width: 7%;" />
+            <col style="width: 7%;" />
+            <col style="width: 15%;" />
+            <col style="width: 15%;" />
+            <col style="width: 15%;" />
+        </colgroup>
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th rowspan="2">危険段階区分</th>
+                <th rowspan="2">用途別単価</th>
+                <th rowspan="2"></th>
+                <th colspan="2">類区分</th>
+                <th colspan="2">引受方式</th>
+                <th>補償割合</th>
+                <th>付保割合</th>
+            </tr>
+            <tr>
+                <th>一筆半損特約</th>
+                <th colspan="2">担い手</th>
+                <th>営農支払以外</th>
+                <th>収穫量確認方法</th>
+                <th>全相殺基準単収</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.RuibetsuSettei.DispRecords.Count(); i++)
+            {
+                string hiddenRow = string.Empty;
+                if (Model.RuibetsuSettei.DispRecords[i].IsDelRec)
+                {
+                    hiddenRow = "display: none;";
+                }
+
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow">
+                    <td rowspan="2">
+                        <button type="button" class="btn btn-primary" id="btnTokeiChiikiKikenDankaiKubunSettei_@i" @disableSelectButton>
+                            詳細
+                        </button>
+                    </td>
+                    <td rowspan="2">
+                        <button type="button" class="btn btn-primary" id="btnYotobetsuTankaSettei_@i" @disableSelectButton>
+                            詳細
+                        </button>
+                    </td>
+                    <td rowspan="2">
+                        @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].GUID)
+                        @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].Xmin)
+                        @Html.CheckBoxFor(model => model.RuibetsuSettei.DispRecords[i].CheckSelect,
+                                 new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                    <td colspan="2">
+                        @{
+                            Dictionary<string, object> attrs = new() {
+                                { "class", "form-select form-select-lg"},
+                                { "tabindex", tabIndex++}
+                            };
+                            if (!Model.RuibetsuSettei.DispRecords[i].IsNewRec)
+                                attrs.Add("disabled", "disabled");
+                        }
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].RuiKbn,
+                                 Model.RuibetsuSettei.RuiKbnList, "", attrs)
+                    </td>
+                    <td colspan="2">
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HikiukeHoushiki,
+                                 Model.RuibetsuSettei.HikiukeHoushikiList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HoshoWariai,
+                                 Model.RuibetsuSettei.HoshoWariaiList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.RuibetsuSettei.DispRecords[i].FuhoWariai, "D",
+                                 new { htmlAttributes = new { @class = "form-control form-select-lg", tabindex = tabIndex++, Type = "text" } })
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <td>
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].IppitsuHansonTokuyaku,
+                                 Model.RuibetsuSettei.IppitsuHansonTokuyakuList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td colspan="2">
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].NinaiteKbn,
+                                 Model.RuibetsuSettei.NinaiteKbnList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.RuibetsuSettei.DispRecords[i].EinoShiharaiIgai,
+                                 new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].SyukakuryoKakuninHouhou,
+                                 Model.RuibetsuSettei.SyukakuryoKakuninHouhouList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.RuibetsuSettei.DispRecords[i].ZensousaiKijunTansyu, "",
+                                 new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("RuibetsuResultPager", "ruibetsuResultPagerClick", Model.RuibetsuSettei.Pager)
+    </div>
+</div>
+
+

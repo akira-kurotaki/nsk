@@ -256,10 +256,10 @@ namespace NskAppModelLibrary.Models
         public Decimal? ¶Y‹àŠz‚ÌŒ¸­Šz_Œˆ’èŠz { get; set; }
 
         /// <summary>
-        /// ¶Y‹àŠz‚ÌŒ¸­Šz_‘I‘ğ‹æ•ª
+        /// ”íŠQ‹æ•ª
         /// </summary>
-        [Column("¶Y‹àŠz‚ÌŒ¸­Šz_‘I‘ğ‹æ•ª")]
-        public Decimal? ¶Y‹àŠz‚ÌŒ¸­Šz_‘I‘ğ‹æ•ª { get; set; }
+        [Column("”íŠQ‹æ•ª")]
+        public Decimal? ”íŠQ‹æ•ª { get; set; }
 
         /// <summary>
         /// ‘g“–x•¥‘ÎÛƒtƒ‰ƒO

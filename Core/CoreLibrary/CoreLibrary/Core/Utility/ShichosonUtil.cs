@@ -152,7 +152,7 @@ namespace CoreLibrary.Core.Utility
         public static List<MShichosonNm> GetShichosonList(string todofukenCd, string kumiaitoCd)
         {
             List<MShichosonNm> result;
-            using (JigyoCommonContext db = new JigyoCommonContext()) 
+            using (SystemCommonContext db = new SystemCommonContext()) 
             {
                 logger.Info("名称M市町村マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd + " ）");
                 result = db.MShichosonNms
@@ -179,7 +179,7 @@ namespace CoreLibrary.Core.Utility
         {
             logger.Info("名称M市町村マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd + "、市町村コード：" + shichosonCd + " ）");
             MShichosonNm result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 result = db.MShichosonNms
                     .OrderBy(a => a.ShichosonCd)

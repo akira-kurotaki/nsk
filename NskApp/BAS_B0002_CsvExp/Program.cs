@@ -303,12 +303,11 @@ namespace BAS_B0002_CsvExp
                         var zipFilePath = ZipUtil.CreateZip(tempFolder);
 
                         // Zipファイルを引数（設定ファイル）：zip保管フォルダ\yyyyMMdd\HHmmss\（GUIDを生成したフォルダ名）に移動する。
-                        var filePath = Path.Combine(ConfigUtil.Get(Constants.CSV_OUTPUT_FOLDER_PATH),
+                        var destDirPath = Path.Combine(ConfigUtil.Get(Constants.CSV_OUTPUT_FOLDER_PATH),
                                                   systemDate.ToString("yyyyMMdd"),
                                                   systemDate.ToString("HHmmss"),
-                                                  Guid.NewGuid().ToString(),
-                                                  zipFileNm);
-                        FolderUtil.MoveFile(zipFilePath, filePath, Constants.BATCH_USER_ID, bid);
+                                                          Guid.NewGuid().ToString());
+                        FolderUtil.MoveFile(zipFilePath, destDirPath, Constants.BATCH_USER_ID, bid);
                     }
 
                     // PDF出力用一時フォルダを削除する

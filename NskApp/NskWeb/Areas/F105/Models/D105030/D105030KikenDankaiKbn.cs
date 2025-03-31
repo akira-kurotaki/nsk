@@ -3,16 +3,17 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Text;
-using NskWeb.Areas.F105.Consts;
 using NskAppModelLibrary.Models;
 using System.Data;
+using NskWeb.Common.Models;
+using NskCommonLibrary.Core.Consts;
 
 namespace NskWeb.Areas.F105.Models.D105030
 {
     /// <summary>
     /// 危険段階
     /// </summary>
-    public class D105030KikenDankaiKbn : D105030Pager<D105030KikenDankaiKbnRecord>
+    public class D105030KikenDankaiKbn : BasePager<D105030KikenDankaiKbnRecord>
     {
         /// <summary>危険段階区分ドロップダウンリスト選択値</summary>
         public List<SelectListItem> KikenDankaiKbnList { get; set; } = new();
@@ -48,10 +49,12 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// 危険段階区分を取得する
         /// </summary>
         /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="sessionInfo">セッション情報</param>
+        /// <param name="session">セッション情報</param>
         /// <returns>検索情報</returns>
-        public override List<D105030KikenDankaiKbnRecord> GetResult(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030KikenDankaiKbnRecord> GetResult(NskAppContext dbContext, BaseSessionInfo session)
         {
+            D105030SessionInfo sessionInfo = (D105030SessionInfo)session;
+
             StringBuilder query = new();
             query.Append(" SELECT ");
             query.Append($"   T1.統計単位地域コード   As \"{nameof(D105030KikenDankaiKbnRecord.TokeiTaniChiikiCd)}\" ");
@@ -72,17 +75,17 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append("  AND  T1.類区分         = @類区分 ");
 
             string ruiKbn =
-                sessionInfo.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_SUITO ? "7" :
-                sessionInfo.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_RIKUTO ? "1" :
+                sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}" ? "7" :
+                sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}" ? "1" :
                 string.Empty;
 
             NpgsqlParameter[] queryParams =
             [
-                new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                new NpgsqlParameter("年産", sessionInfo.Nensan),
-                new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
-                new NpgsqlParameter("類区分", ruiKbn),
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
+                new ("類区分", ruiKbn),
             ];
 
             List<D105030KikenDankaiKbnRecord> records = new();
@@ -135,12 +138,12 @@ namespace NskWeb.Areas.F105.Models.D105030
 
                 List<NpgsqlParameter> delParams =
                 [
-                    new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                    new NpgsqlParameter("年産", sessionInfo.Nensan),
-                    new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                    new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
-                    new NpgsqlParameter("類区分", ruiKbn),
-                    new NpgsqlParameter("統計単位地域コード", target.TokeiTaniChiikiCd),
+                    new ("組合等コード", sessionInfo.KumiaitoCd),
+                    new ("年産", sessionInfo.Nensan),
+                    new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                    new ("組合員等コード", sessionInfo.KumiaiintoCd),
+                    new ("類区分", ruiKbn),
+                    new ("統計単位地域コード", target.TokeiTaniChiikiCd),
                 ];
                 NpgsqlParameter xminParam = new("xmin", NpgsqlTypes.NpgsqlDbType.Xid) { Value = target.Xmin };
                 delParams.Add(xminParam);
@@ -193,13 +196,13 @@ namespace NskWeb.Areas.F105.Models.D105030
 
                 List<NpgsqlParameter> updParams =
                 [
-                    new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                    new NpgsqlParameter("年産", sessionInfo.Nensan),
-                    new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                    new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
-                    new NpgsqlParameter("類区分", ruiKbn),
-                    new NpgsqlParameter("統計単位地域コード", target.TokeiTaniChiikiCd),
-                    new NpgsqlParameter("個人危険段階区分", target.KikenDankaiKbn)
+                    new ("組合等コード", sessionInfo.KumiaitoCd),
+                    new ("年産", sessionInfo.Nensan),
+                    new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                    new ("組合員等コード", sessionInfo.KumiaiintoCd),
+                    new ("類区分", ruiKbn),
+                    new ("統計単位地域コード", target.TokeiTaniChiikiCd),
+                    new ("個人危険段階区分", target.KikenDankaiKbn)
                 ];
                 NpgsqlParameter xminParam = new("xmin", NpgsqlTypes.NpgsqlDbType.Xid) { Value = target.Xmin };
                 updParams.Add(xminParam);
@@ -259,8 +262,8 @@ namespace NskWeb.Areas.F105.Models.D105030
         private string GetRuiKbn(string kyosaiMokutekiCd)
         {
             string ruiKbn =
-                kyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_SUITO ? "7" :
-                kyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_RIKUTO ? "1" :
+                kyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}" ? "7" :
+                kyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}" ? "1" :
                 string.Empty;
             return ruiKbn;
 
@@ -272,7 +275,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <param name="dbContext"></param>
         /// <param name="sessionInfo"></param>
         /// <returns></returns>
-        public override List<D105030KikenDankaiKbnRecord> GetUpdateRecs(ref NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030KikenDankaiKbnRecord> GetUpdateRecs(ref NskAppContext dbContext, BaseSessionInfo sessionInfo)
         {
             List<D105030KikenDankaiKbnRecord> updRecs = new();
 
@@ -283,7 +286,7 @@ namespace NskWeb.Areas.F105.Models.D105030
             foreach (D105030KikenDankaiKbnRecord dispRec in DispRecords)
             {
                 // 追加行、削除行以外を対象とする
-                if (dispRec is D105030PagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
+                if (dispRec is BasePagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
                 {
                     D105030KikenDankaiKbnRecord dbRec = dbResults.SingleOrDefault(x =>
                         (x.TokeiTaniChiikiCd == dispRec.TokeiTaniChiikiCd)

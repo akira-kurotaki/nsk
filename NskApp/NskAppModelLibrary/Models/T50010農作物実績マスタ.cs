@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("t_50010_農作物実績マスタ")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(事業コード), nameof(共済目的コード), nameof(組合員等コード), nameof(類区分), nameof(統計単位地域コード))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(類区分), nameof(統計単位地域コード))]
     public class T50010農作物実績マスタ : ModelBase
     {
         /// <summary>
@@ -30,18 +30,10 @@ namespace NskAppModelLibrary.Models
         public short 年産 { get; set; }
 
         /// <summary>
-        /// 事業コード
-        /// </summary>
-        [Required]
-        [Column("事業コード", Order = 3)]
-        [StringLength(2)]
-        public string 事業コード { get; set; }
-
-        /// <summary>
         /// 共済目的コード
         /// </summary>
         [Required]
-        [Column("共済目的コード", Order = 4)]
+        [Column("共済目的コード", Order = 3)]
         [StringLength(2)]
         public string 共済目的コード { get; set; }
 
@@ -49,7 +41,7 @@ namespace NskAppModelLibrary.Models
         /// 組合員等コード
         /// </summary>
         [Required]
-        [Column("組合員等コード", Order = 5)]
+        [Column("組合員等コード", Order = 4)]
         [StringLength(13)]
         public string 組合員等コード { get; set; }
 
@@ -57,7 +49,7 @@ namespace NskAppModelLibrary.Models
         /// 類区分
         /// </summary>
         [Required]
-        [Column("類区分", Order = 6)]
+        [Column("類区分", Order = 5)]
         [StringLength(2)]
         public string 類区分 { get; set; }
 
@@ -65,7 +57,7 @@ namespace NskAppModelLibrary.Models
         /// 統計単位地域コード
         /// </summary>
         [Required]
-        [Column("統計単位地域コード", Order = 7)]
+        [Column("統計単位地域コード", Order = 6)]
         [StringLength(5)]
         public string 統計単位地域コード { get; set; }
 
@@ -96,6 +88,13 @@ namespace NskAppModelLibrary.Models
         [Column("補償割合コード")]
         [StringLength(2)]
         public string 補償割合コード { get; set; }
+
+        /// <summary>
+        /// 支所コード
+        /// </summary>
+        [Column("支所コード")]
+        [StringLength(2)]
+        public string 支所コード { get; set; }
 
         /// <summary>
         /// 大地区コード
@@ -182,6 +181,12 @@ namespace NskAppModelLibrary.Models
         /// </summary>
         [Column("農家負担共済掛金")]
         public Decimal? 農家負担共済掛金 { get; set; }
+
+        /// <summary>
+        /// 賦課金計
+        /// </summary>
+        [Column("賦課金計")]
+        public Decimal? 賦課金計 { get; set; }
 
         /// <summary>
         /// 共済減収量

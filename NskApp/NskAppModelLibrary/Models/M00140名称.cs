@@ -26,14 +26,14 @@ namespace NskAppModelLibrary.Models
         /// </summary>
         [Required]
         [Column("名称コード", Order = 2)]
-        [StringLength(50)]
+        [StringLength(10)]
         public string 名称コード { get; set; }
 
         /// <summary>
         /// 名称グループ名称
         /// </summary>
         [Column("名称グループ名称")]
-        [StringLength(10)]
+        [StringLength(50)]
         public string 名称グループ名称 { get; set; }
 
         /// <summary>

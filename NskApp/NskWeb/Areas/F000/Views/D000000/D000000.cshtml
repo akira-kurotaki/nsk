@@ -1,135 +1,697 @@
 ﻿@model NskWeb.Areas.F000.Models.D000000.D000000Model
 @{
     ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
-    CoreConst.ScreenMode screenMode = SessionUtil.Get<CoreConst.ScreenMode>(CoreConst.SESS_SCREEN_MODE, this.Context);
+    var tbWidthDataPicker = "width:19.5rem;";
+    var did = 1;
+    var tr_no = 1;
+    var typ_idx = 0;
+    var rno = 0;
+    var bgColorClass = "";
+    var rno2 = 0;
+    var even_bgColorClass = "";
+    var odd_bgColorClass = "";
 }
-<div class="table-thead-container ">
-    <div class="main_title btn_group_left mt_5">
-        <h3>ポータル</h3>
-    </div>
-    <div class="clearfix"></div>
+@*
+    引受計算支所実行単位区分＝１用
+*@
 
-</div>
 @using (Html.BeginForm("Decision", "D000000", FormMethod.Post, new { id = "D000000Form", spellcheck = "false", autocomplete = "off" }))
 {
-    <table>
-        <tr>
-            <td>共済目的コード</td>
-            <td>
-                @Html.EditorFor(model => model.D000000Info.SKyosaiMokutekiCd, "",
-                         new { htmlAttributes = new { @class = "form-control", maxlength = 2, title = "半角２桁", tabindex = 100 } })
-                <div>@Html.ValidationMessageFor(model => model.D000000Info.SKyosaiMokutekiCd, "", new { @class = "text-danger" })</div>
-            </td>
-            <td>
-                @Html.Label("", Model.D000000Info2.SKyosaiMokutekiCd)
-            </td>
-        </tr>
-        <tr>
-            <td>引受年産</td>
-            <td>
-                @Html.EditorFor(model => model.D000000Info.SNensanHikiuke, "",
-                         new { htmlAttributes = new { @class = "form-control", maxlength = 4, title = "半角４桁", tabindex = 101 } })
-                <div>@Html.ValidationMessageFor(model => model.D000000Info.SNensanHikiuke, "", new { @class = "text-danger" })</div>
-            </td>
-            <td>
-                @Html.Label("", Model.D000000Info2.SNensanHikiuke)
-            </td>
-        </tr>
-        <tr>
-            <td>評価年産</td>
-            <td>
-                @Html.EditorFor(model => model.D000000Info.SNensanHyoka, "",
-                         new { htmlAttributes = new { @class = "form-control", maxlength = 4, title = "半角４桁", tabindex = 102 } })
-                <div>@Html.ValidationMessageFor(model => model.D000000Info.SNensanHyoka, "", new { @class = "text-danger" })</div>
-            </td>
-            <td>
-                @Html.Label("", Model.D000000Info2.SNensanHyoka)
-            </td>
-        </tr>
-        <tr>
-            <td>引受年産の引受計算支所実行単位区分　</td>
-            <td colspan="2">
-                @Html.Label("", Model.D000000Info.SHikiukeJikkoTanniKbnHikiuke)
-            </td>
-        </tr>
-        <tr>
-            <td>評価年産の引受計算支所実行単位区分　</td>
-            <td colspan="2">
-                @Html.Label("", Model.D000000Info.SHikiukeJikkoTanniKbnHyoka)
-            </td>
-        </tr>
-        <tr>
-            <td colspan="3">
-                支所コード：[@Html.Label("", Model.ShishoCd)]、
-                支所グループコード：[@Html.Label("", Model.ShishoGroupId.ToString())]
-
-            </td>
-        </tr>
-        @foreach (var shishocd in Model.ShishoList)
-        {
-            <tr>
-                <td colspan="3">
-                    @Html.Label("", shishocd.ShishoCd)：@Html.Label("", shishocd.ShishoNm)
-            </td>
-        </tr>
-        }
-    </table>
-    <div class="mb-3">
-        <div class="col-md-offset-4 col-md-8">
-            <button type="submit" class="btn btn-warning mt_15">決定</button>
+    <div class="table-responsive table-thead-container ">
+        <div class="main_title btn_group_left mt_5">
+            <h3>農作物ポータル</h3>
         </div>
+        <div class="clearfix"></div>
+    </div>
+
+    //var tbWidth = CoreConst.ScreenMode.Tablet.Equals(screenMode) ? "min-width:70rem;max-width:150%" : "width:146rem;";
+    <div class="mb-3">
+        @if(!string.IsNullOrEmpty(Model.MessageArea1)){
+            <div class="text-danger">@Model.MessageArea1</div>
+        }
+        @* @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" }) *@
+    </div>
+
+    <div class="table-responsive table-thead-container">
+
+        <table class="table table-bordered " style="width:1000px;">
+            <tr>
+                <td>
+                    <table style="border:none;width:100%;">
+                        <tr>
+                            <td style="width:15%;">【処理対象】</td>
+                            <td style="width:85%;">
+                                <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+                                    <colgroup class="td_label" style="width: 21%;"></colgroup>
+                                    <colgroup class="td_label" style="width: 21%;"></colgroup>
+                                    <colgroup class="td_label" style="width: 21%;"></colgroup>
+                                    <colgroup class="td_label" style="width: 21%;"></colgroup>
+                                    <colgroup class="td_label" style="width: 16%;"></colgroup>
+                                    <tr>
+                                        <th class="itemTitle">共済目的</th>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.SKyosaiMokutekiCd, Model.KyosaiMokutekiList, new { @class = "form-select form-select-lg", tabindex = 100, title = "共済目的を選択" })
+                                            <div>@Html.ValidationMessageFor(model => model.SKyosaiMokutekiCd, "", new { @class = "text-danger" })</div>
+                                        </td>
+                                        <td style="border:none"></td>
+                                        <td style="border:none"></td>
+                                        <td style="border:none"></td>
+                                    </tr>
+                                    <tr>
+                                        <th class="itemTitle">引受年産</th>
+                                        <td>
+                                            @Html.HiddenFor(model => model.CanUpdateNensan)
+
+                                            @Html.DropDownListFor(model => model.SNensanHikiuke, Model.HikiukeNensanList, new { @class = "form-select form-select-lg notDisplay", tabindex = 101, title = "引受年産を選択" })
+                                            @Html.DropDownListFor(model => model.SNensanHikiuke_dmy, Model.HikiukeNensanList, new { @class = "form-select form-select-lg notDisplay", @disabled = "disabled", tabindex = 101, title = "引受年産を選択" })
+                                            <div>@Html.ValidationMessageFor(model => model.SNensanHikiuke, "", new { @class = "text-danger" })</div>
+                                        </td>
+                                        <th class="itemTitle">評価年産</th>
+                                        <td>
+                                            @Html.DropDownListFor(model => model.SNensanHyoka, Model.HyokaNensanList, new { @class = "form-select form-select-lg notDisplay", tabindex = 102, title = "評価年産を選択" })
+                                            @Html.DropDownListFor(model => model.SNensanHyoka_dmy, Model.HyokaNensanList, new { @class = "form-select form-select-lg notDisplay", @disabled = "disabled", tabindex = 102, title = "評価年産を選択" })
+                                            <div>@Html.ValidationMessageFor(model => model.SNensanHyoka, "", new { @class = "text-danger" })</div>
+                                        </td>
+                                        <td style="border:none">
+                                            <a id="ketteiBtn" href="javascript:void(0)" class="btn btn-primary" tabindex="160">決定</a>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <div id="d" style="display:block">
+
+            <br />
+            ■作業状況
+            <table class="table table-bordered" style="width:60%">
+                <colgroup style="width: 30%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+
+                <thead style="background-color: #5c799c;color:white">
+                    <tr>
+                        <th></th>
+                        <th>引受回</th>
+                        <th>引受計算実施日</th>
+                        <th>引受確定実施日</th>
+                        <th>当初評価高計算実施日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        rno = 0;
+                        even_bgColorClass = "even_line_y";
+                        odd_bgColorClass = "odd_line_g";
+                        rno2 = 0;
+                    }
+                    @foreach (var SagyoJokyo in Model.SagyoJokyoList)
+                    {
+                        rno2++;
+                        bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                        <tr class="@bgColorClass">
+                            <td>@SagyoJokyo.支所</td>
+                            <td style="text-align:right;">@SagyoJokyo.引受回</td>
+                            <td style="text-align:center;">@SagyoJokyo.引受計算実施日</td>
+                            <td style="text-align:center;">@SagyoJokyo.引受確定実施日</td>
+                            <td style="text-align:center;">@SagyoJokyo.当初評価高計算実施日</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <table class="table table-bordered  table-striped" style="width:80%">
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <colgroup style="width: 20%;"></colgroup>
+                <thead class="itemTitle">
+                    <tr>
+                        <th colspan="2">引受とりまとめ計算</th>
+                        <th colspan="2">交付金申請計算</th>
+                        <th>当初評価高とりまとめ計算</th>
+                        <th>保険金計算</th>
+                    </tr>
+                    <tr>
+                        <th>報告回</th>
+                        <th>実施日</th>
+                        <th>交付回</th>
+                        <th>実施日</th>
+                        <th>実施日</th>
+                        <th>実施日</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        even_bgColorClass = "even_line_y";
+                        odd_bgColorClass = "odd_line_g";
+                        rno2 = 0;
+                    }
+                    @if (!string.IsNullOrEmpty(Model.Torimatome.報告実施日))
+                    {
+                        rno2++;
+                        bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                        <tr class="@bgColorClass">
+                            <td>@Model.Torimatome.報告回</td>
+                            <td>@Model.Torimatome.報告実施日</td>
+                            <td>@Model.Torimatome.交付回</td>
+                            <td>@Model.Torimatome.交付計算実施日</td>
+                            <td>@Model.Torimatome.当初評価高とりまとめ計算</td>
+                            <td>@Model.Torimatome.保険金計算</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+
+            @*        <table class="table table-bordered table-striped" style="@tbWidth">*@
+            ■引受状況、被害状況
+            <table class="table table-bordered ">
+                <colgroup style="width: 18%;"></colgroup>
+                <colgroup style="width:  5%;"></colgroup>
+                <colgroup style="width:  5%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+
+                <thead class="itemTitle">
+                    <tr>
+                        <th colspan="3">[@{@Model.SNensanHikiuke}年産]</th>
+                        <th colspan="5">引受状況</th>
+                        <th colspan="3">被害状況</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>引受<br />回</th>
+                        <th>引受<br />方式</th>
+                        <th>戸数(戸)</th>
+                        <th>面積(a)</th>
+                        <th>共済金額(円)</th>
+                        <th>組合員等<br />負担掛金(円)</th>
+                        <th>賦課金(円)</th>
+                        <th>戸数(戸)</th>
+                        <th>面積(a)</th>
+                        <th>支払い共済金(円)</th>
+                        @*                    <th style="min-width:27rem;">氏名又は法人名</th>*@
+                    </tr>
+                </thead>
+                <tbody >
+                    @{
+                        rno = 0;
+                    }
+                    @foreach(var hlist in Model.HikiukeHyokaJokyoList_Hiki){
+                        @if (!hlist.支所コード.Equals("999")){
+                            // 支所単位
+                            @if (hlist.data_type.Equals("1"))
+                            {
+                                rno++;
+                                if (rno % 2 == 0)
+                                {
+                                    even_bgColorClass = "even_line_y";
+                                    odd_bgColorClass = "odd_line_y";
+                                }
+                                else
+                                {
+                                    even_bgColorClass = "even_line_g";
+                                    odd_bgColorClass = "odd_line_g";
+                                }
+                                @* 引受年産の支所計 *@
+                                rno2 = 1;
+                                bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                <tr class="@bgColorClass">
+                                    <td>
+                                        <a id="s_shisho_hikiuke_@hlist.支所コード" href="javascript:detail_show('hikiuke_@hlist.支所コード');">＋@hlist.支所</a>
+                                        <a id="h_shisho_hikiuke_@hlist.支所コード" href="javascript:detail_hide('hikiuke_@hlist.支所コード');" style="display:none">－@hlist.支所</a>
+                                    </td>
+                                    <td style="text-align:right;">@hlist.引受回</td>
+                                    <td style="text-align:center;">@(hlist.支所コード.Equals(AppConst.HONSHO_CD) ? "" : "支所計")</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @* 引受年産の支所、引受方式ごと *@
+                                rno2++;
+                                bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                <tr class="@bgColorClass hikiuke_@hlist.支所コード" style="display:none">
+                                    <td></td>
+                                    <td style="text-align:right;"></td>
+                                    <td style="text-align:center;">@hlist.引受方式名称</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            // 合計行
+                            @if (hlist.data_type.Equals("1"))
+                            {
+                                rno++;
+                                if (rno % 2 == 0)
+                                {
+                                    even_bgColorClass = "even_line_y";
+                                    odd_bgColorClass = "odd_line_y";
+                                }
+                                else
+                                {
+                                    even_bgColorClass = "even_line_g";
+                                    odd_bgColorClass = "odd_line_g";
+                                }
+                                @* 引受年産の合計 *@
+                                rno2 = 1;
+                                bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                <tr class="@bgColorClass gokeiBorder">
+                                    <td>
+                                        <a id="s_shisho_hikiuke_total" href="javascript:detail_show('hikiuke_total');">＋合計</a>
+                                        <a id="h_shisho_hikiuke_total" href="javascript:detail_hide('hikiuke_total');" style="display:none">－合計</a>
+                                    </td>
+                                    <td style="text-align:right;"></td>
+                                    <td style="text-align:center;"></td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                @* 引受年産の合計（引受方式ごと） *@
+                                rno2++;
+                                bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                <tr class="@bgColorClass hikiuke_total" style="display:none">
+                                    <td></td>
+                                    <td style="text-align:right;"></td>
+                                    <td style="text-align:center;">@hlist.引受方式名称</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                    <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <br />
+        @if (!Model.SNensanHikiuke.Equals(Model.SNensanHyoka)) {
+            <table class="table table-bordered ">
+
+                <colgroup style="width: 18%;"></colgroup>
+                <colgroup style="width:  5%;"></colgroup>
+                <colgroup style="width:  5%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width:  8%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+
+                <thead class="itemTitle">
+                    <tr>
+                        <th colspan="3">[@{@Model.SNensanHyoka}年産]</th>
+                        <th colspan="5">引受状況</th>
+                        <th colspan="3">被害状況</th>
+                    </tr>
+                    <tr>
+                        <th></th>
+                        <th>引受<br />回</th>
+                        <th>引受<br />方式</th>
+                        <th>戸数(戸)</th>
+                        <th>面積(a)</th>
+                        <th>共済金額(円)</th>
+                        <th>組合員等<br />負担掛金(円)</th>
+                        <th>賦課金(円)</th>
+                        <th>戸数(戸)</th>
+                        <th>面積(a)</th>
+                        <th>支払い共済金(円)</th>
+                    </tr>
+                </thead>
+                 <tbody id="">
+                    @{
+                        rno = 0;
+                    }
+                    @foreach (var hlist in Model.HikiukeHyokaJokyoList_Hyo)
+                    {
+                        @if (!hlist.支所コード.Equals("999")){
+                            // 支所単位
+                            @if (hlist.data_type.Equals("1"))
+                            {
+                                    rno++;
+                                    if (rno % 2 == 0)
+                                    {
+                                        even_bgColorClass = "even_line_y";
+                                        odd_bgColorClass = "odd_line_y";
+                                    }
+                                    else
+                                    {
+                                        even_bgColorClass = "even_line_g";
+                                        odd_bgColorClass = "odd_line_g";
+                                    }
+                                    @* 評価年産の支所計 *@
+                                    rno2 = 1;
+                                    bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                    <tr class="@bgColorClass">
+                                        <td>
+                                            <a id="s_shisho_hyoka_@hlist.支所コード" href="javascript:detail_show('hyoka_@hlist.支所コード');">＋@hlist.支所</a>
+                                            <a id="h_shisho_hyoka_@hlist.支所コード" href="javascript:detail_hide('hyoka_@hlist.支所コード');" style="display:none">－@hlist.支所</a>
+                                        </td>
+                                        <td style="text-align:right;">@hlist.引受回</td>
+                                        <td style="text-align:center;">@(hlist.支所コード.Equals(AppConst.HONSHO_CD) ? "" : "支所計")</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @* 評価年産の支所、引受方式ごと *@
+                                    rno2++;
+                                    bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                    <tr class="@bgColorClass hyoka_@hlist.支所コード" style="display:none">
+                                        <td></td>
+                                        <td style="text-align:right;"></td>
+                                        <td style="text-align:center;">@hlist.引受方式名称</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                    </tr>
+                                
+                            }
+
+                        }
+                        else
+                        {
+                            // 合計行
+                                @if (hlist.data_type.Equals("1"))
+                                {
+                                    rno++;
+                                    if (rno % 2 == 0)
+                                    {
+                                        even_bgColorClass = "even_line_y";
+                                        odd_bgColorClass = "odd_line_y";
+                                    }
+                                    else
+                                    {
+                                        even_bgColorClass = "even_line_g";
+                                        odd_bgColorClass = "odd_line_g";
+                                    }
+                                    @* 評価年産の合計 *@
+                                    rno2 = 1;
+                                    bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                    <tr class="@bgColorClass gokeiBorder">
+                                        <td>
+                                            <a id="s_shisho_hyoka_total" href="javascript:detail_show('hyoka_total');">＋合計</a>
+                                            <a id="h_shisho_hyoka_total" href="javascript:detail_hide('hyoka_total');" style="display:none">－合計</a>
+                                        </td>
+                                        <td style="text-align:right;"></td>
+                                        <td style="text-align:center;"></td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    @* 評価年産の合計（引受方式ごと） *@
+                                    rno2++;
+                                    bgColorClass = (rno2 % 2 == 0 ? even_bgColorClass : odd_bgColorClass);
+                                    <tr class="@bgColorClass hyoka_total" style="display:none">
+                                        <td></td>
+                                        <td style="text-align:right;"></td>
+                                        <td style="text-align:center;">@hlist.引受方式名称</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計引受面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計共済金額)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計組合員等負担共済掛金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.組合等計賦課金)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害戸数)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象被害面積)</td>
+                                        <td style="text-align:right;">@string.Format("{0:#,0}", hlist.支払対象支払共済金見込額)</td>
+                                    </tr>
+                                }
+                            }
+                    }
+                </tbody>
+            </table>
+        }
+        </div>
+    </div>
+    <div class="table-responsive table-thead-container">
+        @* @Html.Pager("Pager", "pagerClick", Model.Pager)*@
     </div>
 
 }
-<div class="text-end">
-@*     @if (SessionUtil.Get<DateTime?>(F00Const.SESS_LAST_LOGIN_DATETIME, this.Context) != null)
-    {
-        <span>
-            前回のログイン日時は
-            @Model.VSyokuinRecords.LastLoginDate.Value.ToString(F00Const.YYYYMMDD_HHmm_WITH_SLASH)
-            です。
-        </span>
-    }
- *@</div>
 
-@* @if (Model.PwdLabDisplay)
-{
-    <div class="text-end">最後にパスワードを変更してから6か月以上経過しました。</div>
-}
- *@
+@Html.Dialog("SystemError", "エラー", MessageUtil.Get("MF00001"), "閉じる")
+
 @section styles {
     <style type="text/css">
+    .date-picker:first-child {
+        @tbWidthDataPicker;
+    }
 
+    .table-spe-bordered {
+        border-bottom: none;
+        border-left: none;
+    }
+
+    .td_spe_color {
+        background-color: #fff !important;
+        border: none !important;
+    }
+
+    .colgroup_background {
+        background-color: #ecf1fb;
+    }
+
+    .td_color {
+        color: #FF0000;
+        font-weight: bold !important;
+    }
+
+    .table > tbody > tr > th,
+    .table > tbody > tr > td {
+        border: 1px solid #ddd;
+    }
+
+    .itemTitle {
+            background-color: #5c799c!important;
+            color: white!important;
+    }
+
+    .even_line_g {
+            background-color: #E6E6E6;
+        }
+
+
+    .odd_line_g {
+            background-color: #f2f2f2;
+    }
+
+    .even_line_y {
+            background-color: #fff0c0;
+    }
+
+    .odd_line_y {
+            background-color: #F2E4B6;
+    }
+
+    .notDisplay{
+        display:none;
+    }
+
+    .gokeiBorder{
+            border-top: double;
+    }
     </style>
 }
 
-@section scripts {
-    <script type="text/javascript">
-        function DispSearch(index){
-            var infoLink = '@Url.Action("", "D000020", new { area = "F000" })?@CoreConst.CHILD_WINDOW_ID=' + getChildId("D000000") + "&index=" + index;
-            //action = Url.Action("Link", "C000000", new { area = "F000" }) + "?" + InfraConst.MENU_REQUEST_QUERYSTRING + "=" + screenId;
-            if (!myWindow || myWindow.closed) {
-                myWindow = openWindowSize(infoLink);
+@section scripts{
+    <script>
+
+
+        $(function () {
+            // 年産の選択値をDiable用ドロップダウンリストの選択値にコピーする
+             $("#SNensanHikiuke_dmy").val($("#SNensanHikiuke").val());
+             $("#SNensanHyoka_dmy").val($("#SNensanHyoka").val());
+             // 年産変更可否により、ドロップダウンリストの表示／非表示を切り替える
+            if ($("#CanUpdateNensan").val() == "True"){
+                // 年産変更可のときは、Enable用ドロップダウンリストを表示し、Disable用ドロップダウンリストは非表示にする
+                $("#SNensanHikiuke").show();
+                $("#SNensanHikiuke_dmy").hide();
+                $("#SNensanHyoka").show();
+                $("#SNensanHyoka_dmy").hide();
+            } else {
+                // 年産変更不可のときは、Enable用ドロップダウンリストを非表示にし、Disable用ドロップダウンリストは表示する
+                $("#SNensanHikiuke").hide();
+                $("#SNensanHikiuke_dmy").show();
+                $("#SNensanHyoka").hide();
+                $("#SNensanHyoka_dmy").show();
             }
-            else {
-                myWindow.close();
-                myWindow = openWindowSize(infoLink);
+        });
+        @* 決定 *@
+            $("#ketteiBtn").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var validationError = "input-validation-error";
+                var message = "";
+
+                @* 独自チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                $('.input-validation-error:first').focus();
+
+                if ($("#D000000Form").valid() && "" == message) {
+                    var form = $("#D000000Form");
+                    form.attr("action", "@Url.Action("Decision", "D000000", new { area = "F000" })");
+                    form.attr("method", "post");
+                    form.submit();
+                }
+            });
+
+        @* 戻る *@
+            $("#backBtn").click(function () {
+                var backLink = "@Url.Action("Init", "D0001", new { area = "F00" })";
+                var url = "@Url.Action("Back", "D7208", new { area = "F02" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                    success: function (data) {
+                        location.href = backLink;
+                    },
+                    error: function (data) {
+        @Html.ShowDialog("SystemError")
+                    }
+                });
+            });
+        // 共済目的コード変更時の処理
+        $("#SKyosaiMokutekiCd").on('change', function () {
+
+            $("#SNensanHikiuke option").remove();
+            $("#SNensanHikiuke_dmy option").remove();
+            $("#SNensanHyoka option").remove();
+            $("#SNensanHyoka_dmy option").remove();
+
+            var KyosaiMokuteiCd = $(this).val();
+
+            if (KyosaiMokuteiCd === '') {
+                // $("#SNensanHikiuke").prop("disabled", true);
+                // $("#SNensanHyoka").prop("disabled", true);
+                return;
             }
 
+            var data = {"req":"1", "SKyosaiMokutekiCd":KyosaiMokuteiCd};
+            var url = '@Url.Action("GetNensanDropdownList", "D000000", new { area = "F000" })';
+
+
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                cache: false,
+                async: false,
+            }).done(function (data) {
+                if (data.length > 0) {
+                    $.each(data, function (idx, obj) {
+                        $("#SNensanHikiuke").append($('<option>').val(obj.Value).text(obj.Text));
+                        $("#SNensanHikiuke_dmy").append($('<option>').val(obj.Value).text(obj.Text));
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            });
+
+            var data = {"req":"2", "SKyosaiMokutekiCd":KyosaiMokuteiCd};
+            var url = '@Url.Action("GetNensanDropdownList", "D000000", new { area = "F000" })';
+            $.ajax({
+                type: 'POST',
+                url: url,
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: "application/json",
+                cache: false,
+                async: false,
+            }).done(function (data) {
+                if (data.length > 0) {
+                    $.each(data, function (idx, obj) {
+                        $("#SNensanHyoka").append($('<option>').val(obj.Value).text(obj.Text));
+                        $("#SNensanHyoka_dmy").append($('<option>').val(obj.Value).text(obj.Text));
+                    });
+                }
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+            });
+        });
+
+        function detail_show(id){
+            $("." + id).show();
+            $("#s_shisho_" + id).hide();
+            $("#h_shisho_" + id).show();
         }
 
-        function openWindowSize(actionName) {
-            if ('@CoreConst.ScreenMode.Tablet' == '@screenMode') {
-                x = @Convert.ToInt32(F000Const.TabletOpenSizeD000020.TabletWidth);
-                y = @Convert.ToInt32(F000Const.TabletOpenSizeD000020.TabletHeight);
-                return windowSizeOpen(actionName, "D000020", x, y);
-            }
-            else if ('@CoreConst.ScreenMode.PC' == '@screenMode') {
-                x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
-                y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
-                return windowSizeOpen(actionName, "D000020", x, y);
-            }
+        function detail_hide(id){
+            $("." + id).hide();
+            $("#s_shisho_" + id).show();
+            $("#h_shisho_" + id).hide();
         }
 
+        
     </script>
 }

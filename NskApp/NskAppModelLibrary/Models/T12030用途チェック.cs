@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("t_12030_用途チェック")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(類区分), nameof(統計単位地域コード), nameof(用途区分))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(類区分), nameof(統計単位地域コード), nameof(用途区分), nameof(産地別銘柄コード))]
     public class T12030用途チェック : ModelBase
     {
         /// <summary>
@@ -70,74 +70,82 @@ namespace NskAppModelLibrary.Models
         public string 用途区分 { get; set; }
 
         /// <summary>
-        /// 引受ERRフラグ
+        /// 産地別銘柄コード
         /// </summary>
-        [Column("引受ERRフラグ")]
-        [StringLength(1)]
-        public string 引受ERRフラグ { get; set; }
+        [Required]
+        [Column("産地別銘柄コード", Order = 8)]
+        [StringLength(5)]
+        public string 産地別銘柄コード { get; set; }
 
         /// <summary>
-        /// 引受WARフラグ
+        /// 引受errフラグ
         /// </summary>
-        [Column("引受WARフラグ")]
+        [Column("引受errフラグ")]
         [StringLength(1)]
-        public string 引受WARフラグ { get; set; }
+        public string 引受errフラグ { get; set; }
 
         /// <summary>
-        /// 引受ERRNO
+        /// 引受warフラグ
         /// </summary>
-        [Column("引受ERRNO")]
+        [Column("引受warフラグ")]
+        [StringLength(1)]
+        public string 引受warフラグ { get; set; }
+
+        /// <summary>
+        /// 引受errno
+        /// </summary>
+        [Column("引受errno")]
         [StringLength(30)]
-        public string 引受ERRNO { get; set; }
+        public string 引受errno { get; set; }
 
         /// <summary>
-        /// 引受SUBJECT
+        /// 引受subject
         /// </summary>
-        [Column("引受SUBJECT")]
+        [Column("引受subject")]
         [StringLength(100)]
-        public string 引受SUBJECT { get; set; }
+        public string 引受subject { get; set; }
 
         /// <summary>
-        /// 引受ERRメッセージ
+        /// 引受errメッセージ
         /// </summary>
-        [Column("引受ERRメッセージ")]
+        [Column("引受errメッセージ")]
         [StringLength(512)]
-        public string 引受ERRメッセージ { get; set; }
+        public string 引受errメッセージ { get; set; }
 
         /// <summary>
-        /// 評価ERRフラグ
+        /// 評価errフラグ
         /// </summary>
-        [Column("評価ERRフラグ")]
+        [Column("評価errフラグ")]
         [StringLength(1)]
-        public string 評価ERRフラグ { get; set; }
+        public string 評価errフラグ { get; set; }
 
         /// <summary>
-        /// 評価WARフラグ
+        /// 評価warフラグ
         /// </summary>
-        [Column("評価WARフラグ")]
+        [Column("評価warフラグ")]
         [StringLength(1)]
-        public string 評価WARフラグ { get; set; }
+        public string 評価warフラグ { get; set; }
 
         /// <summary>
-        /// 評価ERRNO
+        /// 評価errno
         /// </summary>
-        [Column("評価ERRNO")]
+        [Column("評価errno")]
         [StringLength(30)]
-        public string 評価ERRNO { get; set; }
+        public string 評価errno { get; set; }
 
         /// <summary>
-        /// 評価SUBJECT
+        /// 評価subject
         /// </summary>
-        [Column("評価SUBJECT")]
+        [Column("評価subject")]
         [StringLength(100)]
-        public string 評価SUBJECT { get; set; }
+        public string 評価subject { get; set; }
 
         /// <summary>
-        /// 評価ERRメッセージ
+        /// 評価errメッセージ
         /// </summary>
-        [Column("評価ERRメッセージ")]
+        [Column("評価errメッセージ")]
         [StringLength(512)]
-        public string 評価ERRメッセージ { get; set; }
+        public string 評価errメッセージ { get; set; }
 
         /// <summary>
         /// 合併時識別コード

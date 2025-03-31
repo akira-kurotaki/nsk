@@ -88,6 +88,43 @@ namespace NskAppModelLibrary.Models
         public string 地域集団コード { get; set; }
 
         /// <summary>
+        /// 共通申請等割引方法コード
+        /// </summary>
+        [Column("共通申請等割引方法コード")]
+        [StringLength(2)]
+        public string 共通申請等割引方法コード { get; set; }
+
+        /// <summary>
+        /// 割引割合
+        /// </summary>
+        [Column("割引割合")]
+        public Decimal? 割引割合 { get; set; }
+
+        /// <summary>
+        /// 割引金額
+        /// </summary>
+        [Column("割引金額")]
+        public Decimal? 割引金額 { get; set; }
+
+        /// <summary>
+        /// 割増割合
+        /// </summary>
+        [Column("割増割合")]
+        public Decimal? 割増割合 { get; set; }
+
+        /// <summary>
+        /// 割増金額
+        /// </summary>
+        [Column("割増金額")]
+        public Decimal? 割増金額 { get; set; }
+
+        /// <summary>
+        /// 共通申請等割引理由
+        /// </summary>
+        [Column("共通申請等割引理由")]
+        public string 共通申請等割引理由 { get; set; }
+
+        /// <summary>
         /// 登録日時
         /// </summary>
         [Column("登録日時")]

@@ -6,7 +6,7 @@ using Npgsql;
 using NskAppModelLibrary.Context;
 using NskAppModelLibrary.Models;
 using NskWeb.Areas.F105.Consts;
-using System.ComponentModel;
+using NskWeb.Common.Models;
 using System.Data;
 using System.Text;
 
@@ -16,18 +16,18 @@ namespace NskWeb.Areas.F105.Models.D105030
     /// 引受情報検索結果
     /// </summary>
     [Serializable]
-    public class D105030HikiukeSearchResult : D105030Pager<D105030HikiukeRecord>
+    public class D105030HikiukeSearchResult : BasePager<D105030HikiukeRecord>
     {
         /// <summary>種類ドロップダウンリスト選択値</summary>
         public List<SelectListItem> SyuruiList { get; set; } = new();
         /// <summary>区分ドロップダウンリスト選択値</summary>
         public List<SelectListItem> KbnList { get; set; } = new();
-        /// <summary>市町村ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> ShichosonList { get; set; } = new();
-        /// <summary>品種ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HinsyuList { get; set; } = new();
-        /// <summary>産地銘柄ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SanchiMeigaraList { get; set; } = new();
+        ///// <summary>市町村ドロップダウンリスト選択値</summary>
+        //public List<SelectListItem> ShichosonList { get; set; } = new();
+        ///// <summary>品種ドロップダウンリスト選択値</summary>
+        //public List<SelectListItem> HinsyuList { get; set; } = new();
+        ///// <summary>産地銘柄ドロップダウンリスト選択値</summary>
+        //public List<SelectListItem> SanchiMeigaraList { get; set; } = new();
         /// <summary>田畑ドロップダウンリスト選択値</summary>
         public List<SelectListItem> TahataList { get; set; } = new();
         /// <summary>収量等級ドロップダウンリスト選択値</summary>
@@ -35,14 +35,13 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>受委託者区分ドロップダウンリスト選択値</summary>
         public List<SelectListItem> JuitakusyaKbnList { get; set; } = new();
 
-        private readonly D105030SearchCondition _searchCondition;
+        public D105030SearchCondition SearchCondition { get; set; } = new();
 
         /// <summary>
         /// コンストラクタ
         /// </summary>
         public D105030HikiukeSearchResult()
         {
-            _searchCondition = new();
         }
 
         /// <summary>
@@ -51,8 +50,8 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <param name="searchCondition"></param>
         public D105030HikiukeSearchResult(D105030SearchCondition searchCondition)
         {
-            _searchCondition = searchCondition;
-            DisplayCount = _searchCondition.DisplayCount ?? CoreConst.PAGE_SIZE;
+            SearchCondition = searchCondition;
+            DisplayCount = SearchCondition.DisplayCount ?? CoreConst.PAGE_SIZE;
         }
 
         /// <summary>
@@ -62,12 +61,12 @@ namespace NskWeb.Areas.F105.Models.D105030
         public void InitializeDropdonwList(NskAppContext dbContext, D105030SessionInfo sessionInfo)
         {
             //２．４．[種類] ドロップダウンリスト項目を取得する。		
-            //	(1) m_10130_種類区分名称テーブルより、種類区分、種類区分名称を取得する。
+            //	(1) m_10140_種類名称テーブルより、種類コード、種類名称を取得する。
             //	(2) 取得した結果をドロップダウンリストの項目として設定する。
             SyuruiList = new();
-            SyuruiList.AddRange(dbContext.M10130種類区分名称s.Where(m => m.共済目的コード == sessionInfo.KyosaiMokutekiCd)?.
-                OrderBy(m => m.種類区分).
-                Select(m => new SelectListItem($"{m.種類区分} {m.種類区分名称}", $"{m.種類区分}")));
+            SyuruiList.AddRange(dbContext.M10140種類名称s.Where(m => m.共済目的コード == sessionInfo.KyosaiMokutekiCd)?.
+                OrderBy(m => m.種類コード).
+                Select(m => new SelectListItem($"{m.種類コード} {m.種類名称}", $"{m.種類コード}")));
 
             //２．５．[区分] ドロップダウンリスト項目を取得する。		
             //	(1) m_00030_区分名称テーブルより、区分コード、区分名称を取得する。
@@ -80,32 +79,37 @@ namespace NskWeb.Areas.F105.Models.D105030
                 OrderBy(m => m.区分コード).
                 Select(m => new SelectListItem($"{m.区分コード} {m.区分名称}", $"{m.区分コード}")));
 
-            //２．６．[市町村] ドロップダウンリスト項目を取得する。		
-            //	(1) 名称M市町村テーブルより、市町村コード、市町村名を取得する。
-            //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            ShichosonList = new();
+            ////２．６．[市町村] ドロップダウンリスト項目を取得する。		
+            ////	(1) 名称M市町村テーブルより、市町村コード、市町村名を取得する。
+            ////	(2) 取得した結果をドロップダウンリストの項目として設定する。
+            //ShichosonList = new();
+            //ShichosonList.AddRange(dbContext.VShichosonNms.Where(m =>
+            //    (m.KumiaitoCd == sessionInfo.KumiaitoCd) &&
+            //    (m.TodofukenCd == sessionInfo.TodofukenCd))?.
+            //    OrderBy(m => m.ShichosonCd).
+            //    Select(m => new SelectListItem($"{m.ShichosonCd} {m.ShichosonNm}", $"{m.ShichosonCd}")));
 
-            //２．７．[産地銘柄] ドロップダウンリスト項目を取得する。		
-            //	(1) m_00130_産地別銘柄名称設定テーブルより、産地別銘柄コード、産地別銘柄名称を取得する。
-            //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            SanchiMeigaraList = new();
-            SanchiMeigaraList.AddRange(dbContext.M00130産地別銘柄名称設定s.Where(m =>
-                (m.組合等コード == sessionInfo.KumiaitoCd) &&
-                (m.年産 == sessionInfo.Nensan) &&
-                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
-                OrderBy(m => m.産地別銘柄コード).
-                Select(m => new SelectListItem($"{m.産地別銘柄コード} {m.産地別銘柄名称}", $"{m.産地別銘柄コード}")));
+            ////２．７．[産地銘柄] ドロップダウンリスト項目を取得する。		
+            ////	(1) m_00130_産地別銘柄名称設定テーブルより、産地別銘柄コード、産地別銘柄名称を取得する。
+            ////	(2) 取得した結果をドロップダウンリストの項目として設定する。
+            //SanchiMeigaraList = new();
+            //SanchiMeigaraList.AddRange(dbContext.M00130産地別銘柄名称設定s.Where(m =>
+            //    (m.組合等コード == sessionInfo.KumiaitoCd) &&
+            //    (m.年産 == sessionInfo.Nensan) &&
+            //    (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
+            //    OrderBy(m => m.産地別銘柄コード).
+            //    Select(m => new SelectListItem($"{m.産地別銘柄コード} {m.産地別銘柄名称}", $"{m.産地別銘柄コード}")));
 
-            //２．８．[品種] ドロップダウンリスト項目を取得する。		
-            //	(1) m_00110_品種係数テーブルより、品種コード、品種名等を取得する。
-            //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HinsyuList = new();
-            HinsyuList.AddRange(dbContext.M00110品種係数s.Where(m =>
-                (m.組合等コード == sessionInfo.KumiaitoCd) &&
-                (m.年産 == sessionInfo.Nensan) &&
-                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
-                OrderBy(m => m.品種コード).
-                Select(m => new SelectListItem($"{m.品種コード} {m.品種名等}", $"{m.品種コード}")));
+            ////２．８．[品種] ドロップダウンリスト項目を取得する。		
+            ////	(1) m_00110_品種係数テーブルより、品種コード、品種名等を取得する。
+            ////	(2) 取得した結果をドロップダウンリストの項目として設定する。
+            //HinsyuList = new();
+            //HinsyuList.AddRange(dbContext.M00110品種係数s.Where(m =>
+            //    (m.組合等コード == sessionInfo.KumiaitoCd) &&
+            //    (m.年産 == sessionInfo.Nensan) &&
+            //    (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
+            //    OrderBy(m => m.品種コード).
+            //    Select(m => new SelectListItem($"{m.品種コード} {m.品種名等}", $"{m.品種コード}")));
 
             //２．９．[田畑] ドロップダウンリスト項目を取得する。		
             //	(1) m_00040_田畑名称テーブルより、田畑区分、田畑名称を取得する。
@@ -142,9 +146,12 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// 引受情報を取得する。
         /// </summary>
         /// <param name="dbContext">DBコンテキスト</param>
+        /// <param name="session"></param>
         /// <returns>検索情報</returns>
-        public override List<D105030HikiukeRecord> GetResult(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030HikiukeRecord> GetResult(NskAppContext dbContext, BaseSessionInfo session)
         {
+            D105030SessionInfo sessionInfo = (D105030SessionInfo)session;
+
             // ２．２．２．１．引受情報を取得する。	
             // t_11090_引受耕地テーブル、t_11100_引受gisテーブルから
             // [画面：地番]、[画面：耕地番号（開始）]、[画面：耕地番号（終了）] に該当する引受情報を取得する。
@@ -156,6 +163,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                 new("年産", sessionInfo.Nensan),
                 new("共済目的コード", sessionInfo.KyosaiMokutekiCd),
                 new("組合員等コード", sessionInfo.KumiaiintoCd),
+                new("都道府県コード", sessionInfo.TodofukenCd)
             ];
 
             query.Append(" SELECT ");
@@ -167,8 +175,11 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append($"  ,T1.種類コード       As \"{nameof(D105030HikiukeRecord.Syurui)}\" ");
             query.Append($"  ,T1.区分コード       As \"{nameof(D105030HikiukeRecord.Kbn)}\" ");
             query.Append($"  ,T1.統計市町村コード As \"{nameof(D105030HikiukeRecord.Shichoson)}\" ");
+            query.Append($"  ,M3.shichoson_nm     As \"{nameof(D105030HikiukeRecord.ShichosonNm)}\" ");
             query.Append($"  ,T1.品種コード       As \"{nameof(D105030HikiukeRecord.Hinsyu)}\" ");
+            query.Append($"  ,M1.品種名等         As \"{nameof(D105030HikiukeRecord.HinsyuNm)}\" ");
             query.Append($"  ,T1.産地別銘柄コード As \"{nameof(D105030HikiukeRecord.SanchiMeigara)}\" ");
+            query.Append($"  ,M2.産地別銘柄名称   As \"{nameof(D105030HikiukeRecord.SanchiMeigaraNm)}\" ");
             query.Append($"  ,T1.田畑区分         As \"{nameof(D105030HikiukeRecord.Tahata)}\" ");
             query.Append($"  ,T1.収量等級コード   As \"{nameof(D105030HikiukeRecord.SyuryoTokyu)}\" ");
             query.Append($"  ,T1.分筆番号         As \"{nameof(D105030HikiukeRecord.BunpitsuNo)}\" ");
@@ -197,75 +208,90 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append("  AND  T1.組合員等コード = T2.組合員等コード ");
             query.Append("  AND  T1.耕地番号       = T2.耕地番号 ");
             query.Append("  AND  T1.分筆番号       = T2.分筆番号 ");
+            query.Append(" LEFT OUTER JOIN m_00110_品種係数              M1 ");
+            query.Append(" ON    T1.組合等コード   = M1.組合等コード ");
+            query.Append("  AND  T1.年産           = M1.年産 ");
+            query.Append("  AND  T1.共済目的コード = M1.共済目的コード ");
+            query.Append("  AND  T1.品種コード     = M1.品種コード ");
+            query.Append(" LEFT OUTER JOIN m_00130_産地別銘柄名称設定    M2 ");
+            query.Append(" ON    T1.組合等コード   = M2.組合等コード ");
+            query.Append("  AND  T1.年産           = M2.年産 ");
+            query.Append("  AND  T1.共済目的コード = M2.共済目的コード ");
+            query.Append("  AND  T1.産地別銘柄コード = M2.産地別銘柄コード ");
+            query.Append(" LEFT OUTER JOIN v_shichoson_nm                M3 ");
+            query.Append(" ON    T1.組合等コード   = M3.kumiaito_cd ");
+            query.Append("  AND  M3.todofuken_cd   = @都道府県コード ");
+            query.Append("  AND  T1.統計市町村コード = M3.shichoson_cd ");
+
             query.Append(" WHERE T1.組合等コード   = @組合等コード ");
             query.Append("  AND  T1.年産           = @年産 ");
             query.Append("  AND  T1.共済目的コード = @共済目的コード ");
             query.Append("  AND  T1.組合員等コード = @組合員等コード ");
 
             // ※「画面：地名地番」の入力がある場合
-            if (!string.IsNullOrEmpty(_searchCondition.Chiban))
+            if (!string.IsNullOrEmpty(SearchCondition.Chiban))
             {
                 query.Append("  AND  T1.地名地番       = @地名地番 ");
-                queryParams.Add(new("地名地番", _searchCondition.Chiban));
+                queryParams.Add(new("地名地番", SearchCondition.Chiban));
             }
 
             // ※「画面：耕地番号（開始）」のみ入力がある場合
-            if (!string.IsNullOrEmpty(_searchCondition.KouchiNoFrom) && string.IsNullOrEmpty(_searchCondition.KouchiNoTo))
+            if (!string.IsNullOrEmpty(SearchCondition.KouchiNoFrom) && string.IsNullOrEmpty(SearchCondition.KouchiNoTo))
             {
                 query.Append("  AND  T1.耕地番号       = @耕地番号From ");
-                queryParams.Add(new("耕地番号From", _searchCondition.KouchiNoFrom));
+                queryParams.Add(new("耕地番号From", SearchCondition.KouchiNoFrom));
             }
 
             // ※「画面：耕地番号（終了）」のみ入力がある場合
-            if (string.IsNullOrEmpty(_searchCondition.KouchiNoFrom) && !string.IsNullOrEmpty(_searchCondition.KouchiNoTo))
+            if (string.IsNullOrEmpty(SearchCondition.KouchiNoFrom) && !string.IsNullOrEmpty(SearchCondition.KouchiNoTo))
             {
                 query.Append("  AND  T1.耕地番号       = @耕地番号To ");
-                queryParams.Add(new("耕地番号To", _searchCondition.KouchiNoTo));
+                queryParams.Add(new("耕地番号To", SearchCondition.KouchiNoTo));
             }
 
             // ※「画面：耕地番号（開始）」および「画面：耕地番号（終了）」に入力がある場合
-            if (!string.IsNullOrEmpty(_searchCondition.KouchiNoFrom) && !string.IsNullOrEmpty(_searchCondition.KouchiNoTo))
+            if (!string.IsNullOrEmpty(SearchCondition.KouchiNoFrom) && !string.IsNullOrEmpty(SearchCondition.KouchiNoTo))
             {
                 query.Append("  AND (T1.耕地番号     >= @耕地番号From ");
                 query.Append("  AND      T1.耕地番号     <= @耕地番号To) ");
-                queryParams.Add(new("耕地番号From", _searchCondition.KouchiNoFrom));
-                queryParams.Add(new("耕地番号To", _searchCondition.KouchiNoTo));
+                queryParams.Add(new("耕地番号From", SearchCondition.KouchiNoFrom));
+                queryParams.Add(new("耕地番号To", SearchCondition.KouchiNoTo));
             }
 
-            if (_searchCondition.DisplaySort1.HasValue || _searchCondition.DisplaySort2.HasValue)
+            if (SearchCondition.DisplaySort1.HasValue || SearchCondition.DisplaySort2.HasValue)
             {
                 // ORDER BY
                 query.Append(" ORDER BY ");
 
                 bool isPutOrder = false;
                 //  画面指定ソート順
-                if (_searchCondition.DisplaySort1.HasValue)
+                if (SearchCondition.DisplaySort1.HasValue)
                 {
                     isPutOrder = true;
-                    switch (_searchCondition.DisplaySort1)
+                    switch (SearchCondition.DisplaySort1)
                     {
                         case D105030SearchCondition.DisplaySortType.Chiban:
-                            query.Append($" T1.{nameof(T11090引受耕地.地名地番)} {_searchCondition.DisplaySortOrder1} ");
+                            query.Append($" T1.{nameof(T11090引受耕地.地名地番)} {SearchCondition.DisplaySortOrder1} ");
                             break;
                         case D105030SearchCondition.DisplaySortType.KouchBango:
-                            query.Append($" T1.{nameof(T11090引受耕地.耕地番号)} {_searchCondition.DisplaySortOrder1} ");
+                            query.Append($" T1.{nameof(T11090引受耕地.耕地番号)} {SearchCondition.DisplaySortOrder1} ");
                             break;
                     }
                 }
-                if (_searchCondition.DisplaySort2.HasValue)
+                if (SearchCondition.DisplaySort2.HasValue)
                 {
                     if (isPutOrder)
                     {
                         // ソート条件1が出力されていた場合、カンマを付与する
                         query.Append(", ");
                     }
-                    switch (_searchCondition.DisplaySort2)
+                    switch (SearchCondition.DisplaySort2)
                     {
                         case D105030SearchCondition.DisplaySortType.Chiban:
-                            query.Append($" T1.{nameof(T11090引受耕地.地名地番)} {_searchCondition.DisplaySortOrder2} ");
+                            query.Append($" T1.{nameof(T11090引受耕地.地名地番)} {SearchCondition.DisplaySortOrder2} ");
                             break;
                         case D105030SearchCondition.DisplaySortType.KouchBango:
-                            query.Append($" T1.{nameof(T11090引受耕地.耕地番号)} {_searchCondition.DisplaySortOrder2} ");
+                            query.Append($" T1.{nameof(T11090引受耕地.耕地番号)} {SearchCondition.DisplaySortOrder2} ");
                             break;
                     }
                 }
@@ -396,22 +422,9 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append(" ,@登録日時 ");
             query.Append(" ,@登録ユーザid ");
             query.Append(" )");
-            List<T12140引受耕地削除データ保持> addRecs = new();
+
             foreach(D105030HikiukeRecord target in hikiukeDelRecords)
             {
-                //addRecs.Add(new()
-                //{
-                //    組合等コード = sessionInfo.KumiaitoCd,
-                //    年産 = (short)sessionInfo.Nensan,
-                //    共済目的コード = sessionInfo.KyosaiMokutekiCd,
-                //    組合員等コード = sessionInfo.KumiaiintoCd,
-                //    耕地番号 = target.KouchiNo,
-                //    分筆番号 = target.BunpitsuNo,
-                //    地名地番 = target.ChimeiChiban,
-                //    削除日時 = sysDateTime,
-                //    登録日時 = sysDateTime,
-                //    登録ユーザid = userId
-                //});
                 NpgsqlParameter[] addParams =
                 [
                     new("組合等コード", sessionInfo.KumiaitoCd),
@@ -427,8 +440,6 @@ namespace NskWeb.Areas.F105.Models.D105030
                 ];
                 dbContext.Database.ExecuteSqlRaw(query.ToString(), addParams);
             }
-            //dbContext.T12140引受耕地削除データ保持s.AddRange(addRecs);
-            //dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -484,7 +495,7 @@ namespace NskWeb.Areas.F105.Models.D105030
 
             foreach (D105030HikiukeRecord target in hikiukeUpdRecords)
             {
-                if (!!target.KouchiXmin.HasValue)
+                if (!target.KouchiXmin.HasValue)
                 {
                     // xmin nullは処理対象外
                     continue;
@@ -497,7 +508,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                     new("組合員等コード", sessionInfo.KumiaiintoCd),
                     new("耕地番号", target.KouchiNo),
                     new("分筆番号", target.BunpitsuNo),
-                    new("地名地番", target.ChimeiChiban),
+                    new("地名地番", string.IsNullOrEmpty(target.ChimeiChiban) ? DBNull.Value : target.ChimeiChiban),
                     new("耕地面積", target.HonchiMenseki.HasValue ? target.HonchiMenseki : DBNull.Value),
                     new("引受面積", target.HikukeMenseki.HasValue ? target.HikukeMenseki : DBNull.Value),
                     new("転作等面積", target.TensakutoMenseki.HasValue ? target.TensakutoMenseki : DBNull.Value),
@@ -567,7 +578,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                     (x.分筆番号 == target.BunpitsuNo)
                     ))
                 {
-                    if (!target.KouchiXmin.HasValue)
+                    if (!target.GisXmin.HasValue)
                     {
                         // xmin nullは処理対象外
                         continue;
@@ -619,7 +630,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                         枝番 = target.GisEdaban,
                         子番 = target.GisKoban,
                         孫番 = target.GisMagoban,
-                        RS区分 = target.GisRsKbn,
+                        rs区分 = target.GisRsKbn,
                         登録日時 = sysDateTime,
                         登録ユーザid = userId,
                         更新日時 = sysDateTime,
@@ -705,7 +716,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                     組合員等コード = sessionInfo.KumiaiintoCd,
                     耕地番号 = target.KouchiNo,
                     分筆番号 = target.BunpitsuNo,
-                    RS区分 = target.GisRsKbn,
+                    rs区分 = target.GisRsKbn,
                     局都道府県コード = target.GisKyokuTodofuken,
                     市区町村コード = target.GisShichoson,
                     大字コード = target.GisOoaza,
@@ -741,10 +752,11 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// 更新対象レコード取得
         /// </summary>
         /// <param name="dbContext"></param>
-        /// <param name="sessionInfo"></param>
+        /// <param name="session"></param>
         /// <returns></returns>
-        public override List<D105030HikiukeRecord> GetUpdateRecs(ref NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030HikiukeRecord> GetUpdateRecs(ref NskAppContext dbContext, BaseSessionInfo session)
         {
+            D105030SessionInfo sessionInfo = (D105030SessionInfo)session;
             List<D105030HikiukeRecord> updRecs = new();
 
             // 検索結果取得
@@ -754,7 +766,7 @@ namespace NskWeb.Areas.F105.Models.D105030
             foreach (D105030HikiukeRecord dispRec in DispRecords)
             {
                 // 追加行、削除行以外を対象とする
-                if (dispRec is D105030PagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
+                if (dispRec is BasePagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
                 {
                     D105030HikiukeRecord dbRec = dbResults.SingleOrDefault(x =>
                         (x.KouchiNo == dispRec.KouchiNo) &&

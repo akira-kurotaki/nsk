@@ -1,0 +1,425 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@model NskWeb.Areas.F000.Models.D000020.D000020Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_2;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>組合員等コード検索</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D000020", FormMethod.Post, new { id = "D000020Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+    <div class="table-responsive">
+        <br>
+        <table>
+            <caption class="visually-hidden">年産共済情報</caption>
+            <colgroup style="width: 15%;"></colgroup>
+            <colgroup style="width: 25%;"></colgroup>
+            <colgroup style="width: 60%;"></colgroup>
+            <tr>
+                @* 年産 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.Nensan,
+                             Html.DisplayNameFor(model => model.SearchCondition.Nensan))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.SearchCondition.Nensan)
+                                @Html.HiddenFor(model => model.SearchCondition.Nensan)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                @* 共済目的 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KyosaiMokutekiNm,
+                             Html.DisplayNameFor(model => model.SearchCondition.KyosaiMokutekiNm))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.SearchCondition.KyosaiMokutekiNm)
+                                @Html.HiddenFor(model => model.SearchCondition.KyosaiMokutekiCd)
+                                @Html.HiddenFor(model => model.SearchCondition.KyosaiMokutekiNm)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <div class="table-responsive">
+        <h4 class="sub_title">組合員等コード検索</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        <br>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.SearchCondition.TodofukenDropDownList)
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索対象</caption>
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 50%;"></colgroup>
+            <colgroup style="width: 30%;"></colgroup>
+            <tr>
+                @* 組合員等氏名 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KumiaiintoNm,
+                             Html.DisplayNameFor(model => model.SearchCondition.KumiaiintoNm))
+                </td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.KumiaiintoNm, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.KumiaiintoNm),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "",
+                                         @title = Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.KumiaiintoNm) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.KumiaiintoNm, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+        </table>
+        <button id="toggleButton">＋絞り込み条件を開く</button>
+        <br>
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered" id="itemTable" style="display:none;">
+            <caption class="visually-hidden">検索対象</caption>
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 20%;"></colgroup>
+            <colgroup style="width: 30%;"></colgroup>
+            <tr>
+                @* 支所 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd))
+                </td>
+                <td colspan="3">
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 大地区 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd))
+                </td>
+                <td colspan="3">
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 小地区 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom))
+                </td>
+                @* 小地区(開始) *@
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuFrom, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+                </td>
+                @* ～ *@
+                <td class="text-center">
+                    <div>
+                        @Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdTo)
+                    </div>
+                </td>
+                @* 小地区(終了) *@
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuTo, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 組合員等コード *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KumiaiintoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.KumiaiintoCd))
+                </td>
+                @* 組合員等コード(開始) *@
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.KumiaiintoCdFrom, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.KumiaiintoCdFrom),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "numeric",
+                                         @title = "半角数字" + Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.KumiaiintoCdFrom) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.KumiaiintoCdFrom, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                @* ～ *@
+                <td class="text-center">
+                    <div>
+                        @Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdTo)
+                    </div>
+                </td>
+                @* 組合員等コード(終了) *@
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.KumiaiintoCdTo, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.KumiaiintoCdTo),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "numeric",
+                                         @title = "半角数字" + Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.KumiaiintoCdTo) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.KumiaiintoCdTo, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+        </table>
+        @* 都道府県、組合等（画面上には表示しない） *@
+        <div style="display:none;">
+                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.SearchCondition.TodofukenDropDownList,
+                         "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.SearchCondition.TodofukenDropDownList,
+                         "", new { @class = "form-select form-select-lg", tabindex = 0, @title = "選択項目" })
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            @Html.ActionLink("クリア", "Clear", "D000020", new { area = "F000" }, new { @class = "btn btn-primary", tabindex = 0, id = "clear"})
+            <button type="button" class="btn btn-primary" id="Search" tabindex="0">検索</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+        <h4 class="sub_title">組合員等一覧</h4>
+    </div>
+    <div id="SearchResult">
+        @await Html.PartialAsync("_D000020SearchResult", Model)
+    </div>
+    <br>
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="Close" tabindex="0">閉じる</button>
+        </div>
+    </div>
+}
+
+@section styles {
+    <style type="text/css">
+        #toggleButton{
+            border:none;
+            background-color:white;
+        }
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            // 画面初期表示時に1度だけ実行する処理（リロードは含まない）
+            if (!sessionStorage.getItem('hasRun')) {
+                // [クエリパラメータ：key]から親画面の選択行を取得
+                const urlParams = new URLSearchParams(window.location.search);
+                const idx = urlParams.get('key');
+                // sessionStorageに選択行を保存
+                sessionStorage.setItem('selectRow', idx);
+                // sessionStorageにフラグをセットして、一度実行したことを記録
+                sessionStorage.setItem('hasRun', 'true');
+            }
+
+            const toggleOpen = '＋絞り込み条件を開く';
+            const toggleClose = '－絞り込み条件を閉じる';
+            // 検索条件の開閉状態を取得
+            var sessionData = sessionStorage.getItem('sessionData');
+            if(sessionData == 'open'){
+                // 表示状態の場合
+                $('#itemTable').fadeIn();
+                // テーブルが表示されていれば「－」
+                $('#toggleButton').text(toggleClose);
+            }
+            else
+            {
+                // 非表示状態の場合
+                $('#itemTable').fadeOut();
+                // テーブルが非表示であれば「＋」
+                $('#toggleButton').text(toggleOpen);
+            }
+
+            // 絞り込み条件
+            $("#toggleButton").click(function (event) {
+                // デフォルトのボタンの動作（フォーム送信）を防ぐ
+                event.preventDefault();
+                // 表示/非表示を切り替え
+                $('#itemTable').toggle();
+
+                // ボタンのテキストを切り替え
+                if ($('#itemTable').is(':visible')) {
+                    // テーブルが表示されていれば「－」
+                    $('#toggleButton').text(toggleClose);
+                    // 検索結果描画用に開閉状態をセッションストレージに保持しておく
+                    sessionStorage.setItem('sessionData', 'open');
+                } 
+                else
+                {
+                    // テーブルが非表示であれば「＋」
+                    $('#toggleButton').text(toggleOpen);
+                    // 検索結果描画用に開閉状態をセッションストレージに保持しておく
+                    sessionStorage.setItem('sessionData', 'close');
+                }
+            });
+
+            // 検索
+            $("#Search").click(function () {
+                var form = $("#D000020Form");
+                var messageArea1 = $("#MessageArea1");
+                var ShochikuFrom = $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").val();
+                var ShichikuTo = $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val();
+                var KumiaiintoCdFrom = $("#SearchCondition_KumiaiintoCdFrom").val();
+                var KumiaiintoCdTo = $("#SearchCondition_KumiaiintoCdTo").val();
+                const validationError = "input-validation-error";
+                var message = "";
+                // 前回のメッセージをクリアする
+                messageArea1.html("");
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                    // 属性チェック
+                    if (!$("#D000020Form").valid()) {
+                        // チェックエラー後のカーソルの位置が先頭の入力項目に設定する
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    // 独自チェック
+                    // [画面：小地区(開始)] > [画面：小地区(終了)]の場合、（メッセージID：ME10020)
+                    if (ShochikuFrom != "" && ShichikuTo != "") {
+                        if (Number(ShochikuFrom) > Number(ShichikuTo)) {
+                            // チェックエラー後のエラー項目の背景を赤に設定する
+                            message = ConcatMessage(message, "@MessageUtil.Get("ME10020","小地区")");
+                            $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").addClass(validationError);
+                            $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").addClass(validationError);
+                        }
+                    }
+                    // [画面：組合員等コード(開始)] > [画面：組合員等コード(終了)]の場合、（メッセージID：ME10020)
+                    if (KumiaiintoCdFrom != "" && KumiaiintoCdTo != "") {
+                        if (Number(KumiaiintoCdFrom) > Number(KumiaiintoCdTo)) {
+                            // チェックエラー後のエラー項目の背景を赤に設定する
+                            message = ConcatMessage(message, "@MessageUtil.Get("ME10020","組合員等コード")");
+                            $("#SearchCondition_KumiaiintoCdFrom").addClass(validationError);
+                            $("#SearchCondition_KumiaiintoCdTo").addClass(validationError);
+                        }
+                    }
+                }
+                // チェックエラーありの場合
+                if ("" != message) {
+                    messageArea1.html(message);
+                    // チェックエラー後のカーソルの位置が先頭の入力項目に設定する
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                // チェックエラーなしの場合
+                form.attr("action", "@Url.Action("Search", "D000020", new { area = "F000" })#@CoreConst.SEARCH_RESULT_DIV_ID");
+                form.attr("method", "post");
+                form.submit();
+            });
+
+            // 選択
+            $(".SelectHinshu").click(function () {
+                var hiddenValues = [];
+                // 親画面の選択行を取得
+                const idx = sessionStorage.getItem('selectRow');
+                // 子画面の選択行を取得
+                const selectedRow = $(this).closest('tr');
+                selectedRow.find('input[type="hidden"]').each(function(){
+                    // 選択行のhidden属性を全て配列に格納
+                    hiddenValues.push($(this).val());
+                });
+                
+                if (hiddenValues) {
+                    // 親画面に取得した配列を設定する
+                    window.opener.receiveValueFromChild(idx, hiddenValues);
+                    // 子画面を閉じる
+                    window.close();
+                }
+            });
+
+            // クリア
+            $("#clear").click(function () {
+                // セッションストレージを削除
+                sessionStorage.removeItem('sessionData');
+                sessionStorage.removeItem('hasRun');
+                sessionStorage.removeItem('selectRow');
+                return true;
+            });
+
+            // 閉じる
+            $("#Close").click(function () {
+                // セッション情報削除後に子画面を閉じる
+                var url = '@Url.Action("Close", "D000020", new { area = "F000" })';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        // セッション削除が成功した場合
+                        if (response.result === 'success') {
+                            // セッションストレージを削除
+                            sessionStorage.removeItem('sessionData');
+                            sessionStorage.removeItem('hasRun');
+                            sessionStorage.removeItem('selectRow');
+                            // 子画面を閉じる
+                            window.close();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 処理失敗時
+                        console.error("AJAXエラー:", error);
+                    }
+                });
+
+            });
+
+        });
+    </script>
+}

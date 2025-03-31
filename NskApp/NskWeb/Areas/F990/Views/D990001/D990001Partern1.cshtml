@@ -20,6 +20,10 @@
         <div class="mb-3">
         </div>
         @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.TodofukenDropDownList)
+
+        @* 都道府県ドロップダウンリスト、組合ドロップダウンリストを使用しない場合に大地区、小地区ドロップダウンの連動を行う場合に使用する *@
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_TodofukenDropDownList", Model.TodofukenDropDownList)
+
         <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
             <colgroup class="td_label" style="width: 20.5%;"></colgroup>
             <colgroup class="td_control" style="width: 27.2%;"></colgroup>
@@ -30,8 +34,9 @@
                 @*都道府県*@
                 <td>@Html.DisplayNameFor(model => model.TodofukenDropDownList.TodofukenCd)</td>
                 <td>
-                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
+@*                     @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Todofuken, Model.TodofukenDropDownList,
                              "", new { @class = "form-select form-select-lg", tabindex = 101 })
+                *@
                 </td>
 
                 @*市町村*@
@@ -45,8 +50,9 @@
                 @*組合等*@
                 <td>@Html.DisplayNameFor(model => model.TodofukenDropDownList.KumiaitoCd)</td>
                 <td>
-                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.TodofukenDropDownList,
+@*                     @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Kumiaito, Model.TodofukenDropDownList,
                              "", new { @class = "form-select form-select-lg", tabindex = 102 })
+                *@
                 </td>
 
                 @*大地区*@

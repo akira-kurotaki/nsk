@@ -106,6 +106,12 @@ namespace NskAppModelLibrary.Models
         public Decimal? “à•Š‰Û‹à { get; set; }
 
         /// <summary>
+        /// ˆøó‰ğœ’¥û•Š‰Û‹àŠz
+        /// </summary>
+        [Column("ˆøó‰ğœ’¥û•Š‰Û‹àŠz")]
+        public Decimal? ˆøó‰ğœ’¥û•Š‰Û‹àŠz { get; set; }
+
+        /// <summary>
         /// “o˜^“ú
         /// </summary>
         [Column("“o˜^“ú")]

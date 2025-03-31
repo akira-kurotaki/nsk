@@ -220,7 +220,7 @@ namespace CoreLibrary.Core.Utility
         public static List<MShochikuNm> GetShochikuList(string todofukenCd, string kumiaitoCd, string daichikuCd)
         {
             List<MShochikuNm> result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M小地区マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd +
                     "、大地区コード：" + daichikuCd + " ）");
@@ -250,7 +250,7 @@ namespace CoreLibrary.Core.Utility
         public static MShochikuNm GetShochiku(string todofukenCd, string kumiaitoCd, string daichikuCd, string shochikuCd)
         {
             MShochikuNm result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M小地区マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード："+ kumiaitoCd + 
                     "、大地区コード：" + daichikuCd + "、小地区コード：" + shochikuCd + " ）");

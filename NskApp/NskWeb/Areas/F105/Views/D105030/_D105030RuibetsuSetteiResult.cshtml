@@ -2,6 +2,8 @@
 @{
     var startIndex = 600;
     int tabIndex = startIndex;
+
+    bool isKyosaiMokutekiRikuto = Model.KyosaiMokutekiCd == $"{(int)NskCommonLibrary.Core.Consts.CoreConst.KyosaiMokutekiCdNumber.Rikutou}";
 }
 
 <div class="mb-3">
@@ -52,6 +54,7 @@
                 <!-- 行ｎ -->
                 <tr style="@hiddenRow">
                     <td rowspan="2">
+                        @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].GUID)
                         @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].IsNewRec)
                         @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].IsDelRec)
                         @Html.HiddenFor(model => model.RuibetsuSettei.DispRecords[i].Xmin)
@@ -64,7 +67,8 @@
                                 { "class", "form-select form-select-lg"},
                                 { "tabindex", tabIndex++}
                             };
-                            if (!Model.RuibetsuSettei.DispRecords[i].IsNewRec)
+                            if (!Model.RuibetsuSettei.DispRecords[i].IsNewRec ||
+                                isKyosaiMokutekiRikuto)
                                 attrs.Add("disabled", "disabled");
                         }
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HikiukeKbn,
@@ -81,8 +85,17 @@
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
+                        @{
+                            attrs = new() {
+                                { "class", "form-control"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"}
+                            };
+                            if (isKyosaiMokutekiRikuto)
+                                attrs.Add("readonly", "readonly");
+                        }
                         @Html.EditorFor(model => model.RuibetsuSettei.DispRecords[i].FuhoWariai, "D",
-                                 new { htmlAttributes = new { @class = "form-control form-select-lg", tabindex = tabIndex++, Type = "text" } })
+                                 new { htmlAttributes = attrs })
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].IppitsuHansonTokuyaku,
@@ -93,7 +106,7 @@
                 <tr style="@hiddenRow">
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].SelectKyosaiKingaku,
-                                 Model.RuibetsuSettei.SelectKyosaiKingakuList,
+                                 Model.RuibetsuSettei.DispRecords[i].SelectKyosaiKingakuList,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
@@ -102,13 +115,30 @@
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
+                        @{
+                            attrs = new() {
+                                { "class", "form-select form-select-lg"},
+                                { "tabindex", tabIndex++}
+                            };
+                            if (isKyosaiMokutekiRikuto)
+                                attrs.Add("disabled", "disabled");
+
+                        }
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].SyukakuryoKakuninHouhou,
-                                 Model.RuibetsuSettei.SyukakuryoKakuninHouhouList,
-                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                                 Model.RuibetsuSettei.SyukakuryoKakuninHouhouList, "", attrs)
                     </td>
                     <td colspan="2">
-                        @Html.EditorFor(model => model.RuibetsuSettei.DispRecords[i].ZensousaiKijunTansyu, "",
-                                 new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                        @{
+                            attrs = new() {
+                                { "class", "form-control"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"}
+                            };
+                            if (isKyosaiMokutekiRikuto)
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.RuibetsuSettei.DispRecords[i].ZensousaiKijunTansyu, "D",
+                                 new { htmlAttributes = attrs })
                     </td>
                 </tr>
             }

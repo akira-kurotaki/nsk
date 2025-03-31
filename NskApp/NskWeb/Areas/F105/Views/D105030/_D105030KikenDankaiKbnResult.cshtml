@@ -58,8 +58,15 @@
                                 attrs.Add("readonly", "readonly");
 
                         }
-                        @Html.EditorFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiCd, "",
-                                 new { htmlAttributes = attrs })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiCd, "",
+                                     new { htmlAttributes = attrs })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showTokeiTaniChiikiCdSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td id="@Html.IdFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiNm)">
                         @Html.DisplayTextFor(model => model.KikenDankaiKbn.DispRecords[i].TokeiTaniChiikiNm)

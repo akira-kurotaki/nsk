@@ -4,8 +4,10 @@ using NskAppModelLibrary.Models;
 using Microsoft.EntityFrameworkCore;
 using Npgsql;
 using System.Text;
-using NskWeb.Areas.F105.Consts;
 using System.Data;
+using NskWeb.Common.Models;
+using NskCommonLibrary.Core.Consts;
+using NLog.Targets;
 
 namespace NskWeb.Areas.F105.Models.D105030
 {
@@ -13,7 +15,7 @@ namespace NskWeb.Areas.F105.Models.D105030
     /// 類別設定
     /// </summary>
     [Serializable]
-    public class D105030RuibetsuSettei : D105030Pager<D105030RuibetsuSetteiRecord>
+    public class D105030RuibetsuSettei : BasePager<D105030RuibetsuSetteiRecord>
     {
         /// <summary>メッセージエリア５</summary>
         public string MessageArea5 { get; set; } = string.Empty;
@@ -29,8 +31,8 @@ namespace NskWeb.Areas.F105.Models.D105030
         public List<SelectListItem> HoshoWariaiList { get; set; } = new();
         /// <summary>一筆半損特約ドロップダウンリスト選択値</summary>
         public List<SelectListItem> IppitsuHansonTokuyakuList { get; set; } = new();
-        /// <summary>選択共済金額ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SelectKyosaiKingakuList { get; set; } = new();
+        ///// <summary>選択共済金額ドロップダウンリスト選択値</summary>
+        //public List<SelectListItem> SelectKyosaiKingakuList { get; set; } = new();
         /// <summary>危険段階区分ドロップダウンリスト選択値</summary>
         public List<SelectListItem> KikenDankaiKbnList { get; set; } = new();
         /// <summary>収穫量確認方法ドロップダウンリスト選択値</summary>
@@ -84,30 +86,6 @@ namespace NskWeb.Areas.F105.Models.D105030
                 OrderBy(m => m.特約区分).
                 Select(m => new SelectListItem($"{m.特約区分} {m.特約区分名称}", $"{m.特約区分}")));
 
-            // ２．１６．[選択共済金額] ドロップダウンリスト項目を取得する。		
-            // 	(1) m_10210_単当共済金額用途テーブル、単当共済金額順位、単当共済金額を取得する。
-            // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            //      m_10210_単当共済金額用途.課税単価区分 = 0、かつm_10210_単当共済金額用途.推奨フラグ = 1のレコードを順位0として
-            //      取得したデータを順位0となるようにドロップダウンリストに設定。
-            //      それ以降にm_10210_単当共済金額用途.課税単価区分 = 0のレコードを追加で設定
-            SelectKyosaiKingakuList = new();
-            SelectKyosaiKingakuList.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
-                (m.組合等コード == sessionInfo.KumiaitoCd) &&
-                (m.年産 == sessionInfo.Nensan) &&
-                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
-                (m.課税単価区分 == "0") &&
-                (m.推奨フラグ == "1"))?.
-                OrderBy(m => m.単当共済金額順位).
-                Select(m => new SelectListItem($"0 {m.単当共済金額}", $"{m.単当共済金額順位}")));
-            SelectKyosaiKingakuList.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
-                (m.組合等コード == sessionInfo.KumiaitoCd) &&
-                (m.年産 == sessionInfo.Nensan) &&
-                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
-                OrderBy(m => m.単当共済金額順位).
-                Select(m => new SelectListItem($"{m.単当共済金額順位} {m.単当共済金額}", $"{m.単当共済金額順位}")));
-            //TODO: 種類区分
-            //(m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
-            //(m.種類区分 == sessionInfo.SyuruiKbn))?.
 
             // ２．１７．[危険段階区分] ドロップダウンリスト項目を取得する。		
             // (1) m_10230_危険段階テーブルより、危険段階区分を取得する。
@@ -135,10 +113,12 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// 類別設定を取得する
         /// </summary>
         /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="sessionInfo">セッション情報</param>
+        /// <param name="session">セッション情報</param>
         /// <returns>検索情報</returns>
-        public override List<D105030RuibetsuSetteiRecord> GetResult(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030RuibetsuSetteiRecord> GetResult(NskAppContext dbContext, BaseSessionInfo session)
         {
+            D105030SessionInfo sessionInfo = (D105030SessionInfo)session;
+
             StringBuilder query = new();
             query.Append(" SELECT ");
             query.Append($"   T1.引受区分             As \"{nameof(D105030RuibetsuSetteiRecord.HikiukeKbn)}\" ");  
@@ -166,10 +146,10 @@ namespace NskWeb.Areas.F105.Models.D105030
 
             NpgsqlParameter[] queryParams =
             [
-                new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                new NpgsqlParameter("年産", sessionInfo.Nensan),
-                new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
             ];
 
             List<D105030RuibetsuSetteiRecord> records = new();
@@ -220,6 +200,11 @@ namespace NskWeb.Areas.F105.Models.D105030
                     continue;
                 }
                 // 類区分取得
+                if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                {
+                    target.HikiukeKbn = "0";
+                    target.HikiukeHoushiki = string.Empty;
+                }
                 RuiKbn? ruiKbn = GetRuiKbn(sessionInfo.KyosaiMokutekiCd, target.HikiukeKbn, target.HikiukeHoushiki);
 
                 List<NpgsqlParameter> delParams =
@@ -260,13 +245,7 @@ namespace NskWeb.Areas.F105.Models.D105030
             // t_11030_個人設定類の対象レコードを更新する。
             StringBuilder updRuibetsu = new();
             updRuibetsu.Append("UPDATE t_11030_個人設定類 SET ");
-            updRuibetsu.Append("  組合等コード      = @組合等コード ");
-            updRuibetsu.Append(" ,年産              = @年産 ");
-            updRuibetsu.Append(" ,共済目的コード    = @共済目的コード ");
-            updRuibetsu.Append(" ,組合員等コード    = @組合員等コード ");
-            updRuibetsu.Append(" ,類区分            = @類区分 ");
-            updRuibetsu.Append(" ,引受区分          = @引受区分 ");
-            updRuibetsu.Append(" ,引受方式          = @引受方式 ");
+            updRuibetsu.Append("  引受方式          = @引受方式 ");
             updRuibetsu.Append(" ,特約区分          = @特約区分 ");
             updRuibetsu.Append(" ,補償割合コード    = @補償割合コード ");
             updRuibetsu.Append(" ,付保割合          = @付保割合 ");
@@ -281,9 +260,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             updRuibetsu.Append(" AND 年産           = @年産 ");
             updRuibetsu.Append(" AND 共済目的コード = @共済目的コード ");
             updRuibetsu.Append(" AND 組合員等コード = @組合員等コード ");
-            updRuibetsu.Append(" AND 耕地番号       = @耕地番号 ");
-            updRuibetsu.Append(" AND 分筆番号       = @分筆番号 ");
             updRuibetsu.Append(" AND 類区分         = @類区分 ");
+            updRuibetsu.Append(" AND 引受区分       = @引受区分 ");
             updRuibetsu.Append(" AND xmin           = @xmin ");
 
             foreach (D105030RuibetsuSetteiRecord target in ruibetsuUpdRecords)
@@ -294,37 +272,41 @@ namespace NskWeb.Areas.F105.Models.D105030
                     continue;
                 }
                 // 類区分取得
+                if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                {
+                    target.HikiukeKbn = "0";
+                    target.HikiukeHoushiki = string.Empty;
+                }
                 RuiKbn? ruiKbn = GetRuiKbn(sessionInfo.KyosaiMokutekiCd, target.HikiukeKbn, target.HikiukeHoushiki);
 
                 List<NpgsqlParameter> updParams =
                 [
-                    new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                    new NpgsqlParameter("年産", sessionInfo.Nensan),
-                    new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                    new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
+                    new ("組合等コード", sessionInfo.KumiaitoCd),
+                    new ("年産", sessionInfo.Nensan),
+                    new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                    new ("組合員等コード", sessionInfo.KumiaiintoCd),
 
-                    new NpgsqlParameter("類区分", string.IsNullOrEmpty(ruiKbn?.RuiKbnValue) ? DBNull.Value : ruiKbn?.RuiKbnValue),
-                    new NpgsqlParameter("引受区分", string.IsNullOrEmpty(target.HikiukeKbn) ? DBNull.Value : target.HikiukeKbn),
-                    new NpgsqlParameter("引受方式", string.IsNullOrEmpty(target.HikiukeHoushiki) ? DBNull.Value : target.HikiukeHoushiki),
-                    new NpgsqlParameter("特約区分", string.IsNullOrEmpty(target.IppitsuHansonTokuyaku) ? DBNull.Value : target.IppitsuHansonTokuyaku),
-                    new NpgsqlParameter("補償割合コード", string.IsNullOrEmpty(target.HoshoWariai) ? DBNull.Value : target.HoshoWariai),
-                    new NpgsqlParameter("種類区分", DBNull.Value),
-                    new NpgsqlParameter("共済金額選択順位", target.SelectKyosaiKingaku.HasValue ? target.SelectKyosaiKingaku.Value : DBNull.Value),
-                    new NpgsqlParameter("システム日時", sysDateTime),
-                    new NpgsqlParameter("ユーザID", userId),
+                    new ("類区分", string.IsNullOrEmpty(ruiKbn?.RuiKbnValue) ? DBNull.Value : ruiKbn?.RuiKbnValue),
+                    new ("引受区分", string.IsNullOrEmpty(target.HikiukeKbn) ? DBNull.Value : target.HikiukeKbn),
+                    new ("引受方式", string.IsNullOrEmpty(target.HikiukeHoushiki) ? DBNull.Value : target.HikiukeHoushiki),
+                    new ("特約区分", string.IsNullOrEmpty(target.IppitsuHansonTokuyaku) ? DBNull.Value : target.IppitsuHansonTokuyaku),
+                    new ("補償割合コード", string.IsNullOrEmpty(target.HoshoWariai) ? DBNull.Value : target.HoshoWariai),
+                    new ("種類区分", DBNull.Value),
+                    new ("共済金額選択順位", target.SelectKyosaiKingaku.HasValue ? target.SelectKyosaiKingaku.Value : DBNull.Value),
+                    new ("システム日時", sysDateTime),
+                    new ("ユーザID", userId),
                 ];
-                switch (sessionInfo.KyosaiMokutekiCd)
+                if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}")
                 {
-                    case F105Const.KYOSAI_MOKUTEKI_SUITO:
-                        updParams.Add(new NpgsqlParameter("付保割合", target.FuhoWariai));
-                        updParams.Add(new NpgsqlParameter("収穫量確認方法", string.IsNullOrEmpty(target.SyukakuryoKakuninHouhou) ? DBNull.Value : target.SyukakuryoKakuninHouhou));
-                        updParams.Add(new NpgsqlParameter("全相殺基準単収", string.IsNullOrEmpty(target.ZensousaiKijunTansyu) ? DBNull.Value : target.ZensousaiKijunTansyu));
-                        break;
-                    case F105Const.KYOSAI_MOKUTEKI_RIKUTO:
-                        updParams.Add(new NpgsqlParameter("付保割合", DBNull.Value));
-                        updParams.Add(new NpgsqlParameter("収穫量確認方法", DBNull.Value));
-                        updParams.Add(new NpgsqlParameter("全相殺基準単収", DBNull.Value));
-                        break;
+                    updParams.Add(new ("付保割合", target.FuhoWariai.HasValue ? target.FuhoWariai : DBNull.Value));
+                    updParams.Add(new ("収穫量確認方法", string.IsNullOrEmpty(target.SyukakuryoKakuninHouhou) ? DBNull.Value : target.SyukakuryoKakuninHouhou));
+                    updParams.Add(new ("全相殺基準単収", target.ZensousaiKijunTansyu.HasValue ? target.ZensousaiKijunTansyu : DBNull.Value));
+                }
+                else if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                {
+                    updParams.Add(new ("付保割合", DBNull.Value));
+                    updParams.Add(new ("収穫量確認方法", DBNull.Value));
+                    updParams.Add(new ("全相殺基準単収", DBNull.Value));
                 }
                 NpgsqlParameter xminParam = new("xmin", NpgsqlTypes.NpgsqlDbType.Xid) { Value = target.Xmin };
                 updParams.Add(xminParam);
@@ -356,6 +338,11 @@ namespace NskWeb.Areas.F105.Models.D105030
             List<T11030個人設定類> addRuibetsuRecs = new();
             foreach (D105030RuibetsuSetteiRecord target in ruibetsuAddRecords)
             {
+                if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                {
+                    target.HikiukeKbn = "0";
+                    target.HikiukeHoushiki = string.Empty;
+                }
                 // 類区分取得
                 RuiKbn? ruiKbn = GetRuiKbn(sessionInfo.KyosaiMokutekiCd, target.HikiukeKbn, target.HikiukeHoushiki);
 
@@ -386,18 +373,17 @@ namespace NskWeb.Areas.F105.Models.D105030
                     更新日時 = sysDateTime,
                     更新ユーザid = userId,
                 };
-                switch (sessionInfo.KyosaiMokutekiCd)
+                if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}")
                 {
-                    case F105Const.KYOSAI_MOKUTEKI_SUITO:
-                        addRec.付保割合 = target.FuhoWariai;
-                        addRec.収穫量確認方法 = target.SyukakuryoKakuninHouhou;
-                        //addRec.全相殺基準単収 = target.ZensousaiKijunTansyu;
-                        break;
-                    case F105Const.KYOSAI_MOKUTEKI_RIKUTO:
-                        addRec.付保割合 = null;
-                        addRec.収穫量確認方法 = null;
-                        addRec.全相殺基準単収 = null;
-                        break;
+                    addRec.付保割合 = target.FuhoWariai;
+                    addRec.収穫量確認方法 = target.SyukakuryoKakuninHouhou;
+                    addRec.全相殺基準単収 = target.ZensousaiKijunTansyu;
+                }
+                else if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                {
+                    addRec.付保割合 = null;
+                    addRec.収穫量確認方法 = null;
+                    addRec.全相殺基準単収 = null;
                 }
                 addRuibetsuRecs.Add(addRec);
             }
@@ -412,10 +398,11 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// 更新対象レコード取得
         /// </summary>
         /// <param name="dbContext"></param>
-        /// <param name="sessionInfo"></param>
+        /// <param name="session"></param>
         /// <returns></returns>
-        public override List<D105030RuibetsuSetteiRecord> GetUpdateRecs(ref NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        public override List<D105030RuibetsuSetteiRecord> GetUpdateRecs(ref NskAppContext dbContext, BaseSessionInfo session)
         {
+            D105030SessionInfo sessionInfo = (D105030SessionInfo)session;
             List<D105030RuibetsuSetteiRecord> updRecs = new();
 
             // 検索結果取得
@@ -425,8 +412,12 @@ namespace NskWeb.Areas.F105.Models.D105030
             foreach (D105030RuibetsuSetteiRecord dispRec in DispRecords)
             {
                 // 追加行、削除行以外を対象とする
-                if (dispRec is D105030PagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
+                if (dispRec is BasePagerRecord pagerRec && !pagerRec.IsNewRec && !pagerRec.IsDelRec)
                 {
+                    if (sessionInfo.KyosaiMokutekiCd == $"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
+                    {
+                        dispRec.HikiukeKbn = "0";
+                    }
                     D105030RuibetsuSetteiRecord dbRec = dbResults.SingleOrDefault(x =>
                         (x.HikiukeKbn == dispRec.HikiukeKbn)
                     );
@@ -454,7 +445,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         {
             // 類区分取得
             RuiKbn? ruiKbn = _ruiKbns.SingleOrDefault(x =>
-                (x.KyosaiMokutekiCd == kyosaiMokutekiCd) &&
+                ($"{x.KyosaiMokutekiCd}" == kyosaiMokutekiCd) &&
                 (x.HikiukeKbn == hikiukeKbn) &&
                 (x.HikiukeHoushiki == hikiukeHoushiki)
             );
@@ -462,34 +453,48 @@ namespace NskWeb.Areas.F105.Models.D105030
         }
 
         /// <summary>
+        /// [選択共済金額]ドロップダウンリスト項目を取得する。
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sessionInfo"></param>
+        public void UpdateDropdownListAll(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        {
+            // ※類別設定の件数分繰り返す
+            foreach (D105030RuibetsuSetteiRecord record in DispRecords)
+            {
+                record.InitializeDropdonwList(dbContext, sessionInfo);
+            }
+        }
+
+        /// <summary>
         /// DB更新仕様書_削除No.3 デシジョンテーブル参照
         /// </summary>
         private readonly List<RuiKbn> _ruiKbns =
         [
-            //   共済目的                         引受区分 引受方式 類区分
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "11",    "2",     "1"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "11",    "3",     "1"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "11",    "5",     "1"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "12",    "2",     "2"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "12",    "3",     "2"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "12",    "5",     "2"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "13",    "2",     "3"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "13",    "3",     "3"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "13",    "5",     "3"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "21",    "2",     "4"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "21",    "3",     "4"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "21",    "5",     "4"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "22",    "2",     "5"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "22",    "3",     "5"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "22",    "5",     "5"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "23",    "2",     "6"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "23",    "3",     "6"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "23",    "5",     "6"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "11",    "6",     "7"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "13",    "6",     "7"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "21",    "6",     "7"),
-            new (F105Const.KYOSAI_MOKUTEKI_SUITO, "23",    "6",     "7"),
-            new (F105Const.KYOSAI_MOKUTEKI_RIKUTO, "",     "",      "1"),
+            //   共済目的                                         引受区分 引受方式 類区分
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "11",    "2",     "1"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "11",    "3",     "1"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "11",    "5",     "1"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "12",    "2",     "2"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "12",    "3",     "2"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "12",    "5",     "2"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "13",    "2",     "3"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "13",    "3",     "3"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "13",    "5",     "3"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "21",    "2",     "4"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "21",    "3",     "4"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "21",    "5",     "4"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "22",    "2",     "5"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "22",    "3",     "5"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "22",    "5",     "5"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "23",    "2",     "6"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "23",    "3",     "6"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "23",    "5",     "6"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "11",    "6",     "7"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "13",    "6",     "7"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "21",    "6",     "7"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Suitou}", "23",    "6",     "7"),
+            new ($"{(int)CoreConst.KyosaiMokutekiCdNumber.Rikutou}", "0",    "",      "1"),
         ];
 
         /// <summary>
@@ -498,7 +503,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         private class RuiKbn
         {
             /// <summary>共済目的コード</summary>
-            public string KyosaiMokutekiCd { get; set; } = string.Empty;
+            public string KyosaiMokutekiCd { get; set; } 
             /// <summary>引受区分</summary>
             public string HikiukeKbn { get; set; } = string.Empty;
             /// <summary>引受方式</summary>

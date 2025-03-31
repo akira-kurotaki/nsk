@@ -1,0 +1,225 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F110.Consts
+@using NskWeb.Areas.F110.Models.D110020
+@model D110020Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>引受確定処理</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+
+<div class="table-thead-container">
+    <h4 class="sub_title">引受確定処理</h4>
+    <div class="mb-3">
+        <div>@Html.MessageAreaFor(model => model.MessageArea1, Model.MessageArea1, new { @class = "text-danger", id = "MessageArea1" })</div>
+    </div>
+    <div class="clearfix"></div>
+
+    @using (Html.BeginForm("Init", "D110020", FormMethod.Post, new { id = "HikiukeKaiForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @* 本所・支所 *@
+                <td>本所・支所</td>
+                <td>
+                    @{
+                        Dictionary<string, object> attrs = new() {
+                            { "class", "form-select form-select-lg"},
+                            { "tabindex", 100 },
+                            { "title", "選択項目" }
+                        };
+                        if (Model.IsShishoDropdownListDisabled)
+                            attrs.Add("disabled", "disabled");
+                    }
+                    @Html.DropDownListFor(model => model.HonshoShishoCd, Model.HonshoShishoList, attrs)
+                </td>
+            </tr>
+        </table>
+
+        <div class="clearfix"></div>
+        <div id="HikiukeKaiResult">
+            @await Html.PartialAsync("_D110020HikiukeKaiResult", Model)
+        </div>
+    }
+</div>
+<input type="hidden" id="returnValue" />
+
+
+@Html.Confirm("ZenkenHikiukeKakuteiZumi", "ZenkenHikiukeKakuteiZumiConfirmOK", "確認", MessageUtil.Get("MQ10013"), "OK", "キャンセル")
+@Html.Confirm("IchibuHikiukeKakuteiZumi", "IchibuHikiukeKakuteiZumiConfirmOK", "確認", MessageUtil.Get("MQ10021"), "OK", "キャンセル")
+@Html.Confirm("IchibuSongaiHyoukaMikakutei", "IchibuSongaiHyoukaMikakuteiConfirmOK", "確認", MessageUtil.Get("MQ10022", Model.Nensan), "OK", "キャンセル")
+@Html.Confirm("IchibuHikiukeKakuteiZumiKatsuIchibuSongaiHyoukaMikakutei", "IchibuHikiukeKakuteiZumiKatsuIchibuSongaiHyoukaMikakuteiConfirmOK", "確認", MessageUtil.Get("MQ10023", Model.Nensan), "OK", "キャンセル")
+
+@Html.Confirm("ExecConfirm", "ExecConfirmOK", "確認", MessageUtil.Get("MQ10024", Model.KyosaiMokuteki, Model.Nensan), "OK", "キャンセル") 
+
+
+@section scripts {
+    <script>
+
+        $(function () {
+            @* 本所・支所ドロップダウンリスト 本所支所変更 *@
+            $("#HonshoShishoCd").change(function() {
+                $('#MessageArea1').html("");
+                var url = "@Url.Action("Change", "D110020", new { area = "F110" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: { shishoCd: $("#HonshoShishoCd").val() },
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function (data) {
+                    if (data.message != null && data.message != '') {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    // 検索結果表示部の更新
+                    $('#HikiukeKaiResult').html(data.partialView);
+
+                    updateButtonEvent();
+
+                    $("html, body").scrollTop($('#HikiukeKaiResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+
+            $("#ZenkenHikiukeKakuteiZumiConfirmOK").click(function() {
+                @Html.ShowDialog("ExecConfirm");
+            });
+            $("#IchibuHikiukeKakuteiZumiConfirmOK").click(function() {
+                @Html.ShowDialog("ExecConfirm");
+            });
+            $("#IchibuSongaiHyoukaMikakuteiConfirmOK").click(function() {
+                @Html.ShowDialog("ExecConfirm");
+            });
+            $("#IchibuHikiukeKakuteiZumiKatsuIchibuSongaiHyoukaMikakuteiConfirmOK").click(function() {
+                @Html.ShowDialog("ExecConfirm");
+            });
+
+            updateButtonEvent();
+
+            $("#ExecConfirmOK").click(function() {
+                var url = "@Url.Action("Execusion", "D110020", new { area = "F110" })";
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: null,
+                }).done(function (data) {
+                        $('#MessageArea1').addClass("text-danger").html(data.resultMessage);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+        });
+
+        function updateButtonEvent() {
+        @* 実行ボタン 再引受前処理実行前チェック 再引受前処理実行前チェックを行う。 *@
+            $("#Execusion").click(function() {
+                $('#MessageArea1').html("");
+                var url = "@Url.Action("CheckExecusion", "D110020", new { area = "F110" })";
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { shishoCd: $("#HonshoShishoCd").val() },
+                }).done(function (data) {
+                    if (data.message != null && data.message != '') {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+
+                    }
+
+                    // 処理対象のチェック
+                    if (data.status == 0) {
+                        // 引受確定処理実行「３．」の返却値を判定する。
+                        switch (data.result)
+                        {
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.AllHikiukeMikakutei":
+                                @Html.ShowDialog("ExecConfirm")
+                                break;
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.AllHikiukeKakuteiZumi":
+                                @Html.ShowDialog("ZenkenHikiukeKakuteiZumi")
+                                break;
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.AllSongaiMikakutei":
+                                var errMsg = "@MessageUtil.Get("ME10094", $"{Model.Nensan}")";
+                                $('#MessageArea1').addClass("text-danger").html(errMsg);
+                                break;
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.IchibuHikiukeKakuteiZumi":
+                                @Html.ShowDialog("IchibuHikiukeKakuteiZumi")
+                                break;
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.IchibuSongaiMikakutei":
+                                @Html.ShowDialog("IchibuSongaiHyoukaMikakutei")
+                                break;
+                            case "@F110Const.HikiukeKakuteiShoriTaisho.IchibuHikiukeKakuteiZumiAndIchibuSongaiMikakutei":
+                                @Html.ShowDialog("IchibuHikiukeKakuteiZumiKatsuIchibuSongaiHyoukaMikakutei")
+                                break;
+                        }
+
+                    } else {
+                        // 処理中断
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D110020", new { area = "F110" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+    </script>
+}

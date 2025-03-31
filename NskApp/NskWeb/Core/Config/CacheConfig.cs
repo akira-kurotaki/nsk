@@ -52,7 +52,7 @@ namespace NskWeb.Core.Config
                 //cacheManager.Set(CoreConst.M_MEISHO_CACHE, mMeishoCache.FindAll(), CacheUtil.cacheExpirationTime);
 
                 // 都道府県のマスタデータをキャッシュする
-                CacheBase vTodofukenCache = new MTodofukenCache(cacheManager);
+                SystemCacheBase vTodofukenCache = new MTodofukenCache(cacheManager);
                 cacheManager.Set(CoreConst.M_TODOFUKEN_CACHE, vTodofukenCache.FindAll(), CacheUtil.cacheExpirationTime);
 
                 // システム設定値のマスタデータをキャッシュする

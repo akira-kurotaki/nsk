@@ -152,7 +152,7 @@ namespace CoreLibrary.Core.Utility
         public static List<MDaichikuNm> GetDaichikuList(string todofukenCd, string kumiaitoCd)
         {
             List<MDaichikuNm> result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M大地区マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd + " ）");
                 result = db.MDaichikuNms
@@ -178,7 +178,7 @@ namespace CoreLibrary.Core.Utility
         public static MDaichikuNm GetDaichiku(string todofukenCd, string kumiaitoCd, string daichikuCd)
         {
             MDaichikuNm result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M大地区マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd +
                              "、大地区コード：" + daichikuCd + " ）");

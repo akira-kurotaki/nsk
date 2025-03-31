@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("m_10270_賦課金詳細")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(引受方式), nameof(特約区分), nameof(大地区コード), nameof(ランク))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(賦課金引受方式), nameof(特約区分), nameof(大地区コード), nameof(ランク))]
     public class M10270賦課金詳細 : ModelBase
     {
         /// <summary>
@@ -46,12 +46,12 @@ namespace NskAppModelLibrary.Models
         public string 類区分 { get; set; }
 
         /// <summary>
-        /// 引受方式
+        /// 賦課金引受方式
         /// </summary>
         [Required]
-        [Column("引受方式", Order = 5)]
+        [Column("賦課金引受方式", Order = 5)]
         [StringLength(2)]
-        public string 引受方式 { get; set; }
+        public string 賦課金引受方式 { get; set; }
 
         /// <summary>
         /// 特約区分

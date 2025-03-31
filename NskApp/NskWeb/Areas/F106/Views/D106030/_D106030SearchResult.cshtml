@@ -1,0 +1,52 @@
+﻿@model NskWeb.Areas.F106.Models.D106030.D106030Model
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped" style="width:50%;">
+        <caption class="visually-hidden">検索結果</caption>
+        <thead class="sticky-top">
+            <tr>
+                <th style="width: 80%;" scope="col">支所名</th>
+                <th style="width: 20%;" class="text-center" scope="col">引受回</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* 検索結果件数 *@
+            @Html.HiddenFor(model => model.SearchResult.TotalCount)
+            @Html.HiddenFor(model => model.SearchResult.EnterCtrlFlg)
+            @for (int index = 0; index < Model.SearchResult.TableRecords.Count(); index++)
+            {
+                var item = Model.SearchResult.TableRecords.ElementAt(index);
+
+                <tr>
+                    @* 支所名 *@
+                    <td>@Html.Label("", item.ShishoNm ?? string.Empty)</td>
+                    @* 引受回 *@
+                    <td class="text-right">
+                        @Html.Label("", item.HikiukeCnt.ToString() ?? string.Empty)
+                    </td>
+
+                    @* 支所コード *@
+                    @Html.HiddenFor(model => model.SearchResult.TableRecords[index].ShishoCd)
+                    @* 引受計算実施日 *@
+                    @Html.HiddenFor(model => model.SearchResult.TableRecords[index].HikiukeKeisanDate)
+                    @* 確定引受回 *@
+                    @Html.HiddenFor(model => model.SearchResult.TableRecords[index].KakuteiHikiukeCnt)
+                    @* 報告回 *@
+                    @Html.HiddenFor(model => model.SearchResult.TableRecords[index].HoukokuCnt)
+                </tr>
+            }
+        </tbody>
+    </table>
+    <script>
+        // 一覧表示のタイミングで実行ボタンの使用可否を制御する
+        if ($("#KengenFlg").val() == '1' || $("#SearchResult_EnterCtrlFlg").val() == '0') {
+            // 更新権限のないとき、または実行ボタン制御フラグが０のときは非活性
+            $("#Exec").prop("disabled",true);
+        }
+        else
+        {
+            // 更新権限があり、かつ実行ボタン制御フラグが０以外のときは活性
+            $("#Exec").prop("disabled",false);
+        }
+    </script>
+</div>

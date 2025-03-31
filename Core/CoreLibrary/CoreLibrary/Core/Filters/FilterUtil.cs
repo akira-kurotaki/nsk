@@ -72,7 +72,7 @@ namespace CoreLibrary.Core.Filters
                 var syokuinEntity = db.MSyokuins.AsNoTracking().Where(
                                     s => s.UserId == identityName &&
                                     s.UserYukoStartYmd <= systemDate.Date &&
-                                    (s.UserYukoEndYmd == null || s.UserYukoEndYmd > systemDate.Date)).SingleOrDefault();
+                                    (s.UserYukoEndYmd == null || s.UserYukoEndYmd >= systemDate.Date)).SingleOrDefault();
 
                 var syokuin = new Syokuin
                 {
@@ -198,7 +198,7 @@ namespace CoreLibrary.Core.Filters
                 var syokuinEntity = jigyoDb.VSyokuins.AsNoTracking().Where(
                                     s => s.UserId == identityName &&
                                     s.UserYukoStartYmd <= systemDate.Date &&
-                                    (s.UserYukoEndYmd == null || s.UserYukoEndYmd > systemDate.Date)).SingleOrDefault();
+                                    (s.UserYukoEndYmd == null || s.UserYukoEndYmd >= systemDate.Date)).SingleOrDefault();
 
                 // 取得できない場合のエラー処理
                 if (syokuinEntity == null)
@@ -354,7 +354,7 @@ namespace CoreLibrary.Core.Filters
         {
             var shishoList = new List<Shisho>();
 
-            if (syokuin.ScreenSosaKengenId == null)
+            if (syokuin.ShishoGroupId == null)
             {
                 // 支所グループコードが設定されていない場合
 
@@ -433,7 +433,7 @@ namespace CoreLibrary.Core.Filters
         {
             var shishoList = new List<Shisho>();
 
-            if (syokuin.ScreenSosaKengenId == null)
+            if (syokuin.ShishoGroupId == null)
             {
                 // 支所グループコードが設定されていない場合
 

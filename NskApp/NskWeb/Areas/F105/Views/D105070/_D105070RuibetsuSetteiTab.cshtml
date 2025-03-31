@@ -1,0 +1,41 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105070.D105070Model
+@{
+    var startIndex = 500;
+    int tabIndex = startIndex;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];// "更新権限";
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+
+<div id="RuibetuSettei" class="tab-pane" role="tabpanel" aria-labelledby="RuibetuSetteiTab">
+    <!-- 類別設定 -->
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "RuibetuSetteiForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+        <div class="table-thead-container">
+            <h4 class="sub_title">類別設定</h4>
+            <div class="btn_area btn_group_left">
+                <button type="button" class="btn btn-primary" id="AddRuibetsuRow" name="AddRuibetsuRow" @buttonDisableAttr>行挿入</button>
+                <button type="button" class="btn btn-primary" id="DelRuibetsuRows" name="DelRuibetsuRows" @buttonDisableAttr>選択行削除</button>
+                <button type="button" class="btn btn-primary" id="SelAllRuibetsu" name="SelAllRuibetsu" @buttonDisableAttr>全行選択</button>
+                <button type="button" class="btn btn-primary" id="UnSelAllRuibetsu" name="UnSelAllRuibetsu" @buttonDisableAttr>全行解除</button>
+            </div>
+            <div class="clearfix"></div>
+            <div id="RuibetsuSetteiResult">
+                @await Html.PartialAsync("_D105070RuibetsuSetteiResult", Model)
+            </div>
+            <div class="table-responsive table-thead-container">
+                <div class="btn_area btn_group_right">
+                    <button type="button" class="btn btn-primary" id="RegistRuibetsu" name="RegistRuibetsu" @buttonDisableAttr>
+                        登録
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

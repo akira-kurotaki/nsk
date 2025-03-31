@@ -189,10 +189,10 @@ namespace NskAppModelLibrary.Models
         public Decimal? ”15—ŞŒ§w¦’Pû { get; set; }
 
         /// <summary>
-        /// ”42—ŞŒ§w¦’Pû
+        /// ”2—ŞŒ§w¦’Pû
         /// </summary>
-        [Column("”42—ŞŒ§w¦’Pû")]
-        public Decimal? ”42—ŞŒ§w¦’Pû { get; set; }
+        [Column("”2—ŞŒ§w¦’Pû")]
+        public Decimal? ”2—ŞŒ§w¦’Pû { get; set; }
 
         /// <summary>
         /// ”6—ŞŒ§w¦’Pû
@@ -437,16 +437,16 @@ namespace NskAppModelLibrary.Models
         public Decimal? •â1_”15—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
-        /// •â1_”42—Şˆøó–ÊÏ
+        /// •â1_”2—Şˆøó–ÊÏ
         /// </summary>
-        [Column("•â1_”42—Şˆøó–ÊÏ")]
-        public Decimal? •â1_”42—Şˆøó–ÊÏ { get; set; }
+        [Column("•â1_”2—Şˆøó–ÊÏ")]
+        public Decimal? •â1_”2—Şˆøó–ÊÏ { get; set; }
 
         /// <summary>
-        /// •â1_”42—Ş‘Šî€ûŠn—Ê
+        /// •â1_”2—Ş‘Šî€ûŠn—Ê
         /// </summary>
-        [Column("•â1_”42—Ş‘Šî€ûŠn—Ê")]
-        public Decimal? •â1_”42—Ş‘Šî€ûŠn—Ê { get; set; }
+        [Column("•â1_”2—Ş‘Šî€ûŠn—Ê")]
+        public Decimal? •â1_”2—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
         /// •â1_”6—Şˆøó–ÊÏ
@@ -701,16 +701,16 @@ namespace NskAppModelLibrary.Models
         public Decimal? •â2_”15—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
-        /// •â2_”42—Şˆøó–ÊÏ
+        /// •â2_”2—Şˆøó–ÊÏ
         /// </summary>
-        [Column("•â2_”42—Şˆøó–ÊÏ")]
-        public Decimal? •â2_”42—Şˆøó–ÊÏ { get; set; }
+        [Column("•â2_”2—Şˆøó–ÊÏ")]
+        public Decimal? •â2_”2—Şˆøó–ÊÏ { get; set; }
 
         /// <summary>
-        /// •â2_”42—Ş‘Šî€ûŠn—Ê
+        /// •â2_”2—Ş‘Šî€ûŠn—Ê
         /// </summary>
-        [Column("•â2_”42—Ş‘Šî€ûŠn—Ê")]
-        public Decimal? •â2_”42—Ş‘Šî€ûŠn—Ê { get; set; }
+        [Column("•â2_”2—Ş‘Šî€ûŠn—Ê")]
+        public Decimal? •â2_”2—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
         /// •â2_”6—Şˆøó–ÊÏ
@@ -965,16 +965,16 @@ namespace NskAppModelLibrary.Models
         public Decimal? •â3_”15—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
-        /// •â3_”42—Şˆøó–ÊÏ
+        /// •â3_”2—Şˆøó–ÊÏ
         /// </summary>
-        [Column("•â3_”42—Şˆøó–ÊÏ")]
-        public Decimal? •â3_”42—Şˆøó–ÊÏ { get; set; }
+        [Column("•â3_”2—Şˆøó–ÊÏ")]
+        public Decimal? •â3_”2—Şˆøó–ÊÏ { get; set; }
 
         /// <summary>
-        /// •â3_”42—Ş‘Šî€ûŠn—Ê
+        /// •â3_”2—Ş‘Šî€ûŠn—Ê
         /// </summary>
-        [Column("•â3_”42—Ş‘Šî€ûŠn—Ê")]
-        public Decimal? •â3_”42—Ş‘Šî€ûŠn—Ê { get; set; }
+        [Column("•â3_”2—Ş‘Šî€ûŠn—Ê")]
+        public Decimal? •â3_”2—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
         /// •â3_”6—Şˆøó–ÊÏ
@@ -1217,16 +1217,16 @@ namespace NskAppModelLibrary.Models
         public Decimal? •â‡_”15—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
-        /// •â‡_”42—Şˆøó–ÊÏ
+        /// •â‡_”2—Şˆøó–ÊÏ
         /// </summary>
-        [Column("•â‡_”42—Şˆøó–ÊÏ")]
-        public Decimal? •â‡_”42—Şˆøó–ÊÏ { get; set; }
+        [Column("•â‡_”2—Şˆøó–ÊÏ")]
+        public Decimal? •â‡_”2—Şˆøó–ÊÏ { get; set; }
 
         /// <summary>
-        /// •â‡_”42—Ş‘Šî€ûŠn—Ê
+        /// •â‡_”2—Ş‘Šî€ûŠn—Ê
         /// </summary>
-        [Column("•â‡_”42—Ş‘Šî€ûŠn—Ê")]
-        public Decimal? •â‡_”42—Ş‘Šî€ûŠn—Ê { get; set; }
+        [Column("•â‡_”2—Ş‘Šî€ûŠn—Ê")]
+        public Decimal? •â‡_”2—Ş‘Šî€ûŠn—Ê { get; set; }
 
         /// <summary>
         /// •â‡_”6—Şˆøó–ÊÏ

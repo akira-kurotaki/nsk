@@ -16,6 +16,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="%40Models\**" />
+    <EmbeddedResource Remove="%40Models\**" />
+    <None Remove="%40Models\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Models\T19040大量データ受入組合員等別類別一筆半損特約等o.cs" />
   </ItemGroup>
 

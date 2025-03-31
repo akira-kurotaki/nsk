@@ -6,18 +6,42 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace NskAppModelLibrary.Models
 {
     /// <summary>
-    /// t_29030_大量データ受入_自家保有数量OK
+    /// t_29030_大量データ受入_自家保有数量ok
     /// </summary>
     [Serializable]
-    [Table("t_29030_大量データ受入_自家保有数量OK")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(処理区分), nameof(組合員等コード), nameof(産地別銘柄コード))]
+    [Table("t_29030_大量データ受入_自家保有数量ok")]
+    [PrimaryKey(nameof(受入履歴id), nameof(行番号), nameof(処理区分), nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(類区分), nameof(産地別銘柄コード), nameof(営農対象外フラグ))]
     public class T29030大量データ受入自家保有数量ok : ModelBase
     {
+        /// <summary>
+        /// 受入履歴id
+        /// </summary>
+        [Required]
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Column("受入履歴id", Order = 1)]
+        public long 受入履歴id { get; set; }
+
+        /// <summary>
+        /// 行番号
+        /// </summary>
+        [Required]
+        [Column("行番号", Order = 2)]
+        [StringLength(6)]
+        public string 行番号 { get; set; }
+
+        /// <summary>
+        /// 処理区分
+        /// </summary>
+        [Required]
+        [Column("処理区分", Order = 3)]
+        [StringLength(1)]
+        public string 処理区分 { get; set; }
+
         /// <summary>
         /// 組合等コード
         /// </summary>
         [Required]
-        [Column("組合等コード", Order = 1)]
+        [Column("組合等コード", Order = 4)]
         [StringLength(3)]
         public string 組合等コード { get; set; }
 
@@ -26,54 +50,48 @@ namespace NskAppModelLibrary.Models
         /// </summary>
         [Required]
         [DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Column("年産", Order = 2)]
+        [Column("年産", Order = 5)]
         public short 年産 { get; set; }
 
         /// <summary>
         /// 共済目的コード
         /// </summary>
         [Required]
-        [Column("共済目的コード", Order = 3)]
+        [Column("共済目的コード", Order = 6)]
         [StringLength(2)]
         public string 共済目的コード { get; set; }
-
-        /// <summary>
-        /// 処理区分
-        /// </summary>
-        [Required]
-        [Column("処理区分", Order = 4)]
-        [StringLength(1)]
-        public string 処理区分 { get; set; }
 
         /// <summary>
         /// 組合員等コード
         /// </summary>
         [Required]
-        [Column("組合員等コード", Order = 5)]
+        [Column("組合員等コード", Order = 7)]
         [StringLength(13)]
         public string 組合員等コード { get; set; }
+
+        /// <summary>
+        /// 類区分
+        /// </summary>
+        [Required]
+        [Column("類区分", Order = 8)]
+        [StringLength(2)]
+        public string 類区分 { get; set; }
 
         /// <summary>
         /// 産地別銘柄コード
         /// </summary>
         [Required]
-        [Column("産地別銘柄コード", Order = 6)]
+        [Column("産地別銘柄コード", Order = 9)]
         [StringLength(5)]
         public string 産地別銘柄コード { get; set; }
 
         /// <summary>
-        /// 大地区コード
+        /// 営農対象外フラグ
         /// </summary>
-        [Column("大地区コード")]
-        [StringLength(2)]
-        public string 大地区コード { get; set; }
-
-        /// <summary>
-        /// 小地区コード
-        /// </summary>
-        [Column("小地区コード")]
-        [StringLength(4)]
-        public string 小地区コード { get; set; }
+        [Required]
+        [Column("営農対象外フラグ", Order = 10)]
+        [StringLength(1)]
+        public string 営農対象外フラグ { get; set; }
 
         /// <summary>
         /// 自家保有数量_規格１

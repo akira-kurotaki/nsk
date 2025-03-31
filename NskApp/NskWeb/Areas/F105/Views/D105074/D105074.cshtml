@@ -1,0 +1,429 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F105.Consts
+@using NskWeb.Areas.F105.Models.D105074
+@model D105074Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];// "更新権限"];
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen))
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>加入申込書入力（麦）用途別単価設定</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+    <tr>
+        <td>組合員等コード：</td>
+        <td colspan="2">@Model.KumiaiinToCd</td>
+    </tr>
+    <tr>
+        <td>氏名：</td>
+        <td colspan="2">@Model.FullNm</td>
+    </tr>
+    <tr>
+        <td>電話番号：</td>
+        <td colspan="2">@Model.Tel</td>
+    </tr>
+    <tr>
+        <td>支所：</td>
+        <td>@Model.ShishoCd</td>
+        <td>@Model.ShishoNm</td>
+    </tr>
+    <tr>
+        <td>市町村：</td>
+        <td>@Model.ShichosonCd</td>
+        <td>@Model.ShichosonNm</td>
+    </tr>
+    <tr>
+        <td>大地区：</td>
+        <td>@Model.DaichikuCd</td>
+        <td>@Model.DaichikuNm</td>
+    </tr>
+    <tr>
+        <td>小地区：</td>
+        <td>@Model.ShochikuCd</td>
+        <td>@Model.ShochikuNm</td>
+    </tr>
+    <tr>
+        <td>合併時識別：</td>
+        <td colspan="2">@Model.GappeijiShikibetu</td>
+    </tr>
+    <tr>
+        <td>引受方式：</td>
+        <td colspan="2">@Model.HikiukeHoushikiNm</td>
+    </tr>
+    <tr>
+        <td>類区分：</td>
+        <td>@Model.RuiKbn</td>
+        <td>@Model.RuiKbnNm</td>
+    </tr>
+</table>
+<br />
+
+
+<div class="table-thead-container">
+    <h4 class="sub_title">用途別単価設定入力</h4>
+
+    @using (Html.BeginForm("Init", "D105074", FormMethod.Post, new { id = "YotobetsuTankaForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        <div class="btn_area btn_group_left">
+            <button type="button" class="btn btn-primary" id="AddYotobetsuTankaRow" name="AddYotobetsuTankaRow" @buttonDisableAttr>行挿入</button>
+            <button type="button" class="btn btn-primary" id="DelYotobetsuTankaRows" name="DelYotobetsuTankaRows" @buttonDisableAttr>選択行削除</button>
+            <button type="button" class="btn btn-primary" id="SelAllYotobetsuTanka" name="SelAllYotobetsuTanka" @buttonDisableAttr>全行選択</button>
+            <button type="button" class="btn btn-primary" id="UnSelAllYotobetsuTanka" name="UnSelAllYotobetsuTanka" @buttonDisableAttr>全行解除</button>
+        </div>
+        <div class="clearfix"></div>
+        <div id="YotobetsuTankaResullt">
+            @await Html.PartialAsync("_D105074YotobetsuTankaResullt", Model)
+        </div>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="Back" name="Back">
+                    戻る
+                </button>
+                <button type="button" class="btn btn-primary" id="RegistYotobetsuTanka" name="RegistYotobetsuTanka" @buttonDisableAttr>
+                    登録
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<input type="hidden" id="returnValue" />
+
+@* 用途別単価設定入力登録確認ダイアログ *@
+@Html.Confirm("RegistYotobetsuTankaConfirm", "RegistYotobetsuTankaConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+
+@* 用途別単価設定入力ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("YotobetsuTankaPagerDiscardEditsConfirm", "YotobetsuTankaPagerConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "加入申込書入力（麦）画面", "保存"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+        var yotobetsuTankaPagerUrl = "";
+
+
+        @* 用途別単価設定ページャー *@
+        function yotobetsuTankaPagerClick(url) {
+            yotobetsuTankaPagerUrl = url;
+            @Html.ShowDialog("YotobetsuTankaPagerDiscardEditsConfirm");
+        };
+        $("#YotobetsuTankaPagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: yotobetsuTankaPagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea1').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#YotobetsuTankaResullt').html(data.partialView);
+
+                    // バリデータ再設定
+                    $("#YotobetsuTankaForm").validate().resetForm();
+                    $("#YotobetsuTankaForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#YotobetsuTankaResullt');
+
+                    updateOnChangeEvent();
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        });
+
+        $(function () {
+            @* 用途別単価設定入力行挿入 用途別単価設定入力行を挿入する。*@
+            $("#AddYotobetsuTankaRow").click(function() {
+                var url = "@Url.Action("AddYotobetsuTankaRow", "D105074", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#YotobetsuTankaForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#YotobetsuTankaForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#YotobetsuTankaResullt').html(data.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#YotobetsuTankaForm").validate().resetForm();
+                        $("#YotobetsuTankaForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#YotobetsuTankaResullt');
+
+                        updateOnChangeEvent();
+                    }
+                    $("html, body").scrollTop($('#YotobetsuTankaResullt').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 用途別単価設定選択行削除 用途別単価設定入力でチェックされた行を削除する。*@
+            $("#DelYotobetsuTankaRows").click(function() {
+                var url = "@Url.Action("DelYotobetsuTankaRows", "D105074", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#YotobetsuTankaForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#YotobetsuTankaForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#YotobetsuTankaResullt').html(data.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#YotobetsuTankaForm").validate().resetForm();
+                        $("#YotobetsuTankaForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#YotobetsuTankaResullt');
+
+                        updateOnChangeEvent();
+                    }
+                    $("html, body").scrollTop($('#YotobetsuTankaResullt').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 用途別単価設定全選択 用途別単価設定入力ですべての行をチェック状態にする。*@
+            $("#SelAllYotobetsuTanka").click(function() {
+                var checkboxs = $("#YotobetsuTankaResullt input[type='checkbox']");
+                checkboxs.prop('checked', true);
+            });
+
+            @* 用途別単価設定選択解除 用途別単価設定入力ですべての行を未チェック状態にする。*@
+            $("#UnSelAllYotobetsuTanka").click(function() {
+                var checkboxs = $("#YotobetsuTankaResullt input[type='checkbox']");
+                checkboxs.prop('checked', false);
+            });
+
+            @* 用途別単価設定登録 用途別単価設定の入力内容を登録する。*@
+            $("#RegistYotobetsuTanka").click(function() {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                // 前回のメッセージをクリアする
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#YotobetsuTankaForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // 適用単価が非活性の場合の必須入力チェック
+                var disabledItems = $("#YotobetsuTankaForm [name$='.TekiyoTanka'][disabled]");
+                if (disabledItems.length > 0) {
+                    $('#MessageArea1').addClass("text-danger").html("@MessageUtil.Get("ME00001", "適用単価", "")");
+                    disabledItems.addClass("input-validation-error");
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#YotobetsuTankaForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistYotobetsuTankaConfirm");
+                }
+            });
+            $("#RegistYotobetsuTankaConfirmOK").click(function() {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．用途別単価設定入力フォームの入力データをJSON化する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistYotobetsuTanka", "D105074", new { area = "F105" })";
+
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#YotobetsuTankaForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#YotobetsuTankaForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea1').removeClass("text-danger").html(data.message);
+                    }
+
+                    // disabled属性の復元
+                    var rows = $("#YotobetsuTankaForm input[id$='__IsNewRec']");
+                    for (i = 0; i < rows.length; i++) {
+                        var idx = rows[i].id;
+                        idx = idx.replace('YotobetsuTanka_DispRecords_', '');
+                        idx = idx.replace('__IsNewRec', '');
+
+                        if (rows[i].value == "False") {
+                            var saktukeJiki = $(`#YotobetsuTanka_DispRecords_${idx}__SakutsukeJiki`);
+                            var yotoKbn = $(`#YotobetsuTanka_DispRecords_${idx}__YotoKbn`);
+                            $(saktukeJiki).attr('disabled', 'disabled');
+                            $(yotoKbn).attr('disabled', 'disabled');
+                        }
+                    }
+
+                    $("html, body").scrollTop($('#YotobetsuTankaForm').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 作付時期ドロップダウンリスト 作付時期に紐づく用途区分取得 *@
+            @* 用途区分ドロップダウンリスト 用途区分に紐づく適用単価取得 *@
+            updateOnChangeEvent();
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                @Html.ShowDialog("BackConfirm");
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D105070", new { area = "F105" })";
+                var url = "@Url.Action("Back", "D105074", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+        @* 作付時期ドロップダウンリスト、用途区分ドロップダウンリスト値変更イベント更新 *@
+        function updateOnChangeEvent() {
+            $("#YotobetsuTankaResullt select[id$='__SakutsukeJiki']").change(function() {
+                var url = "@Url.Action("UpdateYotokubun", "D105074", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#YotobetsuTankaForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#YotobetsuTankaForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#YotobetsuTankaResullt').html(data.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#YotobetsuTankaForm").validate().resetForm();
+                        $("#YotobetsuTankaForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#YotobetsuTankaResullt');
+
+                        updateOnChangeEvent();
+                    }
+                    $("html, body").scrollTop($('#YotobetsuTankaResullt').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            $("#YotobetsuTankaResullt select[id$='__YotoKbn']").change(function() {
+                var url = "@Url.Action("UpdateTekiyoTanka", "D105074", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#YotobetsuTankaForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#YotobetsuTankaForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#YotobetsuTankaResullt').html(data.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#YotobetsuTankaForm").validate().resetForm();
+                        $("#YotobetsuTankaForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#YotobetsuTankaResullt');
+
+                        updateOnChangeEvent();
+                    }
+                    $("html, body").scrollTop($('#YotobetsuTankaResullt').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+    </script>
+}

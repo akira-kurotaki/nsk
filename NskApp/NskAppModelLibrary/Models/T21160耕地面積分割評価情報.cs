@@ -70,13 +70,6 @@ namespace NskAppModelLibrary.Models
         public string 行番号 { get; set; }
 
         /// <summary>
-        /// 類区分
-        /// </summary>
-        [Column("類区分")]
-        [StringLength(2)]
-        public string 類区分 { get; set; }
-
-        /// <summary>
         /// 分割耕地判定コード
         /// </summary>
         [Column("分割耕地判定コード")]

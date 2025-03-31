@@ -1,9 +1,10 @@
 ﻿using CoreLibrary.Core.Validator;
+using NskWeb.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace NskWeb.Areas.F105.Models.D105030
 {
-    public class D105030KikenDankaiKbnRecord : D105030PagerRecord
+    public class D105030KikenDankaiKbnRecord : BasePagerRecord
     {
         /// <summary>統計単位地域コード</summary>
         [Display(Name = "統計単位地域コード")]

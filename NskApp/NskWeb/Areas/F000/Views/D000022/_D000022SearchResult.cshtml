@@ -1,0 +1,68 @@
+﻿@model NskWeb.Areas.F000.Models.D000022.D000022Model
+
+<div class="table-responsive">
+    <table>
+        <tr>
+            @* 1～ *@
+            <td>
+                @Html.Label("",Model.SearchResult.TablePart1)
+            </td>
+            @* 検索結果件数 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TotalCount)
+            </td>
+            @* 件/ *@
+            <td>
+                @Html.Label("", Model.SearchResult.TablePart2)
+            </td>
+            @* 検索結果件数 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TotalCount)
+            </td>
+            @* 件中 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TablePart3)
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped" style="width:60%;">
+        <caption class="visually-hidden">検索結果</caption>
+        <thead class="sticky-top">
+            <tr>
+                <th style="width: 15%;" scope="col"></th>
+                <th style="width: 20%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.SanchiMeigaraCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.SanchiMeigaraCd))
+                </th>
+                <th style="width: 65%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.SanchiMeigaraNm,
+                             Html.DisplayNameFor(model => model.SearchCondition.SanchiMeigaraNm))
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int index = 0; index < Model.SearchResult.TableRecords.Count(); index++)
+            {
+                var item = Model.SearchResult.TableRecords.ElementAt(index);
+
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-primary SelectSanchiMeigara" tabindex="0">選択</button>
+                    </td>
+                    @* 産地別銘柄コード *@
+                    <td>
+                        @Html.Label("", item.SanchiMeigaraCd ?? string.Empty)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[index].SanchiMeigaraCd)
+                    </td>
+                    @* 産地別銘柄名称 *@
+                    <td>
+                        @Html.Label("", item.SanchiMeigaraNm ?? string.Empty)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[index].SanchiMeigaraNm)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

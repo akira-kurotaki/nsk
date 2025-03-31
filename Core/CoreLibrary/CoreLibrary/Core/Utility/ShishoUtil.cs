@@ -228,7 +228,7 @@ namespace CoreLibrary.Core.Utility
         public static List<MShishoNm> GetShishoList(string todofukenCd, string kumiaitoCd)
         {
             List<MShishoNm> result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M支所マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd + " ）");
                 result = db.MShishoNms
@@ -254,7 +254,7 @@ namespace CoreLibrary.Core.Utility
         public static MShishoNm GetShisho(string todofukenCd, string kumiaitoCd, string shishoCd)
         {
             MShishoNm result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("名称M支所マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd +
                     "、支所コード：" + shishoCd + " ）");

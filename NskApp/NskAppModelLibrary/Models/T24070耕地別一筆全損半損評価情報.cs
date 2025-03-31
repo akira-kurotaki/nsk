@@ -9,9 +9,9 @@ namespace NskAppModelLibrary.Models
     /// t_24070_耕地別一筆全損半損評価情報
     /// </summary>
     [Serializable]
-    [Table("t_24070_耕地別一筆全損半損評価情報　")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(耕地番号), nameof(分筆番号), nameof(精算区分))]
-    public class T24070耕地別一筆全損半損評価情報　 : ModelBase
+    [Table("t_24070_耕地別一筆全損半損評価情報")]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(耕地番号), nameof(分筆番号))]
+    public class T24070耕地別一筆全損半損評価情報 : ModelBase
     {
         /// <summary>
         /// 組合等コード
@@ -60,14 +60,6 @@ namespace NskAppModelLibrary.Models
         [Column("分筆番号", Order = 6)]
         [StringLength(4)]
         public string 分筆番号 { get; set; }
-
-        /// <summary>
-        /// 精算区分
-        /// </summary>
-        [Required]
-        [Column("精算区分", Order = 7)]
-        [StringLength(1)]
-        public string 精算区分 { get; set; }
 
         /// <summary>
         /// 産地別銘柄コード

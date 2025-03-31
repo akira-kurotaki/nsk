@@ -224,7 +224,7 @@ namespace CoreLibrary.Core.Utility
         public static List<MKumiaito> GetKumiaitoList(string todofukenCd)
         {
             List<MKumiaito> result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("組合等マスタデータを取得する。（都道府県コード：" + todofukenCd + " ）");
                 result = db.MKumiaitos
@@ -251,7 +251,7 @@ namespace CoreLibrary.Core.Utility
         public static MKumiaito GetKumiaito(string todofukenCd, string kumiaitoCd)
         {
             MKumiaito result;
-            using (JigyoCommonContext db = new JigyoCommonContext())
+            using (SystemCommonContext db = new SystemCommonContext())
             {
                 logger.Info("組合等マスタデータを取得する。（都道府県コード：" + todofukenCd + "、組合等コード：" + kumiaitoCd + " ）");
                 result = db.MKumiaitos

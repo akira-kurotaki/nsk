@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("m_10260_賦課金_ランク共通")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(引受方式), nameof(特約区分), nameof(大地区コード))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(賦課金引受方式), nameof(特約区分), nameof(大地区コード))]
     public class M10260賦課金ランク共通 : ModelBase
     {
         /// <summary>
@@ -46,12 +46,12 @@ namespace NskAppModelLibrary.Models
         public string 類区分 { get; set; }
 
         /// <summary>
-        /// 引受方式
+        /// 賦課金引受方式
         /// </summary>
         [Required]
-        [Column("引受方式", Order = 5)]
+        [Column("賦課金引受方式", Order = 5)]
         [StringLength(2)]
-        public string 引受方式 { get; set; }
+        public string 賦課金引受方式 { get; set; }
 
         /// <summary>
         /// 特約区分
@@ -89,12 +89,6 @@ namespace NskAppModelLibrary.Models
         [Column("防災単価")]
         [StringLength(5)]
         public string 防災単価 { get; set; }
-
-        /// <summary>
-        /// 賦課金上限額
-        /// </summary>
-        [Column("賦課金上限額")]
-        public Decimal? 賦課金上限額 { get; set; }
 
         /// <summary>
         /// 登録日時

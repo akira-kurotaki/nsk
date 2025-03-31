@@ -58,6 +58,12 @@ namespace NskAppModelLibrary.Models
         public DateTime? ˆøŽóŠm’èŽÀŽ{“ú { get; set; }
 
         /// <summary>
+        /// ‘¹ŠQ•]‰¿Šm’èŽÀŽ{“ú
+        /// </summary>
+        [Column("‘¹ŠQ•]‰¿Šm’èŽÀŽ{“ú")]
+        public DateTime? ‘¹ŠQ•]‰¿Šm’èŽÀŽ{“ú { get; set; }
+
+        /// <summary>
         /// “o˜^“úŽž
         /// </summary>
         [Column("“o˜^“úŽž")]

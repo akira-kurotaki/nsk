@@ -1,0 +1,46 @@
+﻿@model NskWeb.Areas.F111.Models.D111010.D111010Model
+@{
+    var startIndex = 700;
+    int tabIndex = startIndex;
+}
+
+
+<div class="table-thead-container" style="width: 70%;">
+    <table class="table table-bordered" style="">
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th>計算対象交付回</th>
+                <th>交付金計算実施日</th>
+                <th>農家負担掛金</th>
+                <th>徴収済み額</th>
+                <th>徴収割合</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.KoufukinKeisan.DispRecords.Count(); i++)
+            {
+                <!-- 行ｎ -->
+                <tr>
+                    <td id="@Html.IdFor(model => model.KoufukinKeisan.DispRecords[i].Koufukai)">
+                        @Html.DisplayTextFor(model => model.KoufukinKeisan.DispRecords[i].Koufukai)
+                        @Html.HiddenFor(model => model.KoufukinKeisan.DispRecords[i].ChoshuGakuNyuryokuzumi)
+                    </td>
+                    <td id="@Html.IdFor(model => model.KoufukinKeisan.DispRecords[i].KoufukinKeisanJisshibi)">
+                        @Html.DisplayFor(model => model.KoufukinKeisan.DispRecords[i].KoufukinKeisanJisshibi)
+                    </td>
+                    <td id="@Html.IdFor(model => model.KoufukinKeisan.DispRecords[i].Futankin)" style="text-align: right;">
+                        @Html.DisplayFor(model => model.KoufukinKeisan.DispRecords[i].Futankin, "",
+                                 new { htmlAttributes = new { @class = "text-end" } })
+                    </td>
+                    <td id="@Html.IdFor(model => model.KoufukinKeisan.DispRecords[i].ChoshuzumiGaku)" style="text-align: right;">
+                        @Html.DisplayFor(model => model.KoufukinKeisan.DispRecords[i].ChoshuzumiGaku, "",
+                                 new { htmlAttributes = new { @class = "text-end" } })
+                    </td>
+                    <td id="@Html.IdFor(model => model.KoufukinKeisan.DispRecords[i].ChoshuWariai)" style="text-align: right;">
+                        @Html.DisplayFor(model => model.KoufukinKeisan.DispRecords[i].ChoshuWariai, "",
+                                 new { htmlAttributes = new { @class = "text-end" } })%
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

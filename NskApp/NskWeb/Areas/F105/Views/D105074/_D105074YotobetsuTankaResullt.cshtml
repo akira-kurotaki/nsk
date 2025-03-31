@@ -1,0 +1,105 @@
+﻿@model NskWeb.Areas.F105.Models.D105074.D105074Model
+@{
+    var startIndex = 700;
+    int tabIndex = startIndex;
+}
+<div class="mb-3">
+    @for (int i = 0; i < Model.YotobetsuTanka.DispRecords.Count; i++)
+    {
+        <!-- 行ｎ -->
+        <div>@Html.ValidationMessageFor(model => model.YotobetsuTanka.DispRecords[i].SakutsukeJiki, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.YotobetsuTanka.DispRecords[i].YotoKbn, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.YotobetsuTanka.DispRecords[i].TekiyoTanka, null, new { @class = "text-danger" })</div>
+    }
+    <div>@Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })</div>
+</div>
+<div class="clearfix"></div>
+
+<div class="table-thead-container" style="width: 70%;">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("YotobetsuTankaPager", "yotobetsuTankaPagerClick", Model.YotobetsuTanka.Pager)
+    </div>
+    @Html.HiddenFor(model => model.YotobetsuTanka.AllRecCount)
+    <table class="table table-bordered" style="">
+        <colgroup>
+            <col />
+            <col style="width: 33%;" />
+            <col style="width: 33%;" />
+            <col style="width: 33%;" />
+        </colgroup>
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th></th>
+                <th>作付時期</th>
+                <th>用途区分</th>
+                <th>適用単価</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.YotobetsuTanka.DispRecords.Count(); i++)
+            {
+                string hiddenRow = string.Empty;
+                if (Model.YotobetsuTanka.DispRecords[i].IsDelRec)
+                {
+                    hiddenRow = "display: none;";
+                }
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow">
+                    <td>
+                        @Html.HiddenFor(model => model.YotobetsuTanka.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.YotobetsuTanka.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.YotobetsuTanka.DispRecords[i].Xmin)
+                        @Html.CheckBoxFor(model => model.YotobetsuTanka.DispRecords[i].CheckSelect,
+                                    new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> sakutsukeJikiAttrs = new()
+                            {
+                                { "class", "form-select form-select-lg" },
+                                { "tabindex", tabIndex++ }
+                            };
+                            if (!Model.YotobetsuTanka.DispRecords[i].IsNewRec)
+                                sakutsukeJikiAttrs.Add("disabled", "true");
+                        }
+                        @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].SakutsukeJiki,
+                                 Model.YotobetsuTanka.SakutukeJikiList,
+                                 "", sakutsukeJikiAttrs)
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> yotoKbnAttrs = new()
+                            {
+                                { "class", "form-select form-select-lg" },
+                                { "tabindex", tabIndex++ }
+                            };
+                            if (!Model.YotobetsuTanka.DispRecords[i].IsNewRec ||
+                                Model.YotobetsuTanka.DispRecords[i].YotoKbnList.Count == 0)
+                                yotoKbnAttrs.Add("disabled", "true");
+                        }
+                        @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].YotoKbn,
+                                 Model.YotobetsuTanka.DispRecords[i].YotoKbnList,
+                                 "", yotoKbnAttrs)
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> tekiyoTankaAttrs = new()
+                            {
+                                { "class", "form-select form-select-lg" },
+                                { "tabindex", tabIndex++ }
+                            };
+                            if (Model.YotobetsuTanka.DispRecords[i].TekiyoTankaList.Count == 0)
+                                tekiyoTankaAttrs.Add("disabled", "true");
+                        }
+                        @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].TekiyoTanka,
+                                 Model.YotobetsuTanka.DispRecords[i].TekiyoTankaList,
+                                 "", tekiyoTankaAttrs)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("YotobetsuTankaPager", "yotobetsuTankaPagerClick", Model.YotobetsuTanka.Pager)
+    </div>
+</div>

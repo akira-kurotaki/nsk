@@ -43,7 +43,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// </summary>
         /// <param name="dbContext"></param>
         /// <param name="sessionInfo"></param>
-        /// <param name="hikiukeRecords"></param>
+        /// <param name="hikiukeSearchResult"></param>
         public void Calc(NskAppContext dbContext, D105030SessionInfo sessionInfo, D105030HikiukeSearchResult hikiukeSearchResult)
         {
             List<D105030HikiukeRecord> hikiukeRecords = hikiukeSearchResult.GetResult(dbContext, sessionInfo);

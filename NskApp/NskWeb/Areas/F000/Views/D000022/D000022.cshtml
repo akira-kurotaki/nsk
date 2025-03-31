@@ -1,0 +1,301 @@
+﻿@model NskWeb.Areas.F000.Models.D000022.D000022Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_2;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>産地別銘柄コード検索</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D000022", FormMethod.Post, new { id = "D000022Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-responsive">
+        <br>
+        <table>
+            <caption class="visually-hidden">年産共済情報</caption>
+            <colgroup style="width: 15%;"></colgroup>
+            <colgroup style="width: 25%;"></colgroup>
+            <colgroup style="width: 60%;"></colgroup>
+            <tr>
+                @* 年産 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.Nensan,
+                             Html.DisplayNameFor(model => model.SearchCondition.Nensan))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.SearchCondition.Nensan)
+                                @Html.HiddenFor(model => model.SearchCondition.Nensan)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                @* 共済目的 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KyosaiMokutekiNm,
+                             Html.DisplayNameFor(model => model.SearchCondition.KyosaiMokutekiNm))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.SearchCondition.KyosaiMokutekiNm)
+                                @Html.HiddenFor(model => model.SearchCondition.KyosaiMokutekiCd)
+                                @Html.HiddenFor(model => model.SearchCondition.KyosaiMokutekiNm)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <div class="table-responsive">
+        <h4 class="sub_title">産地別銘柄コード検索</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        <br>
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索対象</caption>
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 15%;"></colgroup>
+            <colgroup class="td_control" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 15%;"></colgroup>
+            <colgroup style="width: 40%;"></colgroup>
+            <tr>
+                @* 産地別銘柄名称 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.SanchiMeigaraNm,
+                             Html.DisplayNameFor(model => model.SearchCondition.SanchiMeigaraNm))
+                </td>
+                <td colspan="3">
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.SanchiMeigaraNm, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.SanchiMeigaraNm),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "",
+                                         @title = Html.GetWithinStringLengthMaxLength(model => model.SearchCondition.SanchiMeigaraNm) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.SanchiMeigaraNm, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 産地別銘柄コード(開始) *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.SanchiMeigaraCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.SanchiMeigaraCd))
+                </td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.SanchiMeigaraCdFrom, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.SanchiMeigaraCdFrom),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "numeric",
+                                         @title = "半角数字" + Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.SanchiMeigaraCdFrom) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.SanchiMeigaraCdFrom, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                @* ～ *@
+                <td class="text-center">
+                    <div>
+                        @Html.DisplayNameFor(model => model.SearchCondition.SanchiMeigaraCdTilde)
+                    </div>
+                </td>
+                @* 産地別銘柄コード(終了) *@
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.SearchCondition.SanchiMeigaraCdTo, "",
+                                 new
+                                 {
+                                     htmlAttributes = new
+                                     {
+                                         @class = "form-control",
+                                         @maxlength = Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.SanchiMeigaraCdTo),
+                                         tabindex = 0,
+                                         @type = "text",
+                                         @inputmode = "numeric",
+                                         @title = "半角数字" + Html.GetWithinDigitLengthMaxLength(model => model.SearchCondition.SanchiMeigaraCdTo) + "桁以内"
+                                     }
+                                 })
+                    </div>
+                    <div>
+                        @Html.ValidationMessageFor(model => model.SearchCondition.SanchiMeigaraCdTo, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            @Html.ActionLink("クリア", "Clear", "D000022", new { area = "F000" }, new { @class = "btn btn-primary", tabindex = 0, id = "clear" })
+            <button type="button" class="btn btn-primary" id="Search" tabindex="0">検索</button>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+        <h4 class="sub_title">産地別銘柄一覧</h4>
+    </div>
+    <div id="SearchResult">
+        @await Html.PartialAsync("_D000022SearchResult", Model)
+    </div>
+    <br>
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="Close" tabindex="0">閉じる</button>
+        </div>
+    </div>
+}
+
+@section styles {
+    <style type="text/css">
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            // 画面初期表示時に1度だけ実行する処理（リロードは含まない）
+            if (!sessionStorage.getItem('hasRun')) {
+                // [クエリパラメータ：key]から親画面の選択行を取得
+                const urlParams = new URLSearchParams(window.location.search);
+                const idx = urlParams.get('key');
+                // sessionStorageに選択行を保存
+                sessionStorage.setItem('selectRow', idx);
+                // sessionStorageにフラグをセットして、一度実行したことを記録
+                sessionStorage.setItem('hasRun', 'true');
+            }
+
+            // 検索
+            $("#Search").click(function () {
+                var form = $("#D000022Form");
+                var messageArea1 = $("#MessageArea1");
+                var SanchiMeigaraCdFrom = $("#SearchCondition_SanchiMeigaraCdFrom").val();
+                var SanchiMeigaraCdTo = $("#SearchCondition_SanchiMeigaraCdTo").val();
+                const validationError = "input-validation-error";
+                var message = "";
+                // 前回のメッセージをクリアする
+                messageArea1.html("");
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                    // 属性チェック
+                    if (!$("#D000022Form").valid()) {
+                        // チェックエラー後のカーソルの位置が先頭の入力項目に設定する
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    // 独自チェック
+                    // [画面：産地別銘柄コード(開始)] > [画面：産地別銘柄コード(終了)]の場合、（メッセージID：ME10020)
+                    if (SanchiMeigaraCdFrom != "" && SanchiMeigaraCdTo != "") {
+                        if (Number(SanchiMeigaraCdFrom) > Number(SanchiMeigaraCdTo)) {
+                            // チェックエラー後のエラー項目の背景を赤に設定する
+                            message = ConcatMessage(message, "@MessageUtil.Get("ME10020","産地別銘柄コード")");
+                            $("#SearchCondition_SanchiMeigaraCdFrom").addClass(validationError);
+                            $("#SearchCondition_SanchiMeigaraCdTo").addClass(validationError);
+                        }
+                    }
+                }
+                // チェックエラーありの場合
+                if ("" != message) {
+                    messageArea1.html(message);
+                    // チェックエラー後のカーソルの位置が先頭の入力項目に設定する
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                // チェックエラーなしの場合
+                form.attr("action", "@Url.Action("Search", "D000022", new { area = "F000" })#@CoreConst.SEARCH_RESULT_DIV_ID");
+                form.attr("method", "post");
+                form.submit();
+            });
+
+            // 選択
+            $(".SelectSanchiMeigara").click(function () {
+                var hiddenValues = [];
+                // 親画面の選択行を取得
+                const idx = sessionStorage.getItem('selectRow');
+                // 子画面の選択行を取得
+                const selectedRow = $(this).closest('tr');
+                selectedRow.find('input[type="hidden"]').each(function(){
+                    // 選択行のhidden属性を全て配列に格納
+                    hiddenValues.push($(this).val());
+                });
+
+                if (hiddenValues) {
+                    // 親画面に取得した配列を設定する
+                    window.opener.receiveValueFromChild(idx, hiddenValues);
+                    // 子画面を閉じる
+                    window.close();
+                }
+            });
+
+            // クリア
+            $("#clear").click(function () {
+                // セッションストレージを削除
+                sessionStorage.removeItem('hasRun');
+                sessionStorage.removeItem('selectRow');
+                return true;
+            });
+
+            // 閉じる
+            $("#Close").click(function () {
+                // セッション情報削除後に子画面を閉じる
+                var url = '@Url.Action("Close", "D000022", new { area = "F000" })';
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        // セッション削除が成功した場合
+                        if (response.result === 'success') {
+                            // セッションストレージを削除
+                            sessionStorage.removeItem('hasRun');
+                            sessionStorage.removeItem('selectRow');
+                            // 子画面を閉じる
+                            window.close();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        // 処理失敗時
+                        console.error("AJAXエラー:", error);
+                    }
+                });
+
+            });
+        })
+    </script>
+}

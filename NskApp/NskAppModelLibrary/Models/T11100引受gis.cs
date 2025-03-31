@@ -62,11 +62,11 @@ namespace NskAppModelLibrary.Models
         public string •ª•M”Ô† { get; set; }
 
         /// <summary>
-        /// RS‹æ•ª
+        /// rs‹æ•ª
         /// </summary>
-        [Column("RS‹æ•ª")]
+        [Column("rs‹æ•ª")]
         [StringLength(2)]
-        public string RS‹æ•ª { get; set; }
+        public string rs‹æ•ª { get; set; }
 
         /// <summary>
         /// ‹Ç“s“¹•{Œ§ƒR[ƒh

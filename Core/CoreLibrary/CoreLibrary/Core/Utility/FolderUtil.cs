@@ -49,37 +49,34 @@ namespace CoreLibrary.Core.Utility
 
         /// <summary>
         /// ファイル移動
+        /// ・ZIPファイルパスリスト内のファイルを移動先フォルダに移動する
+        /// ・移動先のファイルパスをバッチダウンロードファイルに登録する
         /// </summary>
         /// <param name="zipFilePath">ZIPファイルパスリスト(キー：ファイルパス、value:暗号化前のzipファイルのハッシュ)</param>
-        /// <param name="filePath">移動先ファイルパス</param>
+        /// <param name="destDirPath">移動先フォルダパス</param>
         /// <param name="userId">ユーザID</param>
         /// <param name="batchId">バッチID</param>
-        public static void MoveFile(Dictionary<string, string> zipFilePath, string filePath, string userId, long batchId)
+        public static void MoveFile(Dictionary<string, string> zipFilePath, string destDirPath, string userId, long batchId)
         {
             // 移動先フォルダが存在しない場合、作成する
-            FileInfo file = new FileInfo(filePath);
-            if (!Directory.Exists(file.DirectoryName))
+            if (!Directory.Exists(destDirPath))
             {
-                FileSystem.CreateDirectory(file.DirectoryName);
-            }
-
-            // 移動先のファイルがすでに存在する場合、削除する
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
+                FileSystem.CreateDirectory(destDirPath);
             }
 
             // ファイル移動
             foreach (var item in zipFilePath)
             {
                 FileInfo zipFileInfo = new FileInfo(item.Key);
-                var zipFilePathNew = Path.Combine(file.DirectoryName, zipFileInfo.Name);
+                var zipFilePathNew = Path.Combine(destDirPath, zipFileInfo.Name);
 
+                // 移動先のファイルがすでに存在する場合、削除する
                 if (File.Exists(zipFilePathNew))
                 {
                     File.Delete(zipFilePathNew);
                 }
 
+                // 新しいパスにファイルを移動する
                 zipFileInfo.MoveTo(zipFilePathNew);
 
                 // バッチダウンロードファイル登録
