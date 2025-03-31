@@ -1,0 +1,340 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105070.D105070Model
+@{
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Part, F105Const.Authority.Update];// "一部権限", "更新権限"];
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+<div id="Hikiuke" class="tab-pane active" role="tabpanel" aria-labelledby="HikiukeTab">
+    <!-- 引受情報入力 -->
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "HikiukeSearchForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+        <div class="table-thead-container">
+            <h4 class="sub_title">条件選択</h4>
+            <div class="mb-3">
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.Chiban, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.KouchiNoFrom, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.KouchiNoTo, null, new { @class = "text-danger" })</div>
+                <div>@Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })</div>
+            </div>
+            <br />
+            <table class="table table-condensed table-sub-bordered">
+                <colgroup class="colgroup_background" style="width: 20%;"></colgroup>
+                <colgroup style="width: 30%;"></colgroup>
+                <colgroup style="width: 50%;"></colgroup>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.SearchCondition.Chiban,
+                                 Html.DisplayNameFor(model => model.SearchCondition.Chiban))
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.SearchCondition.Chiban, "",
+                                 new { htmlAttributes = new { @class = "form-control", tabindex = 108, Type = "text" } })
+                    </td>
+                </tr>
+                <tr>
+                    <td>耕地番号</td>
+                    <td>
+                        <table style="width:100%">
+                            <tr>
+                                <td style="width:45%">
+                                    @Html.EditorFor(model => model.SearchCondition.KouchiNoFrom, "",
+                                             new { htmlAttributes = new { @class = "form-control", tabindex = 109, Type = "text" } })
+                                </td>
+                                <td class="text-center" style="width:10%">
+                                    ～
+                                </td>
+                                <td style="width:45%">
+                                    @Html.EditorFor(model => model.SearchCondition.KouchiNoTo, "",
+                                             new { htmlAttributes = new { @class = "form-control", tabindex = 110, Type = "text" } })
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <table class="table table-condensed table-sub-bordered">
+                <colgroup class="colgroup_background" style="width: 10%;"></colgroup>
+                <colgroup style="width: 18%;"></colgroup>
+                <colgroup style="width: 12%;"></colgroup>
+                <colgroup style="width: 18%;"></colgroup>
+                <colgroup style="width: 12%;"></colgroup>
+                <colgroup style="width: 18%;"></colgroup>
+                <colgroup style="width: 12%;"></colgroup>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.SearchCondition.DisplayCount,
+                                 Html.DisplayNameFor(model => model.SearchCondition.DisplayCount))
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SearchCondition.DisplayCount,
+                            "display_count", new { @class = "form-select form-select-lg", tabindex = 111, @title = "選択項目" })
+                    </td>
+                    <td colspan="5" class="td_spe_color"></td>
+                </tr>
+                <tr>
+                    <td>表示順</td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SearchCondition.DisplaySort1, new { @class = "form-select form-select-lg", tabindex = 112, @title = "選択項目" })
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <fieldset>
+                                <legend class="visually-hidden">表示順１</legend>
+                                @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.DESC.ToString(),
+                                         new { @id = "SearchCondition_DisplaySortOrder1_1", @class = "magic-radio", tabindex = 113 })
+                                <label for="SearchCondition_DisplaySortOrder1_1">降順</label>
+                                @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.ASC.ToString(),
+                                         new { @id = "SearchCondition_DisplaySortOrder1_2", @class = "magic-radio", tabindex = 114 })
+                                <label for="SearchCondition_DisplaySortOrder1_2">昇順</label>
+                            </fieldset>
+                        </div>
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.SearchCondition.DisplaySort2, new { @class = "form-select form-select-lg", tabindex = 115, @title = "選択項目" })
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <fieldset>
+                                <legend class="visually-hidden">表示順２</legend>
+                                @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.DESC.ToString(),
+                                         new { @id = "SearchCondition_DisplaySortOrder2_1", @class = "magic-radio", tabindex = 116 })
+                                <label for="SearchCondition_DisplaySortOrder2_1">降順</label>
+                                @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.ASC.ToString(),
+                                         new { @id = "SearchCondition_DisplaySortOrder2_2", @class = "magic-radio", tabindex = 117 })
+                                <label for="SearchCondition_DisplaySortOrder2_2">昇順</label>
+                            </fieldset>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+@*                 @Html.ActionLink("クリア", "Index", "D105070", new { area = "F105" }, new { @class = "btn btn-primary", tabindex = 120 }) *@
+                <button type="button" class="btn btn-primary" id="Clear" name="Clear" tabindex="120">
+                    クリア
+                </button>
+                <button type="button" class="btn btn-primary" id="Search" name="Search" tabindex="121">
+                    検索
+                </button>
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Init", "NSK105070D", FormMethod.Post, new { id = "HikiukeForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        <div class="table-thead-container">
+            <h4 class="sub_title">引受条件入力</h4>
+            <div class="btn_area btn_group_left">
+                <button type="button" class="btn btn-primary" id="AddHikiukeRow" name="AddHikiukeRow" tabindex="122" @buttonDisableAttr>行挿入</button>
+                <button type="button" class="btn btn-primary" id="DelHikiukeRows" name="DelHikiukeRows" tabindex="123" @buttonDisableAttr>選択行削除</button>
+                <button type="button" class="btn btn-primary" id="SelAllHikiuke" name="SelAllHikiuke" tabindex="124" @buttonDisableAttr>全行選択</button>
+                <button type="button" class="btn btn-primary" id="UnSelAllHikiuke" name="UnSelAllHikiuke" tabindex="125" @buttonDisableAttr>全行解除</button>
+            </div>
+            <div class="clearfix"></div>
+            <div class="mb-3">
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuKyokuTodofuken, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuShichoson, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuOoaza, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuKoaza, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuChiban, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuEdaban, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuKoban, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuMagoban, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.SearchCondition.IkkatsuRsKbn, null, new { @class = "text-danger" })</div>
+                <div id="SearchResultMessage">
+                    @await Html.PartialAsync("_D105070HikiukeSearchResultMessage", Model)
+                </div>
+                <div>@Html.MessageAreaFor(model => model.MessageArea2, "", new { @class = "text-danger", id = "MessageArea2" })</div>
+            </div>
+            <br />
+
+            <div class="accordion" id="accordionGisInput">
+                <div class="accordion-item">
+                    <h2 class="accordion-header m-0 p-0 text">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            GIS項目一括入力
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse">
+                        <div class="accordion-body">
+                            <table class="table table-condensed table-sub-bordered">
+                                <colgroup></colgroup>
+                                <colgroup class="colgroup_background" style="width: 15%;"></colgroup>
+                                <colgroup style="width: 35%;"></colgroup>
+                                <colgroup></colgroup>
+                                <colgroup class="colgroup_background" style="width: 15%;"></colgroup>
+                                <colgroup style="width: 35%;"></colgroup>
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckKyokuTodofuken,
+                                                 new { @class = "form-check", tabindex = 126 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckKyokuTodofuken,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckKyokuTodofuken))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuKyokuTodofuken,
+                                                 new { @class = "form-text form-select-lg", tabindex = 127, @readonly = true })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckShichoson,
+                                                 new { @class = "form-check", tabindex = 128 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckShichoson,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckShichoson))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuShichoson,
+                                                 new { @class = "form-text form-select-lg", tabindex = 129, @readonly = true })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckOoaza,
+                                                 new { @class = "form-check", tabindex = 130 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckOoaza,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckOoaza))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuOoaza,
+                                                 new { @class = "form-text form-select-lg", tabindex = 131, @readonly = true })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckKoaza,
+                                                 new { @class = "form-check", tabindex = 132 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckKoaza,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckKoaza))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuKoaza,
+                                                 new { @class = "form-text form-select-lg", tabindex = 133, @readonly = true })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckChiban,
+                                                 new { @class = "form-check", tabindex = 134 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckChiban,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckChiban))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuChiban,
+                                                 new { @class = "form-text form-select-lg", tabindex = 135, @readonly = true })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckEdaban,
+                                                 new { @class = "form-check", tabindex = 136 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckEdaban,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckEdaban))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuEdaban,
+                                                 new { @class = "form-text form-select-lg", tabindex = 137, @readonly = true })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckKoban,
+                                                 new { @class = "form-check", tabindex = 138 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckKoban,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckKoban))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuKoban,
+                                                 new { @class = "form-text form-select-lg", tabindex = 138, @readonly = true })
+                                    </td>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckMagoban,
+                                                 new { @class = "form-check", tabindex = 139 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckMagoban,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckMagoban))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuMagoban,
+                                                 new { @class = "form-text form-select-lg", tabindex = 140, @readonly = true })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Html.CheckBoxFor(model => model.SearchCondition.CheckRsKbn,
+                                                 new { @class = "form-check", tabindex = 141 })
+                                    </td>
+                                    <td>
+                                        @Html.LabelFor(model => model.SearchCondition.CheckRsKbn,
+                                                 Html.DisplayNameFor(model => model.SearchCondition.CheckRsKbn))
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(model => model.SearchCondition.IkkatsuRsKbn,
+                                                 new { @class = "form-text form-select-lg", tabindex = 142, @readonly = true })
+                                    </td>
+                                    <td colspan="3">
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="table-responsive table-thead-container">
+                                <div class="btn_area btn_group_right">
+                                    <button type="button" class="btn btn-primary" id="ClearIkkatu" name="ClearIkkatu" tabindex="143" @buttonDisableAttr>
+                                        一括入力欄クリア
+                                    </button>
+                                    <button type="button" class="btn btn-primary" id="SetIkkatsuGIS" name="SetIkkatsuGIS" tabindex="144" @buttonDisableAttr>
+                                        GIS項目一括設定
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="SearchResult">
+            @await Html.PartialAsync("_D105070HikiukeSearchResult", Model)
+        </div>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="RegistHikiuke" name="RegistHikiuke" tabindex="145" @buttonDisableAttr>
+                    登録
+                </button>
+            </div>
+        </div>
+
+        <div class="table-thead-container">
+            <h4 class="sub_title">計算結果</h4>
+            <div class="mb-3">
+                @Html.MessageAreaFor(model => model.CalcResult.MessageArea3, "", new { @class = "text-danger", id = "MessageArea3" })
+            </div>
+            <div class="table-responsive table-thead-container">
+                <div class="btn_area btn_group_left">
+                    <button type="button" class="btn btn-primary" id="CalcHikiuke" name="CalcHikiuke" tabindex="146" @buttonDisableAttr>
+                        計算
+                    </button>
+                </div>
+            </div>
+            <br />
+            <div id="CalcResult">
+                @await Html.PartialAsync("_D105070CalcResult", Model)
+            </div>
+        </div>
+    }
+</div>

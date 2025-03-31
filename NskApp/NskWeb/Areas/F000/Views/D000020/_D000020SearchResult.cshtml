@@ -1,0 +1,84 @@
+﻿@model NskWeb.Areas.F000.Models.D000020.D000020Model
+
+<div class="table-responsive">
+    <table>
+        <tr>
+            @* 1～ *@
+            <td>
+                @Html.Label("",Model.SearchResult.TablePart1)
+            </td>
+            @* 検索結果件数 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TotalCount)
+            </td>
+            @* 件/ *@
+            <td>
+                @Html.Label("", Model.SearchResult.TablePart2)
+            </td>
+            @* 検索結果件数 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TotalCount)
+            </td>
+            @* 件中 *@
+            <td>
+                @Html.Label("", Model.SearchResult.TablePart3)
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="table-responsive">
+    <table class="table table-bordered table-striped" style="width:90%;">
+        <caption class="visually-hidden">検索結果</caption>
+        <thead class="sticky-top">
+            <tr>
+                <th style="width: 10%;" scope="col"></th>
+                <th style="width: 15%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.KumiaiintoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.KumiaiintoCd))
+                </th>
+                <th style="width: 20%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.Name,
+                             Html.DisplayNameFor(model => model.SearchCondition.Name))
+                </th>
+                <th style="width: 40%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.Post,
+                             Html.DisplayNameFor(model => model.SearchCondition.Post))
+                </th>
+                <th style="width: 15%;" scope="col">
+                    @Html.LabelFor(model => model.SearchCondition.Tel,
+                             Html.DisplayNameFor(model => model.SearchCondition.Tel))
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int index = 0; index < Model.SearchResult.TableRecords.Count(); index++)
+            {
+                var item = Model.SearchResult.TableRecords.ElementAt(index);
+
+                <tr>
+                    <td>
+                        <button type="button" class="btn btn-primary SelectHinshu" tabindex="0">選択</button>
+                    </td>
+                    @* 組合員等コード *@
+                    <td>
+                        @Html.Label("", item.KumiaiintoCd ?? string.Empty)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[index].KumiaiintoCd)
+                    </td>
+                    @* 氏名 *@
+                    <td>
+                        @Html.Label("", item.Name ?? string.Empty)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[index].Name)
+                    </td>
+                    @* 住所 *@
+                    <td>
+                        @Html.Label("", item.Post ?? string.Empty)
+                    </td>
+                    @* 電話番号 *@
+                    <td>
+                        @Html.Label("", item.Tel ?? string.Empty)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

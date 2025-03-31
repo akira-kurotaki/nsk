@@ -1,0 +1,301 @@
+﻿
+@model NskWeb.Areas.F107.Models.D107040.D107040Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>消込み処理(自動)(インタフェース)</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+@using (Html.BeginForm("Init", "D107040", FormMethod.Post, new { id = "D107040Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+   @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-responsive">
+        <br>
+        <table>
+            <caption class="visually-hidden">年産共済情報</caption>
+            <colgroup style="width: 15%;"></colgroup>
+            <colgroup style="width: 25%;"></colgroup>
+            <colgroup style="width: 60%;"></colgroup>
+            <tr>
+                @* 年産 *@
+                <td>
+                    年産：
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.EntryCondition.Nensan)
+                                @Html.HiddenFor(model => model.EntryCondition.Nensan)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                @* 共済目的 *@
+                <td>
+                    共済目的：
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td colspan="3">
+                                @Html.Label("", Model.EntryCondition.KyosaiMokutekiNm)
+                                @Html.HiddenFor(model => model.EntryCondition.KyosaiMokutekiCd)
+                                @Html.HiddenFor(model => model.EntryCondition.KyosaiMokutekiNm)
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td></td>
+            </tr>
+        </table>
+        <br>
+        @* 支所実行単位区分 *@
+        @Html.HiddenFor(model => model.EntryCondition.ShishoJikkoHikiukeKbn)
+    </div>
+    <div class="table-responsive">
+        <h4 class="sub_title">消込み処理(自動)</h4>
+        <div class="mb-3">
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">計算対象</caption>
+            <colgroup class="td_label" style="width: 20%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup style="width: 40%;"></colgroup>
+            <tr>
+                @* 本所・支所 *@
+                <td>@Html.LabelFor(model => model.EntryCondition.HonshoshishoList, "本所・支所")</td>
+                <td>
+                    <div>
+                        @Html.DropDownListFor(model => model.EntryCondition.SelectShishoCd, Model.EntryCondition.HonshoshishoList,
+                                 new { @class = "form-select form-select-lg", tabindex = 101, @title = "本所・支所コードを選択" })
+                    </div>
+                    <div><span id='TodofukenDropDownError' class = "text-danger"></span></div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 引受回 *@
+                <td>@Html.LabelFor(model => model.EntryCondition.CurentHikiukeCnt, "引受回")</td>
+                <td>
+                    <div>
+                        @Html.EditorFor(model => model.EntryCondition.CurentHikiukeCnt, "",
+                                 new { htmlAttributes = new { @class = "form-control", tabindex = 102, style = "text-align: right" } })
+                        @Html.HiddenFor(model => model.EntryCondition.CurentHikiukeCntHidden)
+                    </div>
+                    <div>@Html.ValidationMessageFor(model => model.EntryCondition.CurentHikiukeCnt, "", new { @class = "text-danger" })</div>
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+            <tr>
+                @* 対象データ振替日 *@
+                <td>@Html.LabelFor(model => model.EntryCondition.TaisyoFurikaeDate, "対象データ振替日")</td>
+                <td>
+                    <div class="input-group date date-picker">
+                        @Html.EditorFor(
+                                 model => model.EntryCondition.TaisyoFurikaeDate,
+                                 new { htmlAttributes = new { @class = "form-control date-picker", maxlength = 9, tabindex = 103 } }
+                                 )
+                        <div class="input-group-text input-group-addon" title="カレンダーを表示">
+                            <span class="bi bi-grid-3x3-gap-fill"></span>
+                        </div>
+                    </div>
+                    @Html.ValidationMessageFor(model => model.EntryCondition.TaisyoFurikaeDate, "", new { @class = "text-danger" })
+                </td>
+                <td class="td_spe_color"></td>
+            </tr>
+        </table>
+        <br>
+    </div>
+    <div class="table-responsive">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="backBtn" tabindex="104">戻る</button>
+            <button type="button" class="btn btn-primary allow-dbl" id="Entry" tabindex="105">
+                登録
+            </button>
+        </div>
+    </div>
+}
+
+@Html.Confirm("CreateClick", "CreateConfirm", "確認", MessageUtil.Get("MQ10005", "処理"), "OK", "キャンセル")
+@Html.Dialog("SystemError", "メッセージ", "", "閉じる")
+
+@section styles {
+    <style type="text/css">
+    </style>
+}
+
+@section scripts {
+    <script type="text/javascript">
+        $(function () {
+            @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+            $('.input-validation-error:first').focus();
+
+            @* 登録ボタンの非活性 *@
+            @* 更新権限不可ユーザーでログインの場合、登録ボタンを非活性にする *@
+            if (@ViewBag.UpdateFlg == 1) {
+                $("#Entry").prop("disabled",true);
+            }else{
+                $("#Entry").prop("disabled",false);
+            }
+
+            @* 引受計算実行単位区分が本所本所の場合 *@
+            // 本所固定にする
+            if($("input[name='EntryCondition.ShishoJikkoHikiukeKbn']").val() == "1"){
+
+                // 本所を自動選択
+                $("#EntryCondition.SelectShishoCd option[value='00']").prop('selected', true);
+                // 本所を固定にする
+                $("#EntryCondition.SelectShishoCd").prop('disabled', true);
+                // ただし、サブミット時は固定を解除する
+                $('form').bind('submit', function () {
+                    $(this).find("#EntryCondition.SelectShishoCd").prop('disabled', false);
+                });
+            }
+
+            @* 引受計算実行単位区分が本所本所以外の場合 *@
+            if($("input[name='EntryCondition.ShishoJikkoHikiukeKbn']").val() != "1"){
+                // 本所ユーザーの場合はドロップダウンリストから本所を削除する
+                if(@ViewBag.HonsyoUserFlg == 1 && $("#EntryCondition.SelectShishoCd option[value='00']").length > 0){
+                    $("select#EntryCondition.SelectShishoCd option[value='00']").remove();
+                }
+            }
+
+            @* 現在選択されているリストボックスの引受回を取得する *@
+            // $("#EntryCondition_SelectShishoCd").val($("#EntryCondition_TodofukenDropDownList_ShishoCd").val());
+            DispUnderwritingCycle();
+
+            @* 戻る *@
+            $("#backBtn").click(function () {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D107040", new { area = "F107" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 登録 *@
+            $("#Entry").click(function () {
+                var messageArea1 = $("#MessageArea1");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                document.getElementById("TodofukenDropDownError").textContent = "";
+
+                if(@ConfigUtil.Get("ClientValidationEnabled")){
+                    @* 入力・属性・文字数チェック *@
+                    if(!$("#D107040Form").valid()){
+                        @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    @* 独自チェック *@
+                    // 本所・支所ドロップダウンリストの選択チェック(HiddenだとValidationMessageForが動作しない)
+                    var selectedValue = $("#EntryCondition_SelectShishoCd").val();
+                    // ドロップダウンリスト未選択の場合直下にエラーメッセージを表示
+                    if(selectedValue == "")
+                    {
+                        document.getElementById("TodofukenDropDownError").textContent = '@MessageUtil.Get("ME00001", "本所・支所", "")';
+                        return;
+                    }
+
+                    // 引受回の大小チェック
+                    if(Number($("input[name='EntryCondition.CurentHikiukeCnt']").val()) > Number($("input[name='EntryCondition.CurentHikiukeCntHidden']").val()))
+                    {
+                        // エラーの場合メッセージエリア１に表示する
+                        messageArea1.html('@MessageUtil.Get("ME10040")');
+                        return;
+                    }
+                }
+
+                @Html.ShowConfirm("CreateClick");
+            });
+
+            @* リストボックス変更時イベント *@
+            $("#EntryCondition_SelectShishoCd").on('change', function () {
+
+                var messageArea1 = $("#MessageArea1");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                document.getElementById("TodofukenDropDownError").textContent = "";
+
+                @* 引受回をクリアする *@
+                $("#EntryCondition_CurentHikiukeCnt").val("");
+                $("#EntryCondition_CurentHikiukeCntHidden").val("");
+
+                @* 選択された本所・支所コードに対応するカレント引受回を取得する *@
+                @* ただし、空白が選択されている時は実行しない *@
+                var selectedValue = $("#EntryCondition_SelectShishoCd").val();
+
+                if(selectedValue != ""){
+                    // $("#EntryCondition_SelectShishoCd").val($("#EntryCondition_TodofukenDropDownList_ShishoCd").val());
+                    DispUnderwritingCycle();
+                }
+            });
+
+            @* 処理続行ダイアログの「OK」ボタンを押下 *@
+            $('#CreateConfirm').click(function () {
+                @* バッチ予約テーブルへの登録処理 *@
+                var url = '@Url.Action("Insert", "D107040", new { area = "F107" })';
+                var formData = new FormData($('#D107040Form').get(0));
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (response) {
+                    $('#MessageArea1').html(response.message);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D90002", new { area = "F900" })";
+                });
+            });
+        })
+
+        @* カレント引受回数を取得する処理の関数 *@
+        function DispUnderwritingCycle(){
+            var url = '@Url.Action("DispUnderwritingCycle", "D107040", new { area = "F107" })';
+            var formData = new FormData($('#D107040Form').get(0));
+            $.ajax({
+                type: 'POST',
+                cache: false,
+                contentType: false,
+                processData: false,
+                data: formData,
+                dataType: 'json',
+                url: url,
+            }).done(function (response) {
+                if(response.message != ""){
+                    $('#MessageArea1').html(response.message);
+                }
+                if(response.CurentHikiukeCnt != null){
+                    $("input[name='EntryCondition.CurentHikiukeCnt']").val(response.CurentHikiukeCnt);
+                    $("input[name='EntryCondition.CurentHikiukeCntHidden']").val(response.CurentHikiukeCnt);
+                }
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D90002", new { area = "F900" })";
+            });
+        }
+    </script>
+}

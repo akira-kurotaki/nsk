@@ -62,6 +62,7 @@ namespace NskAppModelLibrary.Models
         /// 登録ユーザid
         /// </summary>
         [Column("登録ユーザid")]
+        [StringLength(11)]
         public string 登録ユーザid { get; set; }
 
         /// <summary>
@@ -74,6 +75,7 @@ namespace NskAppModelLibrary.Models
         /// 更新ユーザid
         /// </summary>
         [Column("更新ユーザid")]
+        [StringLength(11)]
         public string 更新ユーザid { get; set; }
     }
 }

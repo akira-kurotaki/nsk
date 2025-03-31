@@ -1,0 +1,19 @@
+﻿@model NskWeb.Areas.F105.Models.D105070.D105070Model
+
+@for (int i = 0; i < Model.HikiukeSearchResult.DispRecords.Count; i++)
+{
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].KouchiNo, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].ChimeiChiban, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].KouchiMenseki, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].HikukeMenseki, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].JogaitoMenseki, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Syurui, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Shichoson, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].SanchiMeigara, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Hinsyu, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].BunpitsuNo, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].JituryoKijunTansyu, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Sanjaku, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Shoyusha, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.HikiukeSearchResult.DispRecords[i].Bikou, null, new { @class = "text-danger" })</div>
+}

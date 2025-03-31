@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("t_24060_耕地別分割評価情報")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(耕地番号), nameof(分筆番号), nameof(分割耕地判定コード), nameof(精算区分))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(組合員等コード), nameof(耕地番号), nameof(分筆番号), nameof(分割耕地判定コード))]
     public class T24060耕地別分割評価情報 : ModelBase
     {
         /// <summary>
@@ -68,14 +68,6 @@ namespace NskAppModelLibrary.Models
         [Column("分割耕地判定コード", Order = 7)]
         [StringLength(1)]
         public string 分割耕地判定コード { get; set; }
-
-        /// <summary>
-        /// 精算区分
-        /// </summary>
-        [Required]
-        [Column("精算区分", Order = 8)]
-        [StringLength(1)]
-        public string 精算区分 { get; set; }
 
         /// <summary>
         /// 営農対象外フラグ

@@ -29,6 +29,13 @@ namespace NskAppModelLibrary.Models
         public string ”íŠQ‹æ•ª–¼Ì { get; set; }
 
         /// <summary>
+        /// ”íŠQ‹æ•ª—ªÌ
+        /// </summary>
+        [Column("”íŠQ‹æ•ª—ªÌ")]
+        [StringLength(20)]
+        public string ”íŠQ‹æ•ª—ªÌ { get; set; }
+
+        /// <summary>
         /// “o˜^“ú
         /// </summary>
         [Column("“o˜^“ú")]

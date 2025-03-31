@@ -34,7 +34,7 @@ namespace NskAppModelLibrary.Models
         /// </summary>
         [Required]
         [Column("’ •[id", Order = 3)]
-        [StringLength(1)]
+        [StringLength(11)]
         public string ’ •[id { get; set; }
 
         /// <summary>

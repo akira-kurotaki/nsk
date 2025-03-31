@@ -32,14 +32,14 @@ namespace NskAppModelLibrary.Models
         /// 受入対象データ名称
         /// </summary>
         [Column("受入対象データ名称")]
-        [StringLength(20)]
+        [StringLength(30)]
         public string 受入対象データ名称 { get; set; }
 
         /// <summary>
         /// 受入対象データ略称
         /// </summary>
         [Column("受入対象データ略称")]
-        [StringLength(20)]
+        [StringLength(30)]
         public string 受入対象データ略称 { get; set; }
 
         /// <summary>

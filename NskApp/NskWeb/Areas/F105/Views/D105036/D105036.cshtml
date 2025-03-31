@@ -1,0 +1,449 @@
+﻿@using NskWeb.Areas.F105.Models.D105036
+@model D105036Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>加入申込書入力組合員等検索（共通）</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@using (Html.BeginForm("Init", "D105036", FormMethod.Post, new { id = "D105036Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @await Html.PartialAsync("_HiddenWindowId")
+    <div class="table-thead-container">
+        <h4 class="sub_title">検索条件</h4>
+        <div class="mb-3">
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdFrom, null, new { @class = "text-danger" })</div>
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdTo, null, new { @class = "text-danger" })</div>
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.SearchCondition.TodofukenDropDownList)
+
+        @* 都道府県段階ドロップダウンリストで非表示の項目はHiddenで値を保持する必要がある *@
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.TodofukenCd)
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.KumiaitoCd)
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @*支所*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 103, @title = "選択項目" })
+                </td>
+            </tr>
+            <tr>
+                @*市町村*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShichosonCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShichosonCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shichoson, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 104, @title = "選択項目" })
+                </td>
+
+            </tr>
+            <tr>
+                @*大地区*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 105, @title = "選択項目" })
+                </td>
+
+                @*小地区*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuFrom, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 106, @title = "選択項目" })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>
+                                    @Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdTo)
+                                </div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuTo, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 107, @title = "選択項目" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @*組合員等*@
+                <td>
+                    組合員等コード
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdFrom, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 108, @type = "text" } })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>～</div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdTo, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 109, @type = "text" } })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @* 未加入 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KanyuState,
+                             Html.DisplayNameFor(model => model.SearchCondition.KanyuState))
+                </td>
+                <td>
+                    <fieldset>
+                        <legend class="visually-hidden">未加入</legend>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KanyuState, D105036SearchCondition.KanyuJokyo.KANYU,
+                                 new { @id = "SearchCondition_KanyuState_1", @class = "magic-radio", tabindex = 111 })
+                        <label for="SearchCondition_KanyuState_1">加入</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KanyuState, D105036SearchCondition.KanyuJokyo.MIKANYU,
+                                 new { @id = "SearchCondition_KanyuState_2", @class = "magic-radio", tabindex = 112 })
+                        <label for="SearchCondition_KanyuState_2">未加入</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KanyuState, D105036SearchCondition.KanyuJokyo.ALL,
+                                 new { @id = "SearchCondition_KanyuState_3", @class = "magic-radio", tabindex = 113 })
+                        <label for="SearchCondition_KanyuState_3">全て</label>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                @* 解除 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KaijoState,
+                             Html.DisplayNameFor(model => model.SearchCondition.KaijoState))
+                </td>
+                <td>
+                    <fieldset>
+                        <legend class="visually-hidden">解除</legend>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KaijoState, D105036SearchCondition.KaijoJokyo.KAIJO,
+                                 new { @id = "SearchCondition_KaijoState_1", @class = "magic-radio", tabindex = 111 })
+                        <label for="SearchCondition_KaijoState_1">解除</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KaijoState, D105036SearchCondition.KaijoJokyo.OTHER,
+                                 new { @id = "SearchCondition_KaijoState_2", @class = "magic-radio", tabindex = 112 })
+                        <label for="SearchCondition_KaijoState_2">解除以外</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KaijoState, D105036SearchCondition.KaijoJokyo.ALL,
+                                 new { @id = "SearchCondition_KaijoState_3", @class = "magic-radio", tabindex = 113 })
+                        <label for="SearchCondition_KaijoState_3">全て</label>
+                    </fieldset>
+                </td>
+            </tr>
+            <tr>
+                @* 新規 *@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.KouchiUmu,
+                             Html.DisplayNameFor(model => model.SearchCondition.KouchiUmu))
+                </td>
+                <td>
+                    <fieldset>
+                        <legend class="visually-hidden">新規</legend>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KouchiUmu, D105036SearchCondition.KouchiJokyo.NEW,
+                                 new { @id = "SearchCondition_KouchiJokyo_1", @class = "magic-radio", tabindex = 111 })
+                        <label for="SearchCondition_KouchiJokyo_1">新規</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KouchiUmu, D105036SearchCondition.KouchiJokyo.OTHER,
+                                 new { @id = "SearchCondition_KouchiJokyo_2", @class = "magic-radio", tabindex = 112 })
+                        <label for="SearchCondition_KouchiJokyo_2">新規以外</label>
+                        @Html.RadioButtonFor(model => model.SearchCondition.KouchiUmu, D105036SearchCondition.KouchiJokyo.ALL,
+                                 new { @id = "SearchCondition_KouchiJokyo_3", @class = "magic-radio", tabindex = 113 })
+                        <label for="SearchCondition_KouchiJokyo_3">全て</label>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="table table-condensed table-sub-bordered">
+            <colgroup class="colgroup_background" style="width: 10%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.DisplayCount,
+                             Html.DisplayNameFor(model => model.SearchCondition.DisplayCount))
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplayCount, "display_count",
+                             new { @class = "form-select form-select-lg", tabindex = 109 })
+                </td>
+                <td colspan="5" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                <td>表示順</td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort1, new { @class = "form-select form-select-lg", tabindex = 110, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順１</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_1", @class = "magic-radio", tabindex = 111 })
+                            <label for="SearchCondition_DisplaySortOrder1_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_2", @class = "magic-radio", tabindex = 112 })
+                            <label for="SearchCondition_DisplaySortOrder1_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort2, new { @class = "form-select form-select-lg", tabindex = 113, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順２</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_1", @class = "magic-radio", tabindex = 114 })
+                            <label for="SearchCondition_DisplaySortOrder2_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_2", @class = "magic-radio", tabindex = 115 })
+                            <label for="SearchCondition_DisplaySortOrder2_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort3, new { @class = "form-select form-select-lg", tabindex = 116, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順３</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_1", @class = "magic-radio", tabindex = 117 })
+                            <label for="SearchCondition_DisplaySortOrder3_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_2", @class = "magic-radio", tabindex = 118 })
+                            <label for="SearchCondition_DisplaySortOrder3_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            @Html.ActionLink("クリア", "Index", "D105036", new { area = "F105" }, new { @class = "btn btn-primary", tabindex = 120 })
+            <button type="button" class="btn btn-primary" id="Search" name="Search" tabindex="121">
+                検索
+            </button>
+        </div>
+    </div>
+}
+
+<div id="SearchResult">
+    @await Html.PartialAsync("_D105036SearchResult", Model)
+</div>
+
+<div class="table-responsive table-thead-container">
+    <div class="btn_area btn_group_right">
+        <button type="button" class="btn btn-primary" id="Back" name="Back">
+            戻る
+        </button>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        @* 検索結果ページャー *@
+        function resultPagerClick(url) {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: url,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea1').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        };
+
+        $(function () {
+
+            @* 検索処理 *@
+            $("#Search").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                @* １．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#D105036Form").valid();
+                if (!checkValid) {
+                @* １．１．１．エラーの場合
+                    エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                }
+
+                @* １．２．独自チェック *@
+                @* １．２．１．検索条件チェック *@
+                @* (1)	[画面：小地区（開始）]と[画面：小地区（終了）]に値が入力されている、かつ、[画面：小地区（開始）]＞[画面：小地区（終了）]の場合、
+                    エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").removeClass("input-validation-error");
+                var shochikuCdFrom = $('#SearchCondition_TodofukenDropDownList_ShochikuCdFrom').val();
+                var shochikuCdTo = $('#SearchCondition_TodofukenDropDownList_ShochikuCdTo').val();
+                if (shochikuCdFrom && shochikuCdTo && shochikuCdFrom > shochikuCdTo) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["小地区（終了）", "小地区（開始）"])");
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").addClass("input-validation-error");
+                }
+                @* (2)	[画面：組合員等コード（開始）]と[画面：組合員等コード（終了）]に値が入力されている、
+                    かつ、[画面：組合員等コード（開始）]＞[画面：組合員等コード（終了）]の場合、
+                    エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。 *@
+                $("#SearchCondition_KumiaiinToCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KumiaiinToCdTo").removeClass("input-validation-error");
+                var kumiaiintoCdFrom = $('#SearchCondition_KumiaiinToCdFrom').val();
+                var kumiaiintoCdTo = $('#SearchCondition_KumiaiinToCdTo').val();
+                if (kumiaiintoCdFrom && kumiaiintoCdTo && Number(kumiaiintoCdFrom) > Number(kumiaiintoCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["組合員等コード（終了）", "組合員等コード（開始）"])");
+                    $("#SearchCondition_KumiaiinToCdFrom").addClass("input-validation-error");
+                }
+
+
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                @* チェックエラーなしの場合 *@
+                if ($("#D105036Form").valid() && "" == message) {
+                    var url = "@Url.Action("Search", "D105036", new { area = "F105" })";
+                    var formData = new FormData($("#D105036Form").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false, //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        if (data.message != null) {
+                            $('#MessageArea1').addClass("text-danger").html(data.message);
+                            $("html, body").scrollTop($('#D105036Form').offset().top);
+                        }
+                        // 検索結果表示部の更新
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                    });
+                }
+            });
+
+            @* 大地区 *@
+            @* DropDownTemplates/_TodofukenDropDownList.cshtml 参照 *@
+
+            @* 小地区（開始）選択値変更 小地区（開始）の選択状態に応じ、小地区（終了）の選択値を変更する。 *@
+            $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").change(function () {
+                var fromVal = $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").val();
+                if (!fromVal) {
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val(0);
+
+                } else {
+                    if (!$("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val()) {
+                        $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val(fromVal);
+                    }
+                }
+            });
+
+            @* 組合員等コード（開始）入力値変更 組合員等コード（開始）の入力値を組合員等コード（終了）に反映する。 *@
+            $("#SearchCondition_KumiaiinToCdFrom").blur(function () {
+                var fromVal = $("#SearchCondition_KumiaiinToCdFrom").val();
+                if (!fromVal) {
+                    $("#SearchCondition_KumiaiinToCdTo").val("");
+
+                } else {
+                    if (!$("#SearchCondition_KumiaiinToCdTo").val()) {
+                        $("#SearchCondition_KumiaiinToCdTo").val(fromVal);
+                    }
+                }
+            });
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D105036", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+    </script>
+}

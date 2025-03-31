@@ -64,23 +64,10 @@ namespace NskAppModelLibrary.Models
         /// <summary>
         /// 類区分
         /// </summary>
+        [Required]
         [Column("類区分")]
         [StringLength(2)]
         public string 類区分 { get; set; }
-
-        /// <summary>
-        /// 評価地区コード
-        /// </summary>
-        [Column("評価地区コード")]
-        [StringLength(4)]
-        public string 評価地区コード { get; set; }
-
-        /// <summary>
-        /// 階層区分
-        /// </summary>
-        [Column("階層区分")]
-        [StringLength(3)]
-        public string 階層区分 { get; set; }
 
         /// <summary>
         /// 産地別銘柄コード

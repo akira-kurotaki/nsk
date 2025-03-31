@@ -1,5 +1,5 @@
 ﻿using CoreLibrary.Core.Validator;
-using NpgsqlTypes;
+using NskWeb.Common.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace NskWeb.Areas.F105.Models.D105030
@@ -7,11 +7,12 @@ namespace NskWeb.Areas.F105.Models.D105030
     /// <summary>
     /// 引受情報入力明細
     /// </summary>
-    public class D105030HikiukeRecord : D105030PagerRecord
+    public class D105030HikiukeRecord : BasePagerRecord
     {
         /// <summary>耕地番号</summary>
         [Display(Name = "耕地番号")]
         [Numeric]
+        [Required]
         [WithinDigitLength(5)]
         public string KouchiNo { get; set; } = string.Empty;
         /// <summary>地名地番</summary>
@@ -35,15 +36,32 @@ namespace NskWeb.Areas.F105.Models.D105030
         [DisplayFormat(DataFormatString = "{0:#,##0.0}", ApplyFormatInEditMode = true)]
         public decimal? TensakutoMenseki { get; set; }
         /// <summary>種類</summary>
-        public string Syurui { get; set; } = string.Empty;
+        [Display(Name = "種類")]
+        [Required]
+        public string? Syurui { get; set; } = string.Empty;
         /// <summary>区分</summary>
         public string Kbn { get; set; } = string.Empty;
         /// <summary>市町村</summary>
+        [Display(Name = "市町村")]
+        [Numeric]
+        [WithinDigitLength(5)]
         public string Shichoson { get; set; } = string.Empty;
+        /// <summary>市町村名</summary>
+        public string ShichosonNm { get; set; } = string.Empty;
         /// <summary>品種</summary>
+        [Display(Name = "品種")]
+        [Numeric]
+        [WithinDigitLength(3)]
         public string Hinsyu { get; set; } = string.Empty;
+        /// <summary>品種名</summary>
+        public string HinsyuNm { get; set; } = string.Empty;
         /// <summary>産地銘柄</summary>
+        [Display(Name = "産地銘柄")]
+        [Numeric]
+        [WithinDigitLength(5)]
         public string SanchiMeigara { get; set; } = string.Empty;
+        /// <summary>産地銘柄名</summary>
+        public string SanchiMeigaraNm { get; set; } = string.Empty;
         /// <summary>田畑</summary>
         public string Tahata { get; set; } = string.Empty;
         /// <summary>収量等級</summary>
@@ -51,6 +69,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>分筆番号</summary>
         [Display(Name = "分筆番号")]
         [Numeric]
+        [Required]
         [WithinDigitLength(4)]
         public string BunpitsuNo { get; set; } = string.Empty;
         /// <summary>統計単収</summary>
@@ -72,7 +91,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>所有者</summary>
         [Display(Name = "所有者")]
         [Numeric]
-        [WithinDigitLength(8)]
+        [WithinDigitLength(13)]
         public string Shoyusha { get; set; } = string.Empty;
         /// <summary>備考</summary>
         [Display(Name = "備考")]

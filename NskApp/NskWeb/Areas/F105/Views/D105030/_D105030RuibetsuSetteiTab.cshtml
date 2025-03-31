@@ -1,11 +1,12 @@
-﻿@model NskWeb.Areas.F105.Models.D105030.D105030Model
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105030.D105030Model
 @{
     var startIndex = 500;
     int tabIndex = startIndex;
 
-    string[] kengens = ["一部権限", "更新権限"];
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];// "更新権限";
     string buttonDisableAttr = "";
-    if (!kengens.Contains(Model.DispKengen))
+    if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
     {
         buttonDisableAttr = "disabled";
     }

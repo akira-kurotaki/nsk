@@ -222,6 +222,13 @@ namespace NskAppModelLibrary.Models
         public string 小地区コード { get; set; }
 
         /// <summary>
+        /// 支所コード
+        /// </summary>
+        [Column("支所コード")]
+        [StringLength(2)]
+        public string 支所コード { get; set; }
+
+        /// <summary>
         /// 合併時識別コード
         /// </summary>
         [Column("合併時識別コード")]

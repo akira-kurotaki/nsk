@@ -1,0 +1,98 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105036.D105036Model
+@{
+    var startIndex = 200;
+    int tabIndex = startIndex;
+
+    // ４．１．１．ログインユーザの権限、共済目的に基づき、活性・非活性制御を行う
+    string disableSelectButton = string.Empty;
+    if (Model.DispKengen != F105Const.Authority.Update)
+    {
+        disableSelectButton = "disabled";
+    }
+}
+
+<div class="table-thead-container">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("ResultPager", "resultPagerClick", Model.SearchResult.Pager)
+    </div>
+    @Html.HiddenFor(model => model.SearchResult.AllRecCount)
+    <table class="table table-bordered" style="">
+        <colgroup>
+            <col style="width: 5%;" />
+            <col style="width: 12%;" />
+            <col style="width: 25%;" />
+            <col style="width: 12%;" />
+            <col style="width: 12%;" />
+            <col style="width: 12%;" />
+            <col style="width: 12%;" />
+        </colgroup>
+
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th rowspan="2"></th>
+                <th rowspan="2">組合員等コード</th>
+                <th rowspan="2">氏名</th>
+                <th>支所</th>
+                <th>大地区</th>
+                <th>小地区</th>
+                <th>市町村</th>
+            </tr>
+            <tr>
+                <th>引受停止</th>
+                <th>解除</th>
+                <th colspan="2">耕地情報有無</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.SearchResult.DispRecords.Count(); i++)
+            {
+                <!-- 行ｎ -->
+                <tr>
+                    <td rowspan="2">
+                        @using (Html.BeginForm("MoveKanyuMoushikomi", "D105036", FormMethod.Post, new { id = "D105036ButtonForm", spellcheck = "false", autocomplete = "off" }))
+                        {
+                            <input type="hidden" name="guid" value="@Model.SearchResult.DispRecords[i].GUID" />
+                            <button type="submit" class="btn btn-primary" @disableSelectButton>
+                                選択
+                            </button>
+                        }
+                    </td>
+                    <td rowspan="2">
+                        @Model.SearchResult.DispRecords[i].KumiaiintoCd
+                    </td>
+                    <td rowspan="2">
+                        @Model.SearchResult.DispRecords[i].FullNm
+                    </td>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].ShishoCd @Model.SearchResult.DispRecords[i].ShishoNm
+                    </td>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].DaichikuCd @Model.SearchResult.DispRecords[i].DaichikuNm
+                    </td>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].ShochikuCd @Model.SearchResult.DispRecords[i].ShochikuNm
+                    </td>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].ShichosonCd @Model.SearchResult.DispRecords[i].ShichosonNm
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].HikiukeTeishi
+                    </td>
+                    <td>
+                        @Model.SearchResult.DispRecords[i].Kaijo
+                    </td>
+                    <td colspan="2">
+                        @Model.SearchResult.DispRecords[i].KouchiUmu
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("ResultPager", "resultPagerClick", Model.SearchResult.Pager)
+    </div>
+</div>
+

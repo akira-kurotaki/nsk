@@ -1,0 +1,114 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105190.D105190Model
+@{
+    var startIndex = 200;
+    int tabIndex = startIndex;
+
+    // ４．１．１．ログインユーザの権限、共済目的に基づき、活性・非活性制御を行う
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];//  "更新権限"];
+}
+<div class="clearfix"></div>
+<div>
+    @Html.MessageAreaFor(model => model.MessageArea2, "", new { id = "MessageArea2" })
+</div>
+@for (int i = 0; i < Model.SearchResult.DispRecords.Count; i++)
+{
+    <div>@Html.ValidationMessageFor(model => model.SearchResult.DispRecords[i].KumiaiintoCd, null, new { @class = "text-danger" })</div>
+    <div>@Html.ValidationMessageFor(model => model.SearchResult.DispRecords[i].KyousaiKingaku, null, new { @class = "text-danger" })</div>
+}
+<div class="table-thead-container">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("ResultPager", "resultPagerClick", Model.SearchResult.Pager)
+    </div>
+    @Html.HiddenFor(model => model.SearchResult.AllRecCount)
+    <table class="table table-bordered" style="">
+        <colgroup>
+            <col style="width: 5%;" />
+            <col style="width: 20%;" />
+            <col style="width: 20%;" />
+            <col style="width: 12%;" />
+        </colgroup>
+
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th rowspan="2">選択</th>
+                <th rowspan="2">組合員等コード<i class="required">必須</i></th>
+                <th rowspan="2">氏名</th>
+                <th rowspan="2">共済金額<i class="required">必須</i></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.SearchResult.DispRecords.Count(); i++)
+            {
+                string hiddenRow = string.Empty;
+                if (Model.SearchResult.DispRecords[i].IsDelRec)
+                {
+                    hiddenRow = "display: none;";
+                }
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow">
+                    <td>
+                        @{
+                            Dictionary<string, object> checkBoxAttrs = new()
+                            {
+                                { "class", "form-check" },
+                                { "tabindex", tabIndex++ }
+                            };
+                            if (!kengens.Contains(Model.DispKengen))
+                                checkBoxAttrs.Add("disabled", "disabled");
+                        }
+                        @Html.HiddenFor(model => model.SearchResult.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.SearchResult.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.SearchResult.DispRecords[i].Xmin)
+                        @Html.HiddenFor(model => model.SearchResult.DispRecords[i].FullNm)
+                        @Html.CheckBoxFor(model => model.SearchResult.DispRecords[i].CheckSelect, checkBoxAttrs)
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> kumiaiintoAttrs = new()
+                            {
+                                { "class", "form-control inputrequired" },
+                                { "tabindex", tabIndex++ },
+                                { "type", "text" },
+                                { "maxlength", 13 }
+                            };
+                            if (!Model.SearchResult.DispRecords[i].IsNewRec || !kengens.Contains(Model.DispKengen))
+                                kumiaiintoAttrs.Add("readonly", "readonly");
+                        }
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.SearchResult.DispRecords[i].KumiaiintoCd, "",
+                                     new { htmlAttributes = kumiaiintoAttrs })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showKumiaiintoCdSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td id="@Html.IdFor(model => model.SearchResult.DispRecords[i].FullNm)">
+                        @Html.DisplayTextFor(model => model.SearchResult.DispRecords[i].FullNm)
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> kyousaiKingakuAttrs = new()
+                            {
+                                { "class", "form-control text-end number-add-comma inputrequired" },
+                                { "tabindex", tabIndex++ },
+                                { "type", "text" },
+                                { "maxlength", 13 }
+                            };
+                            if (!kengens.Contains(Model.DispKengen))
+                                kyousaiKingakuAttrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.SearchResult.DispRecords[i].KyousaiKingaku, "",
+                                 new { htmlAttributes = kyousaiKingakuAttrs })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("ResultPager", "resultPagerClick", Model.SearchResult.Pager)
+    </div>
+</div>
+

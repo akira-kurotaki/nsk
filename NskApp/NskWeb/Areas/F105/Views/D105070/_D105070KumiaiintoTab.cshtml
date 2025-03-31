@@ -1,0 +1,270 @@
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105070.D105070Model
+@{
+    var startIndex = 400;
+    int tabIndex = startIndex;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];// "更新権限";
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+
+<div id="Kumiaiinto" class="tab-pane" role="tabpanel" aria-labelledby="KumiaiintoTab">
+    <!-- 組合員等毎設定 -->
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "KumiaiintoForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+        @Html.HiddenFor(model => model.KumiaiintoSettei.Exists)
+        @Html.HiddenFor(model => model.KumiaiintoSettei.Xmin)
+
+        <div class="table-thead-container">
+            <h4 class="sub_title">組合員等毎設定入力</h4>
+            <div class="mb-3">
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KanyuState, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KanyuKeitai, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.ChiikiSyudanCd, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.WaribikiWariai, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.WaribikiKingaku, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.WarimashiWariai, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.WarimashiKingaku, null, new { @class = "text-danger" })</div>
+                <div>@Html.ValidationMessageFor(model => model.KumiaiintoSettei.KyotuShinseitoWaribikiRiyu, null, new { @class = "text-danger" })</div>
+                <div>@Html.MessageAreaFor(model => model.KumiaiintoSettei.MessageArea4, "", new { @class = "text-danger", id = "MessageArea4" })</div>
+            </div>
+            <br />
+            <table class="table table-condensed table-sub-bordered">
+                <colgroup>
+                    <col class="colgroup_background" style="width: 12%;" />
+                    <col class="" style="width: 25%;" />
+                    <col class="colgroup_background" style="width: 5%;" />
+                    <col class="" style="width: 15%;" />
+                    <col class="colgroup_background" style="width: 5%;" />
+                    <col class="" style="width: 15%;" />
+                </colgroup>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KanyuState,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KanyuState))
+                    </td>
+                    <td>
+                        <div class="text-center">
+                            <fieldset>
+                                <legend class="visually-hidden">加入状況</legend>
+                                @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.MEMBER.ToString(),
+                                                  new { @id = "KumiaiintoSettei_KanyuState_1", @class = "magic-radio", tabindex = tabIndex++ })
+                                <label for="KumiaiintoSettei_KanyuState_1">加入</label>
+                                @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NO_MEMBER.ToString(),
+                                                  new { @id = "KumiaiintoSettei_KanyuState_2", @class = "magic-radio", tabindex = tabIndex++ })
+                                <label for="KumiaiintoSettei_KanyuState_2">未加入</label>
+                            </fieldset>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KanyuKeitai,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KanyuKeitai))
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.KumiaiintoSettei.KanyuKeitai,
+                                          Model.KumiaiintoSettei.KanyuKeitaiList,
+                                          "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KoufuShinseishaKanriCd,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KoufuShinseishaKanriCd))
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.KumiaiintoSettei.KoufuShinseishaKanriCd, "",
+                                 new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++ } })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KyosaiKingakuKaiteijiCd,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KyosaiKingakuKaiteijiCd))
+                    </td>
+                    <td>
+                        @Html.DropDownListFor(model => model.KumiaiintoSettei.KyosaiKingakuKaiteijiCd,
+                                          Model.KumiaiintoSettei.KyosaiKingakuKaiteijiList,
+                                          "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.JidoKeizoku,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.JidoKeizoku))
+                    </td>
+                    <td>
+                        @Html.CheckBoxFor(model => model.KumiaiintoSettei.JidoKeizoku,
+                                          new { @class = "form-check", tabindex = tabIndex++ })
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.Kaijo,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.Kaijo))
+                    </td>
+                    <td>
+                        @Model.KumiaiintoSettei.Kaijo
+                    </td>
+                    <td colspan="2">
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KaijoHiduke,
+                                          Html.DisplayNameFor(model => model.KumiaiintoSettei.KaijoHiduke))
+                    </td>
+                    <td colspan="2">
+                        @DateUtil.GetJapaneseDate(Model.KumiaiintoSettei.KaijoHiduke)
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.ChiikiSyudanCd,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.ChiikiSyudanCd))
+                    </td>
+                    <td>
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.KumiaiintoSettei.ChiikiSyudanCd, "",
+                                     new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showChiikiSyudanCdSearch();">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="4" id="@Html.IdFor(model => model.KumiaiintoSettei.ChiikiSyudanNm)">
+                        @Model.KumiaiintoSettei.ChiikiSyudanNm
+                    </td>
+                </tr>
+                <tr>
+                    <td rowspan="2">
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho))
+                    </td>
+                    <td rowspan="2">
+                        @Html.DropDownListFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho,
+                                 Model.KumiaiintoSettei.KyotuShinseitoWaribikiHouhoList,
+                                 "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                    </td>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.WaribikiWariai,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.WaribikiWariai))
+                    </td>
+                    <td>
+                        @{
+                            Dictionary<string, object> attrs = new() {
+                                { "class", "form-control text-end number-add-comma"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"},
+                                { "maxlength", "3"},
+                                { "inputmode", "numeric"}
+                            };
+                            if (Model.KumiaiintoSettei.KyotuShinseiWaribikiHouho != "99")
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.KumiaiintoSettei.WaribikiWariai, "",
+                                 new { htmlAttributes = attrs })
+
+                    </td>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.WaribikiKingaku,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.WaribikiKingaku))
+                    </td>
+                    <td>
+                        @{
+                            attrs = new() {
+                                { "class", "form-control text-end number-add-comma"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"},
+                                { "maxlength", "8"},
+                                { "inputmode", "numeric"}
+                            };
+                            if (Model.KumiaiintoSettei.KyotuShinseiWaribikiHouho != "99")
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.KumiaiintoSettei.WaribikiKingaku, "",
+                                 new { htmlAttributes = attrs })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.WarimashiWariai,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.WarimashiWariai))
+                    </td>
+                    <td>
+                        @{
+                            attrs = new() {
+                                { "class", "form-control text-end number-add-comma"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"},
+                                { "maxlength", "3"},
+                                { "inputmode", "numeric"}
+                            };
+                            if (Model.KumiaiintoSettei.KyotuShinseiWaribikiHouho != "99")
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.KumiaiintoSettei.WarimashiWariai, "",
+                                 new { htmlAttributes = attrs })
+
+                    </td>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.WarimashiKingaku,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.WarimashiKingaku))
+                    </td>
+                    <td>
+                        @{
+                            attrs = new() {
+                                { "class", "form-control text-end number-add-comma"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"},
+                                { "maxlength", "8"},
+                                { "inputmode", "numeric"}
+                            };
+                            if (Model.KumiaiintoSettei.KyotuShinseiWaribikiHouho != "99")
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.KumiaiintoSettei.WarimashiKingaku, "",
+                                 new { htmlAttributes = attrs })
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        @Html.LabelFor(model => model.KumiaiintoSettei.KyotuShinseitoWaribikiRiyu,
+                                 Html.DisplayNameFor(model => model.KumiaiintoSettei.KyotuShinseitoWaribikiRiyu))
+                    </td>
+                    <td colspan="5">
+                        @{
+                            attrs = new() {
+                                { "class", "form-control"},
+                                { "tabindex", tabIndex++},
+                                { "type", "text"},
+                            };
+                            if (Model.KumiaiintoSettei.KyotuShinseiWaribikiHouho != "99")
+                                attrs.Add("readonly", "readonly");
+                        }
+                        @Html.EditorFor(model => model.KumiaiintoSettei.KyotuShinseitoWaribikiRiyu, "",
+                                 new { htmlAttributes = attrs })
+
+                    </td>
+                </tr>
+            </table>
+            <br />
+            <div class="table-responsive table-thead-container">
+                <div class="btn_area btn_group_right">
+                    <button type="button" class="btn btn-primary" id="RegistKanyuJokyo" name="RegistKanyuJokyo" tabindex=@tabIndex++ @buttonDisableAttr>
+                        登録
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

@@ -257,7 +257,8 @@ namespace NskReportMain.Controllers
                     var zipFilePath = ZipUtil.CreateZip(printTempFolder);
 
                     // Zipファイルを引数：帳票パスに移動する
-                    FolderUtil.MoveFile(zipFilePath, filePath, userId, (batchId ?? 0));
+                    var destFile = new FileInfo(filePath);
+                    FolderUtil.MoveFile(zipFilePath, destFile.DirectoryName, userId, (batchId ?? 0));
 
                     // PDF出力用一時フォルダを削除する
                     FolderUtil.DeleteTempFolder(printTempFolder);

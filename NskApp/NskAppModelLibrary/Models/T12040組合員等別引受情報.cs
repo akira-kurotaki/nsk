@@ -316,10 +316,29 @@ namespace NskAppModelLibrary.Models
         public Decimal? 組合員等割 { get; set; }
 
         /// <summary>
+        /// 共通申請等割引額
+        /// </summary>
+        [Column("共通申請等割引額")]
+        public Decimal? 共通申請等割引額 { get; set; }
+
+        /// <summary>
         /// 賦課金計
         /// </summary>
         [Column("賦課金計")]
         public Decimal? 賦課金計 { get; set; }
+
+        /// <summary>
+        /// 賦課金大量データ取込フラグ
+        /// </summary>
+        [Column("賦課金大量データ取込フラグ")]
+        [StringLength(1)]
+        public string 賦課金大量データ取込フラグ { get; set; }
+
+        /// <summary>
+        /// 賦課金大量データ取込日時
+        /// </summary>
+        [Column("賦課金大量データ取込日時")]
+        public DateTime? 賦課金大量データ取込日時 { get; set; }
 
         /// <summary>
         /// 納入額

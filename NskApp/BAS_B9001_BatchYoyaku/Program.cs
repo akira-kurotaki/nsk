@@ -322,7 +322,7 @@ namespace BAS_B9001_BatchYoyaku
             if (!string.IsNullOrEmpty(timeString))
             {
                 var dateStr = nowStr + CoreConst.HALF_WIDTH_SPACE + timeString;
-                if (IsDateTime(dateStr, "yyyy/MM/dd hh:mm:ss"))
+                if (IsDateTime(dateStr, "yyyy/MM/dd HH:mm:ss"))
                 {
                     scheDateTime = DateTime.Parse(dateStr);
                 }
@@ -562,7 +562,7 @@ namespace BAS_B9001_BatchYoyaku
 
             sql.Append("UPDATE t_sche_batch_run_manage ");
             sql.Append("SET");
-            sql.Append("    batch_run_date = @batch_run_date ");
+            sql.Append("    batch_run_date = @BatchRunDate ");
             sql.Append("WHERE");
             sql.Append("    system_kbn = @SystemKbn ");
             sql.Append("    AND batch_nm = @BatchNm ");

@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="19143.36" DocumentName="NSKR-R-組合等交付金申請書" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; ddo-char-set: 1" />
+    <Style Name="Heading1" Value="font-family: Arial; font-size: 16pt; font-style: normal; font-weight: bold" />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-size: 14pt; font-style: italic; font-weight: bold" />
+    <Style Name="Heading3" Value="font-family: Arial; font-size: 13pt; font-style: normal; font-weight: bold" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="6705.32" BackColor="16777215">
+      <Control Type="AR.Field" Name="txt見出し" Tag="" Left="16901.28" Top="5116.32" Width="1531" Height="1589" Text="&#xD;&#xA;見出し（今回交付申請額又は今回返還申請額）" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: top; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="ラベル282" Tag="" Left="7710" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;特定組合等&#xD;&#xA;（組合等）&#xD;&#xA;負担金交付&#xD;&#xA;対象金額" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト4" Tag="" Left="6180" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;組合等別&#xD;&#xA;国庫負担金" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト0" Tag="" Left="1590" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;引受収量" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト1" Tag="" Left="60" Top="5100" Width="1531" Height="1588" Caption="&#xD;&#xA;引受面積" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト6" Tag="" Left="3120" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;共済金額" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト7" Tag="" Left="4650" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;（組合等別&#xD;&#xA;連合会）&#xD;&#xA;保険料" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト8" Tag="" Left="9240" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;徴収すべき&#xD;&#xA;共済掛金" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト12" Tag="" Left="10770" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;左のうち&#xD;&#xA;徴収済額" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト14" Tag="" Left="12300" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;共済掛金&#xD;&#xA;徴収割合" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト20" Tag="" Left="15360" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;既受領交付金&#xD;&#xA;の金額" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト189" Tag="" Left="165" Top="4110" Width="1545" Height="269" Caption="負担金交付区分" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="線196" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="60" Y1="5105" X2="18222" Y2="5105" />
+      <Control Type="AR.Line" Name="線198" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="60" Y1="5100" X2="60" Y2="6688" />
+      <Control Type="AR.Line" Name="線199" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1590" Y1="5100" X2="1590" Y2="6689" />
+      <Control Type="AR.Line" Name="線200" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="3120" Y1="5100" X2="3120" Y2="6689" />
+      <Control Type="AR.Line" Name="線203" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4650" Y1="5100" X2="4650" Y2="6689" />
+      <Control Type="AR.Line" Name="線204" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6180" Y1="5100" X2="6180" Y2="6689" />
+      <Control Type="AR.Line" Name="線205" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7710" Y1="5100" X2="7710" Y2="6689" />
+      <Control Type="AR.Line" Name="線197" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="64" Y1="5100" X2="18256" Y2="5100" />
+      <Control Type="AR.Label" Name="テキスト486" Tag="" Left="0" Top="0" Width="1545" Height="240" Caption="別記様式第１号" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="テキスト234" Tag="" Left="5190" Top="6240" Width="405" Height="240" Caption="（A）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト232" Tag="" Left="6750" Top="6240" Width="447.1204" Height="240" Caption="（B）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="線255" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="60" Y1="6690" X2="18431" Y2="6690" />
+      <Control Type="AR.Label" Name="lbl日付" Tag="" Left="15929.28" Top="1005.12" Width="2344.319" Height="284" Caption="令和07年　02月　19日" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="ラベル262" Tag="" Left="1560" Top="0" Width="1965" Height="240" Caption="（第４第１項関係）" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル263" Tag="" Left="165" Top="1680" Width="1755" Height="240" Caption="農林水産大臣　殿" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル270" Tag="" Left="9240" Top="3525" Width="285" Height="240" Caption="記" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt負担金交付区分" DataField="負担金交付区分" Tag="" Left="1919.52" Top="4095.36" Width="1545" Height="284" Text="123456789" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: left; ddo-char-set: 1" />
+      <Control Type="AR.Line" Name="直線273" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="90" Y1="3975" X2="90" Y2="4525" />
+      <Control Type="AR.Line" Name="直線274" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1815" Y1="3975" X2="1815" Y2="4525" />
+      <Control Type="AR.Line" Name="直線275" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="3600" Y1="3975" X2="3600" Y2="4525" />
+      <Control Type="AR.Line" Name="直線278" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="90" Y1="3975" X2="3605" Y2="3975" />
+      <Control Type="AR.Line" Name="直線279" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="90" Y1="4530" X2="3605" Y2="4530" />
+      <Control Type="AR.Label" Name="ラベル283" Tag="" Left="9765" Top="6240" Width="405" Height="240" Caption="（Ｄ）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="テキスト233" Tag="" Left="7875" Top="6240" Width="1215" Height="225" Caption="(C) = (B) - (A)" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-size: 9pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル284" Tag="" Left="11340" Top="6240" Width="405" Height="240" Caption="（E）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル286" Tag="" Left="12450" Top="6240" Width="1215" Height="225" Caption="(F) = (E) / (D)" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-size: 9pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル287" Tag="" Left="13830" Top="5100" Width="1531" Height="1589" Caption="&#xD;&#xA;特定組合等&#xD;&#xA;（組合等）&#xD;&#xA;交付金の金額" Style="color: Black; font-family: ＭＳ ゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル288" Tag="" Left="13950" Top="6240" Width="1215" Height="225" Caption="(G) = (C) X (F)" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-size: 9pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル289" Tag="" Left="15930" Top="6240" Width="405" Height="240" Caption="（H）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル290" Tag="" Left="17205" Top="6240" Width="855" Height="240" Caption="（G）-（H）" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="直線291" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="61" Y1="5100" X2="18432" Y2="5100" />
+      <Control Type="AR.Line" Name="線201" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9240" Y1="5100" X2="9240" Y2="6689" />
+      <Control Type="AR.Line" Name="線202" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10770" Y1="5100" X2="10770" Y2="6689" />
+      <Control Type="AR.Line" Name="線206" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="12300" Y1="5100" X2="12300" Y2="6689" />
+      <Control Type="AR.Line" Name="線207" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13830" Y1="5100" X2="13830" Y2="6689" />
+      <Control Type="AR.Line" Name="線208" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="15360" Y1="5100" X2="15360" Y2="6689" />
+      <Control Type="AR.Line" Name="線210" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16890" Y1="5100" X2="16890" Y2="6689" />
+      <Control Type="AR.Line" Name="線211" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="18420" Y1="5100" X2="18420" Y2="6689" />
+      <Control Type="AR.Line" Name="線212" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13860" Y1="5100" X2="13860" Y2="6689" />
+      <Control Type="AR.Field" Name="txt組合等正式名称" DataField="組合等正式名称" Tag="" Left="7485.121" Top="1919.52" Width="10224" Height="284" Text="組合等正式名称〇〇■〇〇〇〇〇〇〇〇〇■〇〇〇〇〇〇〇〇〇■〇〇〇〇〇〇〇〇〇■〇〇〇〇〇〇〇〇〇■" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: left; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="txt組合等長名" DataField="組合等長名" Tag="" Left="15719.04" Top="2270.88" Width="2073.561" Height="284" Text="〇〇〇〇○〇〇■〇〇" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: left; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label1" Tag="" Left="17792.64" Top="2270.88" Width="480.9595" Height="283.6802" Caption="　印" Style="color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label2" Tag="" Left="18001.44" Top="714.2401" Width="272.1588" Height="260.64" Caption="号" Style="color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="Fタイトル" Tag="" Left="3525.12" Top="289.44" Width="12098.88" Height="424.8" Text="令和07年度農作物共済に係る特定組合等（組合等）交付金交付申請書" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 18pt; font-weight: bold; text-align: center; text-decoration: none; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt文言" Left="89.28001" Top="2835.36" Width="17500.32" Height="312.48" Text="　令和07年産水稲及び陸稲（麦）に係る特定組合等（組合等）交付金については、下記の実績に基づき金123,456,789,012円の交付を受けたく申請する。" Style="font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: left; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="txt文書番号" Left="17405.28" Top="714.2401" Width="596.158" Height="260.64" Text="12345" OutputFormat="####0" Style="font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label4" Left="13311.36" Top="2266.56" Width="2407.681" Height="288.0001" Caption="組合長理事（市町村長）　" Style="font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; ddo-char-set: 1" />
+      <Control Type="AR.Label" Name="Label3" Tag="" Left="17120.16" Top="714.2401" Width="285.1199" Height="260.64" Caption="第" Style="color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; ddo-char-set: 1" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="0" GroupKeepTogether="2" BackColor="16777215" NewPage="1" CanGrow="0" />
+    <Section Type="Detail" Name="詳細" Height="1162" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Field" Name="F今回交付申請額又は今回返還申請額" Tag="" Left="16901.28" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F既受領交付金の金額" DataField="既受領交付金の金額" Tag="" Left="15360" Top="0" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F特定組合等交付金の金額" DataField="特定組合等組合等交付金の金額" Tag="" Left="13834.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F共済掛金徴収割合" DataField="共済掛金徴収割合" Tag="" Left="12304.08" Top="27.36" Width="1531" Height="1134" Text="100.00" OutputFormat="0.00" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F左のうち徴収済額" DataField="左のうち徴収済額" Tag="" Left="10774.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F組合員等負担共済掛金" DataField="徴収すべき共済掛金" Tag="" Left="9244.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F組合等別連合会保険料" DataField="組合等別連合会保険料" Tag="" Left="4654.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F組合等別国庫負担金" DataField="組合等別国庫負担金" Tag="" Left="6184.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F共済金額" DataField="共済金額" Tag="" Left="3125.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F特定組合負担金交付対象金額" DataField="特定組合等組合等負担金交付対象金額" Tag="" Left="7715.08" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="F引受収量" DataField="引受収量" Tag="" Left="1559.52" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123" OutputFormat="#,##0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Line" Name="線240" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7711" Y1="0" X2="7711" Y2="1134" />
+      <Control Type="AR.Line" Name="線232" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="12300" Y1="0" X2="12300" Y2="1134" />
+      <Control Type="AR.Line" Name="線230" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16891" Y1="0" X2="16891" Y2="1134" />
+      <Control Type="AR.Line" Name="線229" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="15360" Y1="0" X2="15360" Y2="1134" />
+      <Control Type="AR.Line" Name="線228" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13860" Y1="0" X2="13860" Y2="1134" />
+      <Control Type="AR.Line" Name="線227" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13830" Y1="0" X2="13830" Y2="1134" />
+      <Control Type="AR.Line" Name="線224" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10770" Y1="0" X2="10770" Y2="1134" />
+      <Control Type="AR.Line" Name="線217" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4650" Y1="0" X2="4650" Y2="1134" />
+      <Control Type="AR.Label" Name="テキスト251" Tag="" Left="4290" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="テキスト245" Tag="" Left="13485" Top="113" Width="270" Height="240" Caption="％" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Field" Name="F引受面積" DataField="引受面積" Tag="" Left="64.08005" Top="27.36" Width="1531" Height="1134" Text="1,234,567,890,123.4" OutputFormat="#,##0.0" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Line" Name="線241" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="60" Y1="0" X2="60" Y2="1134" />
+      <Control Type="AR.Line" Name="線220" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1590" Y1="0" X2="1590" Y2="1134" />
+      <Control Type="AR.Line" Name="線214" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="60" Y1="1140" X2="18431" Y2="1140" />
+      <Control Type="AR.Line" Name="線221" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="3121" Y1="0" X2="3121" Y2="1134" />
+      <Control Type="AR.Line" Name="線218" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6180" Y1="0" X2="6180" Y2="1134" />
+      <Control Type="AR.Line" Name="線223" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9240" Y1="0" X2="9240" Y2="1134" />
+      <Control Type="AR.Line" Name="直線292" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="18421" Y1="0" X2="18421" Y2="1134" />
+      <Control Type="AR.Label" Name="ラベル293" Tag="" Left="1350" Top="113" Width="180" Height="240" Caption="ａ" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル294" Tag="" Left="2805" Top="113" Width="255" Height="240" Caption="kg" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル295" Tag="" Left="5805" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル296" Tag="" Left="7365" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル297" Tag="" Left="8880" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル298" Tag="" Left="10425" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル299" Tag="" Left="11970" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル300" Tag="" Left="14970" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル301" Tag="" Left="16530" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル302" Tag="" Left="18030" Top="113" Width="270" Height="240" Caption="円" Style="background-color: White; color: Black; font-family: ＭＳ Ｐゴシック; font-weight: bold; text-align: right" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="329" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Label" Name="テキスト96" Tag="" Left="480" Top="60" Width="3435" Height="269" Caption="（注）　不要の事項は抹消すること" Style="background-color: White; color: Black; font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: left; ddo-char-set: 1" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="453" BackColor="16777215">
+      <Control Type="AR.ReportInfo" Name="ReportInfo1" Left="16992" Top="0" Width="1440" Height="288" FormatString="{PageNumber} / {PageCount}" Style="font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; vertical-align: middle; ddo-char-set: 1" />
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[public void PageHeader_Format()
+{
+	
+}
+
+
+]]></Script>
+  <PageSettings LeftMargin="853" RightMargin="853" TopMargin="1420" BottomMargin="1420" />
+  <Parameters />
+</ActiveReportsLayout>

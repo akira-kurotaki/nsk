@@ -5,7 +5,7 @@
     int tabIndex = startIndex;
 
     bool disableSanchiMeigara = false;
-    if (Model.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_RIKUTO)
+    if (Model.KyosaiMokutekiCd == $"{(int)NskCommonLibrary.Core.Consts.CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
     {
         disableSanchiMeigara = true;
     }
@@ -150,27 +150,51 @@
                 </tr>
                 <tr style="@hiddenRow">
                     <td colspan="2">
-                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Shichoson,
-                                                               Model.HikiukeSearchResult.ShichosonList,
-                                                               "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Shichoson, "",
+                                     new { htmlAttributes = new { @class = "form-control w-25", tabindex = tabIndex++, Type = "text" } })
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].ShichosonNm, "",
+                                     new { htmlAttributes = new { @class = "form-control w-50", Type = "text", @readonly = true } })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showShichosonCdSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td colspan="2">
                         @{
                             Dictionary<string, object> attrs = new() {
-                                { "class", "form-select form-select-lg"},
-                                { "tabindex", tabIndex++}
+                                { "class", "form-control w-25"},
+                                { "tabindex", tabIndex++},
                             };
                             if (disableSanchiMeigara)
-                                attrs.Add("disabled", "disabled");
+                                attrs.Add("readonly", "readonly");
                         }
-                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].SanchiMeigara,
-                                    Model.HikiukeSearchResult.SanchiMeigaraList,
-                                    "", attrs)
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].SanchiMeigara, "",
+                                     new { htmlAttributes = attrs })
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].SanchiMeigaraNm, "",
+                                     new { htmlAttributes = new { @class = "form-control w-50", Type = "text", @readonly = true } })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showSanchiMeigaraCdSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td>
-                        @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Hinsyu,
-                                    Model.HikiukeSearchResult.HinsyuList,
-                                    "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Hinsyu, "",
+                                     new { htmlAttributes = new { @class = "form-control w-25", tabindex = tabIndex++, Type = "text" } })
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].HinsyuNm, "",
+                                        new { htmlAttributes = new { @class = "form-control w-50", Type = "text", @readonly = true } })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showHinsyuCdSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Tahata,
@@ -215,8 +239,15 @@
                                     "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
-                        @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Shoyusha, "",
-                                    new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                        <div class="input-group">
+                            @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Shoyusha, "",
+                                     new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text" } })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="showShoyushaSearch(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
                     </td>
                     <td colspan="2">
                         @Html.EditorFor(model => model.HikiukeSearchResult.DispRecords[i].Bikou, "",

@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("t_21030_組合員等申告_pq")]
-    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(組合員等コード), nameof(統計単位地域コード))]
+    [PrimaryKey(nameof(組合等コード), nameof(年産), nameof(共済目的コード), nameof(類区分), nameof(組合員等コード))]
     public class T21030組合員等申告Pq : ModelBase
     {
         /// <summary>
@@ -54,18 +54,10 @@ namespace NskAppModelLibrary.Models
         public string 組合員等コード { get; set; }
 
         /// <summary>
-        /// 統計単位地域コード
-        /// </summary>
-        [Required]
-        [Column("統計単位地域コード", Order = 6)]
-        [StringLength(5)]
-        public string 統計単位地域コード { get; set; }
-
-        /// <summary>
         /// 申告区分
         /// </summary>
         [Column("申告区分")]
-        [StringLength(3)]
+        [StringLength(1)]
         public string 申告区分 { get; set; }
 
         /// <summary>

@@ -1,0 +1,1332 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F105.Consts
+@using NskWeb.Areas.F105.Models.D105070
+@model D105070Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Part ,F105Const.Authority.Update];// "一部権限", "更新権限";
+    string checkButtonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
+    {
+        checkButtonDisableAttr = "disabled";
+    }
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>加入申込書入力（麦）</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+    <tr>
+        <td>組合員等コード：</td>
+        <td colspan="2">@Model.KumiaiinToCd</td>
+    </tr>
+    <tr>
+        <td>氏名：</td>
+        <td colspan="2">@Model.FullNm</td>
+    </tr>
+    <tr>
+        <td>電話番号：</td>
+        <td colspan="2">@Model.Tel</td>
+    </tr>
+    <tr>
+        <td>支所：</td>
+        <td>@Model.ShishoCd</td>
+        <td>@Model.ShishoNm</td>
+    </tr>
+    <tr>
+        <td>市町村：</td>
+        <td>@Model.ShichosonCd</td>
+        <td>@Model.ShichosonNm</td>
+    </tr>
+    <tr>
+        <td>大地区：</td>
+        <td>@Model.DaichikuCd</td>
+        <td>@Model.DaichikuNm</td>
+    </tr>
+    <tr>
+        <td>小地区：</td>
+        <td>@Model.ShochikuCd</td>
+        <td>@Model.ShochikuNm</td>
+    </tr>
+    <tr>
+        <td>合併時識別：</td>
+        <td colspan="2">@Model.GappeijiShikibetu</td>
+    </tr>
+</table>
+<br />
+
+<ul id="myTab" class="nav nav-tabs mb-3" role="tablist">
+    <li role="presentation" class="nav-item">
+        <button type="button" id="HikiukeTab" class="nav-link active" data-bs-toggle="tab" data-bs-target="#Hikiuke" role="tab" aria-controls="Hikiuke" aria-selected="true">
+            引受情報入力
+        </button>
+    </li>
+    <li role="presentation" class="nav-item">
+        <button type="button" id="KumiaiintoTab" class="nav-link" data-bs-toggle="tab" data-bs-target="#Kumiaiinto" role="tab" aria-controls="Kumiaiinto" aria-selected="false">
+            組合員等毎設定
+        </button>
+    </li>
+    <li role="presentation" class="nav-item">
+        <button type="button" id="RuibetuSetteiTab" class="nav-link" data-bs-toggle="tab" data-bs-target="#RuibetuSettei" role="tab" aria-controls="RuibetuSettei" aria-selected="false">
+            類別設定
+        </button>
+    </li>
+</ul>
+
+<div id="myTabContent" class="tab-content p-2 ">
+    <!-- 引受情報入力 -->
+    @await Html.PartialAsync("_D105070HikiukeInputTab", Model)
+
+    <!-- 組合員等毎設定 -->
+    @await Html.PartialAsync("_D105070KumiaiintoTab", Model)
+
+    <!-- 類別設定 -->
+    @await Html.PartialAsync("_D105070RuibetsuSetteiTab", Model)
+</div>
+<br/>
+<div class="table-responsive table-thead-container">
+    <div class="btn_area btn_group_right">
+        <button type="button" class="btn btn-primary" id="CheckHikiuke" name="CheckHikiuke" @checkButtonDisableAttr>
+            チェック処理実行
+        </button>
+        <button type="button" class="btn btn-primary" id="Back" name="Back">
+            戻る
+        </button>
+    </div>
+</div>
+<input type="hidden" id="returnValue" />
+
+@* 引受情報登録確認ダイアログ *@
+@Html.Confirm("RegistHikiukeConfirm", "RegistHikiukeConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+@* 組合員等毎設定登録確認ダイアログ *@
+@Html.Confirm("RegistKanyuJokyoConfirm", "RegistKanyuJokyoConfirmOK", "確認",
+        MessageUtil.Get(Model.KumiaiintoSettei.Exists ? "MQ10018" : "MQ10019"), "OK", "キャンセル")
+
+@* 類別設定登録確認ダイアログ *@
+@Html.Confirm("RegistRuibetsuConfirm", "RegistRuibetsuConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+
+
+@* 引受検索結果ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("HikiukePagerDiscardEditsConfirm", "HikiukePagerConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+@* 類別設定ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("RuibetsuPagerDiscardEditsConfirm", "RuibetsuPagerConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+
+@* クリア 編集内容破棄確認ダイアログ *@
+@Html.Confirm("ClearConfirm", "ClearConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "初期画面", "保存"), "OK", "キャンセル")
+@* 検索 編集内容破棄確認ダイアログ *@
+@Html.Confirm("SearchConfirm", "SearchConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "新しい検索結果", "保存"), "OK", "キャンセル")
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "加入申込書入力組合員等検索（共通）画面", "保存"), "OK", "キャンセル")
+@* 危険段階区分 詳細 編集内容破棄確認ダイアログ *@
+@Html.Confirm("KikenDankaiKbnDetailConfirm", "KikenDankaiKbnDetailConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "加入申込書入力（麦）危険段階区分設定画面", "保存"), "OK", "キャンセル")
+@* 用途別単価 詳細 編集内容破棄確認ダイアログ *@
+@Html.Confirm("YotobetsuTankaDetailConfirm", "YotobetsuTankaDetailConfirmOK", "確認",
+        MessageUtil.Get("MQ10025", "加入申込書入力（麦）用途別単価設定画面", "保存"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+        var hikiukePagerUrl = "";
+        var ruibetsuPagerUrl = "";
+        var rowGuid = "";
+        var detailUrl = "";
+
+        @* 引受検索結果ページャー *@
+        function hikiukeResultPagerClick(url) {
+            hikiukePagerUrl = url;
+            @Html.ShowDialog("HikiukePagerDiscardEditsConfirm");
+        };
+        $("#HikiukePagerConfirmOK").click(function () {
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: hikiukePagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea2').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+
+                    // バリデータ再設定
+                    $("#HikiukeForm").validate().resetForm();
+                    $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#SearchResult');
+
+                    // カンマ編集機能再設定
+                    loadNumberAddComma();
+
+                    // 産地別銘柄名更新イベント再設定
+                    updateSanchiMeigaraCdEvent();
+                    // 品種名更新イベント再設定
+                    updateHinshuCdEvent();
+                    // 市町村名更新イベント再設定
+                    updateShichosonCdEvent();
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        });
+
+        @* 類別設定ページャー *@
+        function ruibetsuResultPagerClick(url) {
+            ruibetsuPagerUrl = url;
+            @Html.ShowDialog("RuibetsuPagerDiscardEditsConfirm");
+        };
+        $("#RuibetsuPagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: ruibetsuPagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea5').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#RuibetsuSetteiResult').html(data.partialView);
+
+                    // バリデータ再設定
+                    $("#RuibetuSetteiForm").validate().resetForm();
+                    $("#RuibetuSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#RuibetsuSetteiResult');
+
+                    // 詳細ボタンのクリックイベント再設定
+                    updateDetailButtonClickEvent();
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        });
+
+        $(function () {
+            @* クリア処理 *@
+            $("#Clear").click(function(){
+                var recCnt = $("#HikiukeSearchResult_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("ClearConfirm");
+                } else {
+                    $("#ClearConfirmOK").click();
+                }
+            });
+            $("#ClearConfirmOK").click(function(){
+                var initLink = "@Url.Action("Index", "D105070", new { area = "F105" })";
+                location.href = initLink;
+            });
+
+            @* 引受情報検索処理 *@
+            $("#Search").click(function () {
+                var recCnt = $("#HikiukeSearchResult_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("SearchConfirm");
+                } else {
+                    $("#SearchConfirmOK").click();
+                }
+            });
+            $("#SearchConfirmOK").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                @* １．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#HikiukeSearchForm").valid();
+                if (!checkValid) {
+                    @* １．１．１．エラーの場合
+                        エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                }
+
+                @* １．２．独自チェック *@
+                @* １．２．１．検索条件チェック *@
+                @* (1)	[画面：耕地番号（開始）]と[画面：耕地番号（終了）]に値が入力されている、
+                 かつ、[画面：耕地番号（開始）]＞[画面：耕地番号（終了）]の場合、
+                 エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                $("#SearchCondition_KouchiNoFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KouchiNoTo").removeClass("input-validation-error");
+                var kouchiNoFrom = $('#SearchCondition_KouchiNoFrom').val();
+                var kouchiNoTo = $('#SearchCondition_KouchiNoTo').val();
+                if (kouchiNoFrom && kouchiNoTo && Number(kouchiNoFrom) > Number(kouchiNoTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["耕地番号(終了)", "耕地番号(開始)"])");
+                    $("#SearchCondition_KouchiNoFrom").addClass("input-validation-error");
+                }
+
+                @* (2)	[画面：表示順キー１]が空欄以外、かつ、[画面：表示順キー２]と同一の場合、
+                 エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                var displaySort1 = $('#SearchCondition_DisplaySort1').val();
+                var displaySort2 = $('#SearchCondition_DisplaySort2').val();
+                if (displaySort1 && displaySort2 && displaySort1 == displaySort2) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10012", "表示順キー1", "表示順キー2")");
+                    $("#SearchCondition_DisplaySort2").addClass("input-validation-error");
+                }
+
+
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                @* チェックエラーなしの場合 *@
+                if ($("#HikiukeSearchForm").valid() && "" == message) {
+                    var url = "@Url.Action("SearchHikiuke", "D105070", new { area = "F105" })";
+                    var formData = new FormData($("#HikiukeSearchForm").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false,  //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        if (undefined != data.resultArea.errorMessages && data.resultArea.errorMessages.length > 0) {
+                            $('#MessageArea1').addClass("text-danger").html(data.resultArea.errorMessages[0]);
+                            $("html, body").scrollTop($('#HikiukeForm').offset().top);
+                        }
+                        // バリデーションエラー表示部の更新
+                        $('#SearchResultMessage').html(data.messageArea.partialView);
+                        // 検索結果表示部の更新
+                        $('#SearchResult').html(data.resultArea.partialView);
+                        // 計算結果部の更新
+                        $('#CalcResult').html(data.calcArea.partialView);
+
+                        // 検索後のバリデータ再設定
+                        $("#HikiukeForm").validate().resetForm();
+                        $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 産地別銘柄名更新イベント再設定
+                        updateSanchiMeigaraCdEvent();
+                        // 品種名更新イベント再設定
+                        updateHinshuCdEvent();
+                        // 市町村名更新イベント再設定
+                        updateShichosonCdEvent();
+
+                        $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                    });
+                }
+            });
+
+            @* 引受情報入力行挿入 *@
+            $("#AddHikiukeRow").click(function () {
+                var url = "@Url.Action("AddHikiukeRow", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#HikiukeForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea2').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResultMessage').html(data.messageArea.partialView);
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#HikiukeForm").validate().resetForm();
+                        $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 産地別銘柄名更新イベント再設定
+                        updateSanchiMeigaraCdEvent();
+                        // 品種名更新イベント再設定
+                        updateHinshuCdEvent();
+                        // 市町村名更新イベント再設定
+                        updateShichosonCdEvent();
+
+                        // フォーカスは追加行の先頭項目に当てる。
+                        if ($(`#HikiukeSearchResult_DispRecords_${data.addRowIdx}__KouchiNo`)) {
+                            $(`#HikiukeSearchResult_DispRecords_${data.addRowIdx}__KouchiNo`).focus();
+                        }
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 引受情報選択行削除  引受情報入力でチェックされた行を削除する。 *@
+            $("#DelHikiukeRows").click(function () {
+                var url = "@Url.Action("DelHikiukeRows", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#HikiukeForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea2').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResultMessage').html(data.messageArea.partialView);
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#HikiukeForm").validate().resetForm();
+                        $("#HikiukeForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 産地別銘柄名更新イベント再設定
+                        updateSanchiMeigaraCdEvent();
+                        // 品種名更新イベント再設定
+                        updateHinshuCdEvent();
+                        // 市町村名更新イベント再設定
+                        updateShichosonCdEvent();
+
+                        // フォーカスは先頭行の先頭項目に当てる
+                        if ($(`#HikiukeSearchResult_DispRecords_${data.firstRowIdx}__KouchiNo`)) {
+                            $(`#HikiukeSearchResult_DispRecords_${data.firstRowIdx}__KouchiNo`).focus();
+                        }
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+
+            });
+
+            @* // 引受情報全選択  引受情報入力のすべての行をチェック状態にする。  *@
+            $("#SelAllHikiuke").click(function () {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', true);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#HikiukeSearchResult_DispRecords_${idx}__KouchiNo`)) {
+                            $(`#HikiukeSearchResult_DispRecords_${idx}__KouchiNo`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* // 引受情報選択解除  引受情報入力のすべての行を未チェック状態にする。 *@
+            $("#UnSelAllHikiuke").click(function () {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', false);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#HikiukeSearchResult_DispRecords_${idx}__KouchiNo`)) {
+                            $(`#HikiukeSearchResult_DispRecords_${idx}__KouchiNo`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 一括設定欄クリア  一括設定欄の入力内容をクリアする。 *@
+            $("#ClearIkkatu").click(function () {
+                var checkboxs = $("#accordionGisInput input[type='checkbox']");
+                checkboxs.prop('checked', false);
+
+                var textboxs = $("#accordionGisInput input[type='text']");
+                textboxs.val('');
+                // 非活性にする
+                textboxs.attr('readonly', 'readonly');
+
+                // メッセージクリア用にバリデーションチェックを行う
+                $("#HikiukeForm").valid();
+            });
+
+            @* GIS項目一括設定 一括設定欄の入力内容をGIS項目に設定する。 *@
+            $("#SetIkkatsuGIS").click(function () {
+               // １．入力チェック
+               // １．１．チェックボックス未選択チェック
+               // GIS項目の全てのチェックボックスが未選択の場合、[メッセージエリア２]に以下のメッセージを表示して処理を中止する。
+                var checkboxs = $("#accordionGisInput input[type='checkbox']:checked");
+                if (checkboxs.length == 0)
+                {
+                    var message = "@MessageUtil.Get("ME10009", "GIS項目一括設定対象")";
+                    $("#MessageArea2").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+                $("#MessageArea2").html("");
+
+                checkboxs.each(function(idx, checkbox) {
+                    var key = checkbox.id;
+                    key = key.replace("SearchCondition_Check", "");
+                    var gisValKey = `#SearchCondition_Ikkatsu${key}`;
+                    var resultValKey = `#SearchResult label[id$='__Gis${key}']`;
+                    var text = $(gisValKey).val();
+                    $(resultValKey).text(text);
+                    resultValKey = `#SearchResult input[id$='__Gis${key}']`;
+                    $(resultValKey).val(text);
+                });
+            });
+
+            @* 引受情報登録 引受情報の入力内容を登録する。*@
+            $("#RegistHikiuke").click(function () {
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                // 前回のメッセージをクリアする
+                messageArea2.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#HikiukeForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#HikiukeForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistHikiukeConfirm");
+                }
+
+            });
+
+            $("#RegistHikiukeConfirmOK").click(function () {
+                // ２．１．「OK」押下時、引受情報入力フォームデータの送信
+                // ２．１．１．引受情報入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistHikiuke", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#HikiukeForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea2').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea2').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 引受情報計算 引受情報の入力内容から計算結果を算出する。*@
+            $("#CalcHikiuke").click(function() {
+                @* 前回のメッセージをクリアする *@
+                $('#MessageArea3').html("");
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#HikiukeForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // １．１．２．エラーなしの場合
+                var url = "@Url.Action("CalcHikiuke", "D105070", new { area = "F105" })";
+                var formData = new FormData($("#HikiukeForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea3').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#CalcResult').html(data.partialView);
+                    }
+                    $("html, body").scrollTop($('#CalcResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 加入状況、加入形態、自動継続特約有無登録 組合員等毎の加入状況、加入形態、自動継続特約有無を登録する。*@
+            $("#RegistKanyuJokyo").click(function() {
+                var messageArea4 = $("span[data-valmsg-for='MessageArea4']");
+                // 前回のメッセージをクリアする
+                messageArea4.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                // 割合から「％」を除去する
+                let waribikiWariai = $("#KumiaiintoSettei_WaribikiWariai");
+                let val = waribikiWariai.val();
+                val = val.replace("%", "");
+                waribikiWariai.val(val);
+
+                let warimashiWariai = $("#KumiaiintoSettei_WarimashiWariai");
+                val = warimashiWariai.val();
+                val = val.replace("%", "");
+                warimashiWariai.val(val);
+                var checkValid = $("#KumiaiintoForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    waribikiWariai.focus();
+                    warimashiWariai.focus();
+                    $('.input-validation-error:first').focus();
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#HikiukeForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistKanyuJokyoConfirm");
+                }
+            });
+
+            $("#RegistKanyuJokyoConfirmOK").click(function () {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．１．組合員等毎設定フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+
+                // 割合から「％」を除去する
+                let waribikiWariai = $("#KumiaiintoSettei_WaribikiWariai");
+                let val = waribikiWariai.val();
+                val = val.replace("%", "");
+                waribikiWariai.val(val);
+
+                let warimashiWariai = $("#KumiaiintoSettei_WarimashiWariai");
+                val = warimashiWariai.val();
+                val = val.replace("%", "");
+                warimashiWariai.val(val);
+
+                // ２．１．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistKanyuJokyo", "D105070", new { area = "F105" })";
+                var formData = new FormData($("#KumiaiintoForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea4').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea4').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#Kumiaiinto').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 地域集団名更新 地域集団コードに該当する氏名または法人名を表示する。 *@
+            $("#KumiaiintoSettei_ChiikiSyudanCd").blur(function() {
+                var url = "@Url.Action("UpdateChiikiSyudanName", "D105070", new { area = "F105" })";
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: {chiikiSyudanCd: $(`#${this.id}`).val() }
+                }).done(function (data) {
+                    if (data.chiikiSyudanNm != null) {
+                        $('#@Html.IdFor(model => model.KumiaiintoSettei.ChiikiSyudanNm)').html(data.chiikiSyudanNm);
+                    }
+                    $("html, body").scrollTop($('#Kumiaiinto').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 類別設定情報入力行挿入 類別設定入力行を挿入する。*@
+            $("#AddRuibetsuRow").click(function() {
+                var url = "@Url.Action("AddRuibetsuRow", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#RuibetuSetteiForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.view.message != null) {
+                        $('#MessageArea5').addClass("text-danger").html(data.view.message);
+                    }
+                    else {
+                        $('#RuibetsuSetteiResult').html(data.view.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#RuibetuSetteiForm").validate().resetForm();
+                        $("#RuibetuSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#RuibetsuSetteiResult');
+
+                        // 詳細ボタンのクリックイベント再設定
+                        updateDetailButtonClickEvent();
+
+                        // フォーカスは追加行の先頭項目に当てる。
+                        if ($(`#RuibetsuSettei_DispRecords_${data.addRowIdx}__RuiKbn`)) {
+                            $(`#RuibetsuSettei_DispRecords_${data.addRowIdx}__RuiKbn`).focus();
+                        }
+                    }
+                    $("html, body").scrollTop($('#RuibetsuSetteiResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 類別設定情報選択行削除 類別設定入力でチェックされた行を削除する。 *@
+            $("#DelRuibetsuRows").click(function() {
+                var url = "@Url.Action("DelRuibetsuRows", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#RuibetuSetteiForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.view.message != null) {
+                        $('#MessageArea5').addClass("text-danger").html(data.view.message);
+                    }
+                    else {
+                        $('#RuibetsuSetteiResult').html(data.view.partialView);
+
+                        // 行削除後のバリデータ再設定
+                        $("#RuibetuSetteiForm").validate().resetForm();
+                        $("#RuibetuSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#RuibetsuSetteiResult');
+
+                        // 詳細ボタンのクリックイベント再設定
+                        updateDetailButtonClickEvent();
+
+                        // フォーカスは先頭行の先頭項目に当てる
+                        if ($(`#RuibetsuSettei_DispRecords_${data.firstRowIdx}__RuiKbn`)) {
+                            $(`#RuibetsuSettei_DispRecords_${data.firstRowIdx}__RuiKbn`).focus();
+                        }
+                    }
+
+                    $("html, body").scrollTop($('#RuibetsuSetteiResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 類別設定情報全選択 類別設定入力ですべての行をチェック状態にする。 *@
+            $("#SelAllRuibetsu").click(function() {
+                var checkboxs = $("#RuibetsuSetteiResult input[id$='__CheckSelect']");
+                checkboxs.prop('checked', true);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#RuibetsuSettei_DispRecords_${idx}__RuiKbn`)) {
+                            $(`#RuibetsuSettei_DispRecords_${idx}__RuiKbn`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 類別設定情報選択解除 類別設定入力ですべての行を未チェック状態にする。*@
+            $("#UnSelAllRuibetsu").click(function() {
+                var checkboxs = $("#RuibetsuSetteiResult input[id$='__CheckSelect']");
+                checkboxs.prop('checked', false);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#RuibetsuSettei_DispRecords_${idx}__RuiKbn`)) {
+                            $(`#RuibetsuSettei_DispRecords_${idx}__RuiKbn`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 類別設定情報登録 類別設定入力の入力内容を登録する。*@
+            $("#RegistRuibetsu").click(function() {
+                var messageArea5 = $("span[data-valmsg-for='MessageArea5']");
+                // 前回のメッセージをクリアする
+                messageArea5.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#RuibetuSetteiForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#RuibetuSetteiForm").valid() && "" == message) {
+                    @Html.ShowDialog("RegistRuibetsuConfirm");
+                }
+            });
+            $("#RegistRuibetsuConfirmOK").click(function() {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．類別設定入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("RegistRuibetsu", "D105070", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                var disabledItems = $("#RuibetuSetteiForm [disabled]");
+                disabledItems.removeAttr('disabled');
+                var formData = new FormData($("#RuibetuSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea5').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea5').removeClass("text-danger").html(data.message);
+                    }
+                    if (disabledItems) {
+                        disabledItems.attr('disabled', 'disabled');
+                    }
+                    $("html, body").scrollTop($('#RuibetuSettei').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* GIS項目チェックボックス変更時処理 GIS項目のチェックボックス状態に応じて入力欄の活性・非活性を変更する。*@
+            $("#accordionGisInput input[type='checkbox']").change(function() {
+                // UpdateGisInput
+                var key = this.id;
+                var checked = this.checked;
+                key = key.replace("SearchCondition_Check", "");
+                var gisValKey = `#SearchCondition_Ikkatsu${key}`;
+                if (checked) {
+                    // 活性にする
+                    $(gisValKey)[0].readOnly = false;
+                } else {
+                    // 非活性にする
+                    $(gisValKey)[0].readOnly = true;
+                }
+            });
+
+            @* 引受情報チェック 入力内容が妥当かチェック処理を行う。*@
+            $("#CheckHikiuke").click(function() {
+                $('#MessageArea1').html("");
+
+                var url = "@Url.Action("CheckHikiuke", "D105070", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function (data) {
+                    if (data.result != 0 && data.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+ 
+                    } else if (data.result == 0 && data.message != null) {
+                        $('#MessageArea1').removeClass("text-danger").html(data.message);
+
+                    }
+                    $("html, body").scrollTop(0);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 引受情報入力タブの産地銘柄テキストボックス 産地銘柄コードに該当する産地別銘柄名を表示する。 *@
+            updateSanchiMeigaraCdEvent();
+            @* 引受情報入力タブの品種テキストボックス 品種コードに該当する品種名を表示する。 *@
+            updateHinshuCdEvent();
+            @* 引受情報入力タブの市町村テキストボックス 市町村コードに該当する市町村名を表示する。 *@
+            updateShichosonCdEvent();
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                // 0～0件/0件中
+                if ($(".paging")[0].textContent.indexOf("0～0件/0件中") < 0) {
+                    @Html.ShowDialog("BackConfirm");
+                } else {
+                    $("#BackConfirmOK").click();
+                }
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D105036", new { area = "F105" })";
+                var url = "@Url.Action("Back", "D105070", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 危険段階区分の詳細確認OK *@
+            $("#KikenDankaiKbnDetailConfirmOK").click(function() {
+                detailUrl = "@Url.Action("MoveTokeiChiikiKikenDankaiKubunSettei", "D105070", new { area = "F105" })";
+
+                $.ajax({
+                    url: detailUrl,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { guid: rowGuid }
+                }).done(function (data) {
+                    // 画面遷移
+                    location.href = data.redirectLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+            @* 用途別単価の詳細確認OK *@
+            $("#YotobetsuTankaDetailConfirmOK").click(function() {
+                detailUrl = "@Url.Action("MoveYotobetsuTankaSettei", "D105070", new { area = "F105" })";;
+
+                $.ajax({
+                    url: detailUrl,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { guid: rowGuid }
+                }).done(function (data) {
+                    // 画面遷移
+                    location.href = data.redirectLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 割引割合フォーカス時 「％」を除去する *@
+            $("#KumiaiintoSettei_WaribikiWariai").focus(function() {
+                let val = $(`#${this.id}`).val();
+                val = val.replace("%", "");
+                $(`#${this.id}`).val(val);
+            });
+            @* 割引割合フォーカスアウト時 「％」を付与する *@
+            $("#KumiaiintoSettei_WaribikiWariai").blur(function() {
+                let val = $(`#${this.id}`).val();
+                val = val.replace("%", "");
+                $(`#${this.id}`).val(`${val}%`);
+            });
+            @* 割増割合フォーカス時 「％」を除去する *@
+            $("#KumiaiintoSettei_WarimashiWariai").focus(function() {
+                let val = $(`#${this.id}`).val();
+                val = val.replace("%", "");
+                $(`#${this.id}`).val(val);
+            });
+            @* 割増割合フォーカス時 「％」を付与する *@
+            $("#KumiaiintoSettei_WarimashiWariai").blur(function() {
+                let val = $(`#${this.id}`).val();
+                val = val.replace("%", "");
+                $(`#${this.id}`).val(`${val}%`);
+            });
+
+            @* 共通申請割引方法ドロップダウンリスト値変更時 *@
+            $("#KumiaiintoSettei_KyotuShinseiWaribikiHouho").change(function() {
+                var url = "@Url.Action("UpdateWaribikiHouhou", "D105070", new { area = "F105" })";
+                var kyotuShinseiWaribikiHouhoCd = $('#KumiaiintoSettei_KyotuShinseiWaribikiHouho option:selected').val();
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { kyotuShinseiWaribikiHouhoCd: kyotuShinseiWaribikiHouhoCd }
+                }).done(function (data) {
+                    if (data != null) {
+                        // １．２．割引割合、割引金額、割増割合、割増金額に取得した値を設定する。
+                        // ２．２．割引割合、割引金額、割増割合、割増金額、共通申請等割引理由に取得した値を設定する。
+
+                        $("#KumiaiintoSettei_WaribikiWariai").val(`${data.waribikiWariai}%`);
+                        $("#KumiaiintoSettei_WaribikiKingaku").val(`${data.waribikiKingaku}`);
+                        $("#KumiaiintoSettei_WarimashiWariai").val(`${data.warimashiWariai}%`);
+                        $("#KumiaiintoSettei_WarimashiKingaku").val(`${data.warimashiKingaku}`);
+                        $("#KumiaiintoSettei_KyotuShinseitoWaribikiRiyu").val(data.kyotuShinseitoWaribikiRiyu);
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+                    }
+
+                    if (kyotuShinseiWaribikiHouhoCd != "99") {
+                        // １．選択値が「99：個人設定」以外の場合、
+
+                        // １．３．共通申請等割引理由に空白を設定する。
+                        $("#KumiaiintoSettei_KyotuShinseitoWaribikiRiyu").val("");
+
+                        // １．４．割引割合、割引金額、割増割合、割増金額、共通申請等割引理由を非活性（入力不可）にする。
+                        $("#KumiaiintoSettei_WaribikiWariai").attr('readonly', 'readonly');
+                        $("#KumiaiintoSettei_WaribikiKingaku").attr('readonly', 'readonly');
+                        $("#KumiaiintoSettei_WarimashiWariai").attr('readonly', 'readonly');
+                        $("#KumiaiintoSettei_WarimashiKingaku").attr('readonly', 'readonly');
+                        $("#KumiaiintoSettei_KyotuShinseitoWaribikiRiyu").attr('readonly', 'readonly');
+
+                    } else {
+                        // ２．選択値が「99：個人設定」の場合、
+
+                        // ２．３．割引割合、割引金額、割増割合、割増金額、共通申請等割引理由を活性（入力可）にする。
+                        $("#KumiaiintoSettei_WaribikiWariai").removeAttr('readonly');
+                        $("#KumiaiintoSettei_WaribikiKingaku").removeAttr('readonly');
+                        $("#KumiaiintoSettei_WarimashiWariai").removeAttr('readonly');
+                        $("#KumiaiintoSettei_WarimashiKingaku").removeAttr('readonly');
+                        $("#KumiaiintoSettei_KyotuShinseitoWaribikiRiyu").removeAttr('readonly');
+
+                    }
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+
+            });
+
+            // 類別設定タブ 詳細ボタンのクリックイベント再設定
+            updateDetailButtonClickEvent();
+        });
+
+        @* 危険段階区分または用途別単価の詳細ボタンクリックイベント再設定 *@
+        function updateDetailButtonClickEvent() {
+            $("#RuibetsuSetteiResult button").on('click', function() {
+                var idx = -1;
+
+                if (this.id.indexOf("btnYotobetsuTankaSettei_") >= 0) {
+                    // 用途別単価の詳細ボタンの場合
+                    idx = this.id.replace("btnYotobetsuTankaSettei_", "");
+                    // ボタンクリック行のGUID取得
+                    var targetId = `RuibetsuSettei_DispRecords_${idx}__GUID`;
+                    rowGuid = $(`#${targetId}`).val();
+
+                    @Html.ShowDialog("YotobetsuTankaDetailConfirm");
+
+                } else if (this.id.indexOf("btnTokeiChiikiKikenDankaiKubunSettei_") >= 0) {
+                    // 危険段階区分の詳細ボタンの場合
+                    idx = this.id.replace("btnTokeiChiikiKikenDankaiKubunSettei_", "");
+
+                    // ボタンクリック行のGUID取得
+                    var targetId = `RuibetsuSettei_DispRecords_${idx}__GUID`;
+                    rowGuid = $(`#${targetId}`).val();
+
+                    @Html.ShowDialog("KikenDankaiKbnDetailConfirm");
+                }
+
+                if (idx < 0) return;
+            });
+        }
+
+        function updateSanchiMeigaraCdEvent() {
+            $("#SearchResult input[id$='__SanchiMeigara']").blur(function() {
+                var url = "@Url.Action("UpdateSanchiMeigaraName", "D105070", new { area = "F105" })";
+                var targetId = this.id;
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { sanchiMeigaraCd: $(`#${targetId}`).val() }
+                }).done(function (data) {
+                    if (data.sanchiMeigaraNm != null) {
+                        targetId = targetId.replace("SanchiMeigara", "SanchiMeigaraNm");
+
+                        $(`input#${targetId}`).val(data.sanchiMeigaraNm);
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+
+        function updateHinshuCdEvent() {
+            $("#SearchResult input[id$='__Hinsyu']").blur(function() {
+                var url = "@Url.Action("UpdateHinshuName", "D105070", new { area = "F105" })";
+                var targetId = this.id;
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { hinshuCd: $(`#${targetId}`).val() }
+                }).done(function (data) {
+                    if (data.hinsyuNm != null) {
+                        targetId = targetId.replace("Hinsyu", "HinsyuNm");
+
+                        $(`input#${targetId}`).val(data.hinsyuNm);
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+
+        function updateShichosonCdEvent() {
+            $("#SearchResult input[id$='__Shichoson']").blur(function() {
+                var url = "@Url.Action("UpdateShichosonName", "D105070", new { area = "F105" })";
+                var targetId = this.id;
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { shichosonCd: $(`#${targetId}`).val() }
+                }).done(function (data) {
+                    if (data.shichosonNm != null) {
+                        targetId = targetId.replace("Shichoson", "ShichosonNm");
+
+                        $(`input#${targetId}`).val(data.shichosonNm);
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+
+        @* 産地銘柄コード検索子画面表示 *@
+        function showSanchiMeigaraCdSearch(idx) {
+            var targetId = `HikiukeSearchResult_DispRecords_${idx}__SanchiMeigara`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 産地銘柄コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000022", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に産地銘柄コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+
+        @* 品種コード検索子画面表示 *@
+        function showHinsyuCdSearch(idx) {
+            var targetId = `HikiukeSearchResult_DispRecords_${idx}__Hinsyu`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 品種コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000021", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に品種コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+
+        @* 組合員等コード検索子画面表示 *@
+        function showShoyushaSearch(idx) {
+            var targetId = `HikiukeSearchResult_DispRecords_${idx}__Shoyusha`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 組合員等コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に組合員等コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+
+        @* 地域集団コード検索子画面表示 *@
+        function showChiikiSyudanCdSearch() {
+            var targetId = `KumiaiintoSettei_ChiikiSyudanCd`;
+
+            // 組合員等コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に組合員等コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+
+        @* 市町村コード検索子画面表示 *@
+        function showShichosonCdSearch(idx){
+            var targetId = `HikiukeSearchResult_DispRecords_${idx}__Shichoson`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 組合員等コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に組合員等コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+    </script>
+}

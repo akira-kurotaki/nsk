@@ -3,6 +3,7 @@ using NskWeb.Core.Config;
 using NskWeb.Core.Cookie;
 using NskWeb.Core.Filter;
 using NskWeb.Core.Middleware;
+using NskCommonLibrary.Core;
 using Community.Microsoft.Extensions.Caching.PostgreSql;
 using CoreLibrary.Core.Consts;
 using CoreLibrary.Core.Filters;
@@ -173,7 +174,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 builder.Services.AddMvc(options =>
 {
     // 例外フィルター
-    options.Filters.Add<CoreExceptionFilter>();
+    options.Filters.Add<NskCoreExceptionFilter>();
 
     // ログインユーザをセッションに設定
     options.Filters.Add<LoginUserSettingNskWebAttribute>();

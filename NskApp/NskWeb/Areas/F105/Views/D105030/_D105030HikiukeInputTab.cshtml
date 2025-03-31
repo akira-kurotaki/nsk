@@ -1,7 +1,8 @@
-﻿@model NskWeb.Areas.F105.Models.D105030.D105030Model
+﻿@using NskWeb.Areas.F105.Consts
+@model NskWeb.Areas.F105.Models.D105030.D105030Model
 @{
 
-    string[] kengens = ["一部権限", "更新権限"];
+    F105Const.Authority[] kengens = [F105Const.Authority.Part, F105Const.Authority.Update];// "一部権限", "更新権限"];
     string buttonDisableAttr = "";
     if (!kengens.Contains(Model.DispKengen) || Model.ExistsHikiukeKakutei)
     {
@@ -10,7 +11,7 @@
 }
 <div id="Hikiuke" class="tab-pane active" role="tabpanel" aria-labelledby="HikiukeTab">
     <!-- 引受情報入力 -->
-    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "HikiukeForm", spellcheck = "false", autocomplete = "off" }))
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "HikiukeSearchForm", spellcheck = "false", autocomplete = "off" }))
     {
         @await Html.PartialAsync("_HiddenWindowId")
         <div class="table-thead-container">
@@ -125,6 +126,9 @@
                 </button>
             </div>
         </div>
+    }
+    @using (Html.BeginForm("Init", "NSK105030D", FormMethod.Post, new { id = "HikiukeForm", spellcheck = "false", autocomplete = "off" }))
+    {
         <div class="table-thead-container">
             <h4 class="sub_title">引受条件入力</h4>
             <div class="btn_area btn_group_left">

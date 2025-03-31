@@ -231,18 +231,18 @@ namespace NskAppModelLibrary.Models
         public string 削除フラグ { get; set; }
 
         /// <summary>
-        /// ERRフラグ
+        /// errフラグ
         /// </summary>
-        [Column("ERRフラグ")]
+        [Column("errフラグ")]
         [StringLength(1)]
-        public string ERRフラグ { get; set; }
+        public string errフラグ { get; set; }
 
         /// <summary>
-        /// WARフラグ
+        /// warフラグ
         /// </summary>
-        [Column("WARフラグ")]
+        [Column("warフラグ")]
         [StringLength(1)]
-        public string WARフラグ { get; set; }
+        public string warフラグ { get; set; }
 
         /// <summary>
         /// 合併時識別コード

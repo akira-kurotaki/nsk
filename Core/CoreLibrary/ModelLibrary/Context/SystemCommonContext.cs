@@ -51,6 +51,21 @@ namespace ModelLibrary.Context
         public DbSet<MShishoNm> MShishoNms { get; set; }
 
         /// <summary>
+        /// 名称M大地区
+        /// </summary>
+        public DbSet<MDaichikuNm> MDaichikuNms { get; set; }
+
+        /// <summary>
+        /// 名称M小地区
+        /// </summary>
+        public DbSet<MShochikuNm> MShochikuNms { get; set; }
+
+        /// <summary>
+        /// 名称M市町村
+        /// </summary>
+        public DbSet<MShichosonNm> MShichosonNms { get; set; }
+
+        /// <summary>
         /// APIパスフレーズマスタ
         /// </summary>
         public DbSet<MApiPassphrase> MApiPassphrases { get; set; }

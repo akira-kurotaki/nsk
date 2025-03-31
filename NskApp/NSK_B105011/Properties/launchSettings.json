@@ -1,8 +1,8 @@
 {
   "profiles": {
-    "NSK_105011B": {
+    "NSK_B105011": {
       "commandName": "Project",
-      "commandLineArgs": "1\r\n03\r\n003\r\n00\r\n5"
+      "commandLineArgs": "105011\r\n03\r\n003\r\n00\r\n5"
     }
   }
 }

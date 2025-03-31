@@ -1,0 +1,40 @@
+﻿@model NskWeb.Areas.F110.Models.D110010.D110010Model
+
+<h4 class="sub_title">引受回</h4>
+<div class="table-thead-container" style="width: 70%;">
+    <table class="table table-bordered" style="">
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th>支所名</th>
+                <th class="text-center">引受回</th>
+                <th class="text-center">引受計算実施日</th>
+                <th class="text-center">報告回</th>
+                <th class="text-center">報告日付</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.HikiukeKai.DispRecords.Count(); i++)
+            {
+                <!-- 行ｎ -->
+                string shishoCdNm = $"{Model.HikiukeKai.DispRecords[i].ShishoCd} {Model.HikiukeKai.DispRecords[i].ShishoNm}";
+                <tr>
+                    <td>
+                        @shishoCdNm
+                    </td>
+                    <td style="text-align: right;">
+                        @Html.DisplayTextFor(model => model.HikiukeKai.DispRecords[i].HikiukeKai)
+                    </td>
+                    <td style="text-align: right;">
+                        @DateUtil.GetJapaneseDate(Model.HikiukeKai.DispRecords[i].HikiukeKeisanJikkobi)
+                    </td>
+                    <td style="text-align: right;">
+                        @Html.DisplayTextFor(model => model.HikiukeKai.DispRecords[i].HokokuKai)
+                    </td>
+                    <td style="text-align: right;">
+                        @DateUtil.GetJapaneseDate(Model.HikiukeKai.DispRecords[i].HokokuHiduke)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

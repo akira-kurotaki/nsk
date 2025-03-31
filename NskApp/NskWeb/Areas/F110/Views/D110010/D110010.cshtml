@@ -1,0 +1,230 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F110.Consts
+@using NskWeb.Areas.F110.Models.D110010
+@model D110010Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>再引受前処理</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+
+<div class="table-thead-container">
+    <h4 class="sub_title">再引受前処理</h4>
+    <div class="mb-3">
+        <div>@Html.MessageAreaFor(model => model.MessageArea1, Model.MessageArea1, new { @class = "text-danger", id = "MessageArea1" })</div>
+    </div>
+    <div class="clearfix"></div>
+
+    @using (Html.BeginForm("Init", "D110010", FormMethod.Post, new { id = "HikiukeKaiForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        @await Html.PartialAsync("_HiddenWindowId")
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @* 本所・支所 *@
+                <td>本所・支所</td>
+                <td>
+                    @{
+                        Dictionary<string, object> attrs = new() {
+                            { "class", "form-select form-select-lg"},
+                            { "tabindex", 100 },
+                            { "title", "選択項目" }
+                        };
+                        if (Model.IsShishoDropdownListDisabled)
+                            attrs.Add("disabled", "disabled");
+                    }
+                    @Html.DropDownListFor(model => model.HonshoShishoCd, Model.HonshoShishoList, attrs)
+                </td>
+            </tr>
+        </table>
+
+        <div class="clearfix"></div>
+        <div id="HikiukeKaiResult">
+            @await Html.PartialAsync("_D110010HikiukeKaiResult", Model)
+        </div>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="Back" name="Back">
+                    戻る
+                </button>
+                <button type="button" class="btn btn-primary" id="Execusion" name="Execusion" @Model.ExecButtonDisableAttr>
+                    実行
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<input type="hidden" id="returnValue" />
+
+@* 確定済み確認ダイアログ *@
+@Html.Confirm("KakuteizumiConfirm", "KakuteizumiConfirmOK", "確認", MessageUtil.Get("MQ10013"), "OK", "キャンセル")
+@* 本所 引受回上限確認ダイアログ *@
+@Html.Confirm("HonshoHikiukeKaiLimitConfirm", "HonshoHikiukeKaiLimitConfirmOK", "確認", MessageUtil.Get("MQ10012", "99"), "OK", "キャンセル")
+@* 支所 引受回上限確認ダイアログ *@
+@Html.Confirm("ShishoHikiukeKaiLimitConfirm", "ShishoHikiukeKaiLimitConfirmOK", "確認", MessageUtil.Get("MQ10014"), "OK", "キャンセル")
+
+
+@section scripts {
+    <script>
+        var isShishoCdHonsho = false;
+
+        $(function () {
+            @* 本所・支所ドロップダウンリスト 本所支所変更 *@
+            $("#HonshoShishoCd").change(function() {
+                $('#MessageArea1').html("");
+                var url = "@Url.Action("Change", "D110010", new { area = "F110" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: { shishoCd: $("#HonshoShishoCd").val() },
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function (data) {
+                    if (data.message != null && data.message != '') {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+                    }
+                    // 検索結果表示部の更新
+                    $('#HikiukeKaiResult').html(data.partialView);
+
+                    $("html, body").scrollTop($('#HikiukeKaiResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 実行ボタン 再引受前処理実行前チェック 再引受前処理実行前チェックを行う。 *@
+            $("#Execusion").click(function() {
+                $('#MessageArea1').html("");
+                var url = "@Url.Action("CheckExecusion", "D110010", new { area = "F110" })";
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { shishoCd: $("#HonshoShishoCd").val() },
+                }).done(function (data) {
+                    if (data.message != null && data.message != '') {
+                        $('#MessageArea1').addClass("text-danger").html(data.message);
+
+                    } else {
+                        isShishoCdHonsho = data.isShishoCdHonsho;
+
+                        // 確定済みの引受回あり
+                        if (data.isExistsKakuteiZumiHikiukeKai) {
+                            // 確認ダイアログ表示
+                            @Html.ShowDialog("KakuteizumiConfirm");
+
+                        } else {
+                            // 確定済みの引受回なし
+
+                            if (isShishoCdHonsho) {
+                                // 本所の場合
+                                @Html.ShowDialog("HonshoHikiukeKaiLimitConfirm");
+
+                            } else {
+                                // 支所の場合
+                                @Html.ShowDialog("ShishoHikiukeKaiLimitConfirm");
+                            }
+                        }
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+            $("#KakuteizumiConfirmOK").click(function() {
+                if (isShishoCdHonsho) {
+                    // 本所の場合
+                    @Html.ShowDialog("HonshoHikiukeKaiLimitConfirm");
+
+                } else {
+                    // 支所の場合
+                    @Html.ShowDialog("ShishoHikiukeKaiLimitConfirm");
+                }
+            });
+            $("#HonshoHikiukeKaiLimitConfirmOK").click(function() {
+                // No.9　「再引受前処理実行」へ進む。
+                requestExecusion();
+            });
+            $("#ShishoHikiukeKaiLimitConfirmOK").click(function() {
+                // No.9　「再引受前処理実行」へ進む。
+                requestExecusion();
+            });
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D110010", new { area = "F110" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+        @* 再引受前処理実行呼び出し	*@
+        function requestExecusion() {
+            var url = "@Url.Action("Execusion", "D110010", new { area = "F110" })";
+
+            $.ajax({
+                url: url,
+                dataType: 'json',
+                contentType: "application/json; charset=utf-8",
+                type: 'GET',
+                async: false,
+                cache: false,
+                data: { shishoCd: $("#HonshoShishoCd").val() },
+            }).done(function (data) {
+                if (data.message != null && data.message != '') {
+                    $('#MessageArea1').addClass("text-danger").html(data.message);
+                }
+
+                // 検索結果表示部の更新
+                $('#HikiukeKaiResult').html(data.partialView);
+
+                $("html, body").scrollTop($('#HikiukeKaiResult').offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        }
+    </script>
+}

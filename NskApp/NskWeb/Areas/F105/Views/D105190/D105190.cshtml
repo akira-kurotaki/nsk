@@ -1,0 +1,742 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F105.Consts
+@using NskWeb.Areas.F105.Models.D105190
+@model D105190Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];   //  "更新権限"];
+
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen))
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>共済金額設定</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@using (Html.BeginForm("Init", "D105190", FormMethod.Post, new { id = "D105190Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @await Html.PartialAsync("_HiddenWindowId")
+    <div class="table-thead-container">
+        <h4 class="sub_title">検索条件</h4>
+        <div class="mb-3">
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.RuiKbn, null, new { @class = "text-danger" })</div>
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdFrom, null, new { @class = "text-danger" })</div>
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdTo, null, new { @class = "text-danger" })</div>
+            @Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.SearchCondition.TodofukenDropDownList)
+
+        @* 都道府県段階ドロップダウンリストで非表示の項目はHiddenで値を保持する必要がある *@
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.TodofukenCd)
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.KumiaitoCd)
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @*類区分*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.RuiKbn,
+                             Html.DisplayNameFor(model => model.SearchCondition.RuiKbn))
+                    <i class="required">必須</i>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.RuiKbn, 
+                        Model.SearchCondition.RuiKbnList,
+                        "", new { @class = "form-select form-select-lg", tabindex = 100, @title = "選択項目" })
+                    <div>@Html.ValidationMessageFor(model => model.SearchCondition.RuiKbnList, "", new { @class = "text-danger"})</div>
+                </td>
+
+            </tr>
+            <tr>
+                @*支所*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 101, @title = "選択項目" })
+                </td>
+            </tr>
+            <tr>
+                @*大地区*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 102, @title = "選択項目" })
+                </td>
+
+                @*小地区*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom))
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuFrom, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 103, @title = "選択項目" })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>
+                                    @Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdTo)
+                                </div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuTo, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 104, @title = "選択項目" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @*組合員等*@
+                <td>
+                    組合員等コード
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdFrom, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 108, @type = "text" } })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>～</div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdTo, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 109, @type = "text" } })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="table table-condensed table-sub-bordered">
+            <colgroup class="colgroup_background" style="width: 10%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.DisplayCount,
+                             Html.DisplayNameFor(model => model.SearchCondition.DisplayCount))
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplayCount, "display_count",
+                             new { @class = "form-select form-select-lg", tabindex = 109 })
+                </td>
+                <td colspan="5" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                <td>表示順</td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort1, new { @class = "form-select form-select-lg", tabindex = 110, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順１</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_1", @class = "magic-radio", tabindex = 111 })
+                            <label for="SearchCondition_DisplaySortOrder1_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_2", @class = "magic-radio", tabindex = 112 })
+                            <label for="SearchCondition_DisplaySortOrder1_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort2, new { @class = "form-select form-select-lg", tabindex = 113, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順２</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_1", @class = "magic-radio", tabindex = 114 })
+                            <label for="SearchCondition_DisplaySortOrder2_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_2", @class = "magic-radio", tabindex = 115 })
+                            <label for="SearchCondition_DisplaySortOrder2_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort3, new { @class = "form-select form-select-lg", tabindex = 116, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順３</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_1", @class = "magic-radio", tabindex = 117 })
+                            <label for="SearchCondition_DisplaySortOrder3_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_2", @class = "magic-radio", tabindex = 118 })
+                            <label for="SearchCondition_DisplaySortOrder3_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            @Html.ActionLink("クリア", "Index", "D105190", new { area = "F105" }, new { @class = "btn btn-primary", tabindex = 120 })
+            <button type="button" class="btn btn-primary" id="Search" name="Search" tabindex="121">
+                検索
+            </button>
+        </div>
+    </div>
+}
+
+
+
+<div class="table-thead-container">
+    <h4 class="sub_title">共済金額設定</h4>
+
+    @using (Html.BeginForm("Init", "NSK105190D", FormMethod.Post, new { id = "D105190KyousaiKingakuForm", spellcheck = "false", autocomplete = "off" }))
+    {
+
+        <div class="btn_area btn_group_left">
+            <button type="button" class="btn btn-primary" id="AddKyousaiKingakuRow" name="AddKyousaiKingakuRow" @buttonDisableAttr>行挿入</button>
+            <button type="button" class="btn btn-primary" id="DelKyousaiKingakuRows" name="DelKyousaiKingakuRows" @buttonDisableAttr>選択行削除</button>
+            <button type="button" class="btn btn-primary" id="SelAllKyousaiKingaku" name="SelAllKyousaiKingaku" @buttonDisableAttr>全行選択</button>
+            <button type="button" class="btn btn-primary" id="UnSelAllKyousaiKingaku" name="UnSelAllKyousaiKingaku" @buttonDisableAttr>全行解除</button>
+        </div>
+
+        <div id="SearchResult">
+            @await Html.PartialAsync("_D105190SearchResult", Model)
+        </div>
+
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="Back" name="Back">
+                    戻る
+                </button>
+                <button type="button" class="btn btn-primary" id="Insert" name="Insert" @buttonDisableAttr>
+                    登録
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@* 共済金額設定登録確認ダイアログ *@
+@Html.Confirm("InsertConfirm", "InsertConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+
+@* 共済金額設定 編集内容破棄確認ダイアログ *@
+@Html.Confirm("ResultPagerDiscardEditsConfirm", "ResultPagerConfirmOK", "確認",
+                    MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+                    MessageUtil.Get("MQ10025", "ポータル画面", "登録"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+
+        var resultPagerUrl = "";
+        @* 検索結果ページャー *@
+        function resultPagerClick(url) {
+            resultPagerUrl = url;
+            @Html.ShowDialog("ResultPagerDiscardEditsConfirm")
+        };
+        $("#ResultPagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: resultPagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea1').addClass("text-danger").html(data.message);
+                }
+                else
+                {
+                    $('#SearchResult').html(data.partialView);
+
+                    // バリデータ再設定
+                    $("#D105190KyousaiKingakuForm").validate().resetForm();
+                    $("#D105190KyousaiKingakuForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#SearchResult');
+
+                    // カンマ編集機能再設定
+                    loadNumberAddComma();
+
+                    // 組合員等コードに該当する組合員等名を表示する。
+                    updateKyousaikingakuEvent();
+                }
+                $("html, body").scrollTop($("#SearchResult").offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        });
+
+        $(function () {
+
+            @* 検索処理 *@
+            $("#Search").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                messageArea2.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                @* １．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#D105190Form").valid();
+                if (!checkValid) {
+                @* １．１．１．エラーの場合
+                    エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                }
+
+                @* １．２．独自チェック *@
+                @* １．２．１．検索条件チェック *@
+                @* (1)	[画面：小地区（開始）]と[画面：小地区（終了）]に値が入力されている、かつ、[画面：小地区（開始）]＞[画面：小地区（終了）]の場合、
+                    エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。*@
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").removeClass("input-validation-error");
+                var shochikuCdFrom = $('#SearchCondition_TodofukenDropDownList_ShochikuCdFrom').val();
+                var shochikuCdTo = $('#SearchCondition_TodofukenDropDownList_ShochikuCdTo').val();
+                if (shochikuCdFrom && shochikuCdTo && shochikuCdFrom > shochikuCdTo) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["小地区（開始）", "小地区（終了）"])");
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").addClass("input-validation-error");
+                }
+                @* (2)	[画面：組合員等コード（開始）]と[画面：組合員等コード（終了）]に値が入力されている、
+                    かつ、[画面：組合員等コード（開始）]＞[画面：組合員等コード（終了）]の場合、
+                    エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。 *@
+                $("#SearchCondition_KumiaiinToCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KumiaiinToCdTo").removeClass("input-validation-error");
+                var kumiaiintoCdFrom = $('#SearchCondition_KumiaiinToCdFrom').val();
+                var kumiaiintoCdTo = $('#SearchCondition_KumiaiinToCdTo').val();
+                if (kumiaiintoCdFrom && kumiaiintoCdTo && kumiaiintoCdFrom > kumiaiintoCdTo) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["組合員等コード（開始）", "組合員等コード（終了）"])");
+                    $("#SearchCondition_KumiaiinToCdFrom").addClass("input-validation-error");
+                }
+
+
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    return;
+                }
+
+                @* チェックエラーなしの場合 *@
+                if ($("#D105190Form").valid() && "" == message) {
+                    var url = "@Url.Action("Search", "D105190", new { area = "F105" })";
+                    var formData = new FormData($("#D105190Form").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false, //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        if (data.messageArea1 != null) {
+
+                            // 検索結果表示部を空更新
+                            $('#SearchResult').html(data.resultArea.partialView);
+                            data.messageArea1.Errors.forEach(function(error){
+                               $('#MessageArea1').addClass("text-danger").html(error.ErrorMessage);
+                            });
+                           
+                            $("html, body").scrollTop($('#D105190Form').offset().top);
+                        }
+                        else if (data.messageArea2 != null) {
+
+                            // 検索結果表示部を空更新
+                            $('#SearchResult').html(data.resultArea.partialView);
+                            data.messageArea2.Errors.forEach(function(error){
+                               $('#MessageArea2').removeClass("text-danger").html(error.ErrorMessage);
+                            });
+
+                            $("html, body").scrollTop($('#SearchResult').offset().top);
+                        }
+                        else{
+                            // 検索結果表示部の更新
+                            $('#SearchResult').html(data.resultArea.partialView);
+
+                            $("html, body").scrollTop($('#SearchResult').offset().top);
+                        }
+
+                        // バリデータ再設定
+                        $("#D105190KyousaiKingakuForm").validate().resetForm();
+                        $("#D105190KyousaiKingakuForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#D105190KyousaiKingakuForm');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 組合員等コードに該当する組合員等名を表示する。
+                        updateKyousaikingakuEvent();
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                    });
+                }
+            });
+
+            @* 大地区 *@
+            @* DropDownTemplates/_TodofukenDropDownList.cshtml 参照 *@
+
+            @* 小地区（開始）選択値変更 小地区（開始）の選択状態に応じ、小地区（終了）の選択値を変更する。 *@
+            $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").change(function () {
+                var fromVal = $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").val();
+                if (!fromVal) {
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val(0);
+
+                } else {
+                    if (!$("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val()) {
+                        $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").val(fromVal);
+                    }
+                }
+            });
+
+            @* 組合員等コード（開始）入力値変更 組合員等コード（開始）の入力値を組合員等コード（終了）に反映する。 *@
+            $("#SearchCondition_KumiaiinToCdFrom").blur(function () {
+                var fromVal = $("#SearchCondition_KumiaiinToCdFrom").val();
+                if (!fromVal) {
+                    $("#SearchCondition_KumiaiinToCdTo").val("");
+
+                } else {
+                    if (!$("#SearchCondition_KumiaiinToCdTo").val()) {
+                        $("#SearchCondition_KumiaiinToCdTo").val(fromVal);
+                    }
+                }
+            });
+
+            @* 登録 *@
+            $("#Insert").click(function() {
+
+                // 前回のメッセージをクリアする
+                var messageArea2 = $("span[data-valmsg-for='MessageArea2']");
+                messageArea2.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#D105190KyousaiKingakuForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    $("#MessageArea2").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("#D105190KyousaiKingakuForm").scrollTop(0);
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#D105190KyousaiKingakuForm").valid() && "" == message) {
+                    @Html.ShowDialog("InsertConfirm");
+                }
+
+            });
+            $("#InsertConfirmOK").click(function(){
+                var url = "@Url.Action("Insert", "D105190", new { area = "F105" })";
+
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#D105190KyousaiKingakuForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#D105190KyousaiKingakuForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message.indexOf('完了') < 0) {
+                        $('#MessageArea2').addClass("text-danger").html(data.message);
+                    }
+                    else {
+                        $('#MessageArea2').removeClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#D105190KyousaiKingakuForm').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                @Html.ShowDialog("BackConfirm");
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D105190", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+
+
+        $(function () {
+
+            // 起動時に共済金額更新イベントの実行待ち状態にする。
+            updateKyousaikingakuEvent();
+
+            @* 共済金額設定行を挿入する。*@
+            $("#AddKyousaiKingakuRow").click(function() {
+                var url = "@Url.Action("AddKyousaiKingakuRow", "D105190", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#D105190KyousaiKingakuForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#D105190KyousaiKingakuForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResult').html(data.resultArea.Value.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#D105190KyousaiKingakuForm").validate().resetForm();
+                        $("#D105190KyousaiKingakuForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#D105190KyousaiKingakuForm');
+
+                        // ２．フォーカスは追加行の先頭項目に当てる。
+                        if ($(`#SearchResult_DispRecords_${data.addRowIdx}__KumiaiintoCd`)) {
+                            $(`#SearchResult_DispRecords_${data.addRowIdx}__KumiaiintoCd`).focus();
+                        }
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 組合員等コードに該当する組合員等名を表示する。
+                        updateKyousaikingakuEvent();
+
+                    }
+
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 共済金額設定でチェックされた行を削除する。*@
+            $("#DelKyousaiKingakuRows").click(function() {
+                var url = "@Url.Action("DelKyousaiKingakuRows", "D105190", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#D105190KyousaiKingakuForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#D105190KyousaiKingakuForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.resultArea.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.resultArea.message);
+                    }
+                    else {
+                        $('#SearchResult').html(data.resultArea.Value.partialView);
+
+                        // 行追加後のバリデータ再設定
+                        $("#D105190KyousaiKingakuForm").validate().resetForm();
+                        $("#D105190KyousaiKingakuForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // フォーカスは先頭行の先頭項目に当てる
+                        if ($(`#SearchResult_DispRecords_${data.firstRowIdx}__KumiaiintoCd`)) {
+                            $(`#SearchResult_DispRecords_${data.firstRowIdx}__KumiaiintoCd`).focus();
+                        }
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        // 組合員等コードに該当する組合員等名を表示する。
+                        updateKyousaikingakuEvent();
+                    }
+
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 共済金額設定ですべての行をチェック状態にする。*@
+            $("#SelAllKyousaiKingaku").click(function() {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', true);
+
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#SearchResult_DispRecords_${idx}__KumiaiintoCd`)) {
+                            $(`#SearchResult_DispRecords_${idx}__KumiaiintoCd`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 共済金額設定ですべての行を未チェック状態にする。*@
+            $("#UnSelAllKyousaiKingaku").click(function() {
+                var checkboxs = $("#SearchResult input[type='checkbox']");
+                checkboxs.prop('checked', false);
+
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#SearchResult_DispRecords_${idx}__KumiaiintoCd`)) {
+                            $(`#SearchResult_DispRecords_${idx}__KumiaiintoCd`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+
+        @* 共済金額更新イベント *@
+        function updateKyousaikingakuEvent() {
+            $("#SearchResult input[id$='__KumiaiintoCd']").blur(function() {
+                var url = "@Url.Action("UpdateKumiaiintoName", "D105190", new { area = "F105" })";
+                var targetId = this.id;
+
+                if (this.readOnly) {
+                    // 読み取り専用の場合は更新対象外
+                    return;
+                }
+
+                $.ajax({
+                    url: url,
+                    dataType: 'json',
+                    contentType: "application/json; charset=utf-8",
+                    type: 'GET',
+                    async: false,
+                    cache: false,
+                    data: { kumiaiintoCd: $(`#${targetId}`).val() }
+                }).done(function (data) {
+                    if (data.kumiaiintoNm != null) {
+
+                        // 組合員等名設定
+                        targetId = targetId.replace("KumiaiintoCd", "FullNm");
+                        $(`input:hidden#${targetId}`).val(data.kumiaiintoNm);
+                        $(`td#${targetId}`).html(data.kumiaiintoNm);
+
+                    }
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        }
+
+
+        @* 組合員等コード検索子画面表示 *@
+        function showKumiaiintoCdSearch(idx) {
+            var targetId = `SearchResult_DispRecords_${idx}__KumiaiintoCd`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 組合員等コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000023", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に組合員等コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+
+            });
+        }
+
+    </script>
+}

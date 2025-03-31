@@ -11,7 +11,7 @@ namespace CoreLibrary.Core.Cache
     /// 作成日：2017/12/18
     /// 作成者：Rou I
     /// </remarks>
-    public class MTodofukenCache : CacheBase
+    public class MTodofukenCache : SystemCacheBase
     {
         /// <summary>
         /// ロガー

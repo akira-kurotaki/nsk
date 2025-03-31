@@ -9,7 +9,7 @@ namespace NskCommonLibrary.Core.Consts
     /// 作成日：2025/1/31
     /// 作成者：ICS
     /// </remarks>
-    public class CoreConst
+    public class CoreConst : CoreLibrary.Core.Consts.CoreConst
     {
         /// <summary>
         /// バッチプログラムが処理成功：0
@@ -105,9 +105,46 @@ namespace NskCommonLibrary.Core.Consts
         public enum FutankinKofuKbnNumber
         {
             [Description("稲")]
-            Ine = 11,
+            Ine = 1,
             [Description("麦")]
-            Mugi = 30
+            Mugi = 2
+        }
+
+        /// <summary>
+        /// ファイル出力：データ開始
+        /// </summary>
+        public const string DATA_START = "# DATA-START …";
+
+        /// <summary>
+        /// ファイル出力：データ終了
+        /// </summary>
+        public const string DATA_END = "# DATA-END …";
+
+        /// <summary>
+        /// 内部配列要素数（NSK_B109040）
+        /// </summary>
+        public const int HAIRETU_YOUSO_NUM = 21;
+
+        /// <summary>
+        /// 引受方式
+        /// </summary>
+        public enum HikiukeHoushikiCd
+        {
+            /// <summary>半相殺</summary>
+            [Description("半相殺")]
+            Hansousai = 2,
+            /// <summary>全相殺</summary>
+            [Description("全相殺")]
+            Zensousai,
+            /// <summary>災害収入</summary>
+            [Description("災害収入")]
+            SaigaiSyuunyuu,
+            /// <summary>品質</summary>
+            [Description("品質")]
+            Hinshitsu,
+            /// <summary>地域インデックス</summary>
+            [Description("地域インデックス")]
+            ChiikiIndex
         }
     }
 }

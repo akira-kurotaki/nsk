@@ -26,7 +26,7 @@ namespace NskAppModelLibrary.Models
         /// </summary>
         [Required]
         [Column("ˆøó•û®", Order = 2)]
-        [StringLength(4)]
+        [StringLength(1)]
         public string ˆøó•û® { get; set; }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace NskAppModelLibrary.Models
         /// ­•{•ÛŒ¯”F’è‹æ•ª
         /// </summary>
         [Column("­•{•ÛŒ¯”F’è‹æ•ª")]
-        [StringLength(3)]
+        [StringLength(4)]
         public string ­•{•ÛŒ¯”F’è‹æ•ª { get; set; }
 
         /// <summary>

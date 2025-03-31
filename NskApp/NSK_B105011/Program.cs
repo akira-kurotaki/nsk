@@ -7,10 +7,8 @@ using CoreLibrary.Core.Dto;
 using CoreLibrary.Core.Exceptions;
 using CoreLibrary.Core.Utility;
 using NskAppModelLibrary.Context;
-using NskAppModelLibrary.Models;
 using NskCommon = NskCommonLibrary.Core.Consts;
 using NSK_B105011.Models;
-using ModelLibrary.Context;
 
 namespace NSK_B105011
 {
@@ -29,7 +27,7 @@ namespace NSK_B105011
         /// </summary>
         static Program()
         {
-
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         }
 
         /// <summary>
@@ -190,41 +188,42 @@ namespace NSK_B105011
                     TodofukenCd = todofukenCd,
                     KumiaitoCd = kumiaitoCd,
                     ShishoCd = shishoCd,
-                    BatchNm = "NSK_B105011"
+                    BatchId = (long)nBid
                 };
+                // 総件数取得フラグ
+                bool boolAllCntFlg = false;
+                // 件数（出力パラメータ）
+                int intAllCnt = 0;
+                // エラーメッセージ（出力パラメータ）
+                string message = string.Empty;
+                // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
+                List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
-                SystemCommonContext db = new();
-                ModelLibrary.Models.TBatchYoyaku? batchYoyaku = db.TBatchYoyakus.FirstOrDefault(x =>
-                    (x.SystemKbn == param.SystemKbn) &&
-                    (x.TodofukenCd == param.TodofukenCd) &&
-                    (x.KumiaitoCd == param.KumiaitoCd) &&
-                    (x.ShishoCd == param.ShishoCd) &&
-                    (x.BatchNm == param.BatchNm));
+                // バッチ予約が存在しない場合、
+                if (batchYoyakuList.Count == 0)
+                {
+                    // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
+                    //（"ME01645" 引数{0} ：パラメータの取得)
+                    throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
+                }
 
                 // バッチ予約が存在する場合
-                if (batchYoyaku != null)
+                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
                 {
+                    // [引数：バッチID]に一致する場合
                     if (batchYoyaku.BatchId == nBid)
                     {
-                        // [引数：バッチID]に一致する場合
                         // 取得した「バッチ予約状況」から値を取得し変数に設定する。
                         // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
                         batchYoyakuId = batchYoyaku.BatchYoyakuId;
                     }
+                    // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
                     else
                     {
-                        // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
                         // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
                         //（"ME01645" 引数{0} ：パラメータの取得)
                         throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
                     }
-                }
-                else
-                {
-                    // バッチ予約が存在しない場合、
-                    // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
-                    //（"ME01645" 引数{0} ：パラメータの取得)
-                    throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
                 }
 
                 // ４．DB接続
@@ -238,327 +237,20 @@ namespace NSK_B105011
                     throw new AppException("ME90014", MessageUtil.Get("ME90014"));
                 }
 
-                //５．バッチ条件を取得
-                //５．１．バッチ条件情報の取得
-                //５．１．１．条件名定数から以下の項目を取得し、設定値をList<string> に格納する。
-                List<string> jokenNames =
-                [
-                    Core.JoukenNameConst.JOUKEN_KUMIAITO,                   // 組合等
-                    NskCommon.JoukenNameConst.JOUKEN_NENSAN,                // 年産
-                    NskCommon.JoukenNameConst.JOUKEN_KYOSAI_MOKUTEKI,       // 共済目的
-                    Core.JoukenNameConst.JOUKEN_SHISHO,                     // 支所
-                    Core.JoukenNameConst.JOUKEN_SHICHOSON,                  // 市町村
-                    Core.JoukenNameConst.JOUKEN_DAICHIKU,                   // 大地区
-                    Core.JoukenNameConst.JOUKEN_SHOCHIKU_START,             // 小地区（開始）
-                    Core.JoukenNameConst.JOUKEN_SHOCHIKU_END,               // 小地区（終了）
-                    NskCommon.JoukenNameConst.JOUKEN_KUMIAIINTO_CD_START,   // 組合員等コードFrom
-                    NskCommon.JoukenNameConst.JOUKEN_KUMIAIINTO_CD_END,     // 組合員等コードTo
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY1,              // 出力順1
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY1,                  // 昇順・降順1
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY2,              // 出力順2
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY2,                  // 昇順・降順2
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY3,              // 出力順3
-                    Core.JoukenNameConst.JOUKEN_ORDER_BY3,                  // 昇順・降順3
-                    NskCommon.JoukenNameConst.JOUKEN_FILE_NAME,             // ファイル名
-                    NskCommon.JoukenNameConst.JOUKEN_MOJI_CD                // 文字コード
-                ];
-
                 using (NskAppContext dbContext = new(dbInfo.ConnectionString, dbInfo.DefaultSchema, ConfigUtil.GetInt(Core.CoreConst.COMMAND_TIMEOUT)))
                 {
-                    // ５．１．２．[変数：バッチ条件のキー情報] とListをキーにバッチ条件テーブルから「バッチ条件情報」を取得する。
-                    // バッチ条件プロパティモデルは作成しない
-                    List<T01050バッチ条件> batchJokens = GetbatchJoken(dbContext, jid, jokenNames);
-
-                    // ５．１．３．「バッチ条件情報」が0件の場合
-                    if (batchJokens.Count == 0)
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01645" 引数{ 0} ：パラメータの取得)
-                        throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
-                    }
-
+                    //５．バッチ条件を取得
                     // ５．２．バッチ条件情報のチェック
                     // ５．２．１．取得した「バッチ条件情報」のうち条件名称が下記と一致するデータのを条件値を変数に設定する。
                     // バッチ条件情報
                     BatchJoken batchJoken = new();
+                    batchJoken.GetBatchJoukens(dbContext, jid);
 
-                    // 条件値のリストからバッチ条件情報への値設定
-                    foreach (T01050バッチ条件 joken in batchJokens)
-                    {
-                        switch (joken.条件名称)
-                        {
-                            case Core.JoukenNameConst.JOUKEN_KUMIAITO:                  // 組合等　※必須
-                                batchJoken.JokenKumiaitoCd = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_NENSAN:               // 年産　※必須
-                                batchJoken.JokenNensan = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_KYOSAI_MOKUTEKI:      // 共済目的　※必須
-                                batchJoken.JokenKyosaiMokutekitoCd = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_SHISHO:                    // 支所　※必須
-                                batchJoken.JokenShisho = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_SHICHOSON:                 // 市町村
-                                batchJoken.JokenShichoson = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_DAICHIKU:                  // 大地区
-                                batchJoken.JokenDaichiku = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_SHOCHIKU_START:            // 小地区（開始）
-                                batchJoken.JokenShochikuStart = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_SHOCHIKU_END:              // 小地区（終了）
-                                batchJoken.JokenShochikuEnd = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_KUMIAIINTO_CD_START:  // 組合員等コードFrom
-                                batchJoken.JokenKumiaiintoCdStart = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_KUMIAIINTO_CD_END:    // 組合員等コードTo
-                                batchJoken.JokenKumiaiintoCdEnd = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY1:             // 出力順1
-                                batchJoken.JokenShuturyokujun1 = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY1:                 // 昇順・降順1
-                                batchJoken.JokenShojunKojun1 = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY2:             // 出力順2
-                                batchJoken.JokenShuturyokujun2 = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY2:                 // 昇順・降順2
-                                batchJoken.JokenShojunKojun2 = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY_KEY3:             // 出力順3
-                                batchJoken.JokenShuturyokujun3 = joken.条件値;
-                                break;
-                            case Core.JoukenNameConst.JOUKEN_ORDER_BY3:                 // 昇順・降順3
-                                batchJoken.JokenShojunKojun3 = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_FILE_NAME:            // ファイル名　※必須
-                                batchJoken.JokenFileName = joken.条件値;
-                                break;
-                            case NskCommon.JoukenNameConst.JOUKEN_MOJI_CD:              // 文字コード　※必須
-                                batchJoken.JokenMojiCd = joken.条件値;
-                                break;
-                        }
-                    }
-
-                    // ５．２．２．[変数：条件_組合等コード]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenKumiaitoCd))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054" 引数{0} ：条件_組合等コード)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_組合等コード"));
-                    }
-
-                    // ５．２．３．[変数：条件_年産]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenNensan))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054"　引数{0} ：条件_年産)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_年産"));
-                    }
-
-                    // ５．２．４．[変数：条件_共済目的コード]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenKyosaiMokutekitoCd))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054"　引数{0} ：条件_共済目的コード)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_共済目的コード"));
-                    }
-
-                    // ５．２．５．[変数：条件_支所コード]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenShisho))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054"　引数{0} ：条件_支所コード)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_支所コード"));
-                    }
-
-                    // ５．２．５．１．[変数：条件_出力順1]または[変数：条件_昇順・降順1]のどちらか一方がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) || string.IsNullOrEmpty(batchJoken.JokenShojunKojun1))
-                    {
-                        if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_出力順1)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_出力順1"));
-                        }
-                        else if (string.IsNullOrEmpty(batchJoken.JokenShojunKojun1))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_昇順・降順1)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_昇順・降順1"));
-                        }
-                    }
-
-                    // ５．２．５．２．[変数：条件_出力順2]または[変数：条件_昇順・降順2]のどちらか一方がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) || string.IsNullOrEmpty(batchJoken.JokenShojunKojun2))
-                    {
-                        if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_出力順2)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_出力順2"));
-                        }
-                        else if (string.IsNullOrEmpty(batchJoken.JokenShojunKojun2))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_昇順・降順2)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_昇順・降順2"));
-                        }
-                    }
-
-                    // ５．２．５．３．[変数：条件_出力順3]または[変数：条件_昇順・降順3]のどちらか一方がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3) || string.IsNullOrEmpty(batchJoken.JokenShojunKojun3))
-                    {
-                        if (string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_出力順3)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_出力順3"));
-                        }
-                        else if (string.IsNullOrEmpty(batchJoken.JokenShojunKojun3))
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME01054"　引数{0} ：条件_昇順・降順3)
-                            throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_昇順・降順3"));
-                        }
-                    }
-
-                    // ５．２．６．[変数：条件_ファイル名]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenFileName))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054"　引数{0} ：条件_ファイル名)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_ファイル名"));
-                    }
-
-                    // ５．２．７．[変数：条件_文字コード]がnullまたは空文字の場合
-                    if (string.IsNullOrEmpty(batchJoken.JokenMojiCd))
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME01054"　引数{0} ：条件_文字コード)
-                        throw new AppException("ME01054", MessageUtil.Get("ME01054", "条件_文字コード"));
-                    }
+                    // 必須入力チェック
+                    batchJoken.IsRequired();
 
                     // ６．コードの整合性チェック
-                    // ６．１．「都道府県コード存在情報」を取得する。
-                    int todofuken = GetTodofukenCdSonzaiJoho(dbContext, todofukenCd);
-
-                    // ６．２．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                    if (todofuken == 0)
-                    {
-                        // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                        // （"ME10005"　引数{0} ：都道府県コード)
-                        throw new AppException("ME10005", MessageUtil.Get("ME10005", "都道府県コード"));
-                    }
-
-                    // ６．３．[変数：組合等コード] が入力されている場合
-                    if (!string.IsNullOrEmpty(kumiaitoCd))
-                    {
-                        // 「組合等コード存在情報」を取得する。
-                        int kumiaito = GetKumiaitoCdSonzaiJoho(dbContext, todofukenCd, kumiaitoCd);
-
-                        // ６．４．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (kumiaito == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：組合等コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "組合等コード"));
-                        }
-                    }
-
-                    // ６．５．[変数：支所コード]が入力されている場合
-                    if (!string.IsNullOrEmpty(shishoCd))
-                    {
-                        // 「支所コード存在情報」を取得する。
-                        int shisho = GetShishoCdSonzaiJoho(dbContext, todofukenCd, kumiaitoCd, shishoCd);
-
-                        // ６．６．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (shisho == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：支所コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "支所コード"));
-                        }
-                    }
-
-                    // ６．７．[配列：バッチ条件] から組合等コードが取得できた場合
-                    if (!string.IsNullOrEmpty(batchJoken.JokenKumiaitoCd))
-                    {
-                        // 「検索条件組合等コード存在情報」を取得する。
-                        int jokenKumiaito = GetKumiaitoCdSonzaiJoho(dbContext, todofukenCd, batchJoken.JokenKumiaitoCd);
-
-                        // ６．８．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (jokenKumiaito == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：条件_組合等コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "条件_組合等コード"));
-                        }
-                    }
-
-                    // ６．９．[配列：バッチ条件]から共済目的コードが取得できた場合
-                    if (!string.IsNullOrEmpty(batchJoken.JokenKyosaiMokutekitoCd))
-                    {
-                        // 「共済目的コード存在情報」を取得する。
-                        int kyosaiMokuteki = GetKyosaiMokutekiCDSonzaiJoho(dbContext, batchJoken.JokenKyosaiMokutekitoCd);
-
-                        // ６．１０．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (kyosaiMokuteki == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：条件_共済目的コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "条件_共済目的コード"));
-                        }
-                    }
-
-                    // ６．１１．[配列：バッチ条件] から支所コードが取得できた場合
-                    if (!string.IsNullOrEmpty(batchJoken.JokenShisho))
-                    {
-                        // 「検索条件支所コード存在情報」を取得する。
-                        int kensakuJokenShisho = GetKensakuJokenShishoCDSonzaiJoho(dbContext, todofukenCd, kumiaitoCd, batchJoken.JokenShisho);
-
-                        // ６．１２．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (kensakuJokenShisho == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：条件_支所コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "条件_支所コード"));
-                        }
-                    }
-
-                    // ６．１３．[配列：バッチ条件] から市町村コードが取得できた場合
-                    if (!string.IsNullOrEmpty(batchJoken.JokenShichoson))
-                    {
-                        // 「市町村コード存在情報」を取得する。
-                        int shichoson = GetShichosonCdSonzaiJoho(dbContext, todofukenCd, kumiaitoCd, batchJoken.JokenShichoson);
-
-                        // ６．１４．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (shichoson == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005"　引数{0} ：条件_市町村コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "条件_市町村コード"));
-                        }
-                    }
-
-                    // ６．１５．[配列：バッチ条件]から大地区コードが取得できた場合
-                    if (!string.IsNullOrEmpty(batchJoken.JokenDaichiku))
-                    {
-                        // 「大地区コード存在情報」を取得する。
-                        int daichiku = GetDaichikuCdSonzaiJoho(dbContext, todofukenCd, kumiaitoCd, batchJoken.JokenDaichiku);
-
-                        // ６．１４．データが取得できない場合（該当データがマスタデータに登録されていない場合）
-                        if (daichiku == 0)
-                        {
-                            // 以下のエラーメッセージを設定し、ERRORログに出力して「１０.」へ進む。
-                            // （"ME10005　引数{0} ：条件_大地区コード)
-                            throw new AppException("ME10005", MessageUtil.Get("ME10005", "条件_大地区コード"));
-                        }
-                    }
+                    batchJoken.IsConsistency(dbContext, todofukenCd, kumiaitoCd, shishoCd);
 
                     // ７．データ検索SQLを実行（ログ出力：あり）
                     // ７．１．対象データの取得
@@ -570,7 +262,7 @@ namespace NSK_B105011
                     {
                         //  [変数：エラーメッセージ] に以下のメッセージを設定し、ERRORログに出力して「１０.」へ進む。
                         // （"ME10076" 引数{0}：0)
-                        throw new AppException("ME10076", MessageUtil.Get("ME10076", "０"));
+                        throw new AppException("ME10076", MessageUtil.Get("ME10076", "0"));
                     }
 
                     // ７．３．取得した件数が0件以外の場合
@@ -595,32 +287,33 @@ namespace NSK_B105011
                         // ８．２．変数に格納したバッチ条件に沿った細目データ出力
                         // 該当する条件の形式で出力用細目データファイルに細目データを出力する。
                         // 年産（nullの場合は空にする）
-                        string jokenNensan = batchJoken.JokenNensan ?? String.Empty;
+                        string jokenNensan = batchJoken.JokenNensan ?? string.Empty;
 
                         // バッチ条件：共済目的コード（nullの場合は空にする）
-                        string jokenKyosaiMokutekitoCd = batchJoken.JokenKyosaiMokutekitoCd ?? String.Empty;
+                        string jokenKyosaiMokutekitoCd = batchJoken.JokenKyosaiMokutekitoCd ?? string.Empty;
 
                         // 抽出区分
-                        string tyushutuKubun = String.Empty;
+                        string tyushutuKubun = string.Empty;
 
                         // 範囲パラメータ1
-                        string haniParam1 = String.Empty;
+                        string haniParam1 = string.Empty;
 
                         // 範囲パラメータ2
-                        string haniParam2 = String.Empty;
+                        string haniParam2 = string.Empty;
 
                         // 範囲パラメータ3
-                        string haniParam3 = String.Empty;
+                        string haniParam3 = string.Empty;
 
                         // 文字コード
                         Encoding encoding = Encoding.Default;
-                        if (Core.CoreConst.CharacterCode.UTF8.Equals(batchJoken.JokenMojiCd))
+                        switch (int.Parse(batchJoken.JokenMojiCd))
                         {
-                            encoding = Encoding.UTF8;
-                        }
-                        else if (Core.CoreConst.CharacterCode.SJIS.Equals(batchJoken.JokenMojiCd))
-                        {
-                            encoding = Encoding.GetEncoding("Shift_JIS");
+                            case (int)Core.CoreConst.CharacterCode.UTF8:
+                                encoding = Encoding.UTF8;
+                                break;
+                            case (int)Core.CoreConst.CharacterCode.SJIS:
+                                encoding = Encoding.GetEncoding("Shift_JIS");
+                                break;
                         }
 
                         // ファイルの書き込み
@@ -644,13 +337,14 @@ namespace NSK_B105011
                                             tyushutuKubun = NskCommon.CoreConst.TYUSHUTU_KUBUN_KUMIAIINTO_SENTAKU;
                                             haniParam1 = batchJoken.JokenKumiaiintoCdStart;
                                             // [変数：バッチ条件組合員等コードTo] が NULL の場合、haniParam2を空にする
-                                            haniParam2 = batchJoken.JokenKumiaiintoCdEnd ?? String.Empty;
+                                            haniParam2 = batchJoken.JokenKumiaiintoCdEnd ?? string.Empty;
                                         }
                                         // [変数：バッチ条件組合員等コードFrom] が NULL かつ [変数：バッチ条件組合員等コードTo] が NULL の場合
                                         else
                                         {
                                             // 範囲レコード(地区選択)
                                             tyushutuKubun = NskCommon.CoreConst.TYUSHUTU_KUBUN_CHIKU_SENTAKU;
+                                            haniParam1 = batchJoken.JokenDaichiku;
                                             haniParam2 = batchJoken.JokenShochikuStart;
                                             haniParam3 = batchJoken.JokenShochikuEnd;
                                         }
@@ -663,12 +357,12 @@ namespace NSK_B105011
                                         tyushutuKubun = NskCommon.CoreConst.TYUSHUTU_KUBUN_CHIKU_SENTAKU;
                                         haniParam1 = batchJoken.JokenDaichiku;
                                         //  [変数：バッチ条件小地区From] が NULL の場合、haniParam2を空にする
-                                        haniParam2 = batchJoken.JokenShochikuStart ?? String.Empty;
+                                        haniParam2 = batchJoken.JokenShochikuStart ?? string.Empty;
                                         // haniParam2に値が設定された場合、haniParam3にも値が設定される
-                                        if (!String.IsNullOrEmpty(haniParam2))
+                                        if (!string.IsNullOrEmpty(haniParam2))
                                         {
                                             //  [変数：バッチ条件小地区To] が NULL の場合、haniParam3を空にする
-                                            haniParam3 = batchJoken.JokenShochikuEnd ?? String.Empty;
+                                            haniParam3 = batchJoken.JokenShochikuEnd ?? string.Empty;
                                         }
                                     }
                                 }
@@ -743,7 +437,7 @@ namespace NSK_B105011
                             // 3行目の内容を配列にまとめる
                             List<string> dataStart =
                             [
-                                "# DATA-START …",
+                                NskCommon.CoreConst.DATA_START,
                                 DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
                             ];
                             // 配列の内容を書き込む
@@ -770,6 +464,7 @@ namespace NSK_B105011
                                     saimokuRecord.区分コード,
                                     saimokuRecord.種類コード,
                                     saimokuRecord.品種コード,
+                                    saimokuRecord.収量等級コード,
                                     saimokuRecord.参酌コード,
                                     saimokuRecord.基準単収.ToString(),
                                     saimokuRecord.基準収穫量.ToString(),
@@ -793,7 +488,7 @@ namespace NSK_B105011
                             // 最終行の内容を配列にまとめる
                             List<string> dataEnd =
                             [
-                                "# DATA-END …",
+                                NskCommon.CoreConst.DATA_END,
                                 DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
                             ];
                             // 配列の内容を書き込む
@@ -803,11 +498,12 @@ namespace NSK_B105011
 
                     // ８．３．Zip暗号化を行う。
                     // ８．３．１．データ一時出力フォルダ内のファイルを共通部品「ZipUtil.CreateZip」でZip化（暗号化）し
-                    // TODO: Dictionary<string, string> zipFilePath = ZipUtil.CreateZip(filePath);
-                    // Zipファイルを共通部品「FolderUtil.MoveFile」で[変数：ZIPファイル格納先パス]に移動する。
+                    Dictionary<string, string> zipFilePath = ZipUtil.CreateZip(tempFolderPath);
+                    //Dictionary<string, string> zipFilePath = ZipUtil.CreateZip(tempFolderPath);
+                    //Zipファイルを共通部品「FolderUtil.MoveFile」で[変数：ZIPファイル格納先パス]に移動する。
                     // ※共通部品「FolderUtil.MoveFile」内で「システム共通スキーマ.バッチダウンロードファイル]へ
-                    // [変数：ZIPファイル格納先パス] とファイル名でパスを登録します。
-                    // TODO: FolderUtil.MoveFile(zipFilePath, zipFolderPath, Constants.BATCH_USER_ID, nBid);
+                    // [変数：ZIPファイル格納先パス] とファイル名でパスを登録します
+                    FolderUtil.MoveFile(zipFilePath, zipFolderPath, batchYoyakuId, nBid);
 
                     // ８．３．２．「８．１．」のフォルダを削除する。
                     if (Directory.Exists(tempFolderPath))
@@ -822,6 +518,7 @@ namespace NSK_B105011
                     // [変数：エラーメッセージ] に正常終了メッセージを設定
                     // （"MI10005"：処理が正常に終了しました。)
                     errorMessage = MessageUtil.Get("MI10005");
+                    logger.Info(errorMessage);
                 }
 
                 // ９．バッチ実行状況更新
@@ -832,14 +529,13 @@ namespace NSK_B105011
                 if (BatchUtil.UpdateBatchYoyakuSts(nBid, status, errorMessage, batchYoyakuId, ref refMessage) == BatchUtil.RET_FAIL)
                 {
                     // （１）失敗の場合
-                    logger.Error(refMessage);
-                    logger.Error(string.Format(NskCommon.CoreConst.ERROR_LOG_UPDATE_BATCH_YOYAKU_STS, bid, status, errorMessage));
+                    logger.Error(string.Format(NskCommon.CoreConst.ERROR_LOG_UPDATE_BATCH_YOYAKU_STS, bid, status, refMessage));
                     result = NskCommon.CoreConst.BATCH_EXECUT_FAILED;
                 }
                 else
                 {
                     // （２）成功の場合
-                    logger.Info(string.Format(NskCommon.CoreConst.SUCCESS_LOG_UPDATE_BATCH_YOYAKU_STS, bid, status, errorMessage));
+                    logger.Info(string.Format(NskCommon.CoreConst.SUCCESS_LOG_UPDATE_BATCH_YOYAKU_STS, bid, status, refMessage));
                     result = NskCommon.CoreConst.BATCH_EXECUT_SUCCESS;
                 }
 
@@ -848,6 +544,8 @@ namespace NSK_B105011
             catch (Exception ex)
             {
                 // １０．エラー処理
+                // エラーメッセージをERRORログに出力する
+                logger.Error(ex.Message);
                 // １０．１．例外（エクセプション）の場合
                 //  [変数：処理ステータス] に"99"（エラー）を設定
                 status = NskCommon.CoreConst.STATUS_ERROR;
@@ -862,151 +560,6 @@ namespace NSK_B105011
             }
 
             Environment.ExitCode = result;
-        }
-
-        /// <summary>
-        /// 「バッチ条件情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="jid">変数：バッチ条件ID</param>
-        /// <param name="jokenNames">条件名のList</param>
-        /// <returns></returns>
-        private static List<T01050バッチ条件> GetbatchJoken(NskAppContext dbContext, string jid, List<string> jokenNames)
-        {
-            List<T01050バッチ条件> batchJokens = dbContext.T01050バッチ条件s
-                .Where(x => x.バッチ条件id == jid && jokenNames.Contains(x.条件名称))
-                .ToList();
-
-            return batchJokens;
-        }
-
-        /// <summary>
-        /// 「都道府県コード存在情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        private static int GetTodofukenCdSonzaiJoho(NskAppContext dbContext, string todofukenCd)
-        {
-            int todofuken = dbContext.VTodofukens
-                .Where(x => x.TodofukenCd == todofukenCd)
-                .Count();
-
-            return todofuken;
-        }
-
-        /// <summary>
-        /// 「組合等コード存在情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        /// <param name="kumiaitoCd">組合等コード</param>
-        /// <returns></returns>
-        private static int GetKumiaitoCdSonzaiJoho(NskAppContext dbContext, string todofukenCd, string kumiaitoCd)
-        {
-            int kumiaito = dbContext.VKumiaitos
-                 .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd)
-                 .Count();
-
-            return kumiaito;
-        }
-
-        /// <summary>
-        /// 「支所コード存在情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        /// <param name="kumiaitoCd">組合等コード</param>
-        /// <param name="shishoCd">支所コード</param>
-        /// <returns></returns>
-        private static int GetShishoCdSonzaiJoho(NskAppContext dbContext, string todofukenCd, string kumiaitoCd, string shishoCd)
-        {
-            int shisho = dbContext.VShishoNms
-                .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd && x.ShishoCd == shishoCd)
-                .Count();
-
-            return shisho;
-        }
-
-        /// <summary>
-        /// 共済目的コード存在情報の取得
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="kyosaiMokutekiCd">共済目的コード</param>
-        /// <returns></returns>
-        private static int GetKyosaiMokutekiCDSonzaiJoho(NskAppContext dbContext, string kyosaiMokutekiCd)
-        {
-            int kyosaiMokuteki = dbContext.M00010共済目的名称s
-                .Where(x => x.共済目的コード == kyosaiMokutekiCd)
-                .Count();
-
-            return kyosaiMokuteki;
-        }
-
-        /// <summary>
-        /// 検索条件：支所コード存在情報の取得
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        /// <param name="kumiaitoCd">組合等コード</param>
-        /// <param name="shishoCd">支所コード</param>
-        /// <returns></returns>
-        private static int GetKensakuJokenShishoCDSonzaiJoho(NskAppContext dbContext, string todofukenCd, string kumiaitoCd, string shishoCd)
-        {
-            int shisho = 0;
-
-            if (shishoCd != "00")
-            {
-                shisho = dbContext.VShishoNms
-                    .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd && x.ShishoCd == shishoCd)
-                    .Count();
-            }
-            else
-            {
-                shisho = dbContext.VShishoNms
-                    .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd
-                        && dbContext.VShishoNms
-                            .Where(y => y.TodofukenCd == todofukenCd && y.KumiaitoCd == kumiaitoCd && y.ShishoCd != "00")
-                            .Select(y => y.ShishoCd)
-                            .ToList()
-                    .Contains(x.ShishoCd))
-                    .Count();
-            }
-
-            return shisho;
-        }
-
-        /// <summary>
-        /// 「市町村コード存在情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        /// <param name="kumiaitoCd">組合等コード</param>
-        /// <param name="shichosonCd">市町村コード</param>
-        /// <returns></returns>
-        private static int GetShichosonCdSonzaiJoho(NskAppContext dbContext, string todofukenCd, string kumiaitoCd, string shichosonCd)
-        {
-            int shichoson = dbContext.VShichosonNms
-                .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd && x.ShichosonCd == shichosonCd)
-                .Count();
-
-            return shichoson;
-        }
-
-        /// <summary>
-        /// 「大地区コード存在情報」を取得する。
-        /// </summary>
-        /// <param name="dbContext">DBコンテキスト</param>
-        /// <param name="todofukenCd">都道府県コード</param>
-        /// <param name="kumiaitoCd">組合等コード</param>
-        /// <param name="daichikuCd">大地区コード</param>
-        /// <returns></returns>
-        private static int GetDaichikuCdSonzaiJoho(NskAppContext dbContext, string todofukenCd, string kumiaitoCd, string daichikuCd)
-        {
-            int daichiku = dbContext.VDaichikuNms
-                .Where(x => x.TodofukenCd == todofukenCd && x.KumiaitoCd == kumiaitoCd && x.DaichikuCd == daichikuCd)
-                .Count();
-
-            return daichiku;
         }
 
         /// <summary>
@@ -1094,14 +647,14 @@ namespace NSK_B105011
             sql.Append($@"    AND CASE ");
             sql.Append($@"        WHEN @バッチ条件支所コード <> '00' THEN T3.shisho_cd = @バッチ条件支所コード ");
             sql.Append($@"        ELSE T3.shisho_cd IN ( ");
-            sql.Append($@"            SELECT shisho_cd ");
-            sql.Append($@"            FROM v_shisho_nm ");
-            sql.Append($@"            WHERE todofuken_cd = @都道府県コード ");
-            sql.Append($@"            AND kumiaito_cd = @組合等コード ");
-            sql.Append($@"            AND shisho_cd <> '00') ");
+                sql.Append($@"            SELECT shisho_cd ");
+                sql.Append($@"            FROM v_shisho_nm ");
+                sql.Append($@"            WHERE todofuken_cd = @都道府県コード ");
+                sql.Append($@"            AND kumiaito_cd = @組合等コード ");
+                sql.Append($@"            AND shisho_cd <> '00') ");
             sql.Append($@"    END ");
 
-            if (!(String.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) && String.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) && String.IsNullOrEmpty(batchJoken.JokenShuturyokujun3)))
+            if (!(string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) && string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) && string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3)))
             {
                 // 初回の判定
                 bool isFirst = true;
@@ -1117,7 +670,7 @@ namespace NSK_B105011
 
                 foreach (SortOrder sort in sortOrders)
                 {
-                    if (!String.IsNullOrEmpty(sort.OrderByKey))
+                    if (!string.IsNullOrEmpty(sort.OrderByKey))
                     {
                         if (isFirst)
                         {
@@ -1128,25 +681,25 @@ namespace NSK_B105011
                             sql.Append($"   , ");
                         }
 
-                        if      (sort.OrderByKey == batchJoken.JokenShuturyokujun1)
+                        if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun1))
                         {
                             sql.Append($"   @出力順1 ");
                         }
-                        else if (sort.OrderByKey == batchJoken.JokenShuturyokujun2)
+                        else if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun2))
                         {
                             sql.Append($"   @出力順2 ");
                         }
-                        else if (sort.OrderByKey == batchJoken.JokenShuturyokujun3)
+                        else if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun3))
                         {
                             sql.Append($"   @出力順3 ");
                         }
 
-                        switch ((Core.CoreConst.SortOrder)int.Parse(sort.OrderBy))
+                        switch (int.Parse(sort.OrderBy))
                         {
-                            case Core.CoreConst.SortOrder.ASC:
+                            case (int)Core.CoreConst.SortOrder.ASC:
                                 sql.Append($"   ASC ");
                                 break;
-                            case Core.CoreConst.SortOrder.DESC:
+                            case (int)Core.CoreConst.SortOrder.DESC:
                                 sql.Append($"   DESC ");
                                 break;
                         }

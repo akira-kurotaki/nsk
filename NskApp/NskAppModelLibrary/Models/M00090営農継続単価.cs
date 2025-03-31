@@ -10,7 +10,7 @@ namespace NskAppModelLibrary.Models
     /// </summary>
     [Serializable]
     [Table("m_00090_営農継続単価")]
-    [PrimaryKey(nameof(共済目的コード), nameof(適用年月))]
+    [PrimaryKey(nameof(共済目的コード), nameof(適用年産))]
     public class M00090営農継続単価 : ModelBase
     {
         /// <summary>
@@ -22,12 +22,12 @@ namespace NskAppModelLibrary.Models
         public string 共済目的コード { get; set; }
 
         /// <summary>
-        /// 適用年月
+        /// 適用年産
         /// </summary>
         [Required]
-        [Column("適用年月", Order = 2)]
-        [StringLength(7)]
-        public string 適用年月 { get; set; }
+        [Column("適用年産", Order = 2)]
+        [StringLength(4)]
+        public string 適用年産 { get; set; }
 
         /// <summary>
         /// 営農継続単価

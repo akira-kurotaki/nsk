@@ -1,6 +1,7 @@
 ﻿using CoreLibrary.Core.Attributes;
 using CoreLibrary.Core.Base;
 using CoreLibrary.Core.Consts;
+using CoreLibrary.Core.Exceptions;
 using CoreLibrary.Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -26,16 +27,6 @@ namespace NskWeb.Areas.F105.Controllers
     public class D105030Controller : CoreController
     {
         /// <summary>
-        /// ページ0
-        /// </summary>
-        private const string PAGE_0 = "0";
-
-        /// <summary>
-        /// ページ1
-        /// </summary>
-        private const int PAGE_1 = 1;
-
-        /// <summary>
         /// セッションキー(D105030)
         /// </summary>
         private const string SESS_D105030 = $"{F105Const.SCREEN_ID_D105030}_SCREEN";
@@ -59,7 +50,7 @@ namespace NskWeb.Areas.F105.Controllers
 
             }
 
-            return RedirectToAction("Init", "D105030", new { area = "F105" });
+            return RedirectToAction("Init", F105Const.SCREEN_ID_D105030, new { area = "F105" });
         }
 
         /// <summary>
@@ -75,21 +66,29 @@ namespace NskWeb.Areas.F105.Controllers
             model.HikiukeSearchResult = new(model.SearchCondition);
             model.HikiukeSearchResult.Pager.PageSize = 1;
 
-            // TODO: １．１．権限チェック
+            // １．１．権限チェック
             // (1)	ログインユーザの権限が「参照」「一部権限」「更新権限」いずれも許可されていない場合、メッセージを設定し業務エラー画面を表示する。
-            model.DispKengen = "更新権限";
-            switch (model.DispKengen)
-            {
-                case "参照権限":
-                    break;
-                case "一部権限":
-                    break;
-                case "更新権限":
-                    break;
-                default:
-                    throw new SystemException(MessageUtil.Get("ME10075"));
-            }
+            bool partKengen = ScreenSosaUtil.CanUpdate($"{F105Const.SCREEN_ID_D105030}_001", HttpContext);
+            bool dispKengen = ScreenSosaUtil.CanReference(F105Const.SCREEN_ID_D105030, HttpContext);
+            bool updKengen = ScreenSosaUtil.CanUpdate(F105Const.SCREEN_ID_D105030, HttpContext);
 
+            model.DispKengen = F105Const.Authority.None;
+            if (updKengen)
+            {
+                model.DispKengen = F105Const.Authority.Update;// "更新権限";
+            }
+            else if (partKengen)
+            {
+                model.DispKengen = F105Const.Authority.Part;// "一部権限";
+            }
+            else if (dispKengen)
+            {
+                model.DispKengen = F105Const.Authority.ReadOnly;// "参照権限";
+            }
+            else
+            {
+                throw new AppException("ME10075", MessageUtil.Get("ME10075"));
+            }
 
             // ２．画面表示用データを取得する。	
             // ２．１．セッションから「組合等コード」「都道府県コード」「年産」「共済目的」「組合員等コード」「氏名」「電話番号」「支所コード」「支所名」
@@ -104,7 +103,7 @@ namespace NskWeb.Areas.F105.Controllers
             // ドロップダウンリスト初期化
             NskAppContext dbContext = getJigyoDb<NskAppContext>();
             model.HikiukeSearchResult.InitializeDropdonwList(dbContext, sessionInfo);
-            model.KumiaiintoSettei.InitializeDropdonwList(dbContext);
+            model.KumiaiintoSettei.InitializeDropdonwList(dbContext, sessionInfo);
             model.RuibetsuSettei.InitializeDropdonwList(dbContext, sessionInfo);
             model.KikenDankaiKbn.InitializeDropdonwList(dbContext, sessionInfo);
 
@@ -118,11 +117,14 @@ namespace NskWeb.Areas.F105.Controllers
 
             // ２．２１．類別設定を取得する。
             List<D105030RuibetsuSetteiRecord> ruibetsuSettiRecords = model.RuibetsuSettei.GetResult(dbContext, sessionInfo);
-            model.RuibetsuSettei.GetPageDataList(dbContext, sessionInfo, PAGE_1);
+            model.RuibetsuSettei.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
 
             // ２．２２．危険段階区分を取得する。
             List<D105030KikenDankaiKbnRecord> kikenDankaiKbnRecords = model.KikenDankaiKbn.GetResult(dbContext, sessionInfo);
-            model.KikenDankaiKbn.GetPageDataList(dbContext, sessionInfo, PAGE_1);
+            model.KikenDankaiKbn.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
+
+            // ２．２３．[選択共済金額]ドロップダウンリスト項目を取得する。
+            model.RuibetsuSettei.UpdateDropdownListAll(dbContext, sessionInfo);
 
 
             // ３．画面項目設定
@@ -150,7 +152,7 @@ namespace NskWeb.Areas.F105.Controllers
             ModelState.Clear();
 
             // 加入申込書入力（水稲）画面を表示する
-            return View("D105030", model);
+            return View(F105Const.SCREEN_ID_D105030, model);
         }
 
 
@@ -173,7 +175,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
@@ -196,30 +198,34 @@ namespace NskWeb.Areas.F105.Controllers
                 nKouchiNoFrom > nKouchiNoTo)
             {
                 // エラーメッセージを「メッセージエリア１」に設定する。
-                model.MessageArea1 = MessageUtil.Get("ME10022", "耕地番号(開始)", "耕地番号(終了)");
+                model.MessageArea1 = MessageUtil.Get("ME10022", "耕地番号(終了)", "耕地番号(開始)");
 
                 ModelState.AddModelError("MessageArea1", model.MessageArea1);
             }
-
-            // (2)[画面：表示順キー１]が空欄以外、かつ、[画面：表示順キー２] と同一の場合、
-	        // エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。
-            if (model.SearchCondition.DisplaySort1.HasValue &&
-                model.SearchCondition.DisplaySort2.HasValue &&
-                model.SearchCondition.DisplaySort1.Value == model.SearchCondition.DisplaySort2.Value)
+            else
             {
-                // エラーメッセージを「メッセージエリア１」に設定する。
-                model.MessageArea1 = MessageUtil.Get("ME10012", "表示順キー1", "表示順キー2");
+                // (2)[画面：表示順キー１]が空欄以外、かつ、[画面：表示順キー２] と同一の場合、
+                // エラーと判定し、エラーメッセージを「メッセージエリア１」に設定する。
+                if (model.SearchCondition.DisplaySort1.HasValue &&
+                    model.SearchCondition.DisplaySort2.HasValue &&
+                    model.SearchCondition.DisplaySort1.Value == model.SearchCondition.DisplaySort2.Value)
+                {
+                    // エラーメッセージを「メッセージエリア１」に設定する。
+                    model.MessageArea1 = MessageUtil.Get("ME10012", "表示順キー1", "表示順キー2");
 
-                ModelState.AddModelError("MessageArea1", model.MessageArea1);
+                    ModelState.AddModelError("MessageArea1", model.MessageArea1);
+                }
+
             }
+
 
             NskAppContext dbContext = getJigyoDb<NskAppContext>();
-            model.HikiukeSearchResult = new(model.SearchCondition);
+            model.HikiukeSearchResult.SearchCondition = model.SearchCondition;
 
             if (ModelState.IsValid)
             {
                 // ３．２．２．１．引受情報を取得する。
-                model.HikiukeSearchResult.GetPageDataList(dbContext, sessionInfo, PAGE_1);
+                model.HikiukeSearchResult.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
 
                 // ３．２．３．検索結果のチェック
                 // ３．２．３．１．検索結果0件の場合、エラーメッセージを設定する。
@@ -229,23 +235,26 @@ namespace NskWeb.Areas.F105.Controllers
                     // 画面エラーメッセージエリアにメッセージ設定
                     ModelState.AddModelError("MessageArea1", MessageUtil.Get("MI00011"));
                 }
+                else
+                {
+                    // ３．２．４．計算結果の算出
+                    model.CalcResult.Calc(dbContext, sessionInfo, model.HikiukeSearchResult);
 
-                // ３．２．４．計算結果の算出
-                model.CalcResult.Calc(dbContext, sessionInfo, model.HikiukeSearchResult);
+                }
             }
 
-            // ３．２．５．検索条件と検索結果をセッションに保存する
+            // ４．部分ビューを構築する
+            //// (1) ドロップダウンリスト項目取得
+            //// No.1[３．４．]～[３．１７．] の処理を実行する。
+            //model.HikiukeSearchResult.InitializeDropdonwList(dbContext, sessionInfo);
+
+            // (2) 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
-            // ４．部分ビューを構築する
-            // (1) ドロップダウンリスト項目取得
-            // No.1[３．４．]～[３．１７．] の処理を実行する。
-            model.HikiukeSearchResult.InitializeDropdonwList(dbContext, sessionInfo);
-
-            // (2)[２．]で取得した検索結果、計算結果を反映したモデルを使用し、部分ビューに反映させる。	
+            // (3) [２．]で取得した検索結果、計算結果を反映したモデルを使用し、部分ビューに反映させる。	
             // 共済目的に基づき、活性・非活性制御を行う。
-            // (3) 部分ビューを文字列化する。
-            // (4) 文字列化した部分ビューをJSON化する。
+            // (4) 部分ビューを文字列化する。
+            // (5) 文字列化した部分ビューをJSON化する。
 
             JsonResult messageArea = PartialViewAsJson("_D105030HikiukeSearchResultMessage", model);
             JsonResult resultArea = PartialViewAsJson("_D105030HikiukeSearchResult", model);
@@ -264,7 +273,7 @@ namespace NskWeb.Areas.F105.Controllers
         public ActionResult HikiukeResultPager(string id)
         {
             // ページIDは数値以外のデータの場合
-            if (!Regex.IsMatch(id, @"^[0-9]+$") || PAGE_0 == id)
+            if (!Regex.IsMatch(id, @"^[0-9]+$") || F105Const.PAGE_0 == id)
             {
                 return BadRequest();
             }
@@ -275,7 +284,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -302,7 +311,7 @@ namespace NskWeb.Areas.F105.Controllers
         public ActionResult RuibetsuResultPager(string id)
         {
             // ページIDは数値以外のデータの場合
-            if (!Regex.IsMatch(id, @"^[0-9]+$") || PAGE_0 == id)
+            if (!Regex.IsMatch(id, @"^[0-9]+$") || F105Const.PAGE_0 == id)
             {
                 return BadRequest();
             }
@@ -313,7 +322,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -324,6 +333,8 @@ namespace NskWeb.Areas.F105.Controllers
             D105030SessionInfo sessionInfo = new();
             sessionInfo.GetInfo(HttpContext);
             model.RuibetsuSettei.GetPageDataList(dbContext, sessionInfo, int.Parse(id));
+            // [選択共済金額]ドロップダウンリスト項目を取得する。
+            model.RuibetsuSettei.UpdateDropdownListAll(dbContext, sessionInfo);
 
             // 結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
@@ -340,7 +351,7 @@ namespace NskWeb.Areas.F105.Controllers
         public ActionResult KikenDankaiKbnPager(string id)
         {
             // ページIDは数値以外のデータの場合
-            if (!Regex.IsMatch(id, @"^[0-9]+$") || PAGE_0 == id)
+            if (!Regex.IsMatch(id, @"^[0-9]+$") || F105Const.PAGE_0 == id)
             {
                 return BadRequest();
             }
@@ -351,7 +362,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
             // メッセージをクリアする
             model.RuibetsuSettei.MessageArea5 = string.Empty;
@@ -377,6 +388,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// 引受情報入力行を挿入する。
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AddHikiukeRow(D105030Model dispModel)
         {
             // セッションから加入申込書入力（水稲）モデルを取得する
@@ -385,10 +397,11 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
+            List<D105030HikiukeRecord> beforeRecs = new(dispModel.HikiukeSearchResult.DispRecords);
             model.HikiukeSearchResult.ApplyInput(dispModel.HikiukeSearchResult);
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -400,10 +413,19 @@ namespace NskWeb.Areas.F105.Controllers
             // 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
+            // 追加行のインデックスを取得
+            List<D105030HikiukeRecord> diff = model.HikiukeSearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030HikiukeRecord? addRow = diff.LastOrDefault();
+            int addRowIdx = -1;
+            if (addRow is not null)
+            {
+                addRowIdx = model.HikiukeSearchResult.DispRecords.IndexOf(addRow);
+            }
+
             JsonResult messageArea = PartialViewAsJson("_D105030HikiukeSearchResultMessage", model);
             JsonResult resultArea = PartialViewAsJson("_D105030HikiukeSearchResult", model);
 
-            return Json(new { messageArea = messageArea.Value, resultArea = resultArea.Value });
+            return Json(new { addRowIdx, messageArea = messageArea.Value, resultArea = resultArea.Value });
         }
 
         /// <summary>
@@ -412,6 +434,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// </summary>
         /// <param name="dispModel"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult DelHikiukeRows(D105030Model dispModel)
         {
             // セッションから加入申込書入力（水稲）モデルを取得する
@@ -420,7 +443,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
@@ -437,7 +460,13 @@ namespace NskWeb.Areas.F105.Controllers
             JsonResult messageArea = PartialViewAsJson("_D105030HikiukeSearchResultMessage", model);
             JsonResult resultArea = PartialViewAsJson("_D105030HikiukeSearchResult", model);
 
-            return Json(new { messageArea = messageArea.Value, resultArea = resultArea.Value });
+            D105030HikiukeRecord? firstRow = model.HikiukeSearchResult.DispRecords.FirstOrDefault(x => !x.IsDelRec);
+            int firstRowIdx = -1;
+            if (firstRow is not null)
+            {
+                firstRowIdx = model.HikiukeSearchResult.DispRecords.IndexOf(firstRow);
+            }
+            return Json(new { firstRowIdx, messageArea = messageArea.Value, resultArea = resultArea.Value });
         }
 
         /// <summary>
@@ -446,6 +475,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// </summary>
         /// <param name="dispModel"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RegistHikiuke(D105030Model dispModel)
         {
             IDbContextTransaction? transaction = null;
@@ -461,12 +491,9 @@ namespace NskWeb.Areas.F105.Controllers
                 // セッションに自画面のデータが存在しない場合
                 if (model is null)
                 {
-                    //  [変数：エラーメッセージ] にエラーメッセージを設定
-                    errMessage = MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした");
-                    throw new SystemException(errMessage);
+                    throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
                 }
 
-                // 画面入力値をセッションモデルに反映
                 // 画面入力値をセッションモデルに反映
                 model.HikiukeSearchResult.ApplyInput(dispModel.HikiukeSearchResult);
 
@@ -562,6 +589,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// </summary>
         /// <param name="dispModel"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult CalcHikiuke(D105030Model dispModel)
         {
             // セッションから加入申込書入力（水稲）モデルを取得する
@@ -570,7 +598,7 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -622,7 +650,7 @@ namespace NskWeb.Areas.F105.Controllers
             List<NpgsqlParameter> storedParams = new();
 
             // １．２．共済目的に応じたエラーチェック処理を実行する。	
-            if (model.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_SUITO)
+            if (model.KyosaiMokutekiCd == $"{(int)NskCommonLibrary.Core.Consts.CoreConst.KyosaiMokutekiCdNumber.Suitou}")
             {
                 // １．２．１．「NSK_106012B_引受計算処理（水稲）エラーチェック処理」を実行する。
 
@@ -631,8 +659,8 @@ namespace NskWeb.Areas.F105.Controllers
                 // 年産             IN             [セッション：年産]
                 // 共済目的コード   IN             [セッション：共済目的コード]
                 // ユーザーID       IN             [セッション：ユーザID]
-                // チェック対象     IN             [セッション：組合等コード]
-                // チェック対象(サブ) IN           未指定
+                // チェック対象     IN             0：全組合員、または対象支所組合員
+                // チェック対象(サブ) IN           [セッション：支所コード]
                 // 処理結果         OUT            [変数：処理結果]
                 // エラーコード     OUT            [変数：エラーコード]
                 // エラーメッセージ OUT            [変数：エラーメッセージ]
@@ -640,8 +668,8 @@ namespace NskWeb.Areas.F105.Controllers
                 storedParams.Add(new("年産", sessionInfo.Nensan));
                 storedParams.Add(new("共済目的コード", sessionInfo.KyosaiMokutekiCd));
                 storedParams.Add(new("ユーザーID", GetUserId()));
-                storedParams.Add(new("チェック対象", sessionInfo.KumiaitoCd)); // TODO: 組合等コードでよいか？
-                storedParams.Add(new("チェック対象サブ", string.Empty));
+                storedParams.Add(new("チェック対象", "0")); // 0：全組合員、または対象支所組合員
+                storedParams.Add(new("チェック対象サブ", sessionInfo.ShishoCd));
                 NpgsqlParameter outRet = new("ret", NpgsqlDbType.Integer) { Direction = ParameterDirection.InputOutput };
                 outRet.Value = result;
                 storedParams.Add(outRet);
@@ -660,13 +688,15 @@ namespace NskWeb.Areas.F105.Controllers
                 errMessage = (string)(storedParams.SingleOrDefault(p => p.ParameterName == "message")?.NpgsqlValue ?? string.Empty);
 
             }
-            else if (model.KyosaiMokutekiCd == F105Const.KYOSAI_MOKUTEKI_RIKUTO)
+            else if (model.KyosaiMokutekiCd == $"{(int)NskCommonLibrary.Core.Consts.CoreConst.KyosaiMokutekiCdNumber.Rikutou}")
             {
                 // １．２．２．「NSK_106022B_引受計算処理（陸稲）エラーチェック処理）」を実行する。
                 // 引数           IN/ OUT          値
                 // 共済目的コード   IN             [セッション：共済目的コード]
                 // 組合員等コード   IN             [セッション：組合員等コード]
                 // ユーザーID       IN             [セッション：ユーザID]
+                // チェック対象     IN             0：全組合員、または対象支所組合員
+                // チェック対象(サブ) IN           [セッション：支所コード]
                 // 処理結果         OUT            [変数：処理結果]
                 // エラーコード     OUT            [変数：エラーコード]
                 // エラーメッセージ OUT            [変数：エラーメッセージ]
@@ -674,8 +704,8 @@ namespace NskWeb.Areas.F105.Controllers
                 storedParams.Add(new("年産", sessionInfo.Nensan));
                 storedParams.Add(new("共済目的コード", sessionInfo.KyosaiMokutekiCd));
                 storedParams.Add(new("ユーザーID", GetUserId()));
-                storedParams.Add(new("チェック対象", sessionInfo.KumiaitoCd)); // TODO: 組合等コードでよいか？
-                storedParams.Add(new("チェック対象サブ", string.Empty));
+                storedParams.Add(new("チェック対象", "0")); // 0：全組合員、または対象支所組合員
+                storedParams.Add(new("チェック対象サブ", sessionInfo.ShishoCd));
                 NpgsqlParameter outRet = new("ret", NpgsqlDbType.Integer) { Direction = ParameterDirection.InputOutput };
                 outRet.Value = result;
                 storedParams.Add(outRet);
@@ -720,6 +750,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// </summary>
         /// <param name="dispModel"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RegistKanyuJokyo(D105030Model dispModel)
         {
             IDbContextTransaction? transaction = null;
@@ -735,8 +766,7 @@ namespace NskWeb.Areas.F105.Controllers
                 // セッションに自画面のデータが存在しない場合
                 if (model is null)
                 {
-                    errMessage = MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした");
-                    throw new SystemException(errMessage);
+                    throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
                 }
 
                 // 画面入力値をセッションモデルに反映
@@ -755,11 +785,11 @@ namespace NskWeb.Areas.F105.Controllers
                     // ３．１．１．組合員等毎設定でt_11010_個人設定の登録を行う。
                     execCount += model.KumiaiintoSettei.RegistKojinSettei(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
 
-                    if (model.KumiaiintoSettei.KanyuState == F105Const.KanyuStateType.NO_MEMBER)
-                    {
-                        // ３．１．１．１．加入状況で未加入を選択されている場合、t_11020_個人設定解除の登録を行う。
-                        execCount += model.KumiaiintoSettei.RegistKanyuKaijo(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
-                    }
+                    //if (model.KumiaiintoSettei.KanyuState == F105Const.KanyuStateType.NO_MEMBER)
+                    //{
+                    //    // ３．１．１．１．加入状況で未加入を選択されている場合、t_11020_個人設定解除の登録を行う。
+                    //    execCount += model.KumiaiintoSettei.RegistKanyuKaijo(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
+                    //}
 
                     // ３．１．２．登録が行われたデータが1件でもある場合、[メッセージエリア４]に以下のメッセージを表示する。
                     if (execCount > 0)
@@ -774,17 +804,17 @@ namespace NskWeb.Areas.F105.Controllers
                     // ３．２．１．組合員等毎設定でt_11010_個人設定の更新を行う。
                     execCount += model.KumiaiintoSettei.UpdateKojinSettei(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
 
-                    if (model.KumiaiintoSettei.KanyuState == F105Const.KanyuStateType.NO_MEMBER)
-                    {
-                        // ３．２．１．１．加入状況で停止を選択されている場合、t_11020_個人設定解除の登録を行う。
-                        execCount += model.KumiaiintoSettei.RegistKanyuKaijo(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
+                    //if (model.KumiaiintoSettei.KanyuState == F105Const.KanyuStateType.NO_MEMBER)
+                    //{
+                    //    // ３．２．１．１．加入状況で停止を選択されている場合、t_11020_個人設定解除の登録を行う。
+                    //    execCount += model.KumiaiintoSettei.RegistKanyuKaijo(ref dbContext, sessionInfo, GetUserId(), DateUtil.GetSysDateTime());
 
-                    }
+                    //}
 
                     // ３．２．２．更新が行われたデータが1件でもある場合、[メッセージエリア４]に以下のメッセージを表示する。
                     if (execCount > 0)
                     {
-                        errMessage = MessageUtil.Get("MI00004", "登録");
+                        errMessage = MessageUtil.Get("MI00004", "更新");
                     }
                 }
 
@@ -823,6 +853,7 @@ namespace NskWeb.Areas.F105.Controllers
         ///  類別設定入力行を挿入する。
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult AddRuibetsuRow(D105030Model dispModel)
         {
             // セッションから加入申込書入力（水稲）モデルを取得する
@@ -831,10 +862,11 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
+            List<D105030RuibetsuSetteiRecord> beforeRecs = new(dispModel.RuibetsuSettei.DispRecords);
             model.RuibetsuSettei.ApplyInput(dispModel.RuibetsuSettei);
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -844,10 +876,24 @@ namespace NskWeb.Areas.F105.Controllers
             // 一行追加
             model.RuibetsuSettei.AddPageData();
 
+            // [選択共済金額]ドロップダウンリスト項目を取得する。
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            model.RuibetsuSettei.UpdateDropdownListAll(dbContext, sessionInfo);
+
             // 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
-            return PartialViewAsJson("_D105030RuibetsuSetteiResult", model);
+            // 追加行のインデックスを取得
+            List<D105030RuibetsuSetteiRecord> diff = model.RuibetsuSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030RuibetsuSetteiRecord? addRow = diff.LastOrDefault();
+            int addRowIdx = -1;
+            if (addRow is not null)
+            {
+                addRowIdx = model.RuibetsuSettei.DispRecords.IndexOf(addRow);
+            }
+            return Json(new { addRowIdx, view = PartialViewAsJson("_D105030RuibetsuSetteiResult", model).Value });
         }
 
         /// <summary>
@@ -865,10 +911,11 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
+            List<D105030RuibetsuSetteiRecord> beforeRecs = new(dispModel.RuibetsuSettei.DispRecords);
             model.RuibetsuSettei.ApplyInput(dispModel.RuibetsuSettei);
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -877,10 +924,22 @@ namespace NskWeb.Areas.F105.Controllers
             // 選択行を削除する
             model.RuibetsuSettei.DelPageData();
 
+            // [選択共済金額]ドロップダウンリスト項目を取得する。
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            model.RuibetsuSettei.UpdateDropdownListAll(dbContext, sessionInfo);
+
             // 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
-            return PartialViewAsJson("_D105030RuibetsuSetteiResult", model);
+            D105030RuibetsuSetteiRecord? firstRow = model.RuibetsuSettei.DispRecords.FirstOrDefault(x => !x.IsDelRec);
+            int firstRowIdx = -1;
+            if (firstRow is not null)
+            {
+                firstRowIdx = model.RuibetsuSettei.DispRecords.IndexOf(firstRow);
+            }
+            return Json(new { firstRowIdx, view = PartialViewAsJson("_D105030RuibetsuSetteiResult", model).Value });
         }
 
         /// <summary>
@@ -889,6 +948,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// </summary>
         /// <param name="dispModel"></param>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RegistRuibetsu(D105030Model dispModel)
         {
             IDbContextTransaction? transaction = null;
@@ -904,12 +964,7 @@ namespace NskWeb.Areas.F105.Controllers
                 // セッションに自画面のデータが存在しない場合
                 if (model is null)
                 {
-                    if (string.IsNullOrEmpty(errMessage))
-                    {
-                        //  [変数：エラーメッセージ] にエラーメッセージを設定
-                        errMessage = MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした");
-                    }
-                    throw new SystemException(errMessage);
+                    throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
                 }
 
                 // 画面入力値をセッションモデルに反映
@@ -997,7 +1052,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// 統計単位地域コード、危険段階区分入力行を挿入する。
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="SystemException"></exception>
+        [HttpPost]
         public ActionResult AddTokeiTaniRow(D105030Model dispModel)
         {
             // セッションから加入申込書入力（水稲）モデルを取得する
@@ -1006,10 +1061,11 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
+            List<D105030KikenDankaiKbnRecord> beforeRecs = new(dispModel.KikenDankaiKbn.DispRecords);
             model.KikenDankaiKbn.ApplyInput(dispModel.KikenDankaiKbn);
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -1021,7 +1077,15 @@ namespace NskWeb.Areas.F105.Controllers
             // 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
-            return PartialViewAsJson("_D105030KikenDankaiKbnResult", model);
+            // 追加行のインデックスを取得
+            List<D105030KikenDankaiKbnRecord> diff = model.KikenDankaiKbn.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030KikenDankaiKbnRecord? addRow = diff.LastOrDefault();
+            int addRowIdx = -1;
+            if (addRow is not null)
+            {
+                addRowIdx = model.KikenDankaiKbn.DispRecords.IndexOf(addRow);
+            }
+            return Json(new { addRowIdx, view = PartialViewAsJson("_D105030KikenDankaiKbnResult", model).Value });
         }
 
         /// <summary>
@@ -1039,10 +1103,11 @@ namespace NskWeb.Areas.F105.Controllers
             // セッションに自画面のデータが存在しない場合
             if (model is null)
             {
-                throw new SystemException(MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
+                throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
             }
 
             // 画面入力値をセッションモデルに反映
+            List<D105030KikenDankaiKbnRecord> beforeRecs = new(dispModel.KikenDankaiKbn.DispRecords);
             model.KikenDankaiKbn.ApplyInput(dispModel.KikenDankaiKbn);
 
             // モデル状態ディクショナリからすべての項目を削除します。
@@ -1054,7 +1119,13 @@ namespace NskWeb.Areas.F105.Controllers
             // 検索条件と検索結果をセッションに保存する
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
-            return PartialViewAsJson("_D105030KikenDankaiKbnResult", model);
+            D105030KikenDankaiKbnRecord? firstRow = model.KikenDankaiKbn.DispRecords.FirstOrDefault(x => !x.IsDelRec);
+            int firstRowIdx = -1;
+            if (firstRow is not null)
+            {
+                firstRowIdx = model.KikenDankaiKbn.DispRecords.IndexOf(firstRow);
+            }
+            return Json(new { firstRowIdx, view = PartialViewAsJson("_D105030KikenDankaiKbnResult", model).Value });
         }
 
         /// <summary>
@@ -1062,6 +1133,7 @@ namespace NskWeb.Areas.F105.Controllers
         /// 統計単位地域コード、危険段階区分の入力内容を登録する。
         /// </summary>
         /// <returns></returns>
+        [HttpPost]
         public ActionResult RegistTokeiTani(D105030Model dispModel)
         {
             IDbContextTransaction? transaction = null;
@@ -1077,8 +1149,7 @@ namespace NskWeb.Areas.F105.Controllers
                 // セッションに自画面のデータが存在しない場合
                 if (model is null)
                 {
-                    errMessage = MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした");
-                    throw new SystemException(errMessage);
+                    throw new AppException("MF00005", MessageUtil.Get("MF00005", "セッションから画面情報を取得できませんでした"));
                 }
 
                 // 画面入力値をセッションモデルに反映
@@ -1166,8 +1237,9 @@ namespace NskWeb.Areas.F105.Controllers
         /// 地域集団名更新
         /// 地域集団コードに該当する氏名または法人名を表示する。
         /// </summary>
-        /// <param name="chiikiSyudanCd"></param>
+        /// <param name="chiikiSyudanCd">地域集団コード</param>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult UpdateChiikiSyudanName(string chiikiSyudanCd)
         {
             // ２．氏名または法人名を取得
@@ -1186,11 +1258,13 @@ namespace NskWeb.Areas.F105.Controllers
         /// 統計単位地域名更新
         /// 統計単位地域コードに該当する統計単位地域名を表示する。
         /// </summary>
-        /// <param name="tokeiTanniChiikiCd"></param>
+        /// <param name="tokeiTanniChiikiCd">統計単位地域コード</param>
         /// <returns></returns>
+        [HttpGet]
         public ActionResult UpdateTokeiTanniChiikiName(string tokeiTanniChiikiCd)
         {
-
+            // ２．統計単位地域名を取得
+            // ２．１．m_00170_統計単位地域テーブルから「統計単位地域コード」に該当する「統計単位地域名称」を取得する。
             D105030SessionInfo sessionInfo = new();
             sessionInfo.GetInfo(HttpContext);
             NskAppContext dbContext = getJigyoDb<NskAppContext>();
@@ -1201,7 +1275,147 @@ namespace NskWeb.Areas.F105.Controllers
                 (x.統計単位地域コード == tokeiTanniChiikiCd)
                 );
             string tokeiTanniChiikiNm = tokeiTaniChiiki?.統計単位地域名称 ?? string.Empty;
+
+            // ２．２．「統計単位地域名」をJSON化して返送する。
             return Json(new { tokeiTanniChiikiNm });
+        }
+
+        /// <summary>
+        /// 産地別銘柄名更新
+        /// 産地別銘柄コードに該当する産地別銘柄名を表示する。													
+        /// </summary>
+        /// <param name="sanchiMeigaraCd">産地別銘柄コード</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult UpdateSanchiMeigaraName(string sanchiMeigaraCd)
+        {
+            // ２．産地別銘柄名称を取得
+            // ２．１．m_00130_産地別銘柄名称設定テーブルから「産地別銘柄コード」に該当する「産地別銘柄名称」を取得する。
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+            M00130産地別銘柄名称設定? sanchiMeigara = 
+                dbContext.M00130産地別銘柄名称設定s.FirstOrDefault(m =>
+                (m.組合等コード == sessionInfo.KumiaitoCd) &&
+                (m.年産 == sessionInfo.Nensan) &&
+                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
+                (m.産地別銘柄コード == sanchiMeigaraCd));
+            string sanchiMeigaraNm = sanchiMeigara?.産地別銘柄名称 ?? string.Empty;
+
+            // ２．２．「変数：産地別銘柄名称」をJSON化して返送する。
+            return Json(new { sanchiMeigaraNm });
+        }
+
+        /// <summary>
+        /// 品種名更新
+        /// 品種コードに該当する品種名を表示する。													
+        /// </summary>
+        /// <param name="hinshuCd">品種コード</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult UpdateHinshuName(string hinshuCd)
+        {
+            // ２．品種名を取得
+            // ２．１．m_00110_品種係数テーブルから「品種コード」に該当する「品種名等」を取得する。
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+            M00110品種係数? hinshu =
+                dbContext.M00110品種係数s.FirstOrDefault(m =>
+                (m.組合等コード == sessionInfo.KumiaitoCd) &&
+                (m.年産 == sessionInfo.Nensan) &&
+                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
+                (m.品種コード == hinshuCd));
+            string hinsyuNm = hinshu?.品種名等 ?? string.Empty;
+
+            // ２．２．「変数：品種名」をJSON化して返送する。
+            return Json(new { hinsyuNm });
+        }
+
+        /// <summary>
+        /// 選択共済金額ドロップダウンリスト更新
+        /// 類別設定入力の引受区分に応じた選択共済金額ドロップダウンリストを表示する。													
+        /// </summary>
+        /// <param name="guid">GUID</param>
+        /// <param name="hikiukeKbn">引受区分</param>
+        /// <returns></returns>
+        public ActionResult UpdateSelectKyosaiKingakuList(string guid, string hikiukeKbn)
+        {
+            // セッションから加入申込書入力（水稲）モデルを取得する
+            D105030Model model = SessionUtil.Get<D105030Model>(SESS_D105030, HttpContext);
+
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+
+            D105030RuibetsuSetteiRecord? target = model.RuibetsuSettei.DispRecords.SingleOrDefault(m => m.GUID == guid);
+            List<string> options = new();
+            if (target is not null)
+            {
+                target.HikiukeKbn = hikiukeKbn;
+                target.InitializeDropdonwList(dbContext, sessionInfo);
+
+                options.Add("<option value=\"\"></option>");
+                for (int i = 0; i < target.SelectKyosaiKingakuList.Count; i++)
+                {
+                    options.Add($"<option value=\"{target.SelectKyosaiKingakuList[i].Value}\">{target.SelectKyosaiKingakuList[i].Text}</option>");
+                }
+            }
+
+            return Json(new { options });
+        }
+
+        /// <summary>
+        /// 市町村名更新
+        /// 市町村コードに該当する市町村名を表示する。													
+        /// </summary>
+        /// <param name="shichosonCd">市町村コード</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult UpdateShichosonName(string shichosonCd)
+        {
+            // ２．市町村名を取得
+            // ２．１．名称M市町村テーブルから「市町村コード」に該当する「市町村名」を取得する。
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+            VShichosonNm? shichoson =
+                dbContext.VShichosonNms.FirstOrDefault(m =>
+                (m.KumiaitoCd == sessionInfo.KumiaitoCd) &&
+                (m.TodofukenCd == sessionInfo.TodofukenCd) &&
+                (m.ShichosonCd == shichosonCd));
+            string shichosonNm = shichoson?.ShichosonNm ?? string.Empty;
+
+            // ２．２．「変数：市町村名」をJSON化して返送する。
+            return Json(new { shichosonNm });
+        }
+
+        /// <summary>
+        /// 共通申請割引方法更新
+        /// 共通申請割引方法に応じた割引、割増割合、金額を表示する。
+        /// </summary>
+        /// <param name="kyotuShinseiWaribikiHouhoCd">共通申請割引方法コード</param>
+        /// <returns></returns>
+        [HttpGet]
+        public ActionResult UpdateWaribikiHouhou(string kyotuShinseiWaribikiHouhoCd)
+        {
+            // セッションから加入申込書入力（水稲）モデルを取得する
+            D105030Model model = SessionUtil.Get<D105030Model>(SESS_D105030, HttpContext);
+
+            D105030SessionInfo sessionInfo = new();
+            sessionInfo.GetInfo(HttpContext);
+            NskAppContext dbContext = getJigyoDb<NskAppContext>();
+
+            model.KumiaiintoSettei.KyotuShinseiWaribikiHouho = kyotuShinseiWaribikiHouhoCd;
+            model.KumiaiintoSettei.GetWaribikiHouhou(dbContext, sessionInfo);
+                
+            return Json(new {
+                waribikiWariai = $"{model.KumiaiintoSettei.WaribikiWariai}",
+                waribikiKingaku = $"{model.KumiaiintoSettei.WaribikiKingaku}",
+                warimashiWariai = $"{model.KumiaiintoSettei.WarimashiWariai}",
+                warimashiKingaku = $"{model.KumiaiintoSettei.WarimashiKingaku}",
+                kyotuShinseitoWaribikiRiyu = $"{model.KumiaiintoSettei.KyotuShinseitoWaribikiRiyu}"
+            });
         }
     }
 }

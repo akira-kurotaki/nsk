@@ -6,11 +6,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Npgsql;
 using Microsoft.EntityFrameworkCore;
-using NskAppModelLibrary.Models;
 using CoreLibrary.Core.Consts;
 using NskWeb.Areas.F105.Consts;
-//using NskWeb.Areas.F105.Models.D105070;
-using NLog.Targets;
 using System.Data;
 
 namespace NskWeb.Areas.F105.Models.D105030
@@ -53,6 +50,43 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>地域集団名</summary>
         public string? ChiikiSyudanNm { get; set; } = string.Empty;
 
+
+        /// <summary>共通申請割引方法</summary>
+        [Display(Name = "共通申請割引方法")]
+        [Required]
+        public string KyotuShinseiWaribikiHouho { get; set; }
+
+        /// <summary>割引割合</summary>
+        [Display(Name = "割引割合")]
+        [Numeric]
+        [WithinDigitLength(3)]
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
+        public decimal? WaribikiWariai { get; set; }
+        /// <summary>割引金額</summary>
+        [Display(Name = "割引金額")]
+        [Numeric]
+        [WithinDigitLength(8)]
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
+        public decimal? WaribikiKingaku { get; set; }
+
+        /// <summary>割増割合</summary>
+        [Display(Name = "割増割合")]
+        [Numeric]
+        [WithinDigitLength(3)]
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
+        public decimal? WarimashiWariai { get; set; }
+        /// <summary>割増金額</summary>
+        [Display(Name = "割増金額")]
+        [Numeric]
+        [WithinDigitLength(8)]
+        [DisplayFormat(DataFormatString = "{0:0}", ApplyFormatInEditMode = true)]
+        public decimal? WarimashiKingaku { get; set; }
+
+        /// <summary>共通申請等割引理由</summary>
+        [Display(Name = "共通申請等割引理由")]
+        [WithinStringLength(20)]
+        public string KyotuShinseitoWaribikiRiyu { get; set; } = string.Empty;
+
         /// <summary>xmin</summary>
         public uint? Xmin { get; set; }
 
@@ -62,12 +96,14 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>加入形態ドロップダウンリスト選択値</summary>
         public List<SelectListItem> KanyuKeitaiList { get; set; } = new();
 
+        /// <summary>共通申請割引方法ドロップダウンリスト選択値</summary>
+        public List<SelectListItem> KyotuShinseitoWaribikiHouhoList { get; set; } = new();
 
         /// <summary>
         /// ドロップダウンリスト初期化
         /// </summary>
         /// <param name="dbContext"></param>
-        public void InitializeDropdonwList(NskAppContext dbContext)
+        public void InitializeDropdonwList(NskAppContext dbContext, D105030SessionInfo sessionInfo)
         {
             // ２．３．１０．[加入形態] ドロップダウンリスト項目を設定する。
             // 	(1) 「加入形態」ドロップダウンリスト項目に以下を設定する。
@@ -80,6 +116,55 @@ namespace NskWeb.Areas.F105.Models.D105030
                 new($"{(int)F105Const.KanyuKeitaiType.NSK} {F105Const.KanyuKeitaiType.NSK.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.NSK}"),
                 new($"{(int)F105Const.KanyuKeitaiType.Hojin} {F105Const.KanyuKeitaiType.Hojin.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.Hojin}"),
             ];
+
+            // ２．２４．[共通申請割引方法]ドロップダウンリスト項目を取得する。
+            // (1)	m_10290_共通申請等割引方法テーブルから通申請等割引方法コード、通申請等割引方法名称を取得する。
+            // (2)	取得した結果をドロップダウンリストの項目として設定する。
+            GetKyotuShinseitoWaribikiHouhoList(dbContext, sessionInfo);
+        }
+
+        /// <summary>
+        /// [共通申請割引方法]ドロップダウンリスト項目を取得する
+        /// DB検索仕様書 No.25
+        /// </summary>
+        /// <param name="dbContext"></param>
+        private void GetKyotuShinseitoWaribikiHouhoList(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        {
+            KyotuShinseitoWaribikiHouhoList = new();
+            StringBuilder query = new();
+            query.Append(" SELECT ");         
+            query.Append($"    共通申請等割引方法コード As \"{nameof(Query25Result.KyotuShinseitoWaribikiHohoCd)}\" ");       
+            query.Append($"  , 共通申請等割引方法名称 As \"{nameof(Query25Result.KyotuShinseitoWaribikiHohoNm)}\" ");       
+            query.Append(" FROM ");         
+            query.Append("  m_10290_共通申請等割引方法 ");        
+            query.Append(" WHERE ");         
+            query.Append("      組合等コード   = @組合等コード ");
+            query.Append("  AND 共済目的コード = @共済目的コード ");
+            query.Append("  AND 年産           = @年産 ");
+            query.Append(" ORDER BY 共通申請等割引方法コード ");
+            NpgsqlParameter[] queryParams =
+            [
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", (short)sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
+            ];
+
+            List<Query25Result> results = new();
+            results.AddRange(dbContext.Database.SqlQueryRaw<Query25Result>(query.ToString(), queryParams));
+            KyotuShinseitoWaribikiHouhoList.AddRange(results.Select(x =>
+                new SelectListItem($"{x.KyotuShinseitoWaribikiHohoCd} {x.KyotuShinseitoWaribikiHohoNm}", x.KyotuShinseitoWaribikiHohoCd)));
+        }
+
+        /// <summary>
+        /// DB検索仕様書 No.25 検索結果
+        /// </summary>
+        private class Query25Result
+        {
+            /// <summary>共通申請等割引方法コード</summary>
+            public string KyotuShinseitoWaribikiHohoCd { get; set; } = string.Empty;
+            /// <summary>共通申請等割引方法名称</summary>
+            public string KyotuShinseitoWaribikiHohoNm { get; set; } = string.Empty;
         }
 
         /// <summary>
@@ -100,6 +185,12 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append($"  ,T2.引受解除日付   As \"{nameof(D105030KumiaiintoSettei.KaijoHiduke)}\" ");
             query.Append($"  ,T1.地域集団コード As \"{nameof(D105030KumiaiintoSettei.ChiikiSyudanCd)}\" ");
             query.Append($"  ,T3.hojin_full_nm  As \"{nameof(D105030KumiaiintoSettei.ChiikiSyudanNm)}\" ");//氏名または法人名 As {nameof(D105030KumiaiintoSettei.ChiikiSyudanNm)} ");
+            query.Append($"  ,T1.共通申請等割引方法コード As \"{nameof(D105030KumiaiintoSettei.KyotuShinseiWaribikiHouho)}\" ");
+            query.Append($"  ,T1.割引割合       As \"{nameof(D105030KumiaiintoSettei.WaribikiWariai)}\" ");
+            query.Append($"  ,T1.割引金額       As \"{nameof(D105030KumiaiintoSettei.WaribikiKingaku)}\" ");
+            query.Append($"  ,T1.割増割合       As \"{nameof(D105030KumiaiintoSettei.WarimashiWariai)}\" ");
+            query.Append($"  ,T1.割増金額       As \"{nameof(D105030KumiaiintoSettei.WarimashiKingaku)}\" ");
+            query.Append($"  ,T1.共通申請等割引理由 As \"{nameof(D105030KumiaiintoSettei.KyotuShinseitoWaribikiRiyu)}\" ");
             query.Append($"  ,cast('' || T1.xmin as integer) As \"{nameof(D105030KumiaiintoSettei.Xmin)}\" ");
             query.Append($" FROM t_11010_個人設定 T1 ");
             query.Append(" LEFT OUTER JOIN t_11020_個人設定解除 T2");  
@@ -114,14 +205,13 @@ namespace NskWeb.Areas.F105.Models.D105030
             query.Append("  AND  T1.年産           = @年産 ");
             query.Append("  AND  T1.共済目的コード = @共済目的コード ");
             query.Append("  AND  T1.組合員等コード = @組合員等コード ");
-            query.Append("");
 
             NpgsqlParameter[] queryParams =
             [
-                new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                new NpgsqlParameter("年産", sessionInfo.Nensan),
-                new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
             ];
 
             Query17Result? result = dbContext.Database.SqlQueryRaw<Query17Result>(query.ToString(), queryParams)?.SingleOrDefault();
@@ -136,6 +226,15 @@ namespace NskWeb.Areas.F105.Models.D105030
                 this.KaijoHiduke = result.KaijoHiduke;
                 this.ChiikiSyudanCd = result.ChiikiSyudanCd;
                 this.ChiikiSyudanNm = result.ChiikiSyudanNm;
+
+                this.KyotuShinseiWaribikiHouho = result.KyotuShinseiWaribikiHouho;
+                this.WaribikiWariai = result.WaribikiWariai;
+                this.WaribikiKingaku = result.WaribikiKingaku;
+                this.WarimashiWariai = result.WarimashiWariai;
+                this.WarimashiKingaku = result.WarimashiKingaku;
+                this.KyotuShinseitoWaribikiRiyu = result.KyotuShinseitoWaribikiRiyu;
+
+                this.Xmin = result.Xmin;
             }
         }
 
@@ -159,6 +258,22 @@ namespace NskWeb.Areas.F105.Models.D105030
             public string? ChiikiSyudanCd { get; set; } = string.Empty;
             /// <summary>地域集団名</summary>
             public string? ChiikiSyudanNm { get; set; } = string.Empty;
+
+            /// <summary>xmin</summary>
+            public uint? Xmin { get; set; }
+
+            /// <summary>共通申請等割引方法コード</summary>
+            public string? KyotuShinseiWaribikiHouho { get; set; } = string.Empty;
+            /// <summary>割引割合</summary>
+            public decimal? WaribikiWariai { get; set; }
+            /// <summary>割引金額</summary>
+            public decimal? WaribikiKingaku { get; set; }
+            /// <summary>割増割合</summary>
+            public decimal? WarimashiWariai { get; set; }
+            /// <summary>割増金額</summary>
+            public decimal? WarimashiKingaku { get; set; }
+            /// <summary>共通申請等割引理由</summary>
+            public string? KyotuShinseitoWaribikiRiyu { get; set; } = string.Empty;
         }
 
         /// <summary>
@@ -175,44 +290,51 @@ namespace NskWeb.Areas.F105.Models.D105030
             this.KaijoHiduke = src.KaijoHiduke;
             this.ChiikiSyudanCd = src.ChiikiSyudanCd;
             this.ChiikiSyudanNm = src.ChiikiSyudanNm;
+            this.KyotuShinseiWaribikiHouho = src.KyotuShinseiWaribikiHouho;
+            this.WaribikiWariai = src.WaribikiWariai;
+            this.WaribikiKingaku = src.WaribikiKingaku;
+            this.WarimashiWariai = src.WarimashiWariai;
+            this.WarimashiKingaku = src.WarimashiKingaku;
+            this.KyotuShinseitoWaribikiRiyu = src.KyotuShinseitoWaribikiRiyu;
             this.Exists = src.Exists;
+            this.Xmin = src.Xmin;
         }
 
-        /// <summary>
-        /// t_11020_個人設定解除の登録を行う。
-        /// </summary>
-        /// <param name="dbContext"></param>
-        /// <param name="sessionInfo"></param>
-        /// <returns></returns>
-        public int RegistKanyuKaijo(ref NskAppContext dbContext, D105030SessionInfo sessionInfo, string userId, DateTime sysDateTime)
-        {
-            // t_00010_引受回テーブルから引受回を取得する。
-            short? maxHikiukeKai = dbContext.T00010引受回s.Where(m =>
-                (m.組合等コード == sessionInfo.KumiaitoCd) &&
-                (m.年産 == sessionInfo.Nensan) &&
-                (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
-                Max(m => m.引受回);
+        ///// <summary>
+        ///// t_11020_個人設定解除の登録を行う。
+        ///// </summary>
+        ///// <param name="dbContext"></param>
+        ///// <param name="sessionInfo"></param>
+        ///// <returns></returns>
+        //public int RegistKanyuKaijo(ref NskAppContext dbContext, D105030SessionInfo sessionInfo, string userId, DateTime sysDateTime)
+        //{
+        //    // t_00010_引受回テーブルから引受回を取得する。
+        //    short? maxHikiukeKai = dbContext.T00010引受回s.Where(m =>
+        //        (m.組合等コード == sessionInfo.KumiaitoCd) &&
+        //        (m.年産 == sessionInfo.Nensan) &&
+        //        (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
+        //        Max(m => m.引受回);
 
-            T11020個人設定解除 cancelRec = new()
-            {
-                組合等コード = sessionInfo.KumiaitoCd,
-                年産 = (short)sessionInfo.Nensan,
-                共済目的コード = sessionInfo.KyosaiMokutekiCd,
-                組合員等コード = sessionInfo.KumiaiintoCd,
-                解除引受回 = (short)maxHikiukeKai,
-                解除申出日付 = sysDateTime,
-                引受解除日付 = null,
-                引受解除返還賦課金額 = null,
-                解除理由コード = null,
-                登録日時 = sysDateTime,
-                登録ユーザid = userId,
-                更新日時 = sysDateTime,
-                更新ユーザid = userId,
-            };
-            dbContext.T11020個人設定解除s.Add(cancelRec);
+        //    T11020個人設定解除 cancelRec = new()
+        //    {
+        //        組合等コード = sessionInfo.KumiaitoCd,
+        //        年産 = (short)sessionInfo.Nensan,
+        //        共済目的コード = sessionInfo.KyosaiMokutekiCd,
+        //        組合員等コード = sessionInfo.KumiaiintoCd,
+        //        解除引受回 = (short)maxHikiukeKai,
+        //        解除申出日付 = sysDateTime,
+        //        引受解除日付 = null,
+        //        引受解除返還賦課金額 = null,
+        //        解除理由コード = null,
+        //        登録日時 = sysDateTime,
+        //        登録ユーザid = userId,
+        //        更新日時 = sysDateTime,
+        //        更新ユーザid = userId,
+        //    };
+        //    dbContext.T11020個人設定解除s.Add(cancelRec);
 
-            return dbContext.SaveChanges();
-        }
+        //    return dbContext.SaveChanges();
+        //}
 
         /// <summary>
         /// t_11010_個人設定の登録を行う。
@@ -224,26 +346,95 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <returns></returns>
         public int RegistKojinSettei(ref NskAppContext dbContext, D105030SessionInfo sessionInfo, string userId, DateTime sysDateTime)
         {
-            T11010個人設定 addRec = new()
-            {
-                組合等コード = sessionInfo.KumiaitoCd,
-                年産 = (short)sessionInfo.Nensan,
-                共済目的コード = sessionInfo.KyosaiMokutekiCd,
-                組合員等コード = sessionInfo.KumiaiintoCd,
-                加入形態 = KanyuKeitai,
-                交付申請者管理コード = null,
-                共済金額改定時コード = null,
-                未加入フラグ = $"{(short)KanyuState}",
-                継続特約フラグ = JidoKeizoku ? CoreConst.FLG_ON : CoreConst.FLG_OFF,
-                地域集団コード = ChiikiSyudanCd,
-                登録日時 = sysDateTime,
-                登録ユーザid = userId,
-                更新日時 = sysDateTime,
-                更新ユーザid = userId
-            };
-            dbContext.T11010個人設定s.Add(addRec);
+            //T11010個人設定 addRec = new()
+            //{
+            //    組合等コード = sessionInfo.KumiaitoCd,
+            //    年産 = (short)sessionInfo.Nensan,
+            //    共済目的コード = sessionInfo.KyosaiMokutekiCd,
+            //    組合員等コード = sessionInfo.KumiaiintoCd,
+            //    加入形態 = KanyuKeitai,
+            //    交付申請者管理コード = null,
+            //    共済金額改定時コード = null,
+            //    未加入フラグ = $"{(short)KanyuState}",
+            //    継続特約フラグ = JidoKeizoku ? CoreConst.FLG_ON : CoreConst.FLG_OFF,
+            //    地域集団コード = ChiikiSyudanCd,
+            //    登録日時 = sysDateTime,
+            //    登録ユーザid = userId,
+            //    更新日時 = sysDateTime,
+            //    更新ユーザid = userId
+            //};
+            //dbContext.T11010個人設定s.Add(addRec);
+            //return dbContext.SaveChanges();
 
-            return dbContext.SaveChanges();
+            StringBuilder addQuery = new();
+            addQuery.Append(" INSERT INTO t_11010_個人設定 ( ");
+            addQuery.Append("   組合等コード ");
+            addQuery.Append("  ,年産 ");
+            addQuery.Append("  ,共済目的コード ");
+            addQuery.Append("  ,組合員等コード ");
+            addQuery.Append("  ,加入形態 ");
+            addQuery.Append("  ,交付申請者管理コード ");
+            addQuery.Append("  ,共済金額改定時コード ");
+            addQuery.Append("  ,未加入フラグ ");
+            addQuery.Append("  ,継続特約フラグ ");
+            addQuery.Append("  ,地域集団コード ");
+            addQuery.Append("  ,共通申請等割引方法コード ");
+            addQuery.Append("  ,割引割合 ");
+            addQuery.Append("  ,割引金額 ");
+            addQuery.Append("  ,割増割合 ");
+            addQuery.Append("  ,割増金額 ");
+            addQuery.Append("  ,共通申請等割引理由 ");
+            addQuery.Append("  ,登録日時 ");
+            addQuery.Append("  ,登録ユーザid ");
+            addQuery.Append("  ,更新日時 ");
+            addQuery.Append("  ,更新ユーザid ");
+            addQuery.Append(" ) VALUES ( ");
+            addQuery.Append("   @組合等コード ");
+            addQuery.Append("  ,@年産 ");
+            addQuery.Append("  ,@共済目的コード ");
+            addQuery.Append("  ,@組合員等コード ");
+            addQuery.Append("  ,@加入形態 ");
+            addQuery.Append("  ,@交付申請者管理コード ");
+            addQuery.Append("  ,@共済金額改定時コード ");
+            addQuery.Append("  ,@未加入フラグ ");
+            addQuery.Append("  ,@継続特約フラグ ");
+            addQuery.Append("  ,@地域集団コード ");
+            addQuery.Append("  ,@共通申請等割引方法コード ");
+            addQuery.Append("  ,@割引割合 ");
+            addQuery.Append("  ,@割引金額 ");
+            addQuery.Append("  ,@割増割合 ");
+            addQuery.Append("  ,@割増金額 ");
+            addQuery.Append("  ,@共通申請等割引理由 ");
+            addQuery.Append("  ,@登録日時 ");
+            addQuery.Append("  ,@登録ユーザid ");
+            addQuery.Append("  ,@更新日時 ");
+            addQuery.Append("  ,@更新ユーザid ");
+            addQuery.Append(" ) ");
+
+            NpgsqlParameter[] addParams =
+            [
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
+                new ("加入形態", KanyuKeitai),
+                new ("交付申請者管理コード", DBNull.Value),
+                new ("共済金額改定時コード", DBNull.Value),
+                new ("未加入フラグ", $"{(short)KanyuState}"),
+                new ("継続特約フラグ", JidoKeizoku ? CoreConst.FLG_ON : CoreConst.FLG_OFF),
+                new ("地域集団コード", string.IsNullOrEmpty(ChiikiSyudanCd) ? DBNull.Value : ChiikiSyudanCd),
+                new ("共通申請等割引方法コード", KyotuShinseiWaribikiHouho),
+                new ("割引割合", WaribikiWariai),
+                new ("割引金額", WaribikiKingaku),
+                new ("割増割合", WarimashiWariai),
+                new ("割増金額", WarimashiKingaku),
+                new ("共通申請等割引理由", string.IsNullOrEmpty(KyotuShinseitoWaribikiRiyu) ? DBNull.Value : KyotuShinseitoWaribikiRiyu),
+                new ("登録日時", sysDateTime),
+                new ("登録ユーザid", userId),
+                new ("更新日時", sysDateTime),
+                new ("更新ユーザid", userId),
+            ];
+            return dbContext.Database.ExecuteSqlRaw(addQuery.ToString(), addParams);
         }
 
         /// <summary>
@@ -274,6 +465,12 @@ namespace NskWeb.Areas.F105.Models.D105030
             updRuibetsu.Append(" ,加入形態          = @加入形態 ");
             updRuibetsu.Append(" ,未加入フラグ      = @未加入フラグ ");
             updRuibetsu.Append(" ,継続特約フラグ    = @継続特約フラグ ");
+            updRuibetsu.Append(" ,共通申請等割引方法コード = @共通申請等割引方法 ");
+            updRuibetsu.Append(" ,割引割合          = @割引割合 ");
+            updRuibetsu.Append(" ,割引金額          = @割引金額 ");
+            updRuibetsu.Append(" ,割増割合          = @割増割合 ");
+            updRuibetsu.Append(" ,割増金額          = @割増金額 ");
+            updRuibetsu.Append(" ,共通申請等割引理由 = @共通申請等割引理由 ");
             updRuibetsu.Append(" ,更新日時          = @システム日時 ");
             updRuibetsu.Append(" ,更新ユーザid      = @ユーザID ");
             updRuibetsu.Append("WHERE ");
@@ -285,16 +482,24 @@ namespace NskWeb.Areas.F105.Models.D105030
 
             List<NpgsqlParameter> updParams =
             [
-                new NpgsqlParameter("組合等コード", sessionInfo.KumiaitoCd),
-                new NpgsqlParameter("年産", sessionInfo.Nensan),
-                new NpgsqlParameter("共済目的コード", sessionInfo.KyosaiMokutekiCd),
-                new NpgsqlParameter("組合員等コード", sessionInfo.KumiaiintoCd),
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
 
-                new NpgsqlParameter("加入形態", KanyuKeitai),
-                new NpgsqlParameter("未加入フラグ", $"{(int)KanyuState}"),
-                new NpgsqlParameter("継続特約フラグ", JidoKeizoku ? CoreConst.FLG_ON : CoreConst.FLG_OFF),
-                new NpgsqlParameter("システム日時", sysDateTime),
-                new NpgsqlParameter("ユーザID", userId),
+                new ("加入形態", KanyuKeitai),
+                new ("未加入フラグ", $"{(int)KanyuState}"),
+                new ("継続特約フラグ", JidoKeizoku ? CoreConst.FLG_ON : CoreConst.FLG_OFF),
+
+                new ("共通申請等割引方法", KyotuShinseiWaribikiHouho),
+                new ("割引割合", WaribikiWariai),
+                new ("割引金額", WaribikiKingaku),
+                new ("割増割合", WarimashiWariai),
+                new ("割増金額", WarimashiKingaku),
+                new ("共通申請等割引理由", string.IsNullOrEmpty(KyotuShinseitoWaribikiRiyu) ? DBNull.Value : KyotuShinseitoWaribikiRiyu),
+
+                new ("システム日時", sysDateTime),
+                new ("ユーザID", userId),
             ];
             NpgsqlParameter xminParam = new("xmin", NpgsqlTypes.NpgsqlDbType.Xid) { Value = Xmin };
             updParams.Add(xminParam);
@@ -306,6 +511,92 @@ namespace NskWeb.Areas.F105.Models.D105030
             updCount += cnt;
 
             return updCount;
+        }
+
+        /// <summary>
+        /// 共通申請割引方法取得
+        /// </summary>
+        /// <param name="dbContext"></param>
+        /// <param name="sessionInfo"></param>
+        public void GetWaribikiHouhou(NskAppContext dbContext, D105030SessionInfo sessionInfo)
+        {
+            StringBuilder query = new();
+            if (KyotuShinseiWaribikiHouho != "99")
+            {
+                // 選択値が「99：個人設定」以外の場合
+                query.Append(" SELECT ");
+                query.Append($"    割引割合           As \"{nameof(Query27Result.WaribikiWariai)}\" ");
+                query.Append($"  , 割引金額           As \"{nameof(Query27Result.WaribikiKingaku)}\" ");
+                query.Append($"  , 割増割合           As \"{nameof(Query27Result.WarimashiWariai)}\" ");
+                query.Append($"  , 割増金額           As \"{nameof(Query27Result.WarimashiKingaku)}\" ");
+                query.Append($"  , ''                 As \"{nameof(Query27Result.KyotuShinseitoWaribikiRiyu)}\" ");
+                query.Append(" FROM ");
+                query.Append("  m_10290_共通申請等割引方法 ");
+                query.Append(" WHERE ");
+                query.Append("      組合等コード   = @組合等コード ");
+                query.Append("  AND 共済目的コード = @共済目的コード ");
+                query.Append("  AND 年産           = @年産 ");
+                query.Append("  AND 共通申請等割引方法コード = @共通申請等割引方法コード ");
+            }
+            else
+            {
+                // 選択値が「99：個人設定」の場合、
+                query.Append(" SELECT ");
+                query.Append($"    割引割合           As \"{nameof(Query27Result.WaribikiWariai)}\" ");
+                query.Append($"  , 割引金額           As \"{nameof(Query27Result.WaribikiKingaku)}\" ");
+                query.Append($"  , 割増割合           As \"{nameof(Query27Result.WarimashiWariai)}\" ");
+                query.Append($"  , 割増金額           As \"{nameof(Query27Result.WarimashiKingaku)}\" ");
+                query.Append($"  , 共通申請等割引理由 As \"{nameof(Query27Result.KyotuShinseitoWaribikiRiyu)}\" ");
+                query.Append(" FROM ");
+                query.Append("  t_11010_個人設定 ");
+                query.Append(" WHERE ");
+                query.Append("      組合等コード   = @組合等コード ");
+                query.Append("  AND 共済目的コード = @共済目的コード ");
+                query.Append("  AND 年産           = @年産 ");
+                query.Append("  AND 組合員等コード = @組合員等コード ");
+            }
+            NpgsqlParameter[] queryParams =
+            [
+                new ("組合等コード", sessionInfo.KumiaitoCd),
+                new ("年産", (short)sessionInfo.Nensan),
+                new ("共済目的コード", sessionInfo.KyosaiMokutekiCd),
+                new ("共通申請等割引方法コード", string.IsNullOrEmpty(KyotuShinseiWaribikiHouho) ? DBNull.Value : KyotuShinseiWaribikiHouho),
+                new ("組合員等コード", sessionInfo.KumiaiintoCd),
+            ];
+
+            List<Query27Result> results = new();
+            results.AddRange(dbContext.Database.SqlQueryRaw<Query27Result>(query.ToString(), queryParams));
+            Query27Result? result = results.SingleOrDefault();
+            WaribikiWariai = null;
+            WaribikiKingaku = null;
+            WarimashiWariai = null;
+            WarimashiKingaku = null;
+            KyotuShinseitoWaribikiRiyu = string.Empty;
+            if (result is not null)
+            {
+                WaribikiWariai = result.WaribikiWariai;
+                WaribikiKingaku = result.WaribikiKingaku;
+                WarimashiWariai = result.WarimashiWariai;
+                WarimashiKingaku = result.WarimashiKingaku;
+                KyotuShinseitoWaribikiRiyu = result.KyotuShinseitoWaribikiRiyu;
+            }
+        }
+
+        /// <summary>
+        /// DB検索仕様書 No.27 検索結果
+        /// </summary>
+        private class Query27Result
+        {
+            /// <summary>割引割合</summary>
+            public decimal? WaribikiWariai { get; set; }
+            /// <summary>割引金額</summary>
+            public decimal? WaribikiKingaku { get; set; }
+            /// <summary>割増割合</summary>
+            public decimal? WarimashiWariai { get; set; }
+            /// <summary>割増金額</summary>
+            public decimal? WarimashiKingaku { get; set; }
+            /// <summary>共通申請等割引理由</summary>
+            public string? KyotuShinseitoWaribikiRiyu { get; set; } = string.Empty;
         }
     }
 }

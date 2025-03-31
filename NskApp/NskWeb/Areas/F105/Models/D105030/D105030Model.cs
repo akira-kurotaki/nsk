@@ -2,6 +2,7 @@
 using CoreLibrary.Core.Base;
 using System.ComponentModel.DataAnnotations;
 using NskAppModelLibrary.Models;
+using NskWeb.Areas.F105.Consts;
 
 namespace NskWeb.Areas.F105.Models.D105030
 {
@@ -122,7 +123,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>
         /// 画面権限
         /// </summary>
-        public string DispKengen { get; set; }
+        public F105Const.Authority DispKengen { get; set; } = F105Const.Authority.None;
 
         /// <summary>
         /// 引受確定の有無

@@ -33,6 +33,7 @@
     <ProjectReference Include="..\..\Core\CoreLibrary\CoreLibrary\CoreLibrary.csproj" />
     <ProjectReference Include="..\..\Core\CoreLibrary\ModelLibrary\ModelLibrary.csproj" />
     <ProjectReference Include="..\NskAppModelLibrary\NskAppModelLibrary.csproj" />
+    <ProjectReference Include="..\NskCommonLibrary\NskCommonLibrary.csproj" />
   </ItemGroup>
 
 </Project>

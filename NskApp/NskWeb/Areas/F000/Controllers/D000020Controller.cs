@@ -1,0 +1,509 @@
+﻿using NskAppModelLibrary.Context;
+using NskWeb.Areas.F000.Models.D000020;
+using NskWeb.Common.Consts;
+using CoreLibrary.Core.Attributes;
+using CoreLibrary.Core.Base;
+using CoreLibrary.Core.Consts;
+using CoreLibrary.Core.Dto;
+using CoreLibrary.Core.Exceptions;
+using CoreLibrary.Core.Extensions;
+using CoreLibrary.Core.Pager;
+using CoreLibrary.Core.Utility;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewEngines;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Primitives;
+using ModelLibrary.Models;
+using Npgsql;
+using NpgsqlTypes;
+using ReportService.Core;
+using System.Text;
+using System.Text.RegularExpressions;
+using static NskWeb.Areas.F000.Models.D000020.D000020SearchCondition;
+using NskWeb.Areas.F000.Models.D000000;
+using System.Collections.Generic;
+using NskAppModelLibrary.Models;
+using StackExchange.Redis;
+using System.Xml;
+using NuGet.Packaging.Signing;
+using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using static CoreLibrary.Core.Utility.CsvUtil;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+
+namespace NskWeb.Areas.F000.Controllers
+{
+    /// <summary>
+    /// 組合員等コード検索
+    /// </summary>
+    [Authorize(Roles = "bas")]
+    [SessionOutCheck]
+    [Area("F000")]
+    public class D000020Controller : CoreController
+    {
+        #region メンバー定数
+        /// <summary>
+        /// 画面ID(D000020)
+        /// </summary>
+        private static readonly string SCREEN_ID_D000020 = "D000020";
+
+        /// <summary>
+        /// セッションキー(D000020)
+        /// </summary>
+        private static readonly string SESS_D000020 = SCREEN_ID_D000020 + "_" + "SCREEN";
+
+        /// <summary>
+        /// 表部品初期化(検索結果)
+        /// </summary>
+        private static readonly string D000020_INITIALIZE_VALUE = "";
+
+        /// <summary>
+        /// 表示件数0件(検索結果)
+        /// </summary>
+        private static readonly int D000020_SEARCH_NO_COUNT = 0;
+
+        /// <summary>
+        /// 最大表示件数(検索結果)
+        /// </summary>
+        private static readonly int D000020_SEARCH_LIMITED_COUNT = 50;
+
+        /// <summary>
+        /// 表部品1
+        /// </summary>
+        private static readonly string D000020_TABLE_PART1 = "1～";
+
+        /// <summary>
+        /// 表部品2
+        /// </summary>
+        private static readonly string D000020_TABLE_PART2 = "件/";
+
+        /// <summary>
+        /// 表部品3
+        /// </summary>
+        private static readonly string D000020_TABLE_PART3 = "件中";
+        #endregion
+
+        #region コンストラクタ
+        /// <summary>
+        /// コンストラクタ
+        /// </summary>
+        /// <param name="viewEngine"></param>
+        /// <param name="serviceClient"></param>
+        public D000020Controller(ICompositeViewEngine viewEngine, ReportServiceClient serviceClient) : base(viewEngine, serviceClient)
+        {
+        }
+        #endregion
+
+        #region 初期表示イベント
+        /// <summary>
+        /// イベント：初期化
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [HttpGet]
+        public ActionResult Init()
+        {
+
+            // $$$$$$$$$$$$$$
+            //NSKPortalInfoModel model_portal = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
+            //if (model_portal == null)
+            //{
+            //    throw new AppException("ME00068", MessageUtil.Get("ME00068"));
+            //}
+            //$$$$$$$$$$$$$$
+
+            //モデルを取得
+            D000020Model model = new D000020Model();
+
+            // ログインユーザの参照・更新可否判定
+            // 画面IDをキーとして、画面マスタ、画面機能権限マスタを参照し、ログインユーザに本画面の権限がない場合は業務エラー画面を表示する。
+            if (!ScreenSosaUtil.CanReference(SCREEN_ID_D000020, HttpContext))
+            {
+                throw new AppException("ME90003", MessageUtil.Get("ME90003"));
+            }
+
+            // 利用可能な支所一覧
+            var shishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, HttpContext);
+
+            // 画面項目の初期化
+            model = new D000020Model(Syokuin, shishoList);
+
+            // 画面初期化
+            InitializeModel(model, D000020_INITIALIZE_VALUE);
+
+            // モデル状態ディクショナリからすべての項目を削除します。       
+            ModelState.Clear();
+
+            // セッション情報から検索条件、検索結果件数をクリアする
+            SessionUtil.Remove(SESS_D000020, HttpContext);
+
+            // 検索条件をセッションに保存する
+            SessionUtil.Set(SESS_D000020, model, HttpContext);
+
+            // パンくずリストを変更する
+            SessionUtil.Set(CoreConst.SESS_BREADCRUMB, new List<string>() { "D000020" }, HttpContext);
+
+            // 共済目的、年産をセッションから取得
+            NSKPortalInfoModel m = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
+            // セッション情報変数定義
+            String KyosaiMokutekiCd;
+            String NensanHikiuke;
+            if (m != null)
+            {
+                //セッション情報を設定
+                KyosaiMokutekiCd = m.SKyosaiMokutekiCd;
+                NensanHikiuke = m.SNensanHikiuke;
+            }
+            else
+            {
+                // 空白を設定
+                KyosaiMokutekiCd = "";
+                NensanHikiuke = "";
+            }
+
+            // 組合等コードを職員情報から取得
+            String KumiaitoCd = Syokuin.KumiaitoCd;
+            // 1,エラー処理
+            // 共済目的、年産、組合等コードいずれか取得出来ない場合
+            if (string.IsNullOrEmpty(KyosaiMokutekiCd) || string.IsNullOrEmpty(NensanHikiuke) || string.IsNullOrEmpty(KumiaitoCd))
+            {
+                var massageArea1 = "";
+                if (string.IsNullOrEmpty(KyosaiMokutekiCd))
+                {
+                    // 共済目的が取得出来ない場合
+                    massageArea1 += MessageUtil.Get("ME01644", "共済目的");
+                }
+                if (string.IsNullOrEmpty(NensanHikiuke))
+                {
+                    // 年産が取得出来ない場合
+                    massageArea1 += MessageUtil.Get("ME01644", "年産");
+                }
+                if (string.IsNullOrEmpty(KumiaitoCd))
+                {
+                    // 組合等コードが取得出来ない場合
+                    massageArea1 += MessageUtil.Get("ME01644", "組合等コード");
+                }
+                // メッセージエリア１に表示する（メッセージID：ME01644) 
+                ModelState.AddModelError("MessageArea1", massageArea1);
+            }
+            // 2,正常処理
+            // 共済目的または年産が取得出来た場合
+            if (!string.IsNullOrEmpty(KyosaiMokutekiCd) || !string.IsNullOrEmpty(NensanHikiuke))
+            {
+                // 画面項目に表示する
+                model.SearchCondition.Nensan = NensanHikiuke;
+                model.SearchCondition.KyosaiMokutekiCd = KyosaiMokutekiCd;
+                // 共済目的が空白以外の時
+                if (!string.IsNullOrEmpty(KyosaiMokutekiCd))
+                {
+                    // 共済目的名称を取得する
+                    model.SearchCondition.KyosaiMokutekiNm = GetKyosaiMokutekiNM(model, KyosaiMokutekiCd);
+                }
+            }
+
+            // 組合員等コード検索(子画面)画面を表示する
+            return View(SCREEN_ID_D000020, model);
+        }
+        #endregion
+
+        #region 画面初期化
+        /// <summary>
+        /// 画面初期化
+        /// </summary>
+        /// <param name="model"></param>
+        private void InitializeModel(D000020Model model, string v)
+        {
+            // 利用可能な支所一覧
+            var shishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, HttpContext);
+            model.SearchCondition.TodofukenDropDownList.ShishoList = shishoList;
+
+            // 検索結果が存在する場合のみ一覧表を表示する為初期化する
+            // 検索結果件数
+            model.SearchResult.TotalCount = v;
+            // 表部品1
+            model.SearchResult.TablePart1 = v;
+            // 表部品2
+            model.SearchResult.TablePart2 = v;
+            // 表部品3
+            model.SearchResult.TablePart3 = v;
+        }
+        #endregion
+
+        #region クリアイベント
+        /// <summary>
+        /// イベント名：クリア
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [HttpGet]
+        public ActionResult Clear()
+        {
+            // セッション情報から検索条件、検索結果件数をクリアする
+            SessionUtil.Remove(SESS_D000020, HttpContext);
+
+            // 組合員等コード検索(子画面)画面を表示する
+            return RedirectToAction("Init");
+        }
+        #endregion
+
+        #region 検索イベント
+        /// <summary>
+        /// イベント名：検索
+        /// </summary>
+        /// <param name="model">組合員等コード検索(子画面)モデル</param>
+        /// <returns>ActionResult</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Search([Bind("SearchCondition")] D000020Model model)
+        {
+            // 属性チェックまたは独自チェックエラーの場合
+            if (!ModelState.IsValid || CheckSearchCondition(model))
+            {
+                // 検索条件をセッションに保存する
+                SessionUtil.Set(SESS_D000020, model, HttpContext);
+                return View(SCREEN_ID_D000020, model);
+            }
+
+            // 検索して、画面に返す
+            return View(SCREEN_ID_D000020, GetPageDataList(model));
+        }
+        #endregion
+
+        #region 閉じるイベント
+        /// <summary>
+        /// イベント名：閉じる
+        /// </summary>
+        /// <returns>ActionResult</returns>
+        [HttpGet]
+        public ActionResult Close()
+        {
+            // セッション情報から検索条件、検索結果件数をクリアする
+            SessionUtil.Remove(SESS_D000020, HttpContext);
+
+            return Json(new { result = "success" });
+        }
+        #endregion
+
+        #region 共済目的名称取得メソッド
+        /// <summary>
+        /// 共済目的名称取得メソッド
+        /// </summary>
+        /// <param name="model">ビューモデル</param>
+        /// <param name="KyosaiMokutekiCd">共済目的コード</param>
+        /// <returns>共済目的名称取得</returns>
+        private string GetKyosaiMokutekiNM(D000020Model model, string KyosaiMokutekiCd)
+        {
+            logger.Info("共済目的名称を取得する（画面表示用）");
+            var strKyosaiMokuteki = getJigyoDb<NskAppContext>().M00010共済目的名称s.Where(t => t.共済目的コード == KyosaiMokutekiCd).SingleOrDefault();
+            return strKyosaiMokuteki.共済目的名称.ToString();
+        }
+        #endregion
+
+        #region 検索条件チェックメソッド
+        /// <summary>
+        /// 検索条件チェックメソッド
+        /// </summary>
+        /// <param name="model">ビューモデル</param>
+        private bool CheckSearchCondition(D000020Model model)
+        {
+            // チェックフラグ
+            var checkFlg = false;
+            // [画面：小地区(開始)]>[画面：小地区(終了)]の場合、エラーと判定する
+            if (!string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom) && !string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.ShochikuCdTo) &&
+                int.Parse(model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom) > int.Parse(model.SearchCondition.TodofukenDropDownList.ShochikuCdTo))
+            {
+                ModelState.AddModelError("MessageArea1", MessageUtil.Get("ME10020", "小地区"));
+                ModelState.AddModelError("SearchCondition.TodofukenDropDownList.ShochikuCdFrom", " ");
+                ModelState.AddModelError("SearchCondition.TodofukenDropDownList.ShochikuCdTo", " ");
+                checkFlg = true;
+            }
+            // [画面：組合員等コード(開始)]>[画面：組合員等コード(終了)]の場合、エラーと判定する
+            if (!string.IsNullOrEmpty(model.SearchCondition.KumiaiintoCdFrom) && !string.IsNullOrEmpty(model.SearchCondition.KumiaiintoCdTo) &&
+                long.Parse(model.SearchCondition.KumiaiintoCdFrom) > long.Parse(model.SearchCondition.KumiaiintoCdTo))
+            {
+                ModelState.AddModelError("MessageArea1", MessageUtil.Get("ME10020", "組合員等コード"));
+                ModelState.AddModelError("SearchCondition.KumiaiintoCdFrom", " ");
+                ModelState.AddModelError("SearchCondition.KumiaiintoCdTo", " ");
+                checkFlg = true;
+            }
+
+            return checkFlg;
+        }
+        #endregion
+
+        #region 組合員等データ取得メソッド(一覧取得)
+        /// <summary>
+        /// メソッド：組合員等データ取得
+        /// </summary>
+        /// <param name="model">ビューモデル</param>
+        /// <returns>組合員等コード検索結果モデル</returns>
+        private D000020Model GetPageDataList(D000020Model model)
+        {
+            // モデル状態ディクショナリからすべての項目を削除します。
+            ModelState.Clear();
+            // 組合員等コード検索結果をクリアする
+            model.SearchResult = new D000020SearchResult();
+            // sql用定数定義
+            var sql = new StringBuilder();
+            var parameters = new List<NpgsqlParameter>();
+
+            // 組合員等データ取得用SQLをセットする
+            var tableRecords = GetCondition(sql, model, parameters);
+            // 取得用SQL実行結果件数を取得する
+            var TotalCount = tableRecords.ToList().Count;
+            // 0件の場合
+            if (TotalCount == D000020_SEARCH_NO_COUNT)
+            {
+                // メッセージエリア１に表示する（メッセージID：MI00011) 
+                ModelState.AddModelError("MessageArea1", MessageUtil.Get("MI00011"));
+            }
+            // 50件以上の場合
+            else if(TotalCount >= D000020_SEARCH_LIMITED_COUNT)
+            {
+                // メッセージエリア１に表示する（メッセージID：ME10097) 
+                ModelState.AddModelError("MessageArea1", MessageUtil.Get("ME10097"));
+            }
+            else
+            {
+                // 組合員等データをセットする
+                model.SearchResult.TableRecords = tableRecords;
+                // 件数表示項目をセットする
+                model.SearchResult.TotalCount = TotalCount.ToString();
+                model.SearchResult.TablePart1 = D000020_TABLE_PART1;
+                model.SearchResult.TablePart2 = D000020_TABLE_PART2;
+                model.SearchResult.TablePart3 = D000020_TABLE_PART3;
+            }
+
+            // 検索条件と検索結果をセッションに保存する
+            SessionUtil.Set(SESS_D000020, model, HttpContext);
+
+            return model;
+        }
+        #endregion
+
+        #region 組合員等データ取得
+        /// <summary>
+        /// 検索項目を取得する
+        /// </summary>
+        /// <param name="sql">検索sql</param>
+        /// <param name="model">モデル</param>
+        /// <param name="parameters">パラメータ</param>
+        private List<D000020TableRecord> GetCondition(StringBuilder sql, D000020Model model, List<NpgsqlParameter> parameters)
+        {
+            Syokuin syokuin = Syokuin;
+
+            sql.Append("SELECT ");
+            sql.Append("    kumiaiinto_cd AS KumiaiintoCd ");
+            sql.Append("    , hojin_full_nm AS Name ");
+            sql.Append("    , address AS Post ");
+            sql.Append("    , tel AS Tel ");
+            sql.Append("FROM ");
+            sql.Append("    v_nogyosha ");
+            sql.Append("WHERE ");
+            sql.Append("    kumiaito_cd = @KumiaitoCd ");
+            parameters.Add(new NpgsqlParameter("@KumiaitoCd", syokuin.KumiaitoCd));
+            // 検索条件SQLのセット
+            GetSearchItems(sql, model, parameters);
+
+            sql.Append("ORDER BY ");
+            sql.Append("    kumiaiinto_cd ASC ");
+
+            // sql実行 
+            logger.Info("検索結果件数取得処理を実行します。");
+            logger.Info(sql.ToString());
+            return getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D000020TableRecord>(sql.ToString(), parameters.ToArray()).ToList();
+        }
+        #endregion
+
+        #region 組合員等データ一覧取得検索条件
+        /// <summary>
+        /// 画面項目が入力されている場合の取得条件
+        /// </summary>
+        /// <param name="sql">検索sql</param>
+        /// <param name="model">モデル</param>
+        /// <param name="parameters">パラメータ</param>
+        private void GetSearchItems(StringBuilder sql, D000020Model model, List<NpgsqlParameter> parameters)
+        {
+            Syokuin syokuin = Syokuin;
+
+            // [画面：組合員等氏名]が入力されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.KumiaiintoNm))
+            {
+                // 半角全角スペースにて分割し配列に格納
+                string[] KumiaiintoNms = model.SearchCondition.KumiaiintoNm.Split(new char[] { ' ', '　' }, StringSplitOptions.RemoveEmptyEntries);
+                // 文字列前後に"%"を付ける
+                string[] KumiaiintoNmsWithPercent = KumiaiintoNms.Select(word => "%" + word + "%").ToArray();
+                foreach (var (item, index) in KumiaiintoNmsWithPercent.Select((item, index) => (item, index)))
+                    {
+                    // 配列を検索条件として部分一致検索を行う
+                    sql.Append($"    AND (hojin_full_nm ILIKE @KumiaiintoNms{index} OR hojin_full_kana ILIKE @KumiaiintoNms{index}) ");
+                    parameters.Add(new NpgsqlParameter($"@KumiaiintoNms{index}", item));
+                }
+            }
+
+            // [画面：支所]が選択されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.ShishoCd))
+            {
+                // 本所以外
+                if (model.SearchCondition.TodofukenDropDownList.ShishoCd != "00")
+                {
+                    sql.Append("AND shisho_cd = @ShishoCd_1 ");
+                    parameters.Add(new NpgsqlParameter("@ShishoCd_1", model.SearchCondition.TodofukenDropDownList.ShishoCd));
+                }
+            }
+            else
+            {
+                // 利用可能な支所一覧
+                var shishoList = ScreenSosaUtil.GetShishoList(HttpContext);
+                // [セッション：利用可能支所一覧]がある場合
+                if (!shishoList.IsNullOrEmpty())
+                {
+                    // [セッション：支所コード]が空でない場合
+                    if (!string.IsNullOrEmpty(syokuin.ShishoCd))
+                    {
+                        sql.Append("AND shisho_cd = ANY (@ShishoList_2) ");
+                        parameters.Add(new NpgsqlParameter("@ShishoList_2", NpgsqlDbType.Array | NpgsqlDbType.Varchar)
+                        {
+                            Value = shishoList.Select(i => i.ShishoCd).ToList()
+                        });
+                    }
+                }
+            }
+
+            // [画面：大地区]が選択されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.DaichikuCd))
+            {
+                sql.Append("AND daichiku_cd = @DaichikuCd ");
+                parameters.Add(new NpgsqlParameter("@DaichikuCd", model.SearchCondition.TodofukenDropDownList.DaichikuCd));
+            }
+
+            // 小地区
+            // [画面：小地区(開始)] が選択されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom))
+            {
+                sql.Append("AND shochiku_cd >= @ShochikuCdFrom ");
+                parameters.Add(new NpgsqlParameter("@ShochikuCdFrom", model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom));
+            }
+            // [画面：小地区(終了)] が選択されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.TodofukenDropDownList.ShochikuCdTo))
+            {
+                sql.Append("AND shochiku_cd <= @ShochikuCdTo ");
+                parameters.Add(new NpgsqlParameter("@ShochikuCdTo", model.SearchCondition.TodofukenDropDownList.ShochikuCdTo));
+            }
+
+            // 組合員等コード
+            // [画面：組合員等コード(開始)]が入力されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.KumiaiintoCdFrom))
+            {
+                sql.Append("    AND CAST(kumiaiinto_cd AS BIGINT) >= @KumiaiintoCdFrom ");
+                parameters.Add(new NpgsqlParameter("@KumiaiintoCdFrom", long.Parse(model.SearchCondition.KumiaiintoCdFrom)));
+            }
+            // [画面：組合員等コード(終了)]が入力されている場合
+            if (!string.IsNullOrEmpty(model.SearchCondition.KumiaiintoCdTo))
+            {
+                sql.Append("    AND CAST(kumiaiinto_cd AS BIGINT) <= @KumiaiintoCdTo ");
+                parameters.Add(new NpgsqlParameter("@KumiaiintoCdTo", long.Parse(model.SearchCondition.KumiaiintoCdTo)));
+            }
+        }
+        #endregion
+    }
+}
