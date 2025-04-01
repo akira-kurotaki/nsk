@@ -1,0 +1,232 @@
+﻿@model NskWeb.Areas.F112.Models.D112010.D112010Model
+@{
+    var startIndex = 200;
+}
+@Html.Hidden("searchMsgUkeire", "")
+@Html.AntiForgeryToken()
+<div id="searchResultContainer">
+    <h4 class="sub_title">受入履歴検索</h4>
+    @Html.ValidationMessageFor(model => model.MessageArea2, "", new { @class = "text-danger", @id = "validationMessageArea2", style = "margin-top: 0.5rem;" })
+    <br />
+    <div class="table-responsive" style="margin-top: 1rem;" >
+        <table class="table table-condensed table-sub-bordered" style="width: 80%;">
+            <colgroup class="colgroup_background"></colgroup>
+            <colgroup></colgroup>
+            <colgroup></colgroup>
+            <tr>
+                <td>ユーザID</td>
+                <td>
+                    @Html.HiddenFor(model => model.SearchCondition.UkeireUserId, new { id = "hiddenUkeireUserId" })
+                    @Html.UkeireUserIdInfoDropDownListFor(model => model.SearchCondition.UkeireUserId,
+                                                        @Model.VSyokuinRecords.TodofukenCd,
+                                                        @Model.VSyokuinRecords.KumiaitoCd,
+                                                        @Model.VSyokuinRecords.ShishoCd,
+                                                        @Model.VSyokuinRecords.UserId,
+                                                        new { @class = "form-select form-select-lg", id = "UkeireUserIdDropdown" })
+                </td>
+            </tr>
+            <tr>
+                <td>対象データ</td>
+                <td>
+                    @Html.UkeireTaisyoCdDropDownListFor(model => model.SearchCondition.UkeireTaishoData,
+                                                        @Model.VSyokuinRecords.TodofukenCd,
+                                                        @Model.VSyokuinRecords.KumiaitoCd,
+                                                        @Model.VSyokuinRecords.ShishoCd,
+                                                        new { @class = "form-select form-select-lg" })
+                </td>
+
+            </tr>
+            <tr>
+                <td>受入日</td>
+                <td>
+                    <div class="form-group">
+                        @Html.EditorFor(
+                                                            model => model.SearchCondition.UkeireDateFrom,
+                                                            new { htmlAttributes = new { @class = "form-control date-picker" } }
+                                                            )
+                        @Html.ValidationMessageFor(model => model.SearchCondition.UkeireDateFrom, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+                <td><div class="text-center">～</div></td>
+                <td>
+                    <div>
+                        @Html.EditorFor(
+                                                            model => model.SearchCondition.UkeireDateTo,
+                                                            new { htmlAttributes = new { @class = "form-control date-picker" } }
+                                                            )
+                        @Html.ValidationMessageFor(model => model.SearchCondition.UkeireDateTo, "", new { @class = "text-danger" })
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="form-check">
+        @Html.CheckBoxFor(model => model.SearchCondition.IncludeOtherUserHistoryFlg, new { @class = "form-check-input", @id = "includeOtherUserHistory" })
+        <label class="form-check-label" for="includeOtherUserHistory">他のユーザの取込履歴も表示する</label>
+    </div>
+    <div class="table-responsive" style="margin-top: 1rem;">
+        <table class="table table-condensed table-sub-bordered" style="width: 45%;">
+            <colgroup class="colgroup_background"></colgroup>
+            <tr>
+                <td style="width: 35%;">@Html.LabelFor(model => model.SearchCondition.DisplayCount, "表示数")</td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplayCount, "display_count", new { @class = "form-select form-select-lg", tabindex = 140, @title = "選択項目" })
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="btn_area btn_group" style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-primary" id="ClearAcceptTab" style="width: 100px !important;">クリア</button>
+        <button type="button" class="btn btn-warning" id="SearchAcceptHistory" style="width: 100px !important;">検索</button>
+    </div>
+
+    @Html.HiddenFor(Model => Model.SearchCondition.IsResultDisplay)
+    @if (Model.SearchCondition.IsResultDisplay)
+    {
+        <h4 class="sub_title">受入履歴</h4>
+        <div>※処理状況が"失敗"の場合は、バッチ管理画面にてご確認ください</div>
+        @Html.ValidationMessageFor(model => model.MessageArea3, "", new { @class = "text-danger", @id = "validationMessageArea3", style = "margin-top: 0.5rem;" })
+        <div id="SearchResultUkeire">
+            @if (0 < Model.SearchResult.TotalCount)
+            {
+                <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 0;">
+                    <div class="btn_area btn_group_right">
+                        <button type="button" class="btn btn-primary mt_15" id="DeleteLineAcceptBtn" @(Model.UpdateKengenFlg ? "" : "disabled")>選択行削除</button>
+                        <button type="button" class="btn btn-primary mt_15" id="SelectAllAccept" @(Model.UpdateKengenFlg ? "" : "disabled")>全行選択</button>
+                        <button type="button" class="btn btn-primary mt_15" id="ClearSelectionAccept" @(Model.UpdateKengenFlg ? "" : "disabled")>全行解除</button>
+                    </div>
+                </div>
+
+                @if (Model.SearchResult.TableRecords != null && 0 < Model.SearchResult.TableRecords.Count())
+                {
+                    <div class="table-responsive">
+                        @Html.Pager("PagerUkeire", "pagerClickUkeire", Model.SearchResult.Pager)
+                    </div>
+
+                    <div class="table-responsive">
+                        <table id="searchResultTableUkeire" class="table table-bordered table-striped" style="width:200rem;">
+                            <thead class="sticky-top">
+                                <tr>
+                                    <th rowspan="2" style="width: 1%;" class="text-center" scope="col">選択</th>
+                                    <th rowspan="2" style="width: 8%;" scope="col">データ登録日時</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">対象データ</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">ユーザID</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">処理状況</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">対象件数</th>
+                                    <th colspan="2" style="width: 16%;" scope="col">OK件数</th>
+                                    <th colspan="2" style="width: 16%;" scope="col">OKデータリスト</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">コメント</th>
+                                    <th rowspan="2" style="width: 10%;" scope="col">取込</th>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" style="width: 16%;" scope="col">エラー件数</th>
+                                    <th colspan="2" style="width: 16%;" scope="col">エラーリスト</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @for (int i = 0; i < Model.SearchResult.TableRecords.Count; i++)
+                                {
+                                    var item = Model.SearchResult.TableRecords[i];
+
+                                    <tr data-rowid="@item.UkeireRirekiId">
+                                        @Html.HiddenFor(m => m.SearchResult.TableRecords[i].UkeireRirekiId)
+                                        @Html.HiddenFor(m => m.SearchResult.TableRecords[i].TaishoDataKbn)
+                                        <!-- チェックボックス -->
+                                        <td rowspan="2" class="text-center">
+                                            <div>
+                                                @Html.CheckBoxFor(
+                                                    m => m.SearchResult.TableRecords[i].SelectCheck,
+                                                    new
+                                                    {
+                                                        @class = "magic-checkbox selectCheck deleteAcceptCheck magic-checkbox-no-label",
+                                                        data_index = i,
+                                                        tabindex = startIndex + i
+                                                    })
+                                                <label for=@string.Concat("SearchResult_TableRecords_", i, "__SelectCheck")></label>
+                                                <label></label>
+                                            </div>
+                                        </td>
+                                        <!-- データ登録日時 -->
+
+                                        <td rowspan="2">
+                                            @Html.Label("", item.DataRegistDate.ToString())
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].DataRegistDate)
+                                        </td>
+                                        <!-- 対象データ -->
+                                        <td rowspan="2">
+                                            @Html.Label("", item.UkeireTaishoDataNm)
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].UkeireTaishoDataNm)
+                                        </td>
+
+                                        <!-- ユーザID -->
+                                        <td rowspan="2">
+                                            @Html.Label("", item.UserId)
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].UserId)
+                                        </td>
+                                        <!-- 処理状況 -->
+                                        <td rowspan="2">
+                                            @Html.Label("", item.KbnNm)
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].KbnNm)
+                                        </td>
+                                        <!-- 対象件数 -->
+                                        <td rowspan="2">
+                                            @Html.Label("", item.TaishoCount.ToString() ?? "")
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].TaishoCount)
+                                        </td>
+                                        <!-- OK件数 -->
+                                        <td colspan="2">
+                                            @Html.Label("", item.OkCount.ToString() ?? "")
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].OkCount)
+                                        </td>
+                                        <!-- OKデータリスト -->
+                                        <td colspan="2">
+                                            <a href="javascript:void(0);" class="myCustomLink" onclick="OkLinkAccept(this);">
+                                                @Html.Label("", item.OkDataList)
+                                            </a>
+                                        </td>
+                                        <!-- コメント -->
+                                        <td rowspan="2">
+                                            @Html.Label("", item.Comment)
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].Comment)
+                                        </td>
+                                        <!-- 取込 -->
+                                        <td colspan="2">
+                                            @Html.Label("", item.Torikomi)
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].Torikomi)
+                                        </td>
+                                    </tr>
+                                    <tr data-rowid="@item.UkeireRirekiId">
+                                        <!-- エラー件数 -->
+                                        <td colspan="2" style="background-color: white;">
+                                            @Html.Label("", item.ErrorCount.ToString() ?? "")
+                                            @Html.HiddenFor(model => model.SearchResult.TableRecords[i].ErrorCount)
+                                        </td>
+                                        <!-- エラーリスト -->
+                                        <td colspan="2" style="background-color: white;">
+                                            <a href="javascript:void(0);" class="myCustomLink" onclick="ErrorLinkAccept(this);">
+                                                @Html.Label("", item.ErrorList)
+                                            </a>
+                                        </td>
+                                        <!-- 取込 -->
+                                        <td colspan="2" style="background-color: white;">
+                                            @if ("03".Equals(item.ProcessStatus))
+                                            {
+                                                <button type="button" class="btn btn-primary mt_15 importBtn" data-rowid="@item.UkeireRirekiId" @(Model.UpdateKengenFlg ? "" : "disabled")>取込</button>
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-responsive">
+                    @Html.Pager("PagerUkeire", "pagerClickUkeire", Model.SearchResult.Pager)
+                </div>
+            }
+        }
+        </div>
+    }
+</div>

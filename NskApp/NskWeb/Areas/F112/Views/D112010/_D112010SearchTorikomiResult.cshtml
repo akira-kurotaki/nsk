@@ -1,0 +1,198 @@
+﻿@model NskWeb.Areas.F112.Models.D112010.D112010Model
+@{
+    var startIndex = 200;
+}
+@Html.Hidden("searchMsgTorikomi", "")
+@Html.AntiForgeryToken()
+<div id="searchResultContainerTorikomi">
+<h4 class="sub_title">取込履歴検索</h4>
+@Html.ValidationMessageFor(model => model.MessageArea4, "", new { @class = "text-danger", @id = "validationMessageArea4", style = "margin-top: 0.5rem;" })
+<br />
+<div class="table-responsive" style="margin-top: 1rem;">
+    <table class="table table-condensed table-sub-bordered" style="width: 80%;">
+        <colgroup class="colgroup_background"></colgroup>
+        <colgroup></colgroup>
+        <colgroup></colgroup>
+        <tr>
+            <td>ユーザID</td>
+            <td>
+                @Html.HiddenFor(model => model.SearchConditionTorikomi.TorikomiUserId, new { id = "hiddenTorikomiUserId" })
+                @Html.UkeireUserIdInfoDropDownListFor(model => model.SearchConditionTorikomi.TorikomiUserId,
+                         @Model.VSyokuinRecords.TodofukenCd,
+                         @Model.VSyokuinRecords.KumiaitoCd,
+                         @Model.VSyokuinRecords.ShishoCd,
+                         @Model.VSyokuinRecords.UserId,
+                         new { @class = "form-select form-select-lg", id = "TorikomiUserIdDropdown" })
+            </td>
+        </tr>
+        <tr>
+            <td>対象データ</td>
+            <td>
+                @Html.UkeireTaisyoCdDropDownListFor(model => model.SearchConditionTorikomi.TorikomiTaishoData,
+                         @Model.VSyokuinRecords.TodofukenCd,
+                         @Model.VSyokuinRecords.KumiaitoCd,
+                         @Model.VSyokuinRecords.ShishoCd,
+                         new { @class = "form-select form-select-lg" })
+            </td>
+
+        </tr>
+        <tr>
+            <td>受入日</td>
+            <td>
+                <div class="form-group">
+                    @Html.EditorFor(
+                                 model => model.SearchConditionTorikomi.TorikomiDateFrom,
+                             new { htmlAttributes = new { @class = "form-control date-picker" } }
+                             )
+                    @Html.ValidationMessageFor(model => model.SearchConditionTorikomi.TorikomiDateFrom, "", new { @class = "text-danger" })
+                </div>
+            </td>
+            <td><div class="text-center">～</div></td>
+            <td>
+                <div>
+                    @Html.EditorFor(
+                             model => model.SearchConditionTorikomi.TorikomiDateTo,
+                             new { htmlAttributes = new { @class = "form-control date-picker" } }
+                             )
+                    @Html.ValidationMessageFor(model => model.SearchConditionTorikomi.TorikomiDateTo, "", new { @class = "text-danger" })
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+<div class="form-check">
+    @Html.CheckBoxFor(model => model.SearchConditionTorikomi.IncludeOtherUserHistoryFlg, new { @class = "form-check-input", @id = "includeOtherUserHistoryTorikomi" })
+    <label class="form-check-label" for="includeOtherUserHistory">他のユーザの取込履歴も表示する</label>
+</div>
+<div class="table-responsive" style="margin-top: 1rem;">
+    <table class="table table-condensed table-sub-bordered" style="width: 45%;">
+        <colgroup class="colgroup_background"></colgroup>
+        <tr>
+            <td style="width: 35%;">@Html.LabelFor(model => model.SearchConditionTorikomi.DisplayCount, "表示数")</td>
+            <td>
+                 @Html.DropDownListFor(model => model.SearchConditionTorikomi.DisplayCount, "display_count", new { @class = "form-select form-select-lg", tabindex = 140, @title = "選択項目" })
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div class="btn_area btn_group" style="display: flex; justify-content: center; align-items: center;">
+        <button type="button" class="btn btn-primary" id="ClearImportTab" style="width: 100px !important;">クリア</button>
+        <button type="button" class="btn btn-warning" id="SearchImportHistory" style="width: 100px !important;">検索</button>
+
+</div>
+
+@Html.HiddenFor(Model => Model.SearchCondition.IsResultDisplay)
+@if (Model.SearchConditionTorikomi.IsResultDisplay)
+{
+    <h4 class="sub_title">受入履歴</h4>
+    <div>※処理状況が"失敗"の場合は、バッチ管理画面にてご確認ください</div>
+    @Html.ValidationMessageFor(model => model.MessageArea5, "", new { @class = "text-danger", @id = "validationMessageArea5", style = "margin-top: 0.5rem;" })
+    <div id="SearchResultTorikomi">
+    @if (0 < Model.SearchResultTorikomi.TotalCount)
+    {
+
+        <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 0;">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary mt_15" id="DeleteLineImportBtn" @(Model.UpdateKengenFlg ? "" : "disabled")>選択行削除</button>
+                <button type="button" class="btn btn-primary mt_15" id="SelectAllImport" @(Model.UpdateKengenFlg ? "" : "disabled")>全行選択</button>
+                <button type="button" class="btn btn-primary mt_15" id="ClearSelectionImport" @(Model.UpdateKengenFlg ? "" : "disabled")>全行解除</button>
+            </div>
+        </div>
+
+        @if (Model.SearchResultTorikomi.TableRecords != null && 0 < Model.SearchResultTorikomi.TableRecords.Count())
+        {
+            <div class="table-responsive">
+                    @Html.Pager("PagerTorikomi", "pagerClickTorikomi", Model.SearchResultTorikomi.Pager)
+            </div>
+
+            <div class="table-responsive">
+                <table id="searchResultTableTorikomi"  class="table table-bordered table-striped" style="width:200rem;">
+                    <thead class="sticky-top">
+                        <tr>
+                            <th rowspan="1" style="width: 1%;" class="text-center" scope="col">選択</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">データ登録日時</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">対象データ</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">ユーザID</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">処理状況</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">対象件数</th>
+                            <th rowspan="1" style="width: 16%;" scope="col">エラーリスト</th>
+                            <th rowspan="1" style="width: 10%;" scope="col">コメント</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @for (int i = 0; i < Model.SearchResultTorikomi.TableRecords.Count; i++)
+                        {
+                            var item = Model.SearchResultTorikomi.TableRecords[i];
+                            
+                            <tr>
+                                @Html.HiddenFor(m => m.SearchResultTorikomi.TableRecords[i].UkeireRirekiId)
+                                @Html.HiddenFor(m => m.SearchResultTorikomi.TableRecords[i].TorikomiRirekiId)
+                                <!-- チェックボックス -->
+                                <td rowspan="1" class="text-center" style="background-color: white;">
+                                    <div>
+                                        @Html.CheckBoxFor(
+                                            m => m.SearchResultTorikomi.TableRecords[i].SelectCheck,
+                                            new
+                                            {
+                                                @class = "magic-checkbox selectCheck deleteImportCheck magic-checkbox-no-label",
+                                                data_index = i,
+                                                tabindex = startIndex + i
+                                            })
+                                        <label for=@string.Concat("SearchResultTorikomi_TableRecords_", i, "__SelectCheck")></label>
+                                    </div>
+                                </td>
+                                <!-- データ登録日時 -->
+
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.DataRegistDate.ToString())
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].DataRegistDate)
+                                </td>
+                                <!-- 対象データ -->
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.TorikomiTaishoDataNm)
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].TorikomiTaishoDataNm)
+                                </td>
+
+                                <!-- ユーザID -->
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.TourokuUserId)
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].TourokuUserId)
+                                </td>
+                                <!-- 処理状況 -->
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.KbnNm)
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].KbnNm)
+                                </td>
+                                <!-- 対象件数 -->
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.TaishoCount.ToString() ?? "")
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].TaishoCount)
+                                </td>
+                                <!-- エラーリスト -->
+                                <td colspan="1" style="background-color: white;">
+                                    <a href="javascript:void(0);" class="myCustomLink" onclick="ErrorLinkImport(this);">
+                                        @Html.Label("", item.ErrorListNm)
+                                    </a>
+                                </td>
+                                <!-- コメント -->
+                                <td rowspan="1" style="background-color: white;">
+                                    @Html.Label("", item.Comment)
+                                    @Html.HiddenFor(model => model.SearchResultTorikomi.TableRecords[i].Comment)
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="table-responsive">
+                        @Html.Pager("PagerTorikomi", "pagerClickTorikomi", Model.SearchResultTorikomi.Pager)
+            </div>
+        }
+    }
+    </div>
+}
+</div>
+

@@ -1,0 +1,801 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F105.Consts
+@using NskWeb.Areas.F105.Models.D105150
+@model D105150Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+    F105Const.Authority[] kengens = [F105Const.Authority.Update];// "更新権限"];
+    string buttonDisableAttr = "";
+    if (!kengens.Contains(Model.DispKengen))
+    {
+        buttonDisableAttr = "disabled";
+    }
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>基準収穫量設定（災害収入、品質）</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+
+@using (Html.BeginForm("Init", "NSK105150D", FormMethod.Post, new { id = "KijunSyukakuryoSetteiSearchForm", spellcheck = "false", autocomplete = "off" }))
+{
+    @await Html.PartialAsync("_HiddenWindowId")
+
+    <div class="table-thead-container">
+        <h4 class="sub_title">検索条件</h4>
+        <div class="mb-3">
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdFrom, null, new { @class = "text-danger" })</div>
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.KumiaiinToCdTo, null, new { @class = "text-danger" })</div>
+            <div>@Html.MessageAreaFor(model => model.MessageArea1, "", new { @class = "text-danger", id = "MessageArea1" })</div>
+        </div>
+        @await Html.PartialAsync("DropDownTemplates/_Hidden_Todofuken", Model.SearchCondition.TodofukenDropDownList)
+
+        @* 都道府県段階ドロップダウンリストで非表示の項目はHiddenで値を保持する必要がある *@
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.TodofukenCd)
+        @Html.HiddenFor(model => model.SearchCondition.TodofukenDropDownList.KumiaitoCd)
+        <br />
+        <table class="table table-condensed table-sub-bordered">
+            <colgroup>
+                <col class="colgroup_background" style="width: 10%;">
+                <col style="width: 30%;">
+                <col class="colgroup_background" style="width: 10%;">
+                <col style="width: 25%;">
+                <col style="width: 25%;">
+            </colgroup>
+            <tr>
+                @*支所*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 103, @title = "選択項目" })
+                </td>
+            </tr>
+            <tr>
+                @*市町村*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShichosonCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShichosonCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shichoson, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 104, @title = "選択項目" })
+                </td>
+
+            </tr>
+            <tr>
+                @*大地区*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.DaichikuCd))
+                </td>
+                <td>
+                    @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Daichiku, Model.SearchCondition.TodofukenDropDownList,
+                             "", new { @class = "form-select form-select-lg", tabindex = 105, @title = "選択項目" })
+                </td>
+
+                @*小地区*@
+                <td class="colgroup_background">
+                    @Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom,
+                             Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdFrom))
+                </td>
+                <td colspan="2">
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuFrom, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 106, @title = "選択項目" })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>
+                                    @Html.DisplayNameFor(model => model.SearchCondition.TodofukenDropDownList.ShochikuCdTo)
+                                </div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.ShochikuTo, Model.SearchCondition.TodofukenDropDownList,
+                                         "", new { @class = "form-select form-select-lg", tabindex = 107, @title = "選択項目" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @*組合員等*@
+                <td>
+                    組合員等コード
+                </td>
+                <td>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdFrom, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 108, @type = "text" } })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>～</div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.EditorFor(model => model.SearchCondition.KumiaiinToCdTo, "",
+                                         new { htmlAttributes = new { @class = "form-control", tabindex = 109, @type = "text" } })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                @*類区分*@
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.RuiKbn,
+                             Html.DisplayNameFor(model => model.SearchCondition.RuiKbn))
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.RuiKbn,
+                             Model.SearchCondition.RuiKbnList, "",
+                             new { @class = "form-select form-select-lg", tabindex = 111, @title = "選択項目" })
+                </td>
+                @*営農対象外フラグ*@
+                <td class="colgroup_background">
+                    @Html.LabelFor(model => model.SearchCondition.EinoTaishogaiFlg,
+                             Html.DisplayNameFor(model => model.SearchCondition.EinoTaishogaiFlg))
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.EinoTaishogaiFlg,
+                             Model.SearchCondition.EinoTaishogaiFlgList, "",
+                             new { @class = "form-select form-select-lg", tabindex = 112, @title = "選択項目" })
+                </td>
+            </tr>
+            <tr>
+                @*産地別銘柄等コード*@
+                <td>
+                    産地別銘柄等コード
+                </td>
+                <td colspan="3">
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:45%">
+                                @Html.DropDownListFor(model => model.SearchCondition.SanchibetsuMeigaratoCdFrom,
+                                         Model.SearchCondition.SanchibetsuMeigaratoCdList, "",
+                                         new { @class = "form-select form-select-lg", tabindex = 113, @title = "選択項目" })
+                            </td>
+                            <td class="text-center" style="width:10%">
+                                <div>～</div>
+                            </td>
+                            <td style="width:45%">
+                                @Html.DropDownListFor(model => model.SearchCondition.SanchibetsuMeigaratoCdTo,
+                                         Model.SearchCondition.SanchibetsuMeigaratoCdList, "",
+                                         new { @class = "form-select form-select-lg", tabindex = 114, @title = "選択項目" })
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <br />
+        <table class="table table-condensed table-sub-bordered">
+            <colgroup class="colgroup_background" style="width: 10%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <colgroup style="width: 18%;"></colgroup>
+            <colgroup style="width: 12%;"></colgroup>
+            <tr>
+                <td>
+                    @Html.LabelFor(model => model.SearchCondition.DisplayCount,
+                             Html.DisplayNameFor(model => model.SearchCondition.DisplayCount))
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplayCount, "display_count",
+                             new { @class = "form-select form-select-lg", tabindex = 115 })
+                </td>
+                <td colspan="5" class="td_spe_color"></td>
+            </tr>
+            <tr>
+                <td>表示順</td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort1, new { @class = "form-select form-select-lg", tabindex = 116, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順１</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_1", @class = "magic-radio", tabindex = 117 })
+                            <label for="SearchCondition_DisplaySortOrder1_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder1, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder1_2", @class = "magic-radio", tabindex = 118 })
+                            <label for="SearchCondition_DisplaySortOrder1_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort2, new { @class = "form-select form-select-lg", tabindex = 119, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順２</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_1", @class = "magic-radio", tabindex = 120 })
+                            <label for="SearchCondition_DisplaySortOrder2_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder2, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder2_2", @class = "magic-radio", tabindex = 121 })
+                            <label for="SearchCondition_DisplaySortOrder2_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+                <td>
+                    @Html.DropDownListFor(model => model.SearchCondition.DisplaySort3, new { @class = "form-select form-select-lg", tabindex = 122, @title = "選択項目" })
+                </td>
+                <td>
+                    <div class="text-center">
+                        <fieldset>
+                            <legend class="visually-hidden">表示順３</legend>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.DESC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_1", @class = "magic-radio", tabindex = 123 })
+                            <label for="SearchCondition_DisplaySortOrder3_1">降順</label>
+                            @Html.RadioButtonFor(model => model.SearchCondition.DisplaySortOrder3, CoreConst.SortOrder.ASC.ToString(),
+                                     new { @id = "SearchCondition_DisplaySortOrder3_2", @class = "magic-radio", tabindex = 124 })
+                            <label for="SearchCondition_DisplaySortOrder3_2">昇順</label>
+                        </fieldset>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="Clear" name="Clear" tabindex="120">
+                クリア
+            </button>
+            <button type="button" class="btn btn-primary" id="Search" name="Search" tabindex="121">
+                検索
+            </button>
+        </div>
+    </div>
+}
+
+<div class="table-thead-container">
+    <h4 class="sub_title">基準収穫量設定</h4>
+
+    <div class="btn_area btn_group_left">
+        <button type="button" class="btn btn-primary" id="InsertLine" name="InsertLine" @buttonDisableAttr>行挿入</button>
+        <button type="button" class="btn btn-primary" id="DeleteLine" name="DeleteLine" @buttonDisableAttr>選択行削除</button>
+        <button type="button" class="btn btn-primary" id="SelectAll" name="SelectAll" @buttonDisableAttr>全行選択</button>
+        <button type="button" class="btn btn-primary" id="ClearSelection" name="ClearSelection" @buttonDisableAttr>全行解除</button>
+    </div>
+    <div class="clearfix"></div>
+
+    @using (Html.BeginForm("Init", "NSK105150D", FormMethod.Post, new { id = "KijunSyukakuryoSetteiForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        <div class="mb-3">
+            <div>@Html.MessageAreaFor(model => model.KijunSyukakuryoSettei.MessageArea2, "", new { @class = "text-danger", id = "MessageArea2" })</div>
+        </div>
+        <div id="SearchResult">
+            @await Html.PartialAsync("_D105150KijunSyukakuryoSetteiResult", Model)
+        </div>
+    }
+    <div class="table-responsive table-thead-container">
+        <div class="btn_area btn_group_right">
+            <button type="button" class="btn btn-primary" id="Back" name="Back">
+                戻る
+            </button>
+            <button type="button" class="btn btn-primary" id="Insert" name="Insert" @buttonDisableAttr>
+                登録
+            </button>
+        </div>
+    </div>
+</div>
+<input type="hidden" id="returnValue" />
+
+@* 登録確認ダイアログ *@
+@Html.Confirm("InsertConfirm", "InsertConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+@* クリア 編集内容破棄確認ダイアログ *@
+@Html.Confirm("ClearConfirm", "ClearConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "初期画面", "登録"), "OK", "キャンセル")
+
+@* ページャー 編集内容破棄確認ダイアログ *@
+@Html.Confirm("PagerDiscardEditsConfirm", "PagerConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "他ページ", "登録"), "OK", "キャンセル")
+
+@* 検索 編集内容破棄確認ダイアログ *@
+@Html.Confirm("SearchConfirm", "SearchConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "新しい検索結果", "登録"), "OK", "キャンセル")
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "ポータル", "登録"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+        var pagerUrl = "";
+
+
+        @* 基準収穫量設定ページャー *@
+        function kijunSyukakuryoSetteiPagerClick(url) {
+            pagerUrl = url;
+            @Html.ShowDialog("PagerDiscardEditsConfirm");
+        };
+        $("#PagerConfirmOK").click(function(){
+            $.ajax({
+                type: 'GET',
+                cache: false,
+                contentType: "application/json; charset=utf-8",
+                data: "",
+                dataType: 'json',
+                url: pagerUrl,
+            }).done(function (data) {
+                if (data.message != null) {
+                    $('#MessageArea1').addClass("text-danger").html(data.message);
+                }
+                else {
+                    $('#SearchResult').html(data.partialView);
+
+                    // バリデータ再設定
+                    $("#KijunSyukakuryoSetteiForm").validate().resetForm();
+                    $("#KijunSyukakuryoSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#SearchResult');
+                }
+                $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+            }).fail(function () {
+                location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+            });
+        });
+
+        $(function () {
+            @* クリア処理 *@
+            $("#Clear").click(function(){
+                var recCnt = $("#SearchResult_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("ClearConfirm");
+                } else {
+                    $("#ClearConfirmOK").click();
+                }
+            });
+            $("#ClearConfirmOK").click(function(){
+                var initLink = "@Url.Action("Index", "D105150", new { area = "F105" })";
+                location.href = initLink;
+            });
+
+            @* 検索処理 *@
+            $("#Search").click(function () {
+                var message = "";
+                @* １．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#KijunSyukakuryoSetteiSearchForm").valid();
+                if (!checkValid) {
+                @* １．１．１．エラーの場合
+                    エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                    @* 処理を中止する。*@
+                    return;
+                }
+
+                @* １．２．独自チェック *@
+                @* １．２．１．[画面：小地区（終了）]<[画面：小地区（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。*@
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").removeClass("input-validation-error");
+                var shochikuCdFrom = $('#SearchCondition_TodofukenDropDownList_ShochikuCdFrom').val();
+                var shochikuCdTo = $('#SearchCondition_TodofukenDropDownList_ShochikuCdTo').val();
+                if (shochikuCdFrom && shochikuCdTo && shochikuCdFrom > shochikuCdTo) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["小地区（終了）", "小地区（開始）"])");
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").addClass("input-validation-error");
+            
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    @* 処理を中止する。*@
+                    return;
+                }
+
+                @* １．２．２．[画面：組合員等コード（終了）]<[画面：組合員等コード（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。 *@
+                $("#SearchCondition_KumiaiinToCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KumiaiinToCdTo").removeClass("input-validation-error");
+                var kumiaiintoCdFrom = $('#SearchCondition_KumiaiinToCdFrom').val();
+                var kumiaiintoCdTo = $('#SearchCondition_KumiaiinToCdTo').val();
+                if (kumiaiintoCdFrom && kumiaiintoCdTo && Number(kumiaiintoCdFrom) > Number(kumiaiintoCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["組合員等コード（終了）", "組合員等コード（開始）"])");
+                    $("#SearchCondition_KumiaiinToCdFrom").addClass("input-validation-error");
+
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    @* 処理を中止する。*@
+                    return;
+                }
+
+                @* １．２．３．[画面：産地別銘柄等コード（終了）]<[画面：産地別銘柄等コード（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。 *@
+                $("#SearchCondition_SanchibetsuMeigaratoCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_SanchibetsuMeigaratoCdTo").removeClass("input-validation-error");
+                var sanchibetsuMeigaratoCdFrom = $('#SearchCondition_SanchibetsuMeigaratoCdFrom').val();
+                var sanchibetsuMeigaratoCdTo = $('#SearchCondition_SanchibetsuMeigaratoCdTo').val();
+                if (sanchibetsuMeigaratoCdFrom && sanchibetsuMeigaratoCdTo && Number(sanchibetsuMeigaratoCdFrom) > Number(sanchibetsuMeigaratoCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10022", ["産地別銘柄等コード（終了）", "産地別銘柄等コード（開始）"])");
+                    $("#SearchCondition_SanchibetsuMeigaratoCdFrom").addClass("input-validation-error");
+
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    @* 処理を中止する。*@
+                    return;
+                }
+
+                var recCnt = $("#KijunSyukakuryoSettei_AllRecCount").val();
+                if (recCnt != "0") {
+                    @Html.ShowDialog("SearchConfirm");
+                } else {
+                    $("#SearchConfirmOK").click();
+                }
+            });
+            $("#SearchConfirmOK").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                @* 前回のメッセージをクリアする *@
+                messageArea1.html("");
+                var message = "";
+
+
+                @* １．１．属性チェック *@
+                @* エラーチェック仕様に基づき各項目のチェックを行う。*@
+                var checkValid = $("#KijunSyukakuryoSetteiSearchForm").valid();
+                if (!checkValid) {
+                    @* １．１．１．エラーの場合
+                        エラーが発生した各入力欄の直下にメッセージを表示する。*@
+                    $('.input-validation-error:first').focus();
+                    @* 処理を中止する。 *@
+                    return;
+                }
+
+                @* １．２．独自チェック *@
+                @* １．２．１．[画面：小地区（終了）]<[画面：小地区（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。 *@
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_TodofukenDropDownList_ShochikuCdTo").removeClass("input-validation-error");
+                var shochikuCdFrom = $('#SearchCondition_TodofukenDropDownList_ShochikuCdFrom').val();
+                var shochikuCdTo = $('#SearchCondition_TodofukenDropDownList_ShochikuCdTo').val();
+                if (shochikuCdFrom && shochikuCdTo && Number(shochikuCdFrom) > Number(shochikuCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10020", ["小地区", ""])");
+                    $("#SearchCondition_TodofukenDropDownList_ShochikuCdFrom").addClass("input-validation-error");
+                }
+
+                @* １．２．２．[画面：組合員等コード（終了）]<[画面：組合員等コード（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。*@
+                $("#SearchCondition_KumiaiinToCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_KumiaiinToCdTo").removeClass("input-validation-error");
+                var kumiaiintoCdFrom = $('#SearchCondition_KumiaiinToCdFrom').val();
+                var kumiaiintoCdTo = $('#SearchCondition_KumiaiinToCdTo').val();
+                if (kumiaiintoCdFrom && kumiaiintoCdTo && Number(kumiaiintoCdFrom) > Number(kumiaiintoCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10020", ["組合員等コード", ""])");
+                    $("#SearchCondition_KumiaiinToCdFrom").addClass("input-validation-error");
+                }
+
+                @* １．２．３．[画面：産地別銘柄等コード（終了）]<[画面：産地別銘柄等コード（開始）]の場合、エラーと判定し「メッセージリスト」にメッセージを設定する。*@
+                $("#SearchCondition_SanchibetsuMeigaratoCdFrom").removeClass("input-validation-error");
+                $("#SearchCondition_SanchibetsuMeigaratoCdTo").removeClass("input-validation-error");
+                var kumiaiintoCdFrom = $('#SearchCondition_SanchibetsuMeigaratoCdFrom').val();
+                var kumiaiintoCdTo = $('#SearchCondition_SanchibetsuMeigaratoCdTo').val();
+                if (kumiaiintoCdFrom && kumiaiintoCdTo && Number(kumiaiintoCdFrom) > Number(kumiaiintoCdTo)) {
+                    message = ConcatMessage(message, "@MessageUtil.Get("ME10020", ["産地別銘柄等コード", ""])");
+                    $("#SearchCondition_SanchibetsuMeigaratoCdFrom").addClass("input-validation-error");
+                }
+
+
+                @* １．３．入力チェックでエラーがあった場合 *@
+                if ("" != message) {
+                    $("#MessageArea1").html(message);
+                    @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                    $('.input-validation-error:first').focus();
+                    $("html, body").scrollTop(0);
+                    @* １．３．１．処理を中止し、画面へ制御を移す。 *@
+                    return;
+                }
+
+                @* １．４．エラーがない場合 *@
+                if ($("#KijunSyukakuryoSetteiSearchForm").valid() && "" == message) {
+                    @* 前回のメッセージをクリアする *@
+                    messageArea1.html("");
+                    $("#MessageArea2").html("");
+                    var url = "@Url.Action("Search", "D105150", new { area = "F105" })";
+                    var formData = new FormData($("#KijunSyukakuryoSetteiSearchForm").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false,  //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        // ４．１．１．「■基準収穫量設定」が表示されるようにスクロールを調整する。
+                        // ４．２．１．「■基準収穫量設定」が表示されるようにスクロールを調整する。
+                        $("html, body").scrollTop($('#KijunSyukakuryoSetteiForm').offset().top);
+
+                        if (undefined != data.message) {
+                            // ４．１．検索結果が0件だった場合
+                            if (data.message.indexOf("MI00011") > 0) {
+                                // ４．１．２．[メッセージエリア２]にメッセージを黒字で表示する。
+                               $('#MessageArea2').removeClass("text-danger");
+                               $('#MessageArea2').html(data.message);
+
+                               // ４．１．３．[メッセージエリア２]より下すべての画面項目を非表示にする。
+                            } else {
+                                // [画面：メッセージエリア１]に「メッセージリスト」の値を赤字で表示する
+                                $('#MessageArea1').addClass("text-danger").html(data.message);
+
+                                // 「■基準収穫量設定」カテゴリ以下すべての画面項目を非表示にする
+                            }
+                        }
+                        // 検索結果表示部の更新
+                        $('#SearchResult').html(data.resultArea.partialView);
+
+                        // 検索後のバリデータ再設定
+                        $("#KijunSyukakuryoSetteiForm").validate().resetForm();
+                        $("#KijunSyukakuryoSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                    });
+                }
+            });
+
+            @* 行挿入 行挿入を行う。*@
+            $("#InsertLine").click(function() {
+                var url = "@Url.Action("InsertLine", "D105150", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#KijunSyukakuryoSetteiForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#KijunSyukakuryoSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.view.Value.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.view.Value.message);
+                    }
+
+                    $('#SearchResult').html(data.view.Value.partialView);
+
+                    // 行追加後のバリデータ再設定
+                    $("#KijunSyukakuryoSetteiForm").validate().resetForm();
+                    $("#KijunSyukakuryoSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#SearchResult');
+
+                    // ２．フォーカスは追加行の先頭項目に当てる。
+                    if ($(`#KijunSyukakuryoSettei_DispRecords_${data.addRowIdx}__KumiaiintoCd`)) {
+                        $(`#KijunSyukakuryoSettei_DispRecords_${data.addRowIdx}__KumiaiintoCd`).focus();
+                    }
+
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 選択行削除 選択された行の削除を行う。*@
+            $("#DeleteLine").click(function() {
+                var url = "@Url.Action("DeleteLine", "D105150", new { area = "F105" })";
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#KijunSyukakuryoSetteiForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#KijunSyukakuryoSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.view.Value.message != null) {
+                        $('#MessageArea1').addClass("text-danger").html(data.view.Value.message);
+                    }
+                    $('#SearchResult').html(data.view.Value.partialView);
+
+                    // 行削除後のバリデータ再設定
+                    $("#KijunSyukakuryoSetteiForm").validate().resetForm();
+                    $("#KijunSyukakuryoSetteiForm").each(function () { $.data($(this)[0], 'validator', false); });
+                    $.validator.unobtrusive.parse('#SearchResult');
+
+                    // フォーカスは先頭行の先頭項目に当てる
+                    if ($(`#KijunSyukakuryoSettei_DispRecords_${data.firstRowIdx}__KumiaiintoCd`)) {
+                        $(`#KijunSyukakuryoSettei_DispRecords_${data.firstRowIdx}__KumiaiintoCd`).focus();
+                    }
+
+                    $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 全行選択 全行を選択する。*@
+            $("#SelectAll").click(function() {
+                var checkboxs = $("#SearchResult  input[id$='__CheckSelect']");
+                checkboxs.prop('checked', true);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#KijunSyukakuryoSettei_DispRecords_${idx}__KumiaiintoCd`)) {
+                            $(`#KijunSyukakuryoSettei_DispRecords_${idx}__KumiaiintoCd`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 全行解除 全行の選択を解除する。*@
+            $("#ClearSelection").click(function() {
+                var checkboxs = $("#SearchResult  input[id$='__CheckSelect']");
+                checkboxs.prop('checked', false);
+                // フォーカスは先頭行の先頭項目に当てる
+                let idx = 0;
+                for (idx = 0; idx < checkboxs.length; idx++) {
+                    // チェックボックスのあるTDの親であるTRのstyleに「display: none;」が設定されていない場合、表示行となる
+                    if (checkboxs[idx].parentNode.parentNode.style["display"] != "none") {
+                        if ($(`#KijunSyukakuryoSettei_DispRecords_${idx}__KumiaiintoCd`)) {
+                            $(`#KijunSyukakuryoSettei_DispRecords_${idx}__KumiaiintoCd`).focus();
+                            break;
+                        }
+                    }
+                }
+            });
+
+            @* 登録 入力内容を登録する。*@
+            $("#Insert").click(function() {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                // 前回のメッセージをクリアする
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // １．入力チェック
+                // １．１．属性チェック
+                var checkValid = $("#KijunSyukakuryoSetteiForm").valid();
+                if (!checkValid) {
+                    // エラーチェック仕様に基づき各項目のチェックを行う。
+                    // １．１．１．エラーの場合
+                    //    エラーが発生した各入力欄の直下にメッセージを表示する。
+                    return;
+                }
+
+                // ２．エラーがない場合、以下のダイアログを表示する。
+                if ($("#KijunSyukakuryoSetteiForm").valid() && "" == message) {
+                    @Html.ShowDialog("InsertConfirm");
+                }
+            });
+            $("#InsertConfirmOK").click(function() {
+                // ２．１．１．「OK」を押下時
+                // ２．１．１．類別設定入力フォームの入力データをJSON化する
+                //    ※数値項目はカンマを除去する
+                // ２．１．２．入力データ（JSON形式）を送信する。
+                var url = "@Url.Action("Insert", "D105150", new { area = "F105" })";
+
+                // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                $("#KijunSyukakuryoSetteiForm [disabled]").removeAttr('disabled');
+                var formData = new FormData($("#KijunSyukakuryoSetteiForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null) {
+                        $('#MessageArea2').addClass("text-danger").html(data.message);
+                    }
+                    $("html, body").scrollTop($('#KijunSyukakuryoSetteiForm').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            @* 戻る *@
+            $("#Back").click(function() {
+                @Html.ShowDialog("BackConfirm");
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D105150", new { area = "F105" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+
+        @* 産地別銘柄等コード検索子 *@
+        function searchSanchibetsuMeigaratoCd(idx) {
+            var targetId = `KijunSyukakuryoSettei_DispRecords_${idx}__SanchibetsuMeigaratoCd`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 産地銘柄コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000022", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に産地銘柄コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+
+        @* 組合員等コード検索子 *@
+        function searchKumiaiintoCd(idx) {
+            var targetId = `KijunSyukakuryoSettei_DispRecords_${idx}__KumiaiintoCd`;
+
+            if ($(`input#${targetId}`)[0].readOnly) {
+                // 読み取り専用の場合は更新対象外
+                return;
+            }
+
+            // 組合員等コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
+            var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
+            var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
+            $("#returnValue").val("");
+
+            var subWindow = windowSizeOpen(action, "F000", x, y);
+            $(subWindow).on('unload', function(e) {
+                // 子画面クローズ時に組合員等コードを画面反映させる
+                $(`#${targetId}`).val($("#returnValue").val());
+                $(`#${targetId}`).focus();
+            });
+        }
+    </script>
+}

@@ -102,7 +102,6 @@
         </button>
     </div>
 </div>
-<input type="hidden" id="returnValue" />
 
 @* 引受情報登録確認ダイアログ *@
 @Html.Confirm("RegistHikiukeConfirm", "RegistHikiukeConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
@@ -1428,7 +1427,8 @@
             });
         }
 
-        var receiveTargetId = "";
+        var cdTargetId = "";
+        var nmTargetId = "";
 
         @* 産地銘柄コード検索子画面表示 *@
         function showSanchiMeigaraCdSearch(idx) {
@@ -1439,6 +1439,10 @@
                 return;
             }
 
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `HikiukeSearchResult_DispRecords_${idx}__SanchiMeigaraNm`;
+
             // 産地銘柄コード検索子画面を開く
             var action = "@Url.Action("Init", "D000022", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -1446,11 +1450,6 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に産地銘柄コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         @* 品種コード検索子画面表示 *@
@@ -1462,7 +1461,9 @@
                 return;
             }
 
-            receiveTargetId = targetId;
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `HikiukeSearchResult_DispRecords_${idx}__HinsyuNm`;
 
             // 品種コード検索子画面を開く
             var action = "@Url.Action("Init", "D000021", new { area = "F000" })";
@@ -1471,11 +1472,6 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に品種コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
         
         @* 組合員等コード検索子画面表示 *@
@@ -1487,6 +1483,10 @@
                 return;
             }
 
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = null;
+
             // 組合員等コード検索子画面を開く
             var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -1494,17 +1494,15 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に組合員等コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         @* 地域集団コード検索子画面表示 *@
         function showChiikiSyudanCdSearch() {
             var targetId = `KumiaiintoSettei_ChiikiSyudanCd`;
 
+            cdTargetId = targetId;
+            nmTargetId = `KumiaiintoSettei_ChiikiSyudanNm`;
+
             // 組合員等コード検索子画面を開く
             var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -1512,11 +1510,6 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に組合員等コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         @* 統計単位地域コード検索子画面表示 *@
@@ -1528,6 +1521,10 @@
                 return;
             }
 
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `KikenDankaiKbn_DispRecords_${idx}__TokeiTaniChiikiNm`;
+            
             // 統計単位地域コード検索子画面を開く
             var action = "@Url.Action("Init", "D000023", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -1535,11 +1532,6 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に組合員等コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         @* 市町村コード検索子画面表示 *@
@@ -1551,18 +1543,17 @@
                 return;
             }
 
-            // 組合員等コード検索子画面を開く
-            var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `HikiukeSearchResult_DispRecords_${idx}__ShichosonNm`;
+
+            // 統計単位地域コード検索子画面を開く
+            var action = "@Url.Action("Init", "D000023", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
             var y = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcHeight);
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に組合員等コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         function updateWariaiInput() {
@@ -1572,11 +1563,15 @@
             $("#KumiaiintoSettei_WarimashiWariai").blur();
         }
 
+        @* 子画面選択値のセット *@
         function receiveValueFromChild(idx, val)
         {
-            alert(`${receiveTargetId} ${idx} ${val}`);
-
-            $(`#${receiveTargetId}`).val(val[0]);
+            if (cdTargetId) {
+                $(`#${cdTargetId}`).val(val[0]);
+            }
+            if (nmTargetId) {
+                $(`#${nmTargetId}`).val(val[1]);
+            }
         }
     </script>
 }

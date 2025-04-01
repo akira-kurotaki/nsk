@@ -1,0 +1,819 @@
+﻿@await Html.PartialAsync("DropDownTemplates/_TodofukenDropDownList")
+@{
+    // Layout = "~/Views/Shared/_LayoutBodyOnly.cshtml";
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+@model NskWeb.Areas.F112.Models.D112010.D112010Model
+
+@using (Html.BeginForm("Init", "D112010", FormMethod.Post, new { id = "D112010Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="table-responsive table-thead-container">
+        <div class="main_title btn_group_left mt_5">
+            <label>引受大量データ受入・取込処理</label>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <br />
+    <div class="table-responsive table-thead-container">
+        @* 添付ファイル エリア*@
+        <label>◆受入条件</label>
+        <br />
+        <div class="table-responsive" style="margin-top: 1rem;">
+            <table class="table common_table table-bordered table-condensed" style="width: 98%;">
+                <colgroup class="td_label" style="width: 15.5%;"></colgroup>
+                <colgroup class="td_normal" style="width: 80%;"></colgroup>
+                <tr>
+                    <td>受入対象<span style="color:red; float:right;">必須</span></td>
+                    <td>
+                        @Html.UkeireTaisyoNameDropDownListFor(model => model.UkeireTaisho,
+                                 @Model.VSyokuinRecords.TodofukenCd,
+                                 @Model.VSyokuinRecords.KumiaitoCd,
+                                 @Model.VSyokuinRecords.ShishoCd,
+                                 new { @class = "form-select form-select-lg" })
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table common_table table-condensed table-bordered" style="width: 50%;">
+                <colgroup class="td_label" style="width: 28%;"></colgroup>
+                <colgroup class="td_normal" style="width: 60%;"></colgroup>
+                <tr>
+                    <td>@Html.LabelFor(model => model.SearchCondition.TodofukenDropDownList.ShishoCd, "支所")<span style="color:red; float:right;">必須</span></td>
+                    <td>
+                        @Html.SishoCdDropDownListFor(model => model.SishoCd,
+                                 @Model.VSyokuinRecords.TodofukenCd,
+                                 @Model.VSyokuinRecords.KumiaitoCd,
+                                 @Model.VSyokuinRecords.ShishoCd,
+                                 new { @class = "form-select form-select-lg" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br />
+
+        @Html.ValidationMessageFor(model => model.MessageArea1, "", new { @class = "text-danger", @id = "validationMessageArea1", style = "display:none; margin-top: 0.5rem;" })
+
+        <br />
+
+        <div class="table-responsive" style="margin-top: 1rem;">
+            <table class="table common_table table-bordered table-condensed" style="width: 98%;">
+                <colgroup class="td_label" style="width: 13.8%;"></colgroup>
+                <colgroup class="td_normal" style="width: 60%;"></colgroup>
+                <colgroup style="width: 10%;"></colgroup>
+                <tr>
+                    <td>取込ファイル<span style="color:red; float:right;">必須</span></td>
+                    <td>
+                        @Html.TextBox("DisplayFilePath", Model.UkeireFilePath, new { @class = "filePathArea", @disabled = "true" })
+                        @Html.HiddenFor(model => model.UkeireFilePath)
+                    </td>
+                    <td>
+                        <input type="file" id="UploadFile" name="UploadFile" class="upload-file-input" onchange="javascript:fnSearchFile();" />
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <br />
+
+        <table class="table common_table table-condensed table-bordered" style="width: 50%;">
+            <colgroup class="td_label" style="width: 27.9%;"></colgroup>
+            <colgroup class="td_normal" style="width: 60%;"></colgroup>
+            <tr>
+                <td>コメント</td>
+                <td>
+                    @Html.TextBoxFor(model => model.Comment, new
+                        {
+                            @class = "form-control",
+                            style = "width: 100%;",
+                            placeholder = "",
+                            type = "text",
+                            inputmode = "text",
+                        })
+                </td>
+            </tr>
+        </table>
+        @* ボタンエリア *@
+        <div class="table-responsive table-thead-container">
+            <div class="col-md-12" style="display: flex; justify-content: flex-end; padding-right: 0;">
+                <div class="btn_area btn_group_right">
+                    <button type="button" class="btn btn-primary mt_15" id="Back" style="width: 100px !important;">戻る</button>
+                    <button type="button" class="btn btn-warning mt_15" id="AcceptFile" style="width: 100px !important;">受入</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+    <div class="split_line" id="@CoreConst.SEARCH_RESULT_DIV_ID"></div>
+    <ul id="myTab" class="nav nav-tabs mb-3" role="tablist">
+        <li role="presentation" class="nav-item">
+            <button type="button"
+                    id="UkeireTab"
+                    class="nav-link @(Model.ActiveTab == "UkeireTab" ? "active" : "")"
+                    data-bs-toggle="tab"
+                    data-bs-target="#Ukeire"
+                    role="tab"
+                    aria-controls="Ukeire"
+                    aria-selected="@(Model.ActiveTab == "UkeireTab" ? "true" : "false")">
+                受入履歴
+            </button>
+        </li>
+        <li role="presentation" class="nav-item">
+            <button type="button"
+                    id="TorikomiTab"
+                    class="nav-link @(Model.ActiveTab == "TorikomiTab" ? "active" : "")"
+                    data-bs-toggle="tab"
+                    data-bs-target="#Torikomi"
+                    role="tab"
+                    aria-controls="Torikomi"
+                    aria-selected="@(Model.ActiveTab == "TorikomiTab" ? "true" : "false")">
+                取込履歴
+            </button>
+        </li>
+    </ul>
+
+    <div id="myTabContent" class="tab-content p-2">
+        <div id="Ukeire"
+             class="tab-pane @(Model.ActiveTab == "UkeireTab" ? "active" : "")"
+             role="tabpanel"
+             aria-labelledby="UkeireTab">
+            @using (Html.BeginForm("SubmitUkeireTab", "D112010", FormMethod.Post, new { id = "D112010UkeireTab", spellcheck = "false", autocomplete = "off" }))
+            {
+                @await Html.PartialAsync("_D112010SearchUkeireResult", Model)
+            }
+        </div>
+        <div id="Torikomi"
+             class="tab-pane @(Model.ActiveTab == "TorikomiTab" ? "active" : "")"
+             role="tabpanel"
+             aria-labelledby="TorikomiTab">
+            @using (Html.BeginForm("SubmitTorikomiTab", "D112010", FormMethod.Post, new { id = "D112010TorikomiTab", spellcheck = "false", autocomplete = "off" }))
+            {
+                @await Html.PartialAsync("_D112010SearchTorikomiResult", Model)
+            }
+        </div>
+    </div>
+
+@Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ00010", "受入"), "OK", "キャンセル")
+@Html.Confirm("insertDialogTorikomi", "insertConfirmTorikomi", "確認", MessageUtil.Get("MQ00010", "取込"), "OK", "キャンセル")
+@Html.Dialog("SystemError", "エラー", MessageUtil.Get("MF00001"), "閉じる")
+@* 削除 *@
+@Html.Confirm("DeleteLineAccept", "DeleteLineAcceptOK", "確認",
+                                                    MessageUtil.Get("MQ10006"), "OK", "キャンセル")
+@Html.Confirm("DeleteLineImport", "DeleteLineImportOK", "確認",
+         MessageUtil.Get("MQ10006"), "OK", "キャンセル")
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+                        MessageUtil.Get("MQ10025", "ポータル画面", "登録"), "OK", "キャンセル")
+
+@* ページ *@
+@Html.Confirm("PageMoveGuide", "PageMoveConfirmOK", "確認",
+            MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+@* ページ *@
+@Html.Confirm("PageMoveGuideTorikomi", "PageMoveConfirmTorikomiOK", "確認",
+                MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+@* 登録完了 *@
+@Html.Dialog("Success", "確認", MessageUtil.Get("MI10005"), "OK")
+@* ページ *@
+@Html.Confirm("PageMoveGuideUkeire", "PageMoveConfirmUkeireOK", "確認",
+            MessageUtil.Get("MQ10025", "他ページ", "保存"), "OK", "キャンセル")
+
+@section scripts {
+    <script type="text/javascript">
+         $(document).on('click', '#ClearAcceptTab', function () {
+            // 検索条件フォームのリセット（入力値を初期状態に戻す）
+            $("#D112010UkeireTab").trigger('reset');
+
+            // Ajax で条件をリセットするリクエストを送信
+            resetCriteriaAjax();
+        });
+
+         function resetCriteriaAjax() {
+            // フォーム全体のデータをシリアライズ
+            var formData = $("#D112010Form").serialize();
+
+            $.ajax({
+                url: '@Url.Action("ResetCriteria", "D112010", new { area = "F112" })',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // 例: 検索結果専用コンテナだけ更新
+                    $("#searchResultContainer").html(response.partialView);
+                    console.log("検索条件リセット後の結果が更新されました。");
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ajax エラー: " + error);
+                }
+            });
+        }
+
+        $(document).on('click', '#ClearImportTab', function () {
+            // 検索条件フォームのリセット（入力値を初期状態に戻す）
+            $("#D112010TorikomiTab").trigger('reset');
+
+            // Ajax で条件をリセットするリクエストを送信
+            resetCriteriaAjaxTorikomi();
+        });
+
+         function resetCriteriaAjaxTorikomi() {
+            // フォーム全体のデータをシリアライズ
+            var formData = $("#D112010Form").serialize();
+
+            $.ajax({
+                url: '@Url.Action("ResetCriteriTorikomi", "D112010", new { area = "F112" })',
+                type: 'POST',
+                data: formData,
+                success: function(response) {
+                    // 例: 検索結果専用コンテナだけ更新
+                    $("#searchResultContainerTorikomi").html(response.partialView);
+                    console.log("検索条件リセット後の結果が更新されました。");
+                },
+                error: function(xhr, status, error) {
+                    console.error("Ajax エラー: " + error);
+                }
+            });
+        }
+
+        function fnSearchFile() {
+            const fileInput = document.getElementById('UploadFile');
+            const file = fileInput.files[0]; // 最初のファイルを取得
+            const validationMessage = document.getElementById('validationMessageArea1');
+
+            // エラーメッセージ初期化
+            if (validationMessage) {
+                validationMessage.textContent = "";
+                validationMessage.style.display = "none";
+            }
+
+            // ファイルが選択された場合
+            if (file) {
+                // ファイルの種類（MIMEタイプ）をチェック
+                const fileType = file.type;
+                if (fileType !== "text/plain"&& fileType !== "text/csv") {
+                    // テキストファイルでない場合
+                    validationMessage.style.display = "block";
+                    validationMessage.textContent = "@MessageUtil.Get("ME10050")";
+                    document.querySelector('.filePathArea').value = "";
+                } 
+                else 
+                {
+                    // テキストファイルの場合
+                    // ファイル名だけを取得
+                    const fileName = file.name;
+                    // ファイル名を表示
+                    document.querySelector('.filePathArea').value = fileName;
+                    document.querySelector('input[name="UkeireFilePath"]').value = fileName;
+                }
+            }
+        }
+
+        $(function () {
+        @* 受入ボタン *@
+            $("#AcceptFile").click(function () {
+
+                var validationError = 'input-validation-error';
+                const validationMessage = document.getElementById('validationMessageArea1');
+                validationMessage.style.display = "block";
+                validationMessage.textContent = "";
+                $('#validationMessageArea1').empty();
+                
+        @* 変数：アップロードファイルパス *@
+                var uploadFilePath = $("#UploadFile").val();
+        @* 変数：アップロードファイル名 *@
+                var message = "";
+
+                if (@ConfigUtil.Get("ClientValidationEnabled")) {
+        @* 属性チェック *@
+                    if (!$("#D112010Form").valid()) {
+        @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+
+                    var uploadFiles = [];
+
+                    var files = $("#UploadFile").prop("files");
+                    var fileLength = files.length;
+                    for (var i = 0; i < fileLength; i++) {
+                        uploadFiles.push(files[i]);
+                    }
+
+        @* ［画面：アップロードファイル］にファイルが存在しない場合 *@
+                    var length = uploadFiles.length;
+                    if (length == 0) {
+                        validationMessage.style.display = "block";
+                        var uploadFileNm = uploadFilePath.substring(uploadFilePath.lastIndexOf("\\") + 1, uploadFilePath.lastIndexOf("."));
+
+                        // サーバー側からメッセージテンプレートを取得（プレースホルダー {0} が入っている）
+                        var messageTemplate = "@MessageUtil.Get("ME10051", "{0}")";
+
+                        // uploadFileNm をプレースホルダー {0} に置換してメッセージを作成
+                        validationMessage.textContent = messageTemplate.replace("{0}", uploadFileNm);
+                        return;
+                    }
+
+        @* ［画面：アップロードファイル］拡張子チェック  *@
+                    var errorFlg = checkExtensionAllowed(uploadFiles);
+
+        @* ［画面：アップロードファイル］にcsv以外の拡張子が含まれている場合（大文字、小文字を区別しない） *@
+                    if (!errorFlg) {
+                        validationMessage.style.display = "block";
+                        validationMessage.textContent = "@MessageUtil.Get("ME10050")";
+                        return;
+                    }
+
+        @* 最大ファイル合計サイズチェック *@
+                    var fileTotalSize = 0;
+                    for (var i = 0; i < length; i++) {
+                        var size = uploadFiles[i].size;
+                        fileTotalSize = fileTotalSize + size;
+                    }
+
+        @* ［画面：アップロードファイル］のサイズが「(定数ID：D102010UploadFileMaxSize)の値」を超えている場合 *@
+        @*var d102010UploadFileMaxSize = Number('@ConfigUtil.Get(InfraConst.D102010_UPLOAD_FILE_MAX_SIZE)');*@
+                    var d112010UploadFileMaxSize = 10000000;
+                    if (fileTotalSize > d112010UploadFileMaxSize) {
+                        validationMessage.style.display = "block";
+        @* validationMessage.textContent = "@MessageUtil.Get("ME91007", ConfigUtil.Get(InfraConst.D102010_UPLOAD_FILE_MAX_DISP_SIZE))";*@
+                        validationMessage.textContent = "@MessageUtil.Get("ME10049")";
+                        return;
+                    }
+
+        @* ファイル名称の禁止文字チェック *@
+                    const forbiddenChars = /[<>:"\/\\|?*]/;
+                    for (var j = 0; j < length; j++) {
+                        var fileName = uploadFiles[j].name;
+                        if (forbiddenChars.test(fileName)) {
+                            validationMessage.style.display = "block";
+                            validationMessage.textContent ="@MessageUtil.Get("ME91011", "「¥　/　:　*　?　\"　<　>　| 」", "")";
+                            return;
+                        }
+                    }
+
+        @* ［画面：アップロードファイル］のファイル名が100文字を超える場合 *@
+                    for (var j = 0; j < length; j++) {
+                        var fileName = uploadFiles[j].name;
+                        if (fileName.length > 100)
+                        {
+                            validationMessage.style.display = "block";
+                            validationMessage.textContent ="@MessageUtil.Get("ME91008", "100")";
+                            return;
+                        }
+                    }
+                }
+        @* 確認ダイアログ *@
+        @Html.ShowConfirm("insertDialog");
+            });
+
+        @* 取込ボタン:確認ダイアログにOKを押下後の処理 *@
+            $("#insertConfirm").click(function () {
+                var url = '@Url.Action("CreatBatchReport", "D112010", new { area = "F112" })';
+                var formData = new FormData($('#D112010Form').get(0));
+                var file = $('#UploadFile').prop('files')[0];
+                const validationMessage = document.getElementById('validationMessageArea1');
+                
+                if (file == null) {
+                    var file = "";
+                }
+                formData.append('UploadFile', file, file.name);
+                
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (data) {
+                    validationMessage.style.display = "block";
+                    validationMessage.textContent = data.message;
+                    console.log(data.message);
+                }).fail(function () {
+                    console.log("@MessageUtil.Get("MF00001")");
+                    validationMessage.textContent = "@MessageUtil.Get("MF00001")";
+                });
+            })
+        });
+
+        @* ファイル拡張子チェック *@
+        function checkExtensionAllowed(uploadFiles) {
+            var errorfileName = "";
+
+            var length = uploadFiles.length;
+        @*var allowedExtension = '@ConfigUtil.Get("D102010UploadFileExtension")';*@
+            var allowedExtension = "csv";
+            var extensions = allowedExtension.split(",");
+
+            for (var i = 0; i < length; i++) {
+        @* 拡張子取得 *@
+                var fileName = uploadFiles[i].name;
+                var point = fileName.lastIndexOf(".");
+                var type = fileName.substr(point + 1);
+                var isAllowed = false;
+
+                $.each(extensions, function (index, obj) {
+                    if (obj == type.toLowerCase()) {
+
+                        isAllowed = true;
+                        return isAllowed;
+                    }
+                });
+            }
+
+            return isAllowed;
+        }
+
+        $(document).on('click', '#SearchAcceptHistory', function () {
+            var messageArea = $("#validationMessageArea2");
+            // 前回のエラーメッセージをクリア
+            messageArea.html("");
+            var message = "";
+
+            // エラーがある場合はメッセージ表示と最初のエラー要素にフォーカス
+            if (message !== "") {
+                messageArea.html(message);
+                $('.input-validation-error:first').focus();
+                $("html, body").scrollTop(0);
+                return;
+            }
+
+            // クライアント側バリデーションが有効な場合
+            if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                if (!$("#D112010UkeireTab").valid()) {
+                    $('.input-validation-error:first').focus();
+                    return;
+                }
+            }
+
+            // エラーがなければフォームを submit する
+            var form = $("#D112010UkeireTab");
+            form.attr("action", '@Url.Action("Search", "D112010", new { area = "F112" })#@CoreConst.SEARCH_RESULT_DIV_ID');
+            form.attr("method", "post");
+            form.submit();
+        });
+
+        $(document).on('click', '#SearchImportHistory', function () {
+            var messageArea = $("#validationMessageArea4");
+            // 前回のエラーメッセージをクリア
+            messageArea.html("");
+            var message = "";
+
+            // エラーがある場合はメッセージ表示と最初のエラー要素にフォーカス
+            if (message !== "") {
+                messageArea.html(message);
+                $('.input-validation-error:first').focus();
+                $("html, body").scrollTop(0);
+                return;
+            }
+
+            // クライアント側バリデーションが有効な場合
+            if (@ConfigUtil.Get("ClientValidationEnabled")) {
+                if (!$("#D112010TorikomiTab").valid()) {
+                    $('.input-validation-error:first').focus();
+                    return;
+                }
+            }
+
+            // エラーがなければフォームを submit する
+            var form = $("#D112010TorikomiTab");
+            form.attr("action", '@Url.Action("SearchTorikomi", "D112010", new { area = "F112" })#@CoreConst.SEARCH_RESULT_DIV_ID');
+            form.attr("method", "post");
+            form.submit();
+        });
+
+        $(document).ready(function () {
+
+            // 初期状態の確認
+            toggleUserIdDropdown();
+
+            $("#includeOtherUserHistory").change(function () {
+                console.log("Checkbox changed, checked:", $(this).is(":checked"));
+                toggleUserIdDropdown();
+            });
+            function toggleUserIdDropdown() {
+                console.log("UserId dropdown found:", userIdDropdown.length); // 要素が存在するかチェック
+                if ($("#includeOtherUserHistory").is(":checked")) {
+                    userIdDropdown.prop("disabled", true);
+                } else {
+                    userIdDropdown.prop("disabled", false);
+                }
+            }
+        });
+
+        $(document).ready(function () {
+            // 初期状態の確認
+            toggleUserIdDropdownTorikomi();
+
+            $("#includeOtherUserHistoryTorikomi").change(function () {
+                toggleUserIdDropdownTorikomi();
+            });
+            function toggleUserIdDropdownTorikomi() {
+                var userIdDropdown = $("#TorikomiUserIdDropdown");
+                if ($("#includeOtherUserHistoryTorikomi").is(":checked")) {
+                    userIdDropdown.prop("disabled", true);
+                } else {
+                    userIdDropdown.prop("disabled", false);
+                }
+            }
+        });
+
+        $(document).on("change", "#UkeireUserIdDropdown", function(){
+             var selectedVal = $(this).val();
+             $("#hiddenUkeireUserId").val(selectedVal);
+        });
+
+        $(document).on("change", "#TorikomiUserIdDropdown", function(){
+             var selectedVal = $(this).val();
+             $("#hiddenTorikomiUserId").val(selectedVal);
+        });
+
+        $(function () {
+            $("#DeleteLineAcceptBtn").click(function () {
+                 $('#validationMessageArea3').html("");
+                if ($(".deleteAcceptCheck:checked").length === 0) {
+                    $('#validationMessageArea3').html("選択された行がありません。");
+                    return; // 処理を中断
+                }
+            @Html.ShowDialog("DeleteLineAccept");
+            });
+
+            $("#DeleteLineAcceptOK").click(function () {
+                var url = "@Url.Action("DeleteLineAccept", "D112010", new { area = "F112" })";
+                var formData = new FormData($("#D112010UkeireTab").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message != "") {
+                        $('#validationMessageArea3').html(data.message);
+                    }
+                    else {
+                        // 削除成功時、hiddenフィールドにパラメータをセットする
+                        $("#searchMsgUkeire").val("delete");
+                        // 検索イベントをトリガー
+                        $('#SearchAcceptHistory').trigger('click');
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+        });
+
+        $(function () {
+            $("#DeleteLineImportBtn").click(function () {
+                 $('#validationMessageArea5').html("");
+                 if ($(".deleteImportCheck:checked").length === 0) {
+                    $('#validationMessageArea5').html("選択された行がありません。");
+                    return; // 処理を中断
+                }
+                @Html.ShowDialog("DeleteLineImport");
+            });
+
+            $("#DeleteLineImportOK").click(function () {
+                var url = "@Url.Action("DeleteLineImport", "D112010", new { area = "F112" })";
+                var formData = new FormData($("#D112010TorikomiTab").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false,  //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (data.message != null && data.message != "") {
+                        $('#validationMessageArea5').html(data.message);
+                    }
+                    else {
+                        // 削除成功時、hiddenフィールドにパラメータをセットする
+                        $("#searchMsgTorikomi").val("delete");
+                        // 検索イベントをトリガー
+                        $('#SearchImportHistory').trigger('click');
+                    }
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D9002", new { area = "F90" })";
+                });
+            });
+        });
+
+        $(function () {
+            // 戻るボタンをクリックしたら、確認ダイアログを表示
+            $("#Back").click(function() {
+                console.log("testsetes");
+                @Html.ShowDialog("BackConfirm");
+            });
+            // 確認ダイアログの「OK」ボタンがクリックされたときの処理
+            $("#BackConfirmOK").click(function(){
+
+                var backLink = '@Url.Action("Init", "D000000", new { area = "F000" })';
+                var url = '@Url.Action("Back", "D112010", new { area = "F112" })';
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = '@Url.Action("Init", "D9002", new { area = "F90" })';
+                });
+            });
+        });
+        function bindSelectionEvents() {
+            $("#SelectAllImport").off("click").on("click", function () {
+                $("#searchResultTableTorikomi tbody input.selectCheck").filter(":enabled").prop("checked", true);
+            });
+            $("#ClearSelectionImport").off("click").on("click", function () {
+                $("#searchResultTableTorikomi tbody input.selectCheck").filter(":enabled").prop("checked", false);
+            });
+            $("#SelectAllAccept").off("click").on("click", function () {
+                $("#searchResultTableUkeire tbody input.selectCheck").filter(":enabled").prop("checked", true);
+            });
+            $("#ClearSelectionAccept").off("click").on("click", function () {
+                $("#searchResultTableUkeire tbody input.selectCheck").filter(":enabled").prop("checked", false);
+            });
+        }
+
+        @* ページャー *@
+        function pagerClickTorikomi(url) {
+             pageUrl = url;
+        @Html.ShowDialog("PageMoveGuideTorikomi");
+        };
+
+        $("#PageMoveConfirmTorikomiOK").click(function () {
+              $.ajax({
+                 type: 'GET',
+                 cache: false,
+                 contentType: "application/json; charset=utf-8",
+                 data: "",
+                 dataType: 'json',
+                 url: pageUrl,
+             }).done(function (data) {
+                  if (data.message != null && data.message != "") {
+                     $('#MessageArea5').html(data.message);
+                 }
+                 else {
+                     $('#searchResultContainerTorikomi').html(data.partialView);
+                 }
+                 $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+             }).fail(function () {
+                 location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+             });
+        });
+
+        @* ページャー *@
+        function pagerClickUkeire(url) {
+             pageUrl = url;
+        @Html.ShowDialog("PageMoveGuideUkeire");
+        };
+
+        $("#PageMoveConfirmUkeireOK").click(function () {
+              $.ajax({
+                 type: 'GET',
+                 cache: false,
+                 contentType: "application/json; charset=utf-8",
+                 data: "",
+                 dataType: 'json',
+                 url: pageUrl,
+             }).done(function (data) {
+                  if (data.message != null && data.message != "") {
+                     $('#MessageArea3').html(data.message);
+                 }
+                 else {
+                     $('#searchResultContainer').html(data.partialView);
+                 }
+                 $("html, body").scrollTop($(@CoreConst.SEARCH_RESULT_DIV_ID).offset().top);
+             }).fail(function () {
+                 location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+             });
+        });
+
+        function OkLinkAccept(linkElement) {
+            var hiddenValue = $(linkElement)
+                .closest('tr')
+                .find("input[name$='.UkeireRirekiId']")
+                .val();
+            var url = '@Url.Action("OkLinkAcceptFileDownload", "D112010", new { area = "F112" })';
+            url += '?recordId=' + encodeURIComponent(hiddenValue);
+            window.location.href = url; 
+        }
+
+        function ErrorLinkAccept(linkElement) {
+            var hiddenValue = $(linkElement)
+                .closest('tr')
+                .prev('tr')
+                .find("input[name$='.UkeireRirekiId']")
+                .val();
+            var url = '@Url.Action("ErrLinkAcceptFileDownload", "D112010", new { area = "F112" })';
+            url += '?recordId=' + encodeURIComponent(hiddenValue);
+            window.location.href = url;
+        }
+
+        function ErrorLinkImport(linkElement) {
+            var $tr = $(linkElement).closest('tr');
+            var hiddenValueUkeireId = $tr.find("input[name$='.UkeireRirekiId']").val();
+            var hiddenValueTorikomiId = $tr.find("input[name$='.TorikomiRirekiId']").val();
+
+            var url = '@Url.Action("ErrLinkImportFileDownload", "D112010", new { area = "F112" })';
+            url += '?ukeireId=' + encodeURIComponent(hiddenValueUkeireId) + '&torikomiId=' + encodeURIComponent(hiddenValueTorikomiId);
+            window.location.href = url;
+        }
+
+        // DOMが更新されるたびに再設定
+        $(document).ready(function () {
+            bindSelectionEvents(); // 初期表示時
+
+            // Bootstrapタブの切り替え時にも再設定
+            $('a[data-bs-toggle="tab"]').on('shown.bs.tab', function () {
+                bindSelectionEvents();
+            });
+        });
+
+        // グローバル変数（後で確認ダイアログから利用する）
+        var currentRecordData = {};
+
+        $(function () {
+            // 各行の取込ボタンがクリックされたときの処理
+            $(document).on('click', '.importBtn', function () {
+                // ボタンに設定された data-rowid 属性からレコードID を取得
+                var recordId = $(this).data('rowid');
+                // 該当レコードの最初の行を取得
+                var $recordRow = $('tr[data-rowid="' + recordId + '"]').first();
+
+                // hidden フィールドから値を取得してグローバル変数に保存
+                currentRecordData.ukeireId = $recordRow.find("input[name$='.UkeireRirekiId']").val();
+                currentRecordData.taishoDataKbn = $recordRow.find("input[name$='.TaishoDataKbn']").val();
+                currentRecordData.taishoDataNm = $recordRow.find("input[name$='.UkeireTaishoDataNm']").val();
+
+                // 確認ダイアログ表示（サーバーサイドヘルパーのコードをそのまま出力）
+        @Html.ShowConfirm("insertDialogTorikomi");
+            });
+
+            // 取込ボタン（確認ダイアログ内のOKボタン）のクリック処理
+            $("#insertConfirmTorikomi").click(function () {
+                var url = '@Url.Action("CreatBatchReportTorikomi", "D112010", new { area = "F112" })';
+
+                // グローバル変数 currentRecordData を使って FormData を作成
+                var formData = new FormData();
+                formData.append("ukeireId", currentRecordData.ukeireId);
+                formData.append("taishoDataKbn", currentRecordData.taishoDataKbn);
+                formData.append("taishoDataNm", currentRecordData.taishoDataNm);
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (data) {
+                    $("#validationMessageArea3").text(data.message);
+                }).fail(function () {
+                    $("#validationMessageArea3").text("@MessageUtil.Get("MF00001")");
+                });
+            });
+        });
+    </script>
+}
+
+@section styles {
+    <style>
+        a.myCustomLink:hover,
+        a.myCustomLink:hover label {
+            text-decoration: underline !important;
+            cursor: pointer !important;
+            color: blue !important;
+        }
+
+        .common_table td {
+            height: 50px;
+            vertical-align: middle;
+        }
+
+        .filePathArea {
+            background-color: white;
+            border: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .upload-file-input {
+            width: 130px;
+            background-color: white;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+}
