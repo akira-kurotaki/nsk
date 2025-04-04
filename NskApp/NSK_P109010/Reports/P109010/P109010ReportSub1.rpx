@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="21543" DocumentName="NSK-R-加入申込書兼変更届出書Sub1" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; ddo-char-set: 1" />
+    <Style Name="Heading1" Value="font-family: Arial; font-size: 16pt; font-style: normal; font-weight: bold" />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-size: 14pt; font-style: italic; font-weight: bold" />
+    <Style Name="Heading3" Value="font-family: Arial; font-size: 13pt; font-style: normal; font-weight: bold" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="ReportHeader" Name="レポートヘッダー" Height="857" BackColor="16777215" CanGrow="0">
+      <Control Type="AR.Line" Name="直線15" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1140" Y1="0" X2="1140" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線16" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4095" Y1="0" X2="4095" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線17" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="5490" Y1="0" X2="5490" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線18" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7530" Y1="0" X2="7530" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線19" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9810" Y1="0" X2="9810" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線20" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="12135" Y1="0" X2="12135" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線21" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="21267.36" Y1="0" X2="21267.36" Y2="856.7999" />
+      <Control Type="AR.Label" Name="ラベル0" Tag="" Left="113" Top="56" Width="915" Height="285" Caption="類区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル1" Tag="" Left="2040" Top="60" Width="1140" Height="285" Caption="引受方式" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル2" Tag="" Left="4260" Top="60" Width="1140" Height="285" Caption="補償割合" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル3" Tag="" Left="5730" Top="60" Width="1590" Height="495" Caption="一筆半損特約&#xD;&#xA;の有無" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル4" Tag="" Left="7590" Top="60" Width="2175" Height="750" Caption="品質・災害収入共&#xD;&#xA;済方式の共済金額&#xD;&#xA;の選択割合" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル6" Tag="" Left="9870" Top="60" Width="2205" Height="750" Caption="キログラム当たり&#xD;&#xA;共済金額の&#xD;&#xA;選択順位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル7" Tag="" Left="16215" Top="60" Width="915" Height="285" Caption="備考" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="直線22" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="0" Y1="0" X2="0" Y2="856.7999" />
+      <Control Type="AR.Line" Name="直線23" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="0" Y1="0" X2="21267.36" Y2="0" />
+      <Control Type="AR.Line" Name="直線24" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="0" Y1="856.7999" X2="21267.36" Y2="856.7999" LineWeight="2" />
+    </Section>
+    <Section Type="PageHeader" Name="ページヘッダーセクション" Height="0" BackColor="16777215" />
+    <Section Type="Detail" Name="詳細" Height="351.36" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Field" Name="txt備考" DataField="備考" Tag="" Left="12195.36" Top="30.24" Width="9005.761" Height="285.12" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt選択順位" DataField="選択順位" Tag="" Left="10607.04" Top="30.24" Width="726" Height="285" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Field" Name="txt補償割合" DataField="補償割合" Tag="" Left="4259.521" Top="30.24" Width="636" Height="285" Text="" OutputFormat="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="txt引受方式" DataField="引受方式" Tag="" Left="1200" Top="30" Width="2841" Height="285" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt類区分" DataField="類短縮名称" Tag="" Left="60" Top="30" Width="636" Height="285" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="ラベル68" Tag="" Left="11430" Top="30" Width="315" Height="285" Caption="位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" Multiline="0" />
+      <Control Type="AR.Label" Name="ラベル67" Tag="" Left="10200" Top="30" Width="315" Height="285" Caption="第" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" Multiline="0" />
+      <Control Type="AR.Label" Name="ラベル59" Tag="" Left="9360" Top="30" Width="315" Height="285" Caption="％" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" Multiline="0" />
+      <Control Type="AR.Label" Name="ラベル51" Tag="" Left="5040" Top="30" Width="315" Height="285" Caption="割" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" Multiline="0" />
+      <Control Type="AR.Label" Name="ラベル43" Tag="" Left="735" Top="30" Width="315" Height="285" Caption="類" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" Multiline="0" />
+      <Control Type="AR.Line" Name="直線42" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="12135" Y1="0" X2="12135" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線41" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9810" Y1="0" X2="9810" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線40" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7530" Y1="0" X2="7530" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線39" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="5490" Y1="0" X2="5490" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線38" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4095" Y1="0" X2="4095" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線37" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1140" Y1="0" X2="1140" Y2="351.36" />
+      <Control Type="AR.Line" Name="直線36" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="21267.36" Y1="0" X2="21267.36" Y2="351.36" LineWeight="2" />
+      <Control Type="AR.Line" Name="lastLine" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="0" Y1="351" X2="21267.36" Y2="351" />
+      <Control Type="AR.Line" Name="直線35" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="0" Y1="0" X2="0" Y2="357" LineWeight="2" />
+      <Control Type="AR.Field" Name="txt一筆半損特約の有無" DataField="一筆半損特約の有無" Tag="" Left="6180" Top="30" Width="636" Height="285" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+    </Section>
+    <Section Type="PageFooter" Name="ページフッターセクション" Height="0" BackColor="16777215" />
+    <Section Type="ReportFooter" Name="レポートフッター" Height="0" BackColor="16777215" CanGrow="0" />
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[/*' 2018/10/22 エラートラップMsgBox標準化
+
+Option Compare Database
+Option Explicit
+
+Dim blnVisible As Boolean
+Dim i As Integer
+Const MAX_LINE As Integer = 8
+
+Private Sub レポートヘッダー_Format(Cancel As Integer, FormatCount As Integer)
+    On Error GoTo Err_レポートヘッダー_Format
+    
+    i = 0
+    
+    If Parent!txt継続特約FLG = -1 Then
+        blnVisible = True
+    Else
+        blnVisible = False
+    End If
+
+Exit_レポートヘッダー_Format:
+    Exit Sub
+Err_レポートヘッダー_Format:
+    MsgBox Err & ":" & Error$ & "(Sub レポートヘッダー_Format)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_レポートヘッダー_Format
+End Sub
+
+Private Sub 詳細_Format(Cancel As Integer, FormatCount As Integer)
+    On Error GoTo Err_詳細_Format
+
+    i = i + 1
+    
+    Call VisibleSettingOutputArea
+    
+    If i < MAX_LINE Then
+        Me!lastLine.BorderWidth = 1
+    Else
+        Me!lastLine.BorderWidth = 2
+    End If
+
+Exit_詳細_Format:
+    Exit Sub
+Err_詳細_Format:
+    MsgBox Err & ":" & Error$ & "(Sub 詳細_Format)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_詳細_Format
+End Sub
+
+Sub VisibleSettingOutputArea()
+    On Error GoTo Err_VisibleSettingOutputArea
+
+    Me!txt類区分.Visible = blnVisible
+    Me!txt引受方式.Visible = blnVisible
+    Me!txt補償割合.Visible = blnVisible
+    Me!txt一筆半損特約の有無.Visible = blnVisible
+    Me!txt選択順位.Visible = blnVisible
+    Me!txt備考.Visible = blnVisible
+    
+Exit_VisibleSettingOutputArea:
+    Exit Sub
+Err_VisibleSettingOutputArea:
+    MsgBox Err & ":" & Error$ & "(Sub VisibleSettingOutputArea)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_VisibleSettingOutputArea
+End Sub
+*/public void ActiveReport_ReportStart()
+{
+	
+}
+
+
+]]></Script>
+  <PageSettings LeftMargin="290" RightMargin="290" TopMargin="293" BottomMargin="292" />
+  <Parameters />
+</ActiveReportsLayout>

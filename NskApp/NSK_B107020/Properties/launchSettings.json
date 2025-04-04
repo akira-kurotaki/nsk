@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NSK_B107020": {
+      "commandName": "Project",
+      "commandLineArgs": "70100101001\r\n03\r\n899\r\n01\r\nABD"
+    }
+  }
+}

@@ -1,0 +1,506 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="22918" DocumentName="NSK-R-加入申込書兼変更届出書" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-family: Arial; font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; ddo-char-set: 1" />
+    <Style Name="Heading1" Value="font-family: Arial; font-size: 16pt; font-style: normal; font-weight: bold" />
+    <Style Name="Heading2" Value="font-family: Times New Roman; font-size: 14pt; font-style: italic; font-weight: bold" />
+    <Style Name="Heading3" Value="font-family: Arial; font-size: 13pt; font-style: normal; font-weight: bold" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="ReportHeader" Name="レポートヘッダー" Height="0" BackColor="16777215" CanGrow="0" />
+    <Section Type="PageHeader" Name="ページヘッダーセクション" Visible="0" Height="1891" BackColor="16777215">
+      <Control Type="AR.Line" Name="直線265" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20700" Y1="725" X2="22118" Y2="725" />
+      <Control Type="AR.Line" Name="直線280" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855" Y1="1876" X2="20717" Y2="1876" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線298" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20705" Y1="1871" X2="22129" Y2="1871" />
+      <Control Type="AR.Line" Name="直線284" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="860" Y1="1010" X2="22128" Y2="1010" />
+      <Control Type="AR.Label" Name="ラベル299" Tag="" Left="20778" Top="725" Width="1320" Height="285" Caption="※記入不要" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル316" Tag="" Left="922.0001" Top="1080" Width="705" Height="495" Caption="耕地&#xD;&#xA;番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル317" Tag="" Left="1685" Top="1089" Width="615" Height="495" Caption="分筆&#xD;&#xA;番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル318" Tag="" Left="2363" Top="1084" Width="1995" Height="285" Caption="市町村名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル319" Tag="" Left="4427" Top="1090" Width="3630" Height="285" Caption="地名地番" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル320" Tag="" Left="8282" Top="1060" Width="645" Height="495" Caption="耕地&#xD;&#xA;面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル321" Tag="" Left="9272" Top="1060" Width="645" Height="495" Caption="引受&#xD;&#xA;面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル322" Tag="" Left="10127" Top="1060" Width="870" Height="510" Caption="転作等&#xD;&#xA;の面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル323" Tag="" Left="11147" Top="1080" Width="2145" Height="285" Caption="類区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル324" Tag="" Left="13412" Top="1090" Width="2286" Height="510" Caption="品種又は転作作&#xD;&#xA;物名等" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル325" Tag="" Left="15752" Top="1090" Width="1545" Height="510" Caption="栽培上の&#xD;&#xA;特殊事情" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル326" Tag="" Left="17387" Top="1090" Width="525" Height="495" Caption="田畑&#xD;&#xA;区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル327" Tag="" Left="18002" Top="1144" Width="2640" Height="285" Caption="備考" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル328" Tag="" Left="20707" Top="1080" Width="645" Height="495" Caption="収量&#xD;&#xA;等級" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル329" Tag="" Left="21447" Top="1075" Width="645" Height="300" Caption="参酌" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル330" Tag="" Left="8732" Top="1600" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル331" Tag="" Left="9737" Top="1570" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル332" Tag="" Left="10697" Top="1574" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="直線333" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="1020" X2="855" Y2="1876" />
+      <Control Type="AR.Line" Name="直線334" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1682" Y1="1020" X2="1682" Y2="1876" />
+      <Control Type="AR.Line" Name="直線335" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2305" Y1="1020" X2="2305" Y2="1876" />
+      <Control Type="AR.Line" Name="直線336" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="21375" Y1="1020" X2="21375" Y2="1876" />
+      <Control Type="AR.Line" Name="直線337" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4397" Y1="1020" X2="4397" Y2="1876" />
+      <Control Type="AR.Line" Name="直線338" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8102" Y1="1020" X2="8102" Y2="1876" />
+      <Control Type="AR.Line" Name="直線339" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9096" Y1="1020" X2="9096" Y2="1876" />
+      <Control Type="AR.Line" Name="直線340" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10083" Y1="1020" X2="10083" Y2="1876" />
+      <Control Type="AR.Line" Name="直線341" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="11056" Y1="1020" X2="11056" Y2="1876" />
+      <Control Type="AR.Line" Name="直線342" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13382" Y1="1020" X2="13382" Y2="1876" />
+      <Control Type="AR.Line" Name="直線343" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="15722" Y1="1020" X2="15722" Y2="1876" />
+      <Control Type="AR.Line" Name="直線344" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17957" Y1="1020" X2="17957" Y2="1876" />
+      <Control Type="AR.Line" Name="直線345" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17333" Y1="1020" X2="17333" Y2="1876" />
+      <Control Type="AR.Line" Name="直線346" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20702" Y1="737" X2="20702" Y2="1876" />
+      <Control Type="AR.Line" Name="直線347" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="22115" Y1="737" X2="22115" Y2="1876" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="16505.28" GroupKeepTogether="2" BackColor="16777215" NewPage="1" CanShrink="1">
+      <Control Type="AR.Field" Name="txt郵便番号" Tag="" Left="9075" Top="2924" Width="2781" Height="270" Text="郵便番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Line" Name="直線78" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8900" Y1="2877.12" X2="8900" Y2="4232" />
+      <Control Type="AR.Line" Name="直線77" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16899" Y1="2877" X2="16899" Y2="4228" />
+      <Control Type="AR.Line" Name="直線76" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="22122.72" Y1="2877" X2="22122.72" Y2="4228" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線75" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="15595" Y1="2877" X2="15595" Y2="4228" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線74" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7668" Y1="3719" X2="15595.2" Y2="3719" />
+      <Control Type="AR.Line" Name="直線73" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="7710" Y1="4245.12" X2="22122.72" Y2="4245.12" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線72" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2490" Y1="3899" X2="2490" Y2="4245" />
+      <Control Type="AR.Line" Name="直線71" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2045" Y1="2877.12" X2="2045" Y2="3902" />
+      <Control Type="AR.Line" Name="直線70" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="3899" X2="855" Y2="4245" />
+      <Control Type="AR.Line" Name="直線69" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="4245.12" X2="7708" Y2="4245.12" />
+      <Control Type="AR.Line" Name="直線68" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.36" Y1="2877.12" X2="855.36" Y2="3902" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線67" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855" Y1="3899" X2="7668" Y2="3899" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線66" Tag="" BorderLeftStyle="2" BorderTopStyle="2" BorderRightStyle="2" BorderBottomStyle="2" X1="860" Y1="3226" X2="7668" Y2="3226" LineStyle="2" />
+      <Control Type="AR.Line" Name="直線65" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="7668" Y1="2877.12" X2="7668" Y2="4232.44" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線64" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855" Y1="2877" X2="22123" Y2="2877" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線63" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="18683" Y1="1124" X2="22125" Y2="1124" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線62" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="18683" Y1="772" X2="22125" Y2="772" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線61" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="22110" Y1="772" X2="22110" Y2="1141" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線60" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="18684" Y1="772" X2="18684" Y2="1141" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線59" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16215" Y1="779" X2="16215" Y2="1125" />
+      <Control Type="AR.Line" Name="直線58" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16215" Y1="1124" X2="18709" Y2="1124" />
+      <Control Type="AR.Line" Name="直線57" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16214" Y1="772" X2="18708" Y2="772" />
+      <Control Type="AR.Subreport" Name="subForm2" Left="855.36" Top="8724.96" Width="21542.4" Height="5381" ReportName="P109010ReportSub2" />
+      <Control Type="AR.Label" Name="ラベル53" Tag="" Left="915" Top="8393.761" Width="12975" Height="285" Caption="３．全相殺方式、品質方式及び災害収入共済方式における収穫量の確認方法（※注４を参照し、記入願います。）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル35" Tag="" Left="915" Top="4354.68" Width="6360" Height="285" Caption="２．引受方式等（※注３を参照し、記入願います。）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Subreport" Name="subForm1" Left="855" Top="4639.68" Width="21542.4" Height="3636" ReportName="P109010ReportSub1" />
+      <Control Type="AR.Label" Name="ラベル26" Tag="" Left="15690" Top="3434" Width="1095" Height="285" Caption="加入形態" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル25" Tag="" Left="7870" Top="3822" Width="885" Height="285" Caption="電話" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル24" Tag="" Left="7885" Top="3161" Width="855" Height="285" Caption="住所" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル23" Tag="" Left="6120" Top="3959" Width="1260" Height="285" Caption="※記入不要" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル18" Tag="" Left="915" Top="3959" Width="1500" Height="285" Caption="組合員等番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル17" Tag="" Left="6810" Top="3404" Width="525" Height="285" Caption="印" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル16" Tag="" Left="915" Top="3404" Width="1035" Height="285" Caption="氏名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル15" Tag="" Left="927" Top="2939" Width="1020" Height="285" Caption="(ﾌﾘｶﾞﾅ)" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル14" Tag="" Left="914.4" Top="2584.8" Width="5490" Height="285" Caption="１．申込者（※注２を参照し、記入願います。）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル13" Tag="" Left="1085" Top="1844" Width="20445" Height="510" Caption="定款及び事業規程（条例）を了知した上、農作物共済について下記により加入申込み（変更の届出）をいたします。&#xD;&#xA;加入申込書の記載事項は事実に相違ないこと、申し込みができる農作物の全てであること、及び既に事故が生じている又はその事故の原因が生じているものでないことを確約します。" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt宛名" Tag="" Left="960" Top="1338" Width="4686" Height="270" Text="[組合代表者名] + &quot;長&quot;" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="テキスト11" Tag="" Left="18825" Top="838.9999" Width="3171" Height="270" Text="　　年　　月　　日" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: right" />
+      <Control Type="AR.Label" Name="ラベル10" Tag="" Left="16320" Top="838.9999" Width="2325" Height="285" Caption="申込（内容確認）日" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Line" Name="直線9" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4530" Y1="779" X2="4530" Y2="1125" />
+      <Control Type="AR.Line" Name="直線8" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="3405" Y1="779" X2="3405" Y2="1125" />
+      <Control Type="AR.Line" Name="直線7" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="779" X2="855" Y2="1125" />
+      <Control Type="AR.Line" Name="直線5" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="779" X2="4543" Y2="779" />
+      <Control Type="AR.Label" Name="ラベル4" Tag="" Left="4695" Top="838.9999" Width="1350" Height="285" Caption="※記入不要" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル3" Tag="" Left="1020" Top="838.9999" Width="2385" Height="285" Caption="自動継続特約の有無" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル0" Tag="" Left="570" Top="209" Width="2115" Height="285" Caption="様式第１－１号" Style="color: Black; font-family: ＭＳ ゴシック; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="ラベル201" Tag="" Left="5725" Top="1308" Width="315" Height="285" Caption="殿" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt見出し" Tag="" Left="5220" Top="438" Width="12486" Height="285" Text="[和暦年産] + &quot;年産&quot; + &quot;　&quot; + [共済目的名称] + &quot;共済加入申込書兼変更届出書&quot;" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Field" Name="txt申込者カナ" Tag="" Left="2268" Top="2954" Width="4551" Height="270" Text="申込者カナ" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt住所" Tag="" Left="9075" Top="3179" Width="6336" Height="510" Text="(仮)住所" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt電話番号" Tag="" Left="9060" Top="3833" Width="6336" Height="270" Text="電話番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.PageBreak" Name="改ページ111" Tag="" Top="14083" Left="0" Width="0" Height="0" Enabled="0" />
+      <Control Type="AR.Field" Name="txt自動継続特約" Tag="" Left="3405" Top="843" Width="1116" Height="270" Text="有/無" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="ラベル435" Tag="" Left="915" Top="14540.76" Width="2430" Height="285" Caption="４．耕地等情報" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt組合名称" DataField="組合名称" Visible="0" Tag="" BorderLeftStyle="1" BorderLeftColor="10921638" BorderTopStyle="1" BorderTopColor="10921638" BorderRightStyle="1" BorderRightColor="10921638" BorderBottomStyle="1" BorderBottomColor="10921638" Left="6207" Top="854" Width="486" Height="270" Text="組合名称" Style="background-color: #70AD47; color: #404040; font-family: ＭＳ Ｐゴシック; font-size: 11pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt申込者氏名" Tag="" Left="2295.36" Top="3297.6" Width="4596" Height="525" Text="申込者氏名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt共済目的コード" DataField="共済目的コード" Visible="0" Tag="" BorderLeftStyle="1" BorderLeftColor="10921638" BorderTopStyle="1" BorderTopColor="10921638" BorderRightStyle="1" BorderRightColor="10921638" BorderBottomStyle="1" BorderBottomColor="10921638" Left="6702" Top="854" Width="486" Height="270" Text="共済目的コード" Style="background-color: #70AD47; color: #404040; font-family: ＭＳ Ｐゴシック; font-size: 11pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt年産" DataField="年産" Visible="0" Tag="" BorderLeftStyle="1" BorderLeftColor="10921638" BorderTopStyle="1" BorderTopColor="10921638" BorderRightStyle="1" BorderRightColor="10921638" BorderBottomStyle="1" BorderBottomColor="10921638" Left="7182" Top="854" Width="486" Height="270" Text="年産" Style="background-color: #70AD47; color: #404040; font-family: ＭＳ Ｐゴシック; font-size: 11pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt継続特約FLG" DataField="継続特約FLG" Visible="0" Tag="" BorderLeftStyle="1" BorderLeftColor="10921638" BorderTopStyle="1" BorderTopColor="10921638" BorderRightStyle="1" BorderRightColor="10921638" BorderBottomStyle="1" BorderBottomColor="10921638" Left="345" Top="824" Width="486" Height="270" Text="継続特約FLG" Style="background-color: #70AD47; color: #404040; font-family: ＭＳ Ｐゴシック; font-size: 11pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txtタイトル用年産" Visible="0" Tag="" BorderLeftStyle="1" BorderLeftColor="10921638" BorderTopStyle="1" BorderTopColor="10921638" BorderRightStyle="1" BorderRightColor="10921638" BorderBottomStyle="1" BorderBottomColor="10921638" Left="5215" Top="60" Width="486" Height="270" Text="" Style="background-color: #70AD47; color: #404040; font-family: ＭＳ Ｐゴシック; font-size: 11pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="lblChkBx個人" Left="17064" Top="3116.16" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl個人" Left="17353.44" Top="3116.16" Width="1008.001" Height="288" Caption="　個人" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lblChkBx法人" Left="17064" Top="3434.4" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl法人" Left="17353.44" Top="3434.4" Width="972.0002" Height="288" Caption="　法人" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lblChkBx農作物共済資格団体" Left="17064" Top="3814.56" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl農作物共済資格団体" Left="17353.44" Top="3814.56" Width="2761.92" Height="288" Caption="　農作物共済資格団体" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Line" Name="直線6" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855" Y1="1124" X2="4543" Y2="1124" />
+      <Control Type="AR.Field" Name="txt郵便番号2" Tag="" Left="9075.36" Top="15184.2" Width="2781" Height="270" Text="郵便番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Line" Name="Line19" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8900.359" Y1="15137.32" X2="8900.359" Y2="16492.2" />
+      <Control Type="AR.Line" Name="Line20" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="16899.36" Y1="15137.2" X2="16899.36" Y2="16488.2" />
+      <Control Type="AR.Line" Name="Line21" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="22123.08" Y1="15137.2" X2="22123.08" Y2="16488.2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line22" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="15595.36" Y1="15137.2" X2="15595.36" Y2="16488.2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line23" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="7668.359" Y1="15979.2" X2="15595.56" Y2="15979.2" />
+      <Control Type="AR.Line" Name="Line24" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="7710.359" Y1="16505.32" X2="22123.08" Y2="16505.32" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line25" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2490.36" Y1="16159.2" X2="2490.36" Y2="16505.2" />
+      <Control Type="AR.Line" Name="Line26" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2045.36" Y1="15137.32" X2="2045.36" Y2="16162.2" />
+      <Control Type="AR.Line" Name="Line27" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855.36" Y1="16159.2" X2="855.36" Y2="16505.2" />
+      <Control Type="AR.Line" Name="Line28" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855.36" Y1="16505.32" X2="7708.36" Y2="16505.32" />
+      <Control Type="AR.Line" Name="Line29" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.72" Y1="15137.32" X2="855.72" Y2="16162.2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line30" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.36" Y1="16159.2" X2="7668.359" Y2="16159.2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line31" Tag="" BorderLeftStyle="2" BorderTopStyle="2" BorderRightStyle="2" BorderBottomStyle="2" X1="860.36" Y1="15486.2" X2="7668.359" Y2="15486.2" LineStyle="2" />
+      <Control Type="AR.Line" Name="Line32" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="7668.359" Y1="15137.32" X2="7668.359" Y2="16492.64" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line33" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.36" Y1="15137.2" X2="22123.36" Y2="15137.2" LineWeight="2" />
+      <Control Type="AR.Label" Name="Label20" Tag="" Left="15690.36" Top="15694.2" Width="1095" Height="285" Caption="加入形態" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label21" Tag="" Left="7870.36" Top="16082.2" Width="885" Height="285" Caption="電話" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label22" Tag="" Left="7885.36" Top="15421.2" Width="855" Height="285" Caption="住所" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label23" Tag="" Left="6120.36" Top="16219.2" Width="1260" Height="285" Caption="※記入不要" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="Label24" Tag="" Left="915.3601" Top="16219.2" Width="1500" Height="285" Caption="組合員等番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="Label25" Tag="" Left="6810.359" Top="15664.2" Width="525" Height="285" Caption="印" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label26" Tag="" Left="915.3601" Top="15664.2" Width="1035" Height="285" Caption="氏名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label27" Tag="" Left="927.3601" Top="15199.2" Width="1020" Height="285" Caption="(ﾌﾘｶﾞﾅ)" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Field" Name="txt申込者カナ2" Tag="" Left="2268.36" Top="15214.2" Width="4551" Height="270" Text="申込者カナ" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt住所2" Tag="" Left="9075.36" Top="15439.2" Width="6336" Height="510" Text="(仮)住所" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt電話番号2" Tag="" Left="9060.359" Top="16093.2" Width="6336" Height="270" Text="電話番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Field" Name="txt申込者氏名2" Tag="" Left="2295.72" Top="15557.8" Width="4596" Height="525" Text="申込者氏名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Label" Name="lblChkBx個人2" Left="17064.36" Top="15376.36" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl個人2" Left="17353.8" Top="15376.36" Width="1008.001" Height="288" Caption="　個人" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lblChkBx法人2" Left="17064.36" Top="15694.6" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl法人2" Left="17353.44" Top="15694.56" Width="972.0002" Height="288" Caption="　法人" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lblChkBx農作物共済資格団体2" Left="17064.36" Top="16074.76" Width="289.4403" Height="288.0001" Caption="□" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+      <Control Type="AR.Label" Name="lbl農作物共済資格団体2" Left="17353.8" Top="16074.76" Width="2761.92" Height="288" Caption="　農作物共済資格団体" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left; vertical-align: middle; ddo-char-set: 128" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader2" Height="1438.56" RepeatStyle="2" BackColor="16777215">
+      <Control Type="AR.Label" Name="Label1" Tag="" Left="916.399" Top="613.44" Width="705" Height="495" Caption="耕地&#xD;&#xA;番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label2" Tag="" Left="1679.399" Top="613.44" Width="615" Height="495" Caption="分筆&#xD;&#xA;番号" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label3" Tag="" Left="2357.399" Top="613.44" Width="1995" Height="285" Caption="市町村名" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label4" Tag="" Left="4421.399" Top="613.44" Width="3630" Height="285" Caption="地名地番" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label5" Tag="" Left="8276.4" Top="613.4401" Width="645" Height="495" Caption="耕地&#xD;&#xA;面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label6" Tag="" Left="9266.4" Top="613.4401" Width="645" Height="495" Caption="引受&#xD;&#xA;面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label7" Tag="" Left="10121.4" Top="613.4401" Width="870" Height="510" Caption="転作等&#xD;&#xA;の面積" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label8" Tag="" Left="11141.4" Top="613.44" Width="2145" Height="285" Caption="類区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label9" Tag="" Left="13406.4" Top="613.44" Width="2286" Height="510" Caption="品種又は転作作&#xD;&#xA;物名等" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label10" Tag="" Left="15746.4" Top="613.44" Width="1545" Height="510" Caption="栽培上の&#xD;&#xA;特殊事情" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label11" Tag="" Left="17381.4" Top="613.44" Width="525" Height="495" Caption="田畑&#xD;&#xA;区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label12" Tag="" Left="17996.4" Top="613.44" Width="2640" Height="285" Caption="備考" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label13" Tag="" Left="20701.4" Top="613.44" Width="645" Height="495" Caption="収量&#xD;&#xA;等級" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label14" Tag="" Left="21441.4" Top="613.44" Width="645" Height="300" Caption="参酌" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="Line1" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.36" Y1="1438.56" X2="20697.12" Y2="1438.56" LineWeight="2" />
+      <Control Type="AR.Label" Name="Label15" Tag="" Left="8726.4" Top="1123.2" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label16" Tag="" Left="9731.399" Top="1123.439" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Label" Name="Label17" Tag="" Left="10691.4" Top="1123.2" Width="300" Height="285" Caption="a" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center" />
+      <Control Type="AR.Line" Name="Line2" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855.239" Y1="573.4403" X2="22122.6" Y2="573.4403" />
+      <Control Type="AR.Line" Name="Line3" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="855.239" Y1="573.4403" X2="855.239" Y2="1429.44" />
+      <Control Type="AR.Line" Name="Line4" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1676.399" Y1="573.48" X2="1676.399" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line5" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2299.399" Y1="573.48" X2="2299.399" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line6" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="21371.4" Y1="573.48" X2="21371.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line7" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4391.4" Y1="573.48" X2="4391.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line8" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8096.399" Y1="573.48" X2="8096.399" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line9" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9090.399" Y1="573.48" X2="9090.399" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line10" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10077.4" Y1="573.48" X2="10077.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line11" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="11050.4" Y1="573.48" X2="11050.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line12" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13376.4" Y1="573.48" X2="13376.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line13" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="15716.4" Y1="573.48" X2="15716.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line14" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17951.4" Y1="573.48" X2="17951.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line15" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17327.4" Y1="573.48" X2="17327.4" Y2="1428.84" />
+      <Control Type="AR.Line" Name="Line16" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20697.12" Y1="1438.56" X2="22122.72" Y2="1438.56" />
+      <Control Type="AR.Label" Name="Label18" Tag="" Left="20769.4" Top="288.4398" Width="1320" Height="285" Caption="※記入不要" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Line" Name="Line17" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20696.4" Y1="288.4398" X2="20696.4" Y2="1427.439" />
+      <Control Type="AR.Line" Name="Line18" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="22122.6" Y1="288.4398" X2="22122.6" Y2="1427.439" />
+      <Control Type="AR.Label" Name="Label19" Tag="" Left="731.3992" Top="298.4401" Width="4814.76" Height="285" Caption="（※注５を参照し、記入願います。）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: left" />
+      <Control Type="AR.Line" Name="Line34" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20697" Y1="288.3601" X2="22109.64" Y2="288.3601" />
+    </Section>
+    <Section Type="Detail" Name="詳細" Height="318.24" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Line" Name="直線149" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="855.36" Y1="0" X2="855.36" Y2="308" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線150" Tag="" BorderLeftStyle="2" BorderTopStyle="2" BorderRightStyle="2" BorderBottomStyle="2" X1="855.36" Y1="2.000005" X2="22109.76" Y2="2.000005" LineStyle="2" />
+      <Control Type="AR.Line" Name="直線151" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1676.16" Y1="0" X2="1676.16" Y2="308" />
+      <Control Type="AR.Line" Name="直線152" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2299.68" Y1="0" X2="2299.68" Y2="308" />
+      <Control Type="AR.Line" Name="直線153" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4392" Y1="0" X2="4392" Y2="308" />
+      <Control Type="AR.Line" Name="直線154" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8097.12" Y1="0" X2="8097.12" Y2="308" />
+      <Control Type="AR.Line" Name="直線155" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="9090.721" Y1="0" X2="9090.721" Y2="308" />
+      <Control Type="AR.Line" Name="直線156" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10077.12" Y1="0" X2="10077.12" Y2="308" />
+      <Control Type="AR.Line" Name="直線157" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="11050.56" Y1="0" X2="11050.56" Y2="308" />
+      <Control Type="AR.Line" Name="直線158" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="13376.16" Y1="0" X2="13376.16" Y2="308" />
+      <Control Type="AR.Line" Name="直線159" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="15716.16" Y1="0" X2="15716.16" Y2="308" />
+      <Control Type="AR.Line" Name="直線160" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17327.52" Y1="0" X2="17327.52" Y2="308" />
+      <Control Type="AR.Line" Name="直線161" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="17951.04" Y1="0" X2="17951.04" Y2="308" />
+      <Control Type="AR.Line" Name="直線162" Tag="" BorderLeftStyle="7" BorderTopStyle="7" BorderRightStyle="7" BorderBottomStyle="7" X1="20697.12" Y1="0" X2="20697.12" Y2="308" LineWeight="2" />
+      <Control Type="AR.Line" Name="直線163" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="21371.04" Y1="0" X2="21371.04" Y2="308" />
+      <Control Type="AR.Line" Name="lastLine" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="853.9201" Y1="308.16" X2="20697.12" Y2="308.16" />
+      <Control Type="AR.Line" Name="直線164" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="22122.72" Y1="0" X2="22122.72" Y2="308" />
+      <Control Type="AR.Line" Name="直線218" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="20699.4" Y1="308.16" X2="22123.4" Y2="308.16" />
+      <Control Type="AR.PageBreak" Name="pb詳細" Tag="" Top="1268" Left="0" Width="0" Height="0" />
+      <Control Type="AR.Field" Name="txt耕地番号" DataField="耕地番号" Tag="" Left="905.76" Top="31.68" Width="771" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt分筆番号" DataField="分筆番号" Tag="" Left="1737.401" Top="32" Width="501" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt市町村名" DataField="市町村名" Tag="" Left="2354.4" Top="32" Width="2016" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt地名地番" DataField="地名地番" Tag="" Left="4422.4" Top="32" Width="3651" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt耕地面積" DataField="耕地面積" Tag="" Left="8131.399" Top="32" Width="915" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt引受面積" DataField="引受面積" Tag="" Left="9121.4" Top="32" Width="915" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt転作等面積" DataField="転作等面積" Tag="" Left="10094.4" Top="32" Width="915" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: center; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt類区分" DataField="類区分" Tag="" Left="11084.4" Top="32" Width="2286" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt品種" DataField="品種" Tag="" Left="13424.4" Top="32" Width="2286" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt田畑区分" DataField="田畑区分" Tag="" Left="17391.4" Top="31.68" Width="516" Height="227.52" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: left; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt備考" DataField="備考" Tag="" Left="17999.4" Top="32" Width="2631" Height="227" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: center; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt収量等級" DataField="収量等級" Tag="" Left="20748.4" Top="31.68" Width="606" Height="227.52" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: center; ddo-char-set: 128" />
+      <Control Type="AR.Field" Name="txt参酌" DataField="参酌" Tag="" Left="21389.4" Top="31.68" Width="696" Height="227.52" Text="" Multiline="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10.2pt; font-weight: bold; text-align: right; ddo-char-set: 128" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter2" Height="0" BackColor="16777215" />
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="0" BackColor="16777215" />
+    <Section Type="PageFooter" Name="ページフッターセクション" Height="288" BackColor="16777215">
+      <Control Type="AR.ReportInfo" Name="ReportInfo1" Left="10811.52" Top="0" Width="1440" Height="288" FormatString="-{PageNumber}-" Style="font-family: ＭＳ 明朝; font-size: 12pt; font-weight: bold; text-align: center; ddo-char-set: 128" />
+    </Section>
+    <Section Type="ReportFooter" Name="レポートフッター" Height="0" BackColor="16777215" CanGrow="0" />
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[/*' 2018/10/22 エラートラップMsgBox標準化
+
+Option Compare Database
+Option Explicit
+
+Dim i As Integer                    ' 現在の出力行
+Dim j As Integer                    ' レコード件数
+Const MAX_LINE As Integer = 22      '「４．耕地等情報」出力行数
+Dim intWKPage As Integer            ' グループ（組合員等コードごと）の1頁目
+Dim int年産 As Integer              ' タイトル表示用年産
+'
+
+Private Sub グループヘッダー0_Format(Cancel As Integer, FormatCount As Integer)
+    On Error GoTo Err_グループヘッダー0_Format
+    
+    Const TWIP_CM As Integer = 567      ' 1 cm = 567 Twip
+    Dim dblTop1 As Double
+    Dim dblOffset As Double
+    Dim intFontSize As Integer
+    Dim intKanjiNameLenB As Integer
+    
+    If FormatCount = 1 Then
+        intWKPage = Me.Page
+    End If
+    
+    ' 文字数に応じて氏名欄テキストボックスのFontSize、Topを調整
+    intKanjiNameLenB = LenB(StrConv(Nz(Me![txt申込者氏名], ""), vbFromUnicode))
+    dblTop1 = 5.8   '20230406 位置調整6.1→
+
+    If intKanjiNameLenB <= 14 Then
+        dblOffset = 0
+        intFontSize = 20
+    ElseIf intKanjiNameLenB <= 20 Then
+        dblOffset = 0.1
+        intFontSize = 18
+    ElseIf intKanjiNameLenB <= 24 Then
+        dblOffset = 0.15
+        intFontSize = 16
+    ElseIf intKanjiNameLenB <= 30 Then
+        dblOffset = 0.18
+        intFontSize = 14
+    ElseIf intKanjiNameLenB <= 38 Then
+        dblOffset = 0.21
+        intFontSize = 12
+    Else
+        dblOffset = 0
+        intFontSize = 12
+    End If
+    
+    Me!txt申込者氏名.Top = (dblTop1 + dblOffset) * TWIP_CM
+    Me!txt申込者氏名.FontSize = intFontSize
+
+    Dim strSQL As String
+    i = 0
+    
+    strSQL = "[年産] = " & Me![txt年産] & _
+             " AND [共済目的コード] = " & Me![txt共済目的コード] & _
+             " AND [組合員等コード] = " & Me![txt組合員等番号]
+    j = DCount("*", "NSK_V_加入申込書", strSQL)
+    
+    Me!pb詳細.Visible = False
+    Me.ページヘッダーセクション.Visible = False
+
+    Me!txtタイトル用年産 = int年産
+    
+Exit_グループヘッダー0_Format:
+    Exit Sub
+Err_グループヘッダー0_Format:
+    MsgBox Err & ":" & Error$ & "(Sub グループヘッダー0_Format)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_グループヘッダー0_Format
+End Sub
+
+Private Sub Report_Open(Cancel As Integer)
+    On Error GoTo Err_Report_Open
+    '帳票抽出起動時対応　"F3"はレポートによって異なる
+    If IsFormOpen("F-SH00-帳票選択") Then
+        Forms![F-SH00-帳票選択].Visible = False
+    End If
+    
+    intWKPage = 0
+    
+    int年産 = ParamConv(Me.OpenArgs, 2)
+    
+Exit_Report_Open:
+    Exit Sub
+Err_Report_Open:
+    MsgBox Err & ":" & Error$ & "(Sub Report_Open)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_Report_Open
+End Sub
+
+Private Sub Report_Page()
+    On Error GoTo Err_Report_Page
+
+    '帳票抽出起動時対応　オブジェクト名はレポートによって異なる
+    '組合引受：F-SH00-帳票選択、組合等評価＆組合等特例：F-SS00-帳票選択、組合等無事戻：F-SB00-帳票選択
+    '連合会評価&連合会特例：F-SS00-帳票選択
+    DoCmd.OpenForm "S-SH00-帳票選択", acNormal, , , , , Me.Name
+    
+Exit_Report_Page:
+    Exit Sub
+Err_Report_Page:
+    MsgBox Err & ":" & Error$ & "(Sub Report_Page)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_Report_Page
+End Sub
+
+Private Sub Report_Close()
+    On Error GoTo Err_Report_Close
+    Application.Echo False
+    '印刷ダイアログ連動クローズ
+    DoCmd.Close acForm, "S-SH00-帳票選択", acSaveNo
+    
+    'メニュー最大化　単体起動対応(null)
+    If IsNull(Me.OpenArgs) = False Then
+        DoCmd.SelectObject acForm, ParamConv(Me.OpenArgs, 1)
+    End If
+    
+    '帳票抽出起動時対応　オブジェクト名はレポートによって異なる
+    '組合引受：F-SH00-帳票選択、組合等評価＆組合等特例：F-SS00-帳票選択、組合等無事戻：F-SB00-帳票選択
+    '連合会評価&連合会特例：F-SS00-帳票選択
+    If IsFormOpen("F-SH00-帳票選択") Then
+        Forms![F-SH00-帳票選択].Visible = True
+    End If
+    
+    Application.Echo True
+
+Exit_Report_Close:
+    Exit Sub
+Err_Report_Close:
+    Application.Echo True
+    MsgBox Err & ":" & Error$ & "(Sub Report_Close)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_Report_Close
+End Sub
+
+Function Get_Page()
+    On Error GoTo Err_Get_Page
+    
+    Get_Page = Me.Page - intWKPage + 1
+    
+Exit_Get_Page:
+    Exit Function
+Err_Get_Page:
+    MsgBox Err & ":" & Error$ & "(Function Get_Page)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_Get_Page
+End Function
+
+Private Sub レポートヘッダー_Format(Cancel As Integer, FormatCount As Integer)
+    On Error GoTo Err_レポートヘッダー_Format
+
+    Me.ページヘッダーセクション.Visible = False
+
+Exit_レポートヘッダー_Format:
+    Exit Sub
+Err_レポートヘッダー_Format:
+    MsgBox Err & ":" & Error$ & "(Sub レポートヘッダー_Format)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_レポートヘッダー_Format
+End Sub
+
+Private Sub 詳細_Format(Cancel As Integer, FormatCount As Integer)
+    On Error GoTo Err_詳細_Format
+
+    ' 出力済みで2重読み込みされたレコードは処理せずスキップ
+    If (FormatCount > 1) And (i < j) Then
+        GoTo Exit_詳細_Format
+    End If
+    
+    i = i + 1
+            
+    If i Mod MAX_LINE = 0 Then
+        Me!lastLine.BorderWidth = 2
+        If i < j Then
+            Me!pb詳細.Visible = True
+            Me.ページヘッダーセクション.Visible = True
+        ElseIf i = j Then
+            Me!pb詳細.Visible = False
+            Me.ページヘッダーセクション.Visible = False
+        Else
+            Call VisibleSettingOutputArea(False)
+            Me.ページヘッダーセクション.Visible = False
+        End If
+    Else
+        Me!lastLine.BorderWidth = 1
+        Me!pb詳細.Visible = False
+        Me.ページヘッダーセクション.Visible = False
+        If i < j Then
+            Me.NextRecord = True
+            Call VisibleSettingOutputArea(True)
+        ElseIf i = j Then
+            Me.NextRecord = False
+            Call VisibleSettingOutputArea(True)
+        Else
+            Me.NextRecord = False
+            Call VisibleSettingOutputArea(False)
+        End If
+    End If
+    
+Exit_詳細_Format:
+    Exit Sub
+Err_詳細_Format:
+    MsgBox Err & ":" & Error$ & "(Sub 詳細_Format)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_詳細_Format
+End Sub
+
+Private Sub VisibleSettingOutputArea(isVisible As Boolean)
+    On Error GoTo Err_VisibleSettingOutputArea
+
+    Me!txt耕地番号.Visible = isVisible
+    Me!txt分筆番号.Visible = isVisible
+    Me!txt市町村名.Visible = isVisible
+    Me!txt地名地番.Visible = isVisible
+    Me!txt耕地面積.Visible = isVisible
+    Me!txt引受面積.Visible = isVisible
+    Me!txt転作等面積.Visible = isVisible
+    Me!txt類区分.Visible = isVisible
+    Me!txt品種.Visible = isVisible
+    Me!txt田畑区分.Visible = isVisible
+    Me!txt備考.Visible = isVisible
+    Me!txt収量等級.Visible = isVisible
+    Me!txt参酌.Visible = isVisible
+    
+Exit_VisibleSettingOutputArea:
+    Exit Sub
+Err_VisibleSettingOutputArea:
+    MsgBox Err & ":" & Error$ & "(Sub VisibleSettingOutputArea)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_VisibleSettingOutputArea
+End Sub
+
+Private Sub Report_KeyDown(KeyCode As Integer, Shift As Integer)
+    On Error GoTo Err_Report_KeyDown
+
+    Select Case KeyCode
+        Case vbKeyF1 To vbKeyF16
+            KeyCode = 0
+    End Select
+    
+Exit_Report_KeyDown:
+    Exit Sub
+Err_Report_KeyDown:
+    MsgBox Err & ":" & Error$ & "(Sub Report_KeyDown)" _
+           , vbCritical + vbOKOnly, Me.Caption
+    Resume Exit_Report_KeyDown
+End Sub
+*/public void GroupHeader1_Format()
+{
+	
+}
+
+
+public void 詳細_Format()
+{
+	
+}
+
+
+public void GroupHeader2_Format()
+{
+	
+}
+
+
+]]></Script>
+  <PageSettings LeftMargin="360" RightMargin="360" TopMargin="360" BottomMargin="360" />
+  <Parameters />
+</ActiveReportsLayout>

@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\NskAppModelLibrary\NskAppModelLibrary.csproj" />
+    <ProjectReference Include="..\NskCommonLibrary\NskCommonLibrary.csproj" />
+    <ProjectReference Include="..\NskReportLibrary\NskReportLibrary.csproj" />
+    <ProjectReference Include="..\NskReportMain\NskReportMain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Reports\P109010\P109010ReportMain.rpx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\P109010\P109010ReportSub1.rpx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Reports\P109010\P109010ReportSub2.rpx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

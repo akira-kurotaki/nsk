@@ -244,7 +244,8 @@
 @* 共通機能の返却値（処理結果）＝11（バッチ予約警告）の場合 *@
 @Html.Confirm("BatchYoyakuConfirm", "BatchYoyakuConfirmOK", "確認", MessageUtil.Get("MQ00011", "加入者一覧"), "OK", "キャンセル")
 @* ダウンロード失敗ダイアログ（メッセージID：ME90002、引数{0} ： "ダウンロード") *@
-@Html.Dialog("DownLoadError", "メッセージ", MessageUtil.Get("ME90002", "ダウンロード"), "閉じる")
+@* @Html.Dialog("DownLoadError", "メッセージ", MessageUtil.Get("ME90002", "ダウンロード"), "閉じる") *@
+@Html.Dialog("DownLoadError", "メッセージ", MessageUtil.Get("ME10048"), "閉じる")
 @* 結果提示ダイアログ *@
 @Html.Dialog("MessageConfirm", "メッセージ", "", "閉じる")
 

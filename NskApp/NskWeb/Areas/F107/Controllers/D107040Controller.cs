@@ -2,33 +2,20 @@
 using NskWeb.Areas.F107.Models.D107040;
 using NskWeb.Common.Consts;
 using CoreLibrary.Core.Attributes;
-using CoreLibrary.Core.Base;
 using CoreLibrary.Core.Consts;
 using CoreLibrary.Core.Dto;
 using CoreLibrary.Core.Exceptions;
-using CoreLibrary.Core.Extensions;
-using CoreLibrary.Core.Pager;
 using CoreLibrary.Core.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Primitives;
-using ModelLibrary.Models;
 using Npgsql;
-using NpgsqlTypes;
 using ReportService.Core;
 using System.Text;
-using System.Text.RegularExpressions;
-using static NskWeb.Areas.F107.Models.D107040.D107040EntryCondition;
 using NskWeb.Areas.F000.Models.D000000;
-using System.Collections.Generic;
-using NskAppModelLibrary.Models;
-using StackExchange.Redis;
-using ModelLibrary.Context;
 using static CoreLibrary.Core.Utility.BatchUtil;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using NskWeb.Areas.F106.Models.D106010;
 
 namespace NskWeb.Areas.F107.Controllers
 {
@@ -96,14 +83,6 @@ namespace NskWeb.Areas.F107.Controllers
         [HttpGet]
         public ActionResult Init()
         {
-
-            // $$$$$$$$$$$$$$
-            //NSKPortalInfoModel model_portal = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
-            //if (model_portal == null)
-            //{
-            //    throw new AppException("ME00068", MessageUtil.Get("ME00068"));
-            //}
-            //$$$$$$$$$$$$$$
 
             //モデルを取得
             D107040Model model = new D107040Model();
@@ -360,14 +339,17 @@ namespace NskWeb.Areas.F107.Controllers
 
             string ShishoCd = string.Empty;
             // 職員が本所の場合、セッションは空白設定のため"00"を設定する必要がある
-            if (Syokuin.ShishoCd.Equals(""))
-            {
-                ShishoCd = "00";
-            }
-            else if (!Syokuin.ShishoCd.Equals(""))
-            {
-                ShishoCd = syokuin.ShishoCd;
-            }
+            //if (Syokuin.ShishoCd.Equals(""))
+            //{
+            //    ShishoCd = "00";
+            //}
+            //else if (!Syokuin.ShishoCd.Equals(""))
+            //{
+            //    ShishoCd = syokuin.ShishoCd;
+            //}
+
+            // セッションの支所コードを取得(本所の場合は空)
+            ShishoCd = syokuin.ShishoCd;
 
             // バッチ条件取得
             string batchJoken = GetBatchJoken();
@@ -375,7 +357,7 @@ namespace NskWeb.Areas.F107.Controllers
             // バッチ条件（表示用）取得
             var batchJokenDispSb = CreateBatchJokenDsp(form.EntryCondition.Nensan,
                                                         form.EntryCondition.KyosaiMokutekiCd,
-                                                        ShishoCd,
+                                                        form.EntryCondition.SelectShishoCd,
                                                         form.EntryCondition.CurentHikiukeCnt.ToString(),
                                                         form.EntryCondition.TaisyoFurikaeDate.ToString(),
                                                         syokuin.UserId);
@@ -387,9 +369,10 @@ namespace NskWeb.Areas.F107.Controllers
             int? insertResult = null;
             List<BatchYoyaku> yoyakuResult = null;
 
-            // 複数実行禁止IDを設定する
+            // 複数実行禁止IDを設定する(都道府県と選択された支所を付加)
             String multiNotId = D107040_MULTI_ID;
-            multiNotId += syokuin.TodofukenCd;
+            //multiNotId += syokuin.TodofukenCd;
+            multiNotId += syokuin.TodofukenCd + form.EntryCondition.SelectShishoCd;
 
             // レスポンスメッセージ用変数定義
             var responseMsg = "";

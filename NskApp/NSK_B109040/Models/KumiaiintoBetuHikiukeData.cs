@@ -50,7 +50,6 @@
         /// <summary>
         /// 大地区コード
         /// </summary>
-        // todo: 設計書修正完了次第修正　No.１４４
         public string 大地区コード { get; set; } = string.Empty;
     }
 }

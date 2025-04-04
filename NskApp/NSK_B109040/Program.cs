@@ -306,17 +306,17 @@ namespace NSK_B109040
                             hikiukeMensekiKei[n] = 0;
                         }
 
-                        // ８．規模別面積区分別の集計（ファイル出力用集計）				
-                        // ８．１．「組合員等別引受情報」を順次１件づつ読み込む。			
+                        // ８．規模別面積区分別の集計（ファイル出力用集計）
+                        // ８．１．「組合員等別引受情報」を順次１件づつ読み込み、終了まで以下の処理を繰り返す。	
                         // ８．１．１．規模別面積区分毎の振り分け
-                        // 組合員等別引受情報」の[引受面積区分]を内部配列の「対象面積上限」～「対象面積下限」と比較する。	
+                        // 「組合員等別引受情報」の[引受面積区分]を内部配列の「対象面積上限」～「対象面積下限」と比較する。
                         // 該当する規模別面積区分の「引受戸数計」と「引受面積計」に集計する
                         // 引受戸数計（ｎ）：引受戸数計（ｎ）＋「組合員等別引受情報.引受戸数計」
                         // 引受面積計（ｎ）：引受面積計（ｎ）＋「組合員等別引受情報.引受面積計」
-                        // 引受戸数計（ｎ）と引受面積計（ｎ）用のカウント：i
                         int i = 0;
                         int[] kibobetuKbn = new int[NskCommon.CoreConst.HAIRETU_YOUSO_NUM];
                         int[] taishouJougen = new int[NskCommon.CoreConst.HAIRETU_YOUSO_NUM];
+                        int nonZeroConter = 0;
                         foreach (KumiaiintoBetuHikiukeData data in kumiaiintobetuHikiukeDatas)
                         {
                             for (int n = 0; n < NskCommon.CoreConst.HAIRETU_YOUSO_NUM; n++)
@@ -330,17 +330,13 @@ namespace NSK_B109040
                                     i++;
                                     break;
                                 }
-                            }
-                        }
 
-                        // ８．２．データ件数の取得
-                        // 内部配列で引受戸数計（ｎ）が０以外の配列件数をカウントする。
-                        int nonZeroConter = 0;
-                        foreach (int koseki in hikiukeKosukei)
-                        {
-                            if (koseki != 0)
-                            {
-                                nonZeroConter++;
+                                // ８．２．データ件数の取得
+                                // 内部配列で引受戸数計（ｎ）が０以外の配列件数をカウントする。
+                                if (hikiukeKosukei[n] != 0)
+                                {
+                                    nonZeroConter++;
+                                }
                             }
                         }
 
@@ -414,7 +410,6 @@ namespace NSK_B109040
                                             "0",
                                             array[n].組合等コード,
                                             array[n].支所コード,
-                                            // todo: 設計書修正完了次第修正　No.１４４
                                             array[n].大地区コード,
                                             kibobetuKbn[n].ToString(),
                                             taishouJougen[n].ToString(),
@@ -565,13 +560,12 @@ namespace NSK_B109040
             sql.Append($"	    , T1.年産	 ");
             sql.Append($"	    , T1.組合等コード	 ");
             sql.Append($"	    , T1.支所コード 	 ");
-            sql.Append($"	    , MAX(T1.引受回) AS 引受回	 ");
+            sql.Append($"	    , T1.大地区コード 	 ");
+            sql.Append($"	    , T1.引受回	 ");
             sql.Append($"	    , TRUNC(SUM(T1.引受面積計)) AS 引受面積区分	 ");
             sql.Append($"	    , COUNT(T1.組合等コード) AS 引受戸数計	 ");
             sql.Append($"	    , SUM(T1.引受面積計) AS 引受面積計	 ");
             sql.Append($"	    , T3.kumiaito_rnm AS 組合等略称 	 ");
-            // todo: 設計書修正完了次第修正　No.１４４
-            sql.Append($"	    , T1.大地区コード ");
             sql.Append($"	FROM	 ");
             sql.Append($"	    t_12040_組合員等別引受情報 T1 	 ");
             sql.Append($"	    INNER JOIN ( 	 ");
@@ -623,11 +617,10 @@ namespace NSK_B109040
             sql.Append($"	    , T1.年産	 ");
             sql.Append($"	    , T1.組合等コード	 ");
             sql.Append($"	    , T1.支所コード	 ");
+            sql.Append($"	    , T1.大地区コード ");
             sql.Append($"	    , T1.引受回	 ");
             sql.Append($"	    , TRUNC(T1.引受面積計)	 ");
             sql.Append($"	    , T3.kumiaito_rnm	 ");
-            // todo: 設計書修正完了次第修正　No.１４４
-            sql.Append($"	    , T1.大地区コード ");
 
             // パラメータに値を付与する
             List<NpgsqlParameter> parameters =
