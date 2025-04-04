@@ -1,0 +1,267 @@
+﻿@using NskWeb.Areas.F000.Consts
+@using NskWeb.Areas.F109.Consts
+@using NskWeb.Areas.F109.Models.D109020
+@model D109020Model
+@{
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+
+}
+<div>
+    <div class="main_title btn_group_left mt_5">
+        <h3>規模別分布状況データ作成設定</h3>
+    </div>
+    <div class="clearfix"></div>
+</div>
+<br />
+
+<table class="w-50">
+    <colgroup style="width: 20%;"></colgroup>
+    <colgroup style="width: 15%;"></colgroup>
+    <colgroup style="width: 65%;"></colgroup>
+    <tr>
+        <td>年産：</td>
+        <td colspan="2">@Model.Nensan</td>
+    </tr>
+    <tr>
+        <td>共済目的：</td>
+        <td colspan="2">@Model.KyosaiMokuteki</td>
+    </tr>
+</table>
+<br />
+
+<div class="table-thead-container">
+
+    @using (Html.BeginForm("Init", "D109020", FormMethod.Post, new { id = "KibobetsuBunpuSearchForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        <h4 class="sub_title">検索条件</h4>
+        <div class="mb-3">
+            <div>@Html.ValidationMessageFor(model => model.SearchCondition.ShishoCd, null, new { @class = "text-danger" })</div>
+            <div>@Html.MessageAreaFor(model => model.MessageArea1, Model.MessageArea1, new { @class = "text-danger", id = "MessageArea1" })</div>
+        </div>
+        <div class="clearfix"></div>
+
+        @await Html.PartialAsync("_HiddenWindowId")
+
+        <table class="table common_table table-condensed table-spe-bordered table-sub-bordered">
+            <caption class="visually-hidden">検索条件</caption>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <colgroup class="td_label" style="width: 10%;"></colgroup>
+            <colgroup class="td_control" style="width: 40%;"></colgroup>
+            <tr>
+                @* 支所 *@
+                <td>支所</td>
+                <td>
+                    @{
+                        Dictionary<string, object> attrs = new() {
+                            { "class", "form-select form-select-lg"},
+                            { "tabindex", 100 },
+                            { "title", "選択項目" }
+                        };
+                        if (Model.IsShishoDropdownListDisabled)
+                            attrs.Add("disabled", "disabled");
+                    }
+                    @Html.DropDownListFor(model => model.SearchCondition.ShishoCd, Model.SearchCondition.ShishoList, attrs)
+                </td>
+            </tr>
+        </table>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="Clear" name="Clear" tabindex="120">
+                    クリア
+                </button>
+                <button type="button" class="btn btn-primary" id="Search" name="Search" tabindex="121">
+                    検索
+                </button>
+            </div>
+        </div>
+    }
+    @using (Html.BeginForm("Init", "D109020", FormMethod.Post, new { id = "KibobetsuBunpuForm", spellcheck = "false", autocomplete = "off" }))
+    {
+        <div class="clearfix"></div>
+        <div id="SearchResult">
+            @await Html.PartialAsync("_D109020KibobetsuBunpuResult", Model)
+        </div>
+        <div class="table-responsive table-thead-container">
+            <div class="btn_area btn_group_right">
+                <button type="button" class="btn btn-primary" id="Back" name="Back">
+                    戻る
+                </button>
+                <button type="button" class="btn btn-primary" id="Insert" name="Execusion" @Model.InsertButtonDisableAttr>
+                    登録
+                </button>
+            </div>
+        </div>
+    }
+</div>
+<input type="hidden" id="returnValue" />
+
+@* 登録確認ダイアログ *@
+@Html.Confirm("InsertConfirm", "InsertConfirmOK", "確認", MessageUtil.Get("MQ10019"), "OK", "キャンセル")
+
+@* 戻る 編集内容破棄確認ダイアログ *@
+@Html.Confirm("BackConfirm", "BackConfirmOK", "確認",
+                MessageUtil.Get("MQ10025", "農作物ポータル", "登録"), "OK", "キャンセル")
+
+@section scripts {
+    <script>
+
+        $(function () {
+            // 検索処理
+            $("#Search").click(function () {
+                var messageArea1 = $("span[data-valmsg-for='MessageArea1']");
+                // 前回のメッセージをクリアする
+                messageArea1.html("");
+                var message = "";
+
+                if ("" != message) {
+                    $("html, body").scrollTop(0);
+                }
+
+                // ２．１．属性チェック
+                // エラーチェック仕様に基づき各項目のチェックを行う。
+                var checkValid = $("#KibobetsuBunpuSearchForm").valid();
+                if (!checkValid) {
+                    // ２．１．１．エラーの場合
+                    // エラーが発生した各入力欄の直下にメッセージを表示する。
+                    $('.input-validation-error:first').focus();
+                    return;
+                }
+
+                // チェックエラーなしの場合
+                if ($("#KibobetsuBunpuSearchForm").valid() && "" == message) {
+                    var url = "@Url.Action("Search", "D109020", new { area = "F109" })";
+                    // disabled属性がついていると値がPOSTされないのでdisabled属性を削除する
+                    var disabledItems = $("#KibobetsuBunpuSearchForm [disabled]");
+                    disabledItems.removeAttr('disabled');
+                    var formData = new FormData($("#KibobetsuBunpuSearchForm").get(0));
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: formData,
+                        dataType: 'json',
+                        url: url,
+                        processData: false, //ajaxがdataを整形しない指定
+                        contentType: false  //contentTypeもfalseに指定
+                    }).done(function (data) {
+                        if (undefined != data.errorMessages && data.errorMessages.length > 0) {
+                            $('#MessageArea1').addClass("text-danger").html(data.errorMessages[0]);
+                        }
+
+                        // 検索結果表示部の更新
+                        $('#SearchResult').html(data.partialView);
+
+                        // 検索後のバリデータ再設定
+                        $("#KibobetsuBunpuForm").validate().resetForm();
+                        $("#KibobetsuBunpuForm").each(function () { $.data($(this)[0], 'validator', false); });
+                        $.validator.unobtrusive.parse('#SearchResult');
+
+                        // カンマ編集機能再設定
+                        loadNumberAddComma();
+
+                        $("html, body").scrollTop($('#SearchResult').offset().top);
+
+                    }).fail(function () {
+                        location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                    });
+                }
+            });
+
+            // 戻る
+            $("#Back").click(function() {
+                // １．確認ダイアログを表示する。
+                @Html.ShowDialog("BackConfirm");
+            });
+            $("#BackConfirmOK").click(function(){
+                var backLink = "@Url.Action("Init", "D000000", new { area = "F000" })";
+                var url = "@Url.Action("Back", "D109020", new { area = "F109" })";
+
+                $.ajax({
+                    type: 'GET',
+                    url: url,
+                    data: null,
+                    dataType: 'json',
+                    contentType: "application/json",
+                    cache: false,
+                }).done(function () {
+                    location.href = backLink;
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+
+            // 登録処理
+            $("#Insert").click(function() {
+                $('#MessageArea2').html("");
+                // １．入力チェック
+                // １．１．必須チェック
+                // １．２．属性チェック
+                // １．３．文字数チェック
+                // １．４．独自チェック
+                // １．４．１．面積上限の前後チェック
+                let i = 0;
+                for (i = 0; i < 20; i++) {
+                    let j = i + 1;
+                    let currentRow = $(`#KibobetsuBunpu_DispRecords_${i}__MensekiJogen`);
+                    let nextRow = $(`#KibobetsuBunpu_DispRecords_${j}__MensekiJogen`);
+                    if ((undefined != currentRow) &&
+                        (undefined != nextRow) &&
+                        Number(currentRow.val()) > Number(nextRow.val())) {
+                        // 画面：[面積上限]が１つ上の行より小さい
+                        // "ME10096"：{0}より{1}が小さい値になっています。
+                        // 　{0}：一つ前の面積区分　　{1}：面積上限
+                        let msg = "@MessageUtil.Get("ME10096", "一つ前の面積区分", "面積上限")";
+                        $('#MessageArea2').addClass("text-danger").html(msg);
+                        nextRow.addClass("input-validation-error");
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+                    if ((undefined != currentRow) &&
+                        (undefined != nextRow) &&
+                        Number(currentRow.val()) == Number(nextRow.val())) {
+                        // 画面：[面積上限]が１つ上の行と等しい
+                        // "ME90018"：{0}に重複があります。
+                        // 　{0}：面積上限
+                        let msg = "@MessageUtil.Get("ME90018", "面積上限", "")";
+                        $('#MessageArea2').addClass("text-danger").html(msg);
+                        nextRow.addClass("input-validation-error");
+                        $('.input-validation-error:first').focus();
+                        return;
+                    }
+                }
+
+                // ２．実行確認
+                // ２．１．確認ダイアログを表示する。
+                @Html.ShowDialog("InsertConfirm");
+            });
+            $("#InsertConfirmOK").click(function() {
+                // ３．「OK」押下時
+                var url = "@Url.Action("Insert", "D109020", new { area = "F109" })";
+                var formData = new FormData($("#KibobetsuBunpuForm").get(0));
+
+                $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                    processData: false, //ajaxがdataを整形しない指定
+                    contentType: false  //contentTypeもfalseに指定
+                }).done(function (data) {
+                    if (undefined != data.message && data.message.length > 0) {
+                        // ３．２．１．エラーの場合はエラーメッセージを[メッセージエリア２]に表示する。
+                        $('#MessageArea2').addClass("text-danger").html(data.message);
+                    } else {
+                        // 登録が行われたデータが1件でもある場合、[メッセージエリア２]に以下のメッセージを表示する。
+                        let msg = "@MessageUtil.Get("MI00004", "登録", "")";
+                        $('#MessageArea2').html(msg);
+                    }
+                    $("html, body").scrollTop($('#KibobetsuBunpuForm').offset().top);
+                }).fail(function () {
+                    location.href = "@Url.Action("Init", "D900002", new { area = "F900" })";
+                });
+            });
+        });
+    </script>
+}

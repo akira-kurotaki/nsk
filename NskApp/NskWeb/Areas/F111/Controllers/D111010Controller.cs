@@ -56,7 +56,7 @@ namespace NskWeb.Areas.F111.Controllers
 
             D111010Model model = new();
 
-            // TODO: １．１．権限チェック
+            // １．１．権限チェック
             // (1)	ログインユーザの権限が「参照」
             // 「更新権限」いずれも許可されていない場合、メッセージを設定し業務エラー画面を表示する。
             bool dispKengen = ScreenSosaUtil.CanReference(F111Const.SCREEN_ID_D111010, HttpContext);

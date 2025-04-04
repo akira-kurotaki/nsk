@@ -15,6 +15,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\NskAppModelLibrary\NskAppModelLibrary.csproj" />
+    <ProjectReference Include="..\NskCommonLibrary\NskCommonLibrary.csproj" />
     <ProjectReference Include="..\NskReportLibrary\NskReportLibrary.csproj" />
   </ItemGroup>
   <ItemGroup>

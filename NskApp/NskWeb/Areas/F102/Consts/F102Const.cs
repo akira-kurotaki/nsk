@@ -95,6 +95,7 @@ namespace NskWeb.Areas.F102.Consts
         /// </summary>
         public const string BATCH_ID_NSK_102121B = "NSK_102121B";
 
+<<<<<<< HEAD
         // D103010
 
         /// <summary>
@@ -117,6 +118,8 @@ namespace NskWeb.Areas.F102.Consts
         /// </summary>
         public const string BATCH_ID_NSK_103011B = "NSK_103011B";
 
+=======
+>>>>>>> 72fc30810fa617c5165b071081136d599c1a5e22
         // 許容する拡張子
         public const string allowedExtension = "csv";
 

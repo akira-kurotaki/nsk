@@ -1,0 +1,37 @@
+﻿@model NskWeb.Areas.F109.Models.D109020.D109020Model
+
+<h4 class="sub_title">規模別分布状況データ設定</h4>
+<div class="mb-3">
+    @for (int i = 0; i < Model.KibobetsuBunpu.DispRecords.Count; i++)
+    {
+        <div>@Html.ValidationMessageFor(model => model.KibobetsuBunpu.DispRecords[i].MensekiJogen, null, new { @class = "text-danger" })</div>
+    }
+    <div>@Html.MessageAreaFor(model => model.KibobetsuBunpu.MessageArea2, Model.KibobetsuBunpu.MessageArea2, new { @class = "text-danger", id = "MessageArea2" })</div>
+</div>
+<div class="clearfix"></div>
+<div class="table-thead-container" style="width: 50%;">
+    <table class="table table-bordered" style="">
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th>面積区分</th>
+                <th>面積上限</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.KibobetsuBunpu.DispRecords.Count(); i++)
+            {
+                <!-- 行ｎ -->
+                <tr>
+                    <td>
+                        @Html.HiddenFor(model => model.KibobetsuBunpu.DispRecords[i].MensekiKbn)
+                        @Html.DisplayTextFor(model => model.KibobetsuBunpu.DispRecords[i].MensekiKbn)
+                    </td>
+                    <td>
+                        @Html.EditorFor(model => model.KibobetsuBunpu.DispRecords[i].MensekiJogen, "D",
+                                 new { htmlAttributes = new { @class = "form-control", @type = "text" } })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

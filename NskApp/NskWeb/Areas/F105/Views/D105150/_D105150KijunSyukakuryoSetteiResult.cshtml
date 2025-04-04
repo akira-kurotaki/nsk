@@ -1,0 +1,533 @@
+﻿@model NskWeb.Areas.F105.Models.D105150.D105150Model
+@{
+    var startIndex = 700;
+    int tabIndex = startIndex;
+
+    string readOnlyAttr = string.Empty;
+    if (Model.DispKengen == NskWeb.Areas.F105.Consts.F105Const.Authority.ReadOnly)
+    {
+        // 参照権限
+        readOnlyAttr = "readonly";
+    }
+}
+<div class="mb-3">
+    @for (int i = 0; i < Model.KijunSyukakuryoSettei.DispRecords.Count; i++)
+    {
+        <!-- 行ｎ -->
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KumiaiintoCd, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].RuiKbn, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].SanchibetsuMeigaratoCd, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].HeikinTanshu, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai1, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai2, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai3, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai4, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai5, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai6, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai7, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai8, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai9, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai10, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai11, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai12, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai13, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai14, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai15, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai16, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai17, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai18, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai19, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai20, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai21, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai22, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai23, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai24, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai25, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai26, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai27, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai28, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai29, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai30, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai31, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai32, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai33, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai34, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai35, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai36, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai37, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai38, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai39, null, new { @class = "text-danger" })</div>
+        <div>@Html.ValidationMessageFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai40, null, new { @class = "text-danger" })</div>
+    }
+</div>
+<div class="clearfix"></div>
+
+<div class="table-thead-container">
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("KijunSyukakuryoSetteiPager", "kijunSyukakuryoSetteiPagerClick", Model.KijunSyukakuryoSettei.Pager)
+    </div>
+    @Html.HiddenFor(model => model.KijunSyukakuryoSettei.AllRecCount)
+    <table class="table table-bordered" style="">
+        <colgroup>
+            <col style="width: 2%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+            <col style="width: 2%;" class="colgroup_background" />
+            <col style="width: 7%;" />
+        </colgroup>
+        <thead style="background-color: #ecf1fb;">
+            <tr>
+                <th></th>
+                <th colspan="3">組合員等コード<i class="required">必須</i></th>
+                <th colspan="2">氏名</th>
+                <th colspan="3">類区分<i class="required">必須</i></th>
+                <th colspan="4">産地別銘柄等<i class="required">必須</i></th>
+                <th colspan="2">営農対象外フラグ<i class="required">必須</i></th>
+                <th colspan="2">平均単収<i class="required">必須</i></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.KijunSyukakuryoSettei.DispRecords.Count(); i++)
+            {
+                string hiddenRow = string.Empty;
+                if (Model.KijunSyukakuryoSettei.DispRecords[i].IsDelRec)
+                {
+                    hiddenRow = "display: none;";
+                }
+                Dictionary<string, object> checkBoxAttrs = new()
+                {
+                    { "class", "form-check" },
+                    { "tabindex", tabIndex++ },
+                };
+                Dictionary<string, object> textBoxAttrs = new()
+                {
+                    { "class", "form-control" },
+                    { "tabindex", 0 },
+                    { "type", "text" },
+                    { "inputmode", "numeric" }
+                };
+                Dictionary<string, object> dropdownAttrs = new()
+                {
+                    { "class", "form-select form-select-lg" },
+                    { "tabindex", 0 },
+                };
+                if (Model.DispKengen == NskWeb.Areas.F105.Consts.F105Const.Authority.ReadOnly)
+                {
+                    checkBoxAttrs.Add("disabled", "disabled");
+                    textBoxAttrs.Add("readonly", "readonly");
+                    dropdownAttrs.Add("disabled", "disabled");
+                }
+                <!-- 行ｎ -->
+                <tr style="@hiddenRow background-color:white !important;">
+                    <td rowspan="7">
+                        @Html.HiddenFor(model => model.KijunSyukakuryoSettei.DispRecords[i].IsNewRec)
+                        @Html.HiddenFor(model => model.KijunSyukakuryoSettei.DispRecords[i].IsDelRec)
+                        @Html.HiddenFor(model => model.KijunSyukakuryoSettei.DispRecords[i].Xmin)
+                        @Html.CheckBoxFor(model => model.KijunSyukakuryoSettei.DispRecords[i].CheckSelect, checkBoxAttrs)
+                    </td>
+                    <td colspan="3">
+                        <div class="input-group">
+                            @{
+                                textBoxAttrs["tabindex"] = tabIndex++;
+                            }
+                            @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KumiaiintoCd, "", new { htmlAttributes = textBoxAttrs })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="searchKumiaiintoCd(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].Shimei, "",
+                                          new { htmlAttributes = new { @class = "form-control", tabindex = tabIndex++, Type = "text", @readonly = true } })
+                    </td>
+                    <td colspan="3">
+                        @{
+                            dropdownAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.DropDownListFor(model => model.KijunSyukakuryoSettei.DispRecords[i].RuiKbn, Model.KijunSyukakuryoSettei.RuiKbnList, "", dropdownAttrs)
+                    </td>
+                    <td colspan="4">
+                        <div class="input-group">
+                            @{
+                                textBoxAttrs["tabindex"] = tabIndex++;
+                            }
+                            @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].SanchibetsuMeigaratoCd, "", new { htmlAttributes = textBoxAttrs })
+                            <div class="input-group-text input-group-addon" title="検索">
+                                <a herf="javascript:void(0)" style="cursor: pointer" onclick="searchSanchibetsuMeigaratoCd(@i);">
+                                    <span class="bi bi-search">検索</span>
+                                </a>
+                            </div>
+                            @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].SanchibetsuMeigaratoNm, "",
+                                              new { htmlAttributes = new { @class = "form-control w-50", Type = "text", @readonly = true } })
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        <div class="input-group">
+                            @{
+                                checkBoxAttrs["class"] = "form-check m-2";
+                                checkBoxAttrs["tabindex"] = tabIndex++;
+                            }
+                            @Html.CheckBoxFor(model => model.KijunSyukakuryoSettei.DispRecords[i].EinoTaisyogaiFlg, checkBoxAttrs)
+                            @Html.LabelFor(model => model.KijunSyukakuryoSettei.DispRecords[i].EinoTaisyogaiFlg, "営農対象外")
+                        </div>
+                    </td>
+                    <td colspan="2">
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].HeikinTanshu, "", new { htmlAttributes = textBoxAttrs })
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th colspan="16" class="text-center">規格等別割合</th>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th>1</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai1, "", new { htmlAttributes = textBoxAttrs })
+                    </td>
+                    <th>2</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai2, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>3</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai3, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>4</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai4, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>5</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai5, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>6</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai6, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>7</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai7, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>8</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai8, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th>9</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai9, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>10</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai10, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>11</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai11, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>12</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai12, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>13</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai13, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>14</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai14, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>15</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai15, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>16</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai16, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th>17</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai17, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>18</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai18, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>19</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai19, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>20</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai20, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>21</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai21, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>22</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai22, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>23</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai23, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>24</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai24, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th>25</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai25, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>26</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai26, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>27</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai27, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>28</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai28, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>29</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai29, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>30</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai30, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>31</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai31, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>32</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai32, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                </tr>
+                <tr style="@hiddenRow">
+                    <th>33</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai33, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>34</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai34, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>35</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai35, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>36</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai36, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>37</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai37, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>38</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai38, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>39</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai39, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                    <th>40</th>
+                    <td>
+                        @{
+                            textBoxAttrs["tabindex"] = tabIndex++;
+                        }
+                        @Html.EditorFor(model => model.KijunSyukakuryoSettei.DispRecords[i].KikakubetsuWariai40, "", new { htmlAttributes = textBoxAttrs })
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="table-responsive table-thead-container">
+        @Html.Pager("KijunSyukakuryoSetteiPager", "kijunSyukakuryoSetteiPagerClick", Model.KijunSyukakuryoSettei.Pager)
+    </div>
+</div>

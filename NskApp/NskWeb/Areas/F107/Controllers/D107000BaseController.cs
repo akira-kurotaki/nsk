@@ -27,6 +27,7 @@ using static CoreLibrary.Core.Utility.BatchUtil;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using NskWeb.Areas.F107.Models;
 using NskWeb.Areas.F106.Models;
+using NskAppModelLibrary.FimModels;
 
 namespace NskWeb.Areas.F107.Controllers
 {
@@ -69,10 +70,10 @@ namespace NskWeb.Areas.F107.Controllers
 
         #region 本所・支所ドロップダウンリスト取得
         /// <summary>
-        /// 本所配下の支所一覧を取得する(本所含む)
+        /// 本所配下の支所一覧を取得する
         /// </summary>
         /// /// <returns>List<D107000HonshoshishoList></returns>
-        protected List<D107000HonshoshishoList> getHonshoInShishoList(NSKPortalInfoModel pmodel)
+        protected List<D107000HonshoshishoList> getHonshoShishoList(NSKPortalInfoModel pmodel)
         {
             Syokuin syokuin = Syokuin;
 
@@ -91,80 +92,14 @@ namespace NskWeb.Areas.F107.Controllers
             sql.Append("    WHERE 組合等コード   = @KumiaitoCd ");
             sql.Append("    AND   共済目的コード = @KyosaimokutekiCd ");
             sql.Append("    AND   年産           = @Nensan ");
-            sql.Append("    ) hk ");
-            //sql.Append("LEFT JOIN v_shisho_nm nm ");
-            sql.Append("INNER JOIN v_shisho_nm nm ");           // 支所マスタに存在しない引受回データが万が一あった場合
-            sql.Append("ON  nm.todofuken_cd = @TodofukenCd ");
-            sql.Append("AND nm.kumiaito_cd  = @KumiaitoCd ");
-            sql.Append("AND nm.shisho_cd    = hk.支所コード ");
 
-            sql.Append("WHERE '1' = '1'");
-
-            // [セッション：利用可能な支所コード]
-            var shishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, HttpContext);
-            if (!shishoList.IsNullOrEmpty())
+            // 引受計算支所実行単位区分が1:本所本所以外の場合は本所を除く
+            if (!pmodel.SHikiukeJikkoTanniKbnHikiuke.Equals("1"))
             {
-                // [セッション：利用可能支所一覧]がある場合
-                //本所以外の支所を表示する
-                sql.Append("AND hk.支所コード = ANY (@ShishoList) ");
-                parameters.Add(new NpgsqlParameter("@ShishoList", NpgsqlDbType.Array | NpgsqlDbType.Varchar)
-                {
-                    Value = shishoList.Select(i => i.ShishoCd).ToList()
-                });
+                sql.Append("    AND 支所コード <> '00' ");
             }
-            else if (!string.IsNullOrEmpty(syokuin.ShishoCd))
-            {
-                // [セッション：利用可能支所一覧]がない、かつ、[セッション：支所コード]が空でない場合
-                sql.Append(" AND hk.支所コード = @ShishoCd_1 ");
-                parameters.Add(new NpgsqlParameter("@ShishoCd_1", syokuin.ShishoCd));
-            }
-
-            sql.Append("ORDER BY hk.支所コード ");
-
-            // パラメータの設定
-            // [セッション：都道府県コード]
-            parameters.Add(new NpgsqlParameter("@TodofukenCd", syokuin.TodofukenCd));
-            // [セッション：組合等]
-            parameters.Add(new NpgsqlParameter("@KumiaitoCd", syokuin.KumiaitoCd));
-            // [セッション：共済目的]
-            parameters.Add(new NpgsqlParameter("@KyosaimokutekiCd", pmodel.SKyosaiMokutekiCd));
-            // [セッション：年産]
-            parameters.Add(new NpgsqlParameter("@Nensan", int.Parse(pmodel.SNensanHikiuke)));
-
-            logger.Info("本所支所一覧取得処理を実行します。");
-            logger.Info(sql);
-
-            List<D107000HonshoshishoList> list = getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D107000HonshoshishoList>(sql.ToString(), parameters.ToArray()).ToList();
-
-            return list;
-        }
-
-        /// <summary>
-        /// 本所配下の支所一覧を取得する
-        /// </summary>
-        /// /// <returns>List<D107000HonshoshishoList></returns>
-        protected List<D107000HonshoshishoList> getHonshoShishoList(NSKPortalInfoModel pmodel)
-        {
-            Syokuin syokuin = Syokuin;
-
-            // 名称M支所から本所を取得
-            var sql = new StringBuilder();
-            var parameters = new List<NpgsqlParameter>();
-
-            sql.Append("SELECT ");
-            sql.Append("    hk.支所コード  AS 本所・支所コード ");
-            sql.Append("    , nm.shisho_cd || ' ' || nm.shisho_nm AS 本所・支所名称 ");
-            sql.Append("FROM ");
-            sql.Append("    ( SELECT ");
-            sql.Append("        DISTINCT 支所コード ");
-            sql.Append("    FROM ");
-            sql.Append("        t_00010_引受回 ");
-            sql.Append("    WHERE 組合等コード   = @KumiaitoCd ");
-            sql.Append("    AND   共済目的コード = @KyosaimokutekiCd ");
-            sql.Append("    AND   年産           = @Nensan ");
             sql.Append("    ) hk ");
-            //sql.Append("LEFT JOIN v_shisho_nm nm ");
-            sql.Append("INNER JOIN v_shisho_nm nm ");
+            sql.Append("LEFT JOIN v_shisho_nm nm ");
             sql.Append("ON  nm.todofuken_cd = @TodofukenCd ");
             sql.Append("AND nm.kumiaito_cd  = @KumiaitoCd ");
             sql.Append("AND nm.shisho_cd    = hk.支所コード ");
@@ -206,6 +141,85 @@ namespace NskWeb.Areas.F107.Controllers
             logger.Info(sql);
 
             List<D107000HonshoshishoList> list = getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D107000HonshoshishoList>(sql.ToString(), parameters.ToArray()).ToList();
+
+            return list;
+        }
+        #endregion
+
+        #region 徴収予定区分ドロップダウンリスト取得
+        /// <summary>
+        /// 汎用区分マスタから徴収予定区分一覧を取得する
+        /// </summary>
+        /// /// <returns>List<D107060ChoshuYoteiList></returns>
+        protected List<D107060ChoshuYoteiList> getChoshuYoteiList()
+        {
+            var sql = new StringBuilder();
+
+            sql.Append("SELECT ");
+            sql.Append("    kbn_cd  AS 区分コード ");
+            sql.Append("    , kbn_cd || ' ' || kbn_nm AS 区分名称 ");
+            sql.Append("FROM ");
+            sql.Append("    v_hanyokubun ");
+            sql.Append("WHERE ");
+            sql.Append("    kbn_sbt = 'furikomi_hikiotoshi_cd' ");
+            sql.Append("ORDER BY ");
+            sql.Append("    kbn_cd ");
+
+            List<D107060ChoshuYoteiList> list = getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D107060ChoshuYoteiList>(sql.ToString()).ToList();
+
+            return list;
+        }
+        #endregion
+
+        #region 徴収区分ドロップダウンリスト取得
+        /// <summary>
+        /// 名称M徴収区分マスタから徴収区分一覧を取得する
+        /// </summary>
+        /// /// <returns>List<D107060ChoshuKbnList></returns>
+        protected List<D107060ChoshuKbnList> getChoshuKbnList()
+        {
+            var sql = new StringBuilder();
+
+            sql.Append("SELECT ");
+            sql.Append("    choshu_kbn_cd AS 徴収区分コード ");
+            sql.Append("    , choshu_kbn_cd || ' ' || choshu_kbn_display AS 徴収区分名 ");
+            sql.Append("FROM ");
+            sql.Append("    v_choshu_kbn ");
+            sql.Append("ORDER BY ");
+            sql.Append("    choshu_kbn_cd ");
+
+            List<D107060ChoshuKbnList> list = getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D107060ChoshuKbnList>(sql.ToString()).ToList();
+
+            return list;
+        }
+        #endregion
+
+        #region 徴収理由ドロップダウンリスト取得
+        /// <summary>
+        /// 名称M徴収理由マスタから徴収区分一覧を取得する
+        /// </summary>
+        /// /// <returns>List<D107060ChoshuRiyuList></returns>
+        protected List<D107060ChoshuRiyuList> getChoshuRiyuList(decimal? choshukbncd)
+        {
+            var sql = new StringBuilder();
+            var parameters = new List<NpgsqlParameter>();
+
+            sql.Append("SELECT ");
+            sql.Append("    choshu_riyu_cd AS 徴収理由コード ");
+            sql.Append("    , choshu_riyu_cd || ' ' || choshu_riyu_nm AS 徴収理由名 ");
+            sql.Append("FROM ");
+            sql.Append("    v_choshu_riyu ");
+            sql.Append("WHERE ");
+            sql.Append("    choshu_kbn_cd = @徴収区分コード ");
+            sql.Append("    AND nsk_taisho_flg = '1' ");
+            sql.Append("ORDER BY ");
+            sql.Append("    choshu_riyu_cd ");
+
+            // パラメータの設定
+            // [画面：徴収区分コード]
+            parameters.Add(new NpgsqlParameter("@徴収区分コード", choshukbncd));
+
+            List<D107060ChoshuRiyuList> list = getJigyoDb<NskAppContext>().Database.SqlQueryRaw<D107060ChoshuRiyuList>(sql.ToString(), parameters.ToArray()).ToList();
 
             return list;
         }

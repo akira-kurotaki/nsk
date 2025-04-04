@@ -119,6 +119,8 @@ namespace NskWeb.Areas.F105.Controllers
             // ３．２．[画面：表示数]、[画面：表示順１]、[画面：表示順２]、[画面：表示順３]を設定する。
             // 共通部品にて設定
 
+            // ４～６は設計誤りのためコメントアウト
+
             // ４．セッションから検索条件を取得する。
             // ４．１．セッションに検索条件がない場合
             // ４．１．1．検索結果を表示する「■共済金額設定」カテゴリの画面項目を非表示にし、処理を終了する。
@@ -129,21 +131,21 @@ namespace NskWeb.Areas.F105.Controllers
             // ５．１．「４．」で取得した値を設定する。
 
             // ６．「検索ボタン」イベントを実施する。
-            model.SearchResult.SearchCondition = model.SearchCondition;
-            model.SearchResult.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
+            //model.SearchResult.SearchCondition = model.SearchCondition;
+            //model.SearchResult.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
 
             // 検索結果からメッセージ設定
-            if (model.SearchResult.AllRecCount == 0)
-            {
-                // エラーメッセージを「メッセージエリア２」に設定する。
-                model.MessageArea2 = MessageUtil.Get("MI00011");
-                ModelState.AddModelError("MessageArea2", model.MessageArea2);
-            }
+            //if (model.SearchResult.AllRecCount == 0)
+            //{
+            //    // エラーメッセージを「メッセージエリア２」に設定する。
+            //    model.MessageArea2 = MessageUtil.Get("MI00011");
+            //    ModelState.AddModelError("MessageArea2", model.MessageArea2);
+            //}
 
-            // 検索条件と検索結果をセッションに保存する
+            // セッションに保存する
             SessionUtil.Set(SESS_D105190, model, HttpContext);
 
-            //ModelState.Clear();
+            ModelState.Clear();
 
             // 加入申込書入力組合員等検索（共通）画面を表示する
             return View(F105Const.SCREEN_ID_D105190, model);

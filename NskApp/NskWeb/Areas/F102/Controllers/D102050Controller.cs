@@ -349,7 +349,7 @@ namespace NskWeb.Areas.F102.Controllers
 
             // （出力メッセージ：バッチ予約登録成功）
             logger.Info("バッチ予約登録成功");
-            return Json(new { success = true, message = MessageUtil.Get("MI00004", "危険段階データ取込バッチの予約") });
+            return Json(new { success = true, message = MessageUtil.Get("MI00004", "危険段階データ取込（危険段階別料率）バッチの予約") });
         }
         #endregion
 

@@ -148,31 +148,12 @@
                 $("#Entry").prop("disabled",false);
             }
 
-            @* 引受計算実行単位区分が本所本所の場合 *@
-            // 本所固定にする
-            if($("input[name='EntryCondition.ShishoJikkoHikiukeKbn']").val() == "1"){
-
-                // 本所を自動選択
-                $("#EntryCondition.SelectShishoCd option[value='00']").prop('selected', true);
-                // 本所を固定にする
-                $("#EntryCondition.SelectShishoCd").prop('disabled', true);
-                // ただし、サブミット時は固定を解除する
-                $('form').bind('submit', function () {
-                    $(this).find("#EntryCondition.SelectShishoCd").prop('disabled', false);
-                });
-            }
-
-            @* 引受計算実行単位区分が本所本所以外の場合 *@
-            if($("input[name='EntryCondition.ShishoJikkoHikiukeKbn']").val() != "1"){
-                // 本所ユーザーの場合はドロップダウンリストから本所を削除する
-                if(@ViewBag.HonsyoUserFlg == 1 && $("#EntryCondition.SelectShishoCd option[value='00']").length > 0){
-                    $("select#EntryCondition.SelectShishoCd option[value='00']").remove();
-                }
-            }
-
             @* 現在選択されているリストボックスの引受回を取得する *@
-            // $("#EntryCondition_SelectShishoCd").val($("#EntryCondition_TodofukenDropDownList_ShishoCd").val());
-            DispUnderwritingCycle();
+            @* ※ただしドロップダウンリストのオプションが空の場合は引受回取得しない *@
+            if($("#EntryCondition_SelectShishoCd").children("option").length !== 0)
+            {
+                DispUnderwritingCycle();
+            }
 
             @* 戻る *@
             $("#backBtn").click(function () {
@@ -201,6 +182,15 @@
                 document.getElementById("TodofukenDropDownError").textContent = "";
 
                 if(@ConfigUtil.Get("ClientValidationEnabled")){
+                    // 本所・支所ドロップダウンリストの選択チェック(HiddenだとValidationMessageForが動作しない)
+                    var selectedValue = $("#EntryCondition_SelectShishoCd").val();
+                    // ドロップダウンリスト未選択の場合直下にエラーメッセージを表示
+                    if(selectedValue == null)
+                    {
+                        document.getElementById("TodofukenDropDownError").textContent = '@MessageUtil.Get("ME00001", "本所・支所", "")';
+                        return;
+                    }
+
                     @* 入力・属性・文字数チェック *@
                     if(!$("#D107050Form").valid()){
                         @* チェックエラー後のカーソルの位置が先頭の入力項目に設定する *@
@@ -209,15 +199,6 @@
                     }
 
                     @* 独自チェック *@
-                    // 本所・支所ドロップダウンリストの選択チェック(HiddenだとValidationMessageForが動作しない)
-                    var selectedValue = $("#EntryCondition_SelectShishoCd").val();
-                    // ドロップダウンリスト未選択の場合直下にエラーメッセージを表示
-                    if(selectedValue == "")
-                    {
-                        document.getElementById("TodofukenDropDownError").textContent = '@MessageUtil.Get("ME00001", "本所・支所", "")';
-                        return;
-                    }
-
                     // 引受回の大小チェック
                     if(Number($("input[name='EntryCondition.CurentHikiukeCnt']").val()) > Number($("input[name='EntryCondition.CurentHikiukeCntHidden']").val()))
                     {
@@ -247,7 +228,6 @@
                 var selectedValue = $("#EntryCondition_SelectShishoCd").val();
 
                 if(selectedValue != ""){
-                    // $("#EntryCondition_SelectShishoCd").val($("#EntryCondition_TodofukenDropDownList_ShishoCd").val());
                     DispUnderwritingCycle();
                 }
             });

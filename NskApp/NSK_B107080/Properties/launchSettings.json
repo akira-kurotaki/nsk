@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "NSK_B107080": {
+      "commandName": "Project",
+      "commandLineArgs": "99999\r\n04\r\n900\r\n\"\"\r\nNSK_B107080_JYOKEN\r\nAAA"
+    }
+  }
+}
