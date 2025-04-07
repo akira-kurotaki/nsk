@@ -94,32 +94,7 @@ namespace NskWeb.Areas.F102.Consts
         /// バッチID(102121B)
         /// </summary>
         public const string BATCH_ID_NSK_102121B = "NSK_102121B";
-
-<<<<<<< HEAD
-        // D103010
-
-        /// <summary>
-        /// 画面ID(D103010)
-        /// </summary>
-        public const string SCREEN_ID_D103010 = "D103010";
-
-        /// <summary>
-        /// セッションキー(D103010)
-        /// </summary>
-        public const string SESS_D103010 = "D103010_SCREEN";
-
-        /// <summary>
-        /// 予約を実行した処理名(103010D)
-        /// </summary>
-        public const string SCREEN_ID_NSK_D103010 = "NSK_103010D";
-
-        /// <summary>
-        /// バッチID(103011B)
-        /// </summary>
-        public const string BATCH_ID_NSK_103011B = "NSK_103011B";
-
-=======
->>>>>>> 72fc30810fa617c5165b071081136d599c1a5e22
+        
         // 許容する拡張子
         public const string allowedExtension = "csv";
 
