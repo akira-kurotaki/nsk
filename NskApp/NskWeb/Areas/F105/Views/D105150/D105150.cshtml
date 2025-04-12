@@ -752,6 +752,9 @@
             });
         });
 
+        var cdTargetId = "";
+        var nmTargetId = "";
+
         @* 産地別銘柄等コード検索子 *@
         function searchSanchibetsuMeigaratoCd(idx) {
             var targetId = `KijunSyukakuryoSettei_DispRecords_${idx}__SanchibetsuMeigaratoCd`;
@@ -761,6 +764,10 @@
                 return;
             }
 
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `KijunSyukakuryoSettei_DispRecords_${idx}__SanchibetsuMeigaratoNm`;
+
             // 産地銘柄コード検索子画面を開く
             var action = "@Url.Action("Init", "D000022", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -768,11 +775,6 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に産地銘柄コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
         }
 
         @* 組合員等コード検索子 *@
@@ -784,6 +786,10 @@
                 return;
             }
 
+            // 子画面選択値をセットする項目のID設定
+            cdTargetId = targetId;
+            nmTargetId = `KijunSyukakuryoSettei_DispRecords_${idx}__Shimei`;
+
             // 組合員等コード検索子画面を開く
             var action = "@Url.Action("Init", "D000020", new { area = "F000" })";
             var x = @Convert.ToInt32(F000Const.PcOpenSizeD000020.PcWidth);
@@ -791,11 +797,17 @@
             $("#returnValue").val("");
 
             var subWindow = windowSizeOpen(action, "F000", x, y);
-            $(subWindow).on('unload', function(e) {
-                // 子画面クローズ時に組合員等コードを画面反映させる
-                $(`#${targetId}`).val($("#returnValue").val());
-                $(`#${targetId}`).focus();
-            });
+        }
+
+        @* 子画面選択値のセット *@
+        function receiveValueFromChild(idx, val)
+        {
+            if (cdTargetId) {
+                $(`#${cdTargetId}`).val(val[0]);
+            }
+            if (nmTargetId) {
+                $(`#${nmTargetId}`).val(val[1]);
+            }
         }
     </script>
 }
