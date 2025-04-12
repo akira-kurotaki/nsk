@@ -128,19 +128,17 @@ namespace NskWeb.Areas.F105.Controllers
             model.KyosaiMokuteki = kyosaiMokutekiNm;
 
 
-            // ４．セッションから検索条件を取得する。
-            // ４．１．セッションに検索条件がない場合
-            // TODO: ※ １．でセッション削除、２．でモデル初期化しているためありえないケース
+            //// ４．セッションから検索条件を取得する。
+            //// ４．１．セッションに検索条件がない場合
 
-            // ４．２．セッションに検索条件がある場合、処理を続行する。
+            //// ４．２．セッションに検索条件がある場合、処理を続行する。
 
-            // ５．画面項目再設定
-            // ５．１．「４．」で取得した値を設定する。
-            // TODO: ※ １．でセッション削除、２．でモデル初期化しているためありえないケース
+            //// ５．画面項目再設定
+            //// ５．１．「４．」で取得した値を設定する。
 
-            // ６．「検索ボタン」イベントを実施する。
-            model.KijunSyukakuryoSettei.SearchCondition = model.SearchCondition;
-            model.KijunSyukakuryoSettei.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
+            //// ６．「検索ボタン」イベントを実施する。
+            //model.KijunSyukakuryoSettei.SearchCondition = model.SearchCondition;
+            //model.KijunSyukakuryoSettei.GetPageDataList(dbContext, sessionInfo, F105Const.PAGE_1);
 
             // 結果をセッションに保存する
             SessionUtil.Set(SESS_D105150, model, HttpContext);
@@ -456,6 +454,68 @@ namespace NskWeb.Areas.F105.Controllers
                 if (errCnt == delRecErrCnt)
                 {
                     ModelState.Clear();
+                }
+
+
+                // ４．２．独自チェック
+                // ４．２．１．該当レコードの規格別割合の合計値が１以外の場合は
+                // [メッセージリスト２]にメッセージを設定し、処理を終了する。
+                decimal sumKikakubetsuWariai = 0;
+                int idx = 0;
+                foreach (D105150KijunSyukakuryoSetteiRecord dispRec in dispModel.KijunSyukakuryoSettei.DispRecords)
+                {
+                    if (!dispRec.IsDelRec)
+                    {
+                        idx++;
+
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai1.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai2.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai3.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai4.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai5.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai6.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai7.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai8.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai9.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai10.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai11.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai12.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai13.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai14.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai15.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai16.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai17.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai18.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai19.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai20.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai21.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai22.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai23.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai24.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai25.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai26.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai27.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai28.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai29.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai20.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai31.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai32.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai33.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai34.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai35.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai36.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai37.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai38.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai39.GetValueOrDefault(0);
+                        sumKikakubetsuWariai += dispRec.KikakubetsuWariai40.GetValueOrDefault(0);
+                    }
+
+                    if (sumKikakubetsuWariai != 1)
+                    {
+                        errMessage = $"品質指数の規格１から規格４０までの加算値が１以外です。（{idx}行目）";// MessageUtil.Get("DUMMY_MESSAGE_ID", $"{idx}");
+
+                        ModelState.AddModelError("MessageArea2", errMessage);
+                    }
                 }
 
                 if (!ModelState.IsValid)
