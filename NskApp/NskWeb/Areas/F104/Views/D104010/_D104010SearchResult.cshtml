@@ -1,0 +1,253 @@
+﻿@model NskWeb.Areas.F104.Models.D104010.D104010Model
+@{
+    var startIndex = 200;
+
+}
+
+@if (Model.SearchResult.TableRecords != null && Model.SearchResult.TableRecords.Count() > 0)
+{
+    <div class="table-responsive">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+
+    @if (Model.UpdateKengenFlg)
+    {
+        <button type="button" class="btn btn-primary mt_15" id="InsertRow">行挿入</button>
+        <button type="button" class="btn btn-primary mt_15" id="DeleteSelectedRow">選択行削除</button>
+        <button type="button" class="btn btn-primary mt_15" id="SelectAllRows">全行選択</button>
+        <button type="button" class="btn btn-primary mt_15" id="CancelAllRows">全行解除</button>
+    }
+    else
+    {
+        <button type="button" class="btn btn-primary mt_15" id="InsertRow" disabled="disabled">行挿入</button>
+        <button type="button" class="btn btn-primary mt_15" id="DeleteSelectedRow" disabled="disabled">選択行削除</button>
+        <button type="button" class="btn btn-primary mt_15" id="SelectAllRows" disabled="disabled">全行選択</button>
+        <button type="button" class="btn btn-primary mt_15" id="CancelAllRows" disabled="disabled">全行解除</button>
+    }
+
+    <br />
+    <br />
+    <div>@Html.MessageAreaFor(Model => Model.MessageArea3, "", new { @class = "text-danger", @id = "messageArea3" })</div>
+    <div class="table-responsive">
+        <table id="searchResultTable" class="table table-bordered table-striped" style="width:200rem;">
+            <thead class="sticky-top">
+                <tr>
+                    <th rowspan="2" style="width: 1%;" class="text-center"></th>
+                    <th rowspan="2" style="width: 8%;">組合員コード</th>
+                    <th rowspan="2" style="width: 10%;">氏名</th>
+                    <th rowspan="2" style="width: 10%;">賦課金計</th>
+                    <th colspan="2" style="width: 16%;">引受解除理由</th>
+                    <th colspan="2" style="width: 16%;">引受解除返還賦課金額</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 16%;">引受解除日付</th>
+                    <th colspan="2" style="width: 16%;">解除申し出日</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.SearchResult.TableRecords.Count; i++)
+                {
+                    var item = Model.SearchResult.TableRecords[i];
+                    @Html.HiddenFor(m => m.SearchResult.TableRecords[i].rowAddFlg)
+                    @Html.HiddenFor(m => m.SearchResult.TableRecords[i].rowDeleteFlg)
+                    @Html.HiddenFor(model => model.SearchResult.TableRecords[i].hikiukekai)
+                    @Html.HiddenFor(m => m.SearchResult.TableRecords[i].hikiukekai)
+                    @Html.HiddenFor(m => m.SearchResult.TableRecords[i].ruikbn)
+                    @Html.HiddenFor(m => m.SearchResult.TableRecords[i].toukeiTaniChiikiCd)
+                    @if (item.rowDeleteFlg == "1")
+                    {
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].SelectCheck)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].kumiaiintoCd)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].HojinFullNm)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].hukakinkei)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].kaijyoRiyuCd)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].hikiukeKaijyoHenkanHukakingaku)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].hikiukeKaijyoDate)
+                        @Html.HiddenFor(model => model.SearchResult.TableRecords[i].kanjyoMousideDate)
+                        continue;
+                    }
+
+                    <tr>
+                        <!-- チェックボックス -->
+                        <td rowspan="2" class="text-center">
+                            <div>
+                                @if (item.kaijyoKakuteiFlg == "1")
+                                {
+                                    @Html.CheckBoxFor(
+                                                             m => m.SearchResult.TableRecords[i].SelectCheck,
+                                                             new
+                                                             {
+                                                                 @class = "magic-checkbox selectCheck magic-checkbox-no-label",
+                                                                 data_index = i,
+                                                                 tabindex = startIndex + i,
+                                                                 disabled = "disabled"
+                                                             })
+                                    <label for=@string.Concat("SearchResult_TableRecords_", i, "__SelectCheck")></label>
+                                }
+                                else
+                                {
+                                    @Html.CheckBoxFor(
+                                                             m => m.SearchResult.TableRecords[i].SelectCheck,
+                                                             new
+                                                             {
+                                                                 @class = "magic-checkbox selectCheck magic-checkbox-no-label",
+                                                                 data_index = i,
+                                                                 tabindex = startIndex + i
+                                                             })
+                                    <label for=@string.Concat("SearchResult_TableRecords_", i, "__SelectCheck")></label>
+                                }
+                                <label></label>
+                            </div>
+                        </td>
+                        <!-- 組合員コード -->
+
+                        <td rowspan="2">
+                            @if (item.rowAddFlg == "1")
+                            {
+                                @Html.TextBoxFor(model => model.SearchResult.TableRecords[i].kumiaiintoCd, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "99999999",
+                                        type = "numeric",
+                                        inputmode = "numeric",
+                                        maxlength = "8",
+                                        oninput = "this.value = this.value.replace(/[^0-9]/g, '');"
+                                    })
+                            }
+                            else
+                            {
+                                @Html.Label("", item.kumiaiintoCd)
+                                @Html.HiddenFor(model => model.SearchResult.TableRecords[i].kumiaiintoCd)
+                            }
+                        </td>
+                        <!-- 氏名 -->
+                        <td rowspan="2">
+                            @if (item.rowAddFlg == "1")
+                            {
+                                @Html.TextBoxFor(model => model.SearchResult.TableRecords[i].HojinFullNm, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "99999999",
+                                        type = "text",
+                                        maxlength = "8"
+                                    })
+                            }
+                            else
+                            {
+                                @Html.Label("", item.HojinFullNm)
+                                @Html.HiddenFor(model => model.SearchResult.TableRecords[i].HojinFullNm)
+                            }
+                        </td>
+
+                        <!-- 賦課金計 -->
+                        <td rowspan="2">
+                            @if (item.rowAddFlg == "1")
+                            {
+                                @Html.TextBoxFor(model => model.SearchResult.TableRecords[i].hukakinkei, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "99999999",
+                                        type = "numeric",
+                                        inputmode = "numeric",
+                                        maxlength = "8",
+                                        oninput = "this.value = this.value.replace(/[^0-9]/g, '');"
+                                    })
+                            }
+                            else
+                            {
+                                @Html.Label("", item.hukakinkei?.ToString() ?? "")
+                                @Html.HiddenFor(model => model.SearchResult.TableRecords[i].hukakinkei)
+                            }
+                        </td>
+                        <!-- 引受解除理由 -->
+                        <td colspan="2">
+                            @if (item.kaijyoKakuteiFlg == "1")
+                            {
+                                @Html.KaijyoReasonDropDownListFor(m => m.SearchResult.TableRecords[i].kaijyoRiyuCd,
+                                                           @Model.VSyokuinRecords.TodofukenCd,
+                                                           @Model.VSyokuinRecords.KumiaitoCd,
+                                                           @Model.VSyokuinRecords.ShishoCd,
+                                                           new { @class = "form-select form-select-lg", @readonly = true })
+                            }
+                            else
+                            {
+                                @Html.KaijyoReasonDropDownListFor(m => m.SearchResult.TableRecords[i].kaijyoRiyuCd,
+                                                  @Model.VSyokuinRecords.TodofukenCd,
+                                                  @Model.VSyokuinRecords.KumiaitoCd,
+                                                  @Model.VSyokuinRecords.ShishoCd,
+                                                  new { @class = "form-select form-select-lg" })
+                            }
+
+                        </td>
+                        <!-- 引受解除返還賦課金額 -->
+                        <td colspan="2">
+                            @if (item.kaijyoKakuteiFlg == "1")
+                            {
+                                @Html.TextBoxFor(model => model.SearchResult.TableRecords[i].hikiukeKaijyoHenkanHukakingaku, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "99999999",
+                                        type = "numeric",
+                                        inputmode = "numeric",
+                                        maxlength = "8",
+                                        oninput = "this.value = this.value.replace(/[^0-9]/g, '');",
+                                        @readonly = "readonly"
+                                    })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(model => model.SearchResult.TableRecords[i].hikiukeKaijyoHenkanHukakingaku, new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "99999999",
+                                        type = "numeric",
+                                        inputmode = "numeric",
+                                        maxlength = "8",
+                                        oninput = "this.value = this.value.replace(/[^0-9]/g, '');"
+                                    })
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <!-- 引受解除日付 -->
+                        <td colspan="2" style="background-color: white;">
+                            @if (item.kaijyoKakuteiFlg == "1")
+                            {
+                                @Html.EditorFor(
+                                        m => m.SearchResult.TableRecords[i].hikiukeKaijyoDate,
+                                        new { htmlAttributes = new { @class = "form-control date-picker", @readonly = true } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(
+                                         m => m.SearchResult.TableRecords[i].hikiukeKaijyoDate,
+                                         new { htmlAttributes = new { @class = "form-control date-picker" } })
+                            }
+
+                        </td>
+                        <!-- 解除申し出日 -->
+                        <td colspan="2" style="background-color: white;">
+                            @if (item.kaijyoKakuteiFlg == "1")
+                            {
+                                @Html.EditorFor(
+                                     m => m.SearchResult.TableRecords[i].kanjyoMousideDate,
+                                     new { htmlAttributes = new { @class = "form-control date-picker", @readonly = true } })
+                            }
+                            else 
+                            {
+                                @Html.EditorFor(
+                                     m => m.SearchResult.TableRecords[i].kanjyoMousideDate,
+                                     new { htmlAttributes = new { @class = "form-control date-picker" } })
+                            }
+                            
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-responsive">
+        @Html.Pager("Pager", "pagerClick", Model.SearchResult.Pager)
+    </div>
+}

@@ -1,0 +1,42 @@
+﻿@model NskWeb.Areas.F104.Models.D104010.D104010TableAddRecord
+
+<!-- 1レコード＝2行構成 -->
+<tr>
+    <td rowspan="2" class="text-center">
+        <div>
+            @Html.CheckBoxFor(m => m.SelectCheck,
+                     new
+                     {
+                         @class = "magic-checkbox selectCheck magic-checkbox-no-label",
+                         data_index = "__INDEX__",
+                         tabindex = "__TABINDEX__"
+                     })
+            <label>&nbsp;</label>
+        </div>
+    </td>
+    <td rowspan="2">
+        @Html.TextBoxFor(m => m.kumiaitoCd, new { Value = "-" })
+    </td>
+    <td rowspan="2">
+        @Html.TextBoxFor(m => m.HojinFullNm)
+    </td>
+    <td rowspan="2">
+        @Html.TextBoxFor(m => m.hukakinkei)
+    </td>
+    <td colspan="2">
+        @Html.TextBoxFor(m => m.kaijyoRiyuMeisho)
+    </td>
+    <td colspan="2">
+        @Html.TextBoxFor(m => m.hikiukeKaijyoHenkanHukakingaku)
+    </td>
+</tr>
+<tr>
+    <td colspan="2" style="background-color: white;">
+        @Html.EditorFor(m => m.hikiukeKaijyoDate,
+                 new { htmlAttributes = new { @class = "form-control date-picker" } })
+    </td>
+    <td colspan="2" style="background-color: white;">
+        @Html.EditorFor(m => m.kanjyoMousideDate,
+                 new { htmlAttributes = new { @class = "form-control date-picker" } })
+    </td>
+</tr>
