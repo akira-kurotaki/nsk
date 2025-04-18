@@ -87,5 +87,30 @@ namespace NskWeb.Areas.F990.Models.D990005
         [DisplayName("禁止文字チェック")]
         public string ProhibitWord { get; set; }
 
+        public List<kumiaiinto> Kumiaiinto { get; set; }
+
+        [Numeric]
+        [WithinDigitLength(3)]
+        public string HinshuCd { get; set; }
+        public string HinshuNm { get; set; }
+        [Numeric]
+        [WithinDigitLength(5)]
+        public string SanchiMeigaraCd { get; set; }
+        public string SanchiMeigaraNm { get; set; }
+        [Numeric]
+        [WithinDigitLength(5)]
+        public string TokeiTaniCd { get; set; }
+        public string TokeiTaniNm { get; set; }
+    }
+
+    public class kumiaiinto
+    {
+        [DisplayName("組合員等コード")]
+        [Numeric]
+        [WithinDigitLength(13)]
+        public string KumiaiintoCd { get; set; }
+        [DisplayName("組合員等名")]
+        public string KumiaiintoNm { get; set; }
+
     }
 }

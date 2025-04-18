@@ -481,10 +481,11 @@ namespace NskWeb.Areas.F106.Controllers
 
             // 複数実行禁止IDを設定する
             String multiNotId = D106010_MULTI_ID;
-            if (model.SearchCondition.ShishoJikkoHikiukeKbn == "3")
-            {
-                multiNotId += model.SearchCondition.SelectShishoCd;
-            }
+            // 支所コードは付加しない（支所が異なっていても重複不可）
+            //if (model.SearchCondition.ShishoJikkoHikiukeKbn == "3")
+            //{
+            //    multiNotId += model.SearchCondition.SelectShishoCd;
+            //}
 
             // メッセージ用の支所名称を設定
             string msgShisho = model.SearchCondition.SelectShishoNm + " の引受計算処理(水稲)のバッチ登録";

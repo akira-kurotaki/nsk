@@ -178,6 +178,7 @@
             <button type="button" class="btn btn-primary" id="Close" tabindex="0">閉じる</button>
         </div>
     </div>
+    @Html.HiddenFor(model => model.SearchCondition.RetKey, new { id = "RetKey" })
 }
 
 @section styles {
@@ -188,16 +189,16 @@
 @section scripts {
     <script type="text/javascript">
         $(function () {
-            // 画面初期表示時に1度だけ実行する処理（リロードは含まない）
-            if (!sessionStorage.getItem('hasRun')) {
-                // [クエリパラメータ：key]から親画面の選択行を取得
-                const urlParams = new URLSearchParams(window.location.search);
-                const idx = urlParams.get('key');
-                // sessionStorageに選択行を保存
-                sessionStorage.setItem('selectRow', idx);
-                // sessionStorageにフラグをセットして、一度実行したことを記録
-                sessionStorage.setItem('hasRun', 'true');
-            }
+            // // 画面初期表示時に1度だけ実行する処理（リロードは含まない）
+            // if (!sessionStorage.getItem('hasRun')) {
+            //     // [クエリパラメータ：key]から親画面の選択行を取得
+            //     const urlParams = new URLSearchParams(window.location.search);
+            //     const idx = urlParams.get('key');
+            //     // sessionStorageに選択行を保存
+            //     sessionStorage.setItem('selectRow', idx);
+            //     // sessionStorageにフラグをセットして、一度実行したことを記録
+            //     sessionStorage.setItem('hasRun', 'true');
+            // }
 
             // 検索
             $("#Search").click(function () {
@@ -248,7 +249,8 @@
             $(".SelectTokeiTaniChiki").click(function () {
                 var hiddenValues = [];
                 // 親画面の選択行を取得
-                const idx = sessionStorage.getItem('selectRow');
+                // const idx = sessionStorage.getItem('selectRow');
+                var idx = $("#RetKey").val();
                 // 子画面の選択行を取得
                 const selectedRow = $(this).closest('tr');
                 selectedRow.find('input[type="hidden"]').each(function(){
@@ -267,7 +269,7 @@
             // クリア
             $("#clear").click(function () {
                 // セッションストレージを削除
-                sessionStorage.removeItem('hasRun');
+                // sessionStorage.removeItem('hasRun');
                 sessionStorage.removeItem('selectRow');
                 return true;
             });
@@ -283,7 +285,7 @@
                         // セッション削除が成功した場合
                         if (response.result === 'success') {
                             // セッションストレージを削除
-                            sessionStorage.removeItem('hasRun');
+                            // sessionStorage.removeItem('hasRun');
                             sessionStorage.removeItem('selectRow');
                             // 子画面を閉じる
                             window.close();

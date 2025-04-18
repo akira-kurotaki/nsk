@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="10091.34" DocumentName="NSK-R-加入承諾書兼共済掛金等払込通知書Sub1" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading1" Value="font-size: 16pt; font-style: normal; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading2" Value="font-size: 14pt; font-style: italic; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading3" Value="font-size: 13pt; font-style: normal; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="Detail" Name="Detail" Height="453.5433" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Field" Name="txtRuiKbn" DataField="類区分" Tag="" Left="0" Top="0" Width="510.2362" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtRuiNm" DataField="類短縮名称" Tag="" Left="0" Top="226.7717" Width="907.0867" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 6pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 128; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtHiki" DataField="引受方式名称" Tag="" Left="907.0867" Top="0" Width="1020.472" Height="453.5433" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 8pt; font-weight: normal; text-align: center; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtHoshoPer" DataField="補償割合短縮名称" Tag="" Left="1927.559" Top="0" Width="793.7007" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtUmu" DataField="一筆半損特約の有無_表示" Tag="" Left="2721.26" Top="0" Width="907.0866" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtRank" DataField="共済金額選択順位" Tag="" Left="5272.441" Top="0" Width="510.2362" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtBikou" DataField="備考" Tag="" Left="6122.834" Top="0" Width="2607.874" Height="453.5433" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 7pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtCheck" DataField="全相殺方式等の収穫量の確認方法_表示" Tag="" Left="8730.709" Top="0" Width="1360.63" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKyosaiMokutekiWk" DataField="共済目的コード" Visible="0" Left="3720.189" Top="70.86614" Width="1440" Height="288" Text="(hidden)" Multiline="0" CanGrow="0" />
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[public void Detail_Format()
+{
+	var kyosaiMokuteki = (string) this.txtKyosaiMokutekiWk.Value;	
+
+	// 類区分 表示設定
+	this.txtRuiKbn.Visible = (kyosaiMokuteki != "20");
+	
+	// 類名称 表示設定
+	this.txtRuiNm.Visible = (kyosaiMokuteki != "20");
+}
+
+
+]]></Script>
+  <PageSettings LeftMargin="0" RightMargin="0" TopMargin="0" BottomMargin="0" PaperSize="0" PaperWidth="1814" PaperHeight="10094" PaperName="ユーザー定義のサイズ" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>
