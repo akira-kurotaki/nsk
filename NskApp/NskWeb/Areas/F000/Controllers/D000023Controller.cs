@@ -29,6 +29,7 @@ using System.Xml;
 using NuGet.Packaging.Signing;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using NskWeb.Areas.F000.Models.D000021;
 
 namespace NskWeb.Areas.F000.Controllers
 {
@@ -102,17 +103,6 @@ namespace NskWeb.Areas.F000.Controllers
         public ActionResult Init()
         {
 
-            // $$$$$$$$$$$$$$
-            //NSKPortalInfoModel model_portal = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
-            //if (model_portal == null)
-            //{
-            //    throw new AppException("ME00068", MessageUtil.Get("ME00068"));
-            //}
-            //$$$$$$$$$$$$$$
-
-            //モデルを取得
-            D000023Model model = new D000023Model();
-
             // ログインユーザの参照・更新可否判定
             // 画面IDをキーとして、画面マスタ、画面機能権限マスタを参照し、ログインユーザに本画面の権限がない場合は業務エラー画面を表示する。
             if (!ScreenSosaUtil.CanReference(SCREEN_ID_D000023, HttpContext))
@@ -121,7 +111,10 @@ namespace NskWeb.Areas.F000.Controllers
             }
 
             // 画面項目の初期化
-            model = new D000023Model();
+            D000023Model model = new D000023Model();
+
+            // 戻り値をセットする項目キーを取得
+            model.SearchCondition.RetKey = Request.Query[InfraConst.SEARCH_COMMON_RETKEY];
 
             // 画面初期化
             InitializeModel(model, D000023_INITIALIZE_VALUE);
@@ -450,6 +443,38 @@ namespace NskWeb.Areas.F000.Controllers
                 sql.Append("    AND CAST(統計単位地域コード AS INTEGER) <= @TokeiTaniChikiCdTo ");
                 parameters.Add(new NpgsqlParameter("@TokeiTaniChikiCdTo", int.Parse(model.SearchCondition.TokeiTaniChikiCdTo)));
             }
+        }
+        #endregion
+
+        #region コードから名称を取得
+        /// <summary>
+        /// コードから名称を取得
+        /// </summary>
+        /// <param name="Code">統計単位地域コード</param>
+        /// <returns>json(string)</returns>
+        [HttpPost]
+        public ActionResult GetNameByCode([Bind("TargetCd"), FromBody] D000023Model model)
+        {
+            D000023Model returnModel = new D000023Model();
+            returnModel.ReturnNm = string.Empty;
+
+            // 共済目的、年産をセッションから取得
+            NSKPortalInfoModel m = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
+            if (m != null)
+            {
+                M00170統計単位地域 dt = getJigyoDb<NskAppContext>().M00170統計単位地域s
+                    .Where(x => x.組合等コード == Syokuin.KumiaitoCd
+                            && x.年産 == short.Parse(m.SNensanHikiuke)
+                            && x.共済目的コード == m.SKyosaiMokutekiCd
+                            && x.統計単位地域コード == model.TargetCd
+                    ).SingleOrDefault();
+                if (dt != null)
+                {
+                    returnModel.ReturnNm = dt.統計単位地域名称;
+                }
+            }
+
+            return Json(returnModel);
         }
         #endregion
     }

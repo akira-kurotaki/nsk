@@ -29,6 +29,7 @@ using System.Xml;
 using NuGet.Packaging.Signing;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using NskWeb.Areas.F000.Models.D000021;
 
 namespace NskWeb.Areas.F000.Controllers
 {
@@ -102,17 +103,6 @@ namespace NskWeb.Areas.F000.Controllers
         public ActionResult Init()
         {
 
-            // $$$$$$$$$$$$$$
-            //NSKPortalInfoModel model_portal = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
-            //if (model_portal == null)
-            //{
-            //    throw new AppException("ME00068", MessageUtil.Get("ME00068"));
-            //}
-            //$$$$$$$$$$$$$$
-
-            //モデルを取得
-            D000022Model model = new D000022Model();
-
             // ログインユーザの参照・更新可否判定
             // 画面IDをキーとして、画面マスタ、画面機能権限マスタを参照し、ログインユーザに本画面の権限がない場合は業務エラー画面を表示する。
             if (!ScreenSosaUtil.CanReference(SCREEN_ID_D000022, HttpContext))
@@ -121,7 +111,10 @@ namespace NskWeb.Areas.F000.Controllers
             }
 
             // 画面項目の初期化
-            model = new D000022Model();
+            D000022Model model = new D000022Model();
+
+            // 戻り値をセットする項目キーを取得
+            model.SearchCondition.RetKey = Request.Query[InfraConst.SEARCH_COMMON_RETKEY];
 
             // 画面初期化
             InitializeModel(model, D000022_INITIALIZE_VALUE);
@@ -450,6 +443,38 @@ namespace NskWeb.Areas.F000.Controllers
                 sql.Append("    AND CAST(産地別銘柄コード AS INTEGER) <= @SanchiMeigaraCdTo ");
                 parameters.Add(new NpgsqlParameter("@SanchiMeigaraCdTo", int.Parse(model.SearchCondition.SanchiMeigaraCdTo)));
             }
+        }
+        #endregion
+
+        #region コードから名称を取得
+        /// <summary>
+        /// コードから名称を取得
+        /// </summary>
+        /// <param name="Code">産地別銘柄コード</param>
+        /// <returns>json(string)</returns>
+        [HttpPost]
+        public ActionResult GetNameByCode([Bind("TargetCd"), FromBody] D000022Model model)
+        {
+            D000022Model returnModel = new D000022Model();
+            returnModel.ReturnNm = string.Empty;
+
+            // 共済目的、年産をセッションから取得
+            NSKPortalInfoModel m = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
+            if (m != null)
+            {
+                M00130産地別銘柄名称設定 dt = getJigyoDb<NskAppContext>().M00130産地別銘柄名称設定s
+                    .Where(x => x.組合等コード == Syokuin.KumiaitoCd
+                            && x.年産 == short.Parse(m.SNensanHikiuke)
+                            && x.共済目的コード == m.SKyosaiMokutekiCd
+                            && x.産地別銘柄コード == model.TargetCd
+                    ).SingleOrDefault();
+                if (dt != null)
+                {
+                    returnModel.ReturnNm = dt.産地別銘柄名称;
+                }
+            }
+
+            return Json(returnModel);
         }
         #endregion
     }

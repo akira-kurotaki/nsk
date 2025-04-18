@@ -69,5 +69,10 @@ namespace NskWeb.Areas.F000.Models.D000023
         /// </summary>
         [Display(Name = "～")]
         public string TokeiTaniChikiCdTilde { get; set; }
+
+        /// <summary>
+        /// 検索子画面からの戻り値をセットする項目のキー
+        /// </summary>
+        public string RetKey { get; set; }
     }
 }

@@ -31,6 +31,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using static CoreLibrary.Core.Utility.CsvUtil;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using NskWeb.Areas.F000.Models.D000999;
+using System.Linq;
+using NskAppModelLibrary.FimModels;
+using VNogyosha = ModelLibrary.Models.VNogyosha;
 
 namespace NskWeb.Areas.F000.Controllers
 {
@@ -104,17 +109,6 @@ namespace NskWeb.Areas.F000.Controllers
         public ActionResult Init()
         {
 
-            // $$$$$$$$$$$$$$
-            //NSKPortalInfoModel model_portal = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
-            //if (model_portal == null)
-            //{
-            //    throw new AppException("ME00068", MessageUtil.Get("ME00068"));
-            //}
-            //$$$$$$$$$$$$$$
-
-            //モデルを取得
-            D000020Model model = new D000020Model();
-
             // ログインユーザの参照・更新可否判定
             // 画面IDをキーとして、画面マスタ、画面機能権限マスタを参照し、ログインユーザに本画面の権限がない場合は業務エラー画面を表示する。
             if (!ScreenSosaUtil.CanReference(SCREEN_ID_D000020, HttpContext))
@@ -126,7 +120,10 @@ namespace NskWeb.Areas.F000.Controllers
             var shishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, HttpContext);
 
             // 画面項目の初期化
-            model = new D000020Model(Syokuin, shishoList);
+            D000020Model model = new D000020Model(Syokuin, shishoList);
+
+            // 戻り値をセットする項目キーを取得
+            model.SearchCondition.RetKey = Request.Query[InfraConst.SEARCH_COMMON_RETKEY];
 
             // 画面初期化
             InitializeModel(model, D000020_INITIALIZE_VALUE);
@@ -503,6 +500,30 @@ namespace NskWeb.Areas.F000.Controllers
                 sql.Append("    AND CAST(kumiaiinto_cd AS BIGINT) <= @KumiaiintoCdTo ");
                 parameters.Add(new NpgsqlParameter("@KumiaiintoCdTo", long.Parse(model.SearchCondition.KumiaiintoCdTo)));
             }
+        }
+        #endregion
+        #region コードから名称を取得
+        /// <summary>
+        /// コードから名称を取得
+        /// </summary>
+        /// <param name="Code">組合員等コード</param>
+        /// <returns>json(string)</returns>
+        [HttpPost]
+        public ActionResult GetNameByCode([Bind("TargetCd"), FromBody] D000020Model model)
+        {
+            D000020Model returnModel = new D000020Model();
+
+            VNogyosha vn = getJigyoDb<FimContext>().VNogyoshas.Where(x => x.TodofukenCd == Syokuin.TodofukenCd && x.KumiaitoCd == Syokuin.KumiaitoCd && x.KumiaiintoCd == model.TargetCd).SingleOrDefault();
+            if (vn != null)
+            {
+                returnModel.ReturnNm = vn.HojinFullNm;
+            }
+            else
+            {
+                returnModel.ReturnNm = string.Empty;
+            }
+
+            return Json(returnModel);
         }
         #endregion
     }

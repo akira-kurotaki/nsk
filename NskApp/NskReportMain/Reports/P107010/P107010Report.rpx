@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="10204.72" DocumentName="NSK-R-加入承諾書兼共済掛金等払込通知書" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading1" Value="font-size: 16pt; font-style: normal; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading2" Value="font-size: 14pt; font-style: italic; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading3" Value="font-size: 13pt; font-style: normal; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="0" BackColor="16777215" CanGrow="0" />
+    <Section Type="Detail" Name="Detail" Height="15080.32" BackColor="16777215" KeepTogether="1" CanGrow="0">
+      <Control Type="AR.Field" Name="txtAppAddress" DataField="申込者住所" Tag="" Left="680.315" Top="566.9291" Width="4535.433" Height="850.3936" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-weight: normal; text-align: left; white-space: inherit; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtDocUpper" DataField="文書_上段_表示" Tag="" Left="56.69291" Top="3344.882" Width="10091.34" Height="680.315" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: left; ddo-char-set: 1; ddo-shrink-to-fit: true" LineSpacing="2" />
+      <Control Type="AR.Label" Name="lblKeizokuAri" Tag="" Left="3153.827" Top="7837.229" Width="435" Height="420" Caption="○" Style="color: Black; font-family: ＭＳ 明朝; font-size: 20pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Field" Name="txtNensan" DataField="年産_表示" Tag="" Left="1445.669" Top="2551.181" Width="963.7796" Height="340.1575" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 14pt; font-weight: normal; text-align: center; text-justify: auto; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKyosaiMokuteki" DataField="共済目的名称" Tag="" Left="3033.071" Top="2551.181" Width="623.6221" Height="340.1575" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 14pt; font-weight: normal; text-align: center; text-justify: auto; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label3" Tag="" Left="3656.693" Top="2551.181" Width="5102.362" Height="340.1575" Caption="共済加入承諾書兼共済掛金等払込通知書" Style="color: Black; font-family: ＭＳ 明朝; font-size: 14pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Field" Name="txtAppName" DataField="氏名又は法人名" Tag="" Left="680.315" Top="1417.323" Width="4535.433" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 12pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtAppDate" DataField="申込日_表示" Tag="" Left="8447.244" Top="0" Width="1700.787" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 0; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKumiaitoAddress" DataField="組合住所" Tag="" Left="5896.063" Top="566.9291" Width="4251.969" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtkumiaitoNm" DataField="組合等正式名称" Tag="" Left="5896.063" Top="850.3936" Width="4251.969" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 128; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label8" Tag="" Left="9694.488" Top="1417.323" Width="283.4646" Height="283.4646" Caption="印" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Field" Name="txtDaihyoshaNm" DataField="代表者氏名" Tag="" Left="7710.236" Top="1417.323" Width="1814.173" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 128; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Image" Name="picKumiaichoStamp" Left="9552.757" Top="1275.591" Width="566.9291" Height="566.9291" LineWeight="0" SizeMode="2" />
+      <Control Type="AR.Field" Name="txtDocKouchi" DataField="文書_耕地等情報_表示" Tag="" Left="170.0788" Top="4025.197" Width="9921.26" Height="453.5433" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: bold; text-align: left; text-decoration: underline; ddo-char-set: 128; ddo-shrink-to-fit: true" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtDocLower" DataField="文書_下段_表示" Tag="" Left="56.69291" Top="4478.74" Width="10091.34" Height="907.0866" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: left; ddo-char-set: 1; ddo-shrink-to-fit: true" LineSpacing="2" />
+      <Control Type="AR.Label" Name="Label9" Tag="" Left="56.69291" Top="5385.827" Width="10091.34" Height="226.7717" Caption="記" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Label" Name="Label10" Tag="" Left="56.69291" Top="5612.599" Width="2267.717" Height="226.7717" Caption="１．共済関係成立日：" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label11" Tag="" Left="56.69291" Top="5839.37" Width="10091.34" Height="226.7717" Caption="２．共済責任期間：　移植期（又は発芽期）から収穫をするに至るまで" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label12" Tag="" Left="56.69291" Top="6066.142" Width="10091.34" Height="481.8898" Caption="３．共済事故：　風水害、干害、冷害、雪害その他気象上の原因（地震及び噴火を含む）&#xD;&#xA;　　による災害、火災、病虫害及び鳥獣害" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="2" />
+      <Control Type="AR.Field" Name="txtKyosaiSeiritsuDate" DataField="共済関係成立日_表示" Tag="" Left="2324.409" Top="5612.599" Width="1984.252" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label13" Tag="" Left="56.69291" Top="6548.031" Width="5102.362" Height="226.7717" Caption="４．組合員等負担共済掛金及び事務費賦課金の合計：" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtKinSum" DataField="負担共済掛金事務費賦課金の合計_表示" Tag="" Left="5499.213" Top="6548.031" Width="1247.244" Height="226.7717" Text="" OutputFormat="##,###,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label14" Tag="" Left="6746.457" Top="6548.031" Width="850.3936" Height="226.7717" Caption="円也" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label15" Tag="" Left="56.69291" Top="6774.803" Width="2267.717" Height="481.8898" Caption="　　（内訳：共済掛金&#xD;&#xA;　　（　　　既納入額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="2" />
+      <Control Type="AR.Field" Name="txtKakeKin" DataField="組合員等負担共済掛金" Tag="" Left="2324.409" Top="6774.803" Width="1247.244" Height="226.7717" Text="" OutputFormat="##,###,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 11pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKiNounyu" DataField="既納入額_表示" Tag="" Left="2324.409" Top="7001.575" Width="1247.244" Height="255.1181" Text="" OutputFormat="##,###,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 11pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label16" Tag="" Left="3571.654" Top="6774.803" Width="1927.559" Height="226.7717" Caption="円也、事務費賦課金" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtKafu" DataField="賦課金計" Tag="" Left="5499.213" Top="6774.803" Width="1247.244" Height="226.7717" Text="" OutputFormat="##,###,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label17" Tag="" Left="6746.457" Top="6774.803" Width="850.3936" Height="226.7717" Caption="円也）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label18" Tag="" Left="3571.654" Top="7001.575" Width="1417.323" Height="255.1181" Caption="円也、納入額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtNonyu" DataField="納入額_表示" Tag="" Left="5499.213" Top="7001.575" Width="1247.244" Height="255.1181" Text="" OutputFormat="##,###,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label19" Tag="" Left="6746.457" Top="7001.575" Width="850.3936" Height="255.1181" Caption="円也）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label20" Tag="" Left="56.69291" Top="7256.693" Width="2834.646" Height="226.7717" Caption="５．払込期限及び払込場所：" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtHaraikomiKigen" DataField="払込期限_表示" Tag="" Left="2891.339" Top="7256.693" Width="1984.252" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtHaraikomiAddress" DataField="組合等正式名称" Tag="" Left="4875.591" Top="7256.693" Width="5272.441" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label21" Tag="" Left="56.69291" Top="7483.464" Width="1870.866" Height="226.7717" Caption="６．口座振替日：" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Field" Name="txtKozaFurikaeDate" DataField="口座振替日_表示" Tag="" Left="1927.559" Top="7483.464" Width="1984.252" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label22" Tag="" Left="56.69291" Top="7710.236" Width="1700.787" Height="226.7717" Caption="７．契約内容" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label23" Tag="" Left="56.69291" Top="7937.007" Width="10091.34" Height="226.7717" Caption="（１）自動継続特約の付加：　（　有　：　無　）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="lblKeizokuNashi" Tag="" Left="3957.166" Top="7837.229" Width="435" Height="420" Caption="○" Style="color: Black; font-family: ＭＳ 明朝; font-size: 20pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Label" Name="Label25" Tag="" Left="56.69291" Top="8163.78" Width="2834.646" Height="226.7717" Caption="（２）引受方式等" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Line" Name="Line1" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.69291" Y1="8390.549" X2="10148.03" Y2="8390.549" />
+      <Control Type="AR.Label" Name="Label24" Tag="" Left="3628.346" Top="8390.55" Width="1360.63" Height="850.3936" Caption="品質・災害収入&#xD;&#xA;共済方式の&#xD;&#xA;共済金額の&#xD;&#xA;選択割合" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line2" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.69291" Y1="9240.944" X2="10148.03" Y2="9240.944" />
+      <Control Type="AR.Line" Name="Line3" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.6936" Y1="8390.545" X2="56.6936" Y2="11055.11" />
+      <Control Type="AR.Line" Name="Line4" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.69291" Y1="11055.11" X2="10148.03" Y2="11055.11" />
+      <Control Type="AR.Label" Name="Label26" Tag="" Left="56.69291" Top="11055.11" Width="2423.622" Height="283.4646" Caption="（３）契約内容内訳" Style="color: Black; font-family: ＭＳ 明朝; font-size: 10pt; font-weight: normal; text-align: left; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Line" Name="Line5" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.69291" Y1="11338.58" X2="10148.03" Y2="11338.58" />
+      <Control Type="AR.Label" Name="Label27" Tag="" Left="6066.143" Top="11338.58" Width="3004.724" Height="226.7717" Caption="共済掛金" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label28" Tag="" Left="6066.143" Top="11565.35" Width="963.7796" Height="453.5433" Caption="危険段&#xD;&#xA;階区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line7" Tag="" X1="56.69308" Y1="12472.44" X2="10148.03" Y2="12472.44" />
+      <Control Type="AR.Label" Name="Label29" Tag="" Left="6066.143" Top="12018.89" Width="963.7796" Height="453.5433" Caption="共済掛&#xD;&#xA;金率" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line8" Tag="" X1="56.69378" Y1="11338.58" X2="56.69378" Y2="14740.15" />
+      <Control Type="AR.Label" Name="Label30" Tag="" Left="56.69291" Top="8390.549" Width="907.0866" Height="850.3936" Caption="類区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtHikiRuiKbnDummy" Visible="0" Tag="" Left="56.69291" Top="9240.944" Width="510.2362" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label31" Tag="" Left="566.9291" Top="9240.944" Width="396.8504" Height="226.7717" Caption="類" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtHikiRuiShortNmDummy" Visible="0" Tag="" Left="56.6929" Top="9467.714" Width="907.0867" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 6pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 128; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line9" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="963.7795" Y1="8390.549" X2="963.7795" Y2="11055.11" />
+      <Control Type="AR.Field" Name="txtHikiHikiDummy" Visible="0" Tag="" Left="963.7795" Top="9240.944" Width="1020.472" Height="453.5433" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 8pt; font-weight: normal; text-align: center; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Line" Name="Line10" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1984.252" Y1="8390.549" X2="1984.252" Y2="11055.11" />
+      <Control Type="AR.Label" Name="Label32" Tag="" Left="963.7795" Top="8390.549" Width="1020.472" Height="850.3936" Caption="引受方式" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtHikiHoshoDummy" Visible="0" Tag="" Left="1984.252" Top="9240.944" Width="850.3936" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label33" Tag="" Left="1984.252" Top="8390.549" Width="850.3936" Height="850.3936" Caption="補償割合" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line11" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="2834.646" Y1="8390.549" X2="2834.646" Y2="11055.11" />
+      <Control Type="AR.Line" Name="Line12" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="56.69291" Y1="9694.483" X2="10148.03" Y2="9694.483" />
+      <Control Type="AR.Line" Name="Line13" Tag="" X1="56.69357" Y1="10148.02" X2="10148.03" Y2="10148.02" />
+      <Control Type="AR.Line" Name="Line14" Tag="" X1="56.69393" Y1="10601.57" X2="10148.03" Y2="10601.57" />
+      <Control Type="AR.Label" Name="Label34" Tag="" Left="566.9291" Top="9694.483" Width="396.8504" Height="226.7717" Caption="類" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label35" Tag="" Left="566.9291" Top="10148.02" Width="396.8504" Height="226.7717" Caption="類" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label36" Tag="" Left="566.9291" Top="10601.58" Width="396.8504" Height="226.7717" Caption="類" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label37" Tag="" Left="2834.646" Top="8390.549" Width="793.7007" Height="850.3936" Caption="一筆半損&#xD;&#xA;特約の&#xD;&#xA;有無" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line15" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="3628.346" Y1="8390.549" X2="3628.346" Y2="11055.11" />
+      <Control Type="AR.Field" Name="txtHikiUmuDummy" Visible="0" Tag="" Left="2834.646" Top="9240.944" Width="793.7007" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label38" Tag="" Left="4648.818" Top="9240.944" Width="340.1575" Height="453.5433" Caption="％" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line16" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="4988.978" Y1="8390.549" X2="4988.978" Y2="11055.11" />
+      <Control Type="AR.Label" Name="Label39" Tag="" Left="4988.978" Top="8390.549" Width="1190.551" Height="850.3936" Caption="キログラム&#xD;&#xA;当たり&#xD;&#xA;共済金額の&#xD;&#xA;選択順位&#xD;&#xA;" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label40" Tag="" Left="4988.978" Top="9240.944" Width="340.1575" Height="453.5433" Caption="第" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label41" Tag="" Left="5839.37" Top="9240.944" Width="340.1575" Height="453.5433" Caption="位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtHikiRank" Visible="0" Tag="" Left="5329.133" Top="9240.944" Width="510.2362" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label42" Tag="" Left="8787.4" Top="8390.549" Width="1360.63" Height="850.3936" Caption="全相殺方式等&#xD;&#xA;の収穫量&#xD;&#xA;の確認方法&#xD;&#xA;（注１）&#xD;&#xA;" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line17" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6179.527" Y1="8390.549" X2="6179.527" Y2="11055.11" />
+      <Control Type="AR.Line" Name="Line18" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="10148.03" Y1="8390.545" X2="10148.03" Y2="11055.11" />
+      <Control Type="AR.Line" Name="Line19" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="8787.4" Y1="8390.549" X2="8787.4" Y2="11055.11" />
+      <Control Type="AR.Field" Name="txtHikiCheckDummy" Visible="0" Tag="" Left="8787.4" Top="9240.944" Width="1360.63" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label43" Tag="" Left="6179.527" Top="8390.549" Width="2607.874" Height="850.3936" Caption="備考" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtHikiBikouDummy" Visible="0" Tag="" Left="6179.527" Top="9240.944" Width="2607.874" Height="453.5433" Text="" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 7pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label44" Tag="" Left="4648.818" Top="9694.483" Width="340.1575" Height="453.5433" Caption="％" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label45" Tag="" Left="4648.818" Top="10148.02" Width="340.1575" Height="453.5433" Caption="％" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label46" Tag="" Left="4648.818" Top="10601.57" Width="340.1575" Height="453.5433" Caption="％" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label47" Tag="" Left="4988.978" Top="9694.483" Width="340.1575" Height="453.5433" Caption="第" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label48" Tag="" Left="5839.37" Top="9694.483" Width="340.1575" Height="453.5433" Caption="位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label49" Tag="" Left="4988.978" Top="10148.02" Width="340.1575" Height="453.5433" Caption="第" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label50" Tag="" Left="5839.37" Top="10148.02" Width="340.1575" Height="453.5433" Caption="位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label51" Tag="" Left="4988.978" Top="10601.57" Width="340.1575" Height="453.5433" Caption="第" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label52" Tag="" Left="5839.37" Top="10601.57" Width="340.1575" Height="453.5433" Caption="位" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: top; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label53" Tag="" Left="56.69308" Top="11338.58" Width="453.5433" Height="1133.858" Caption="類区分" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line6" Tag="" X1="510.2364" Y1="11338.58" X2="510.2364" Y2="14740.15" />
+      <Control Type="AR.Field" Name="txtKeiRuiKbnDummy" Visible="0" Tag="" Left="56.69308" Top="12472.44" Width="453.5433" Height="453.5433" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: top; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label54" Tag="" Left="510.2364" Top="11338.58" Width="1133.858" Height="1133.858" Caption="地域&#xD;&#xA;インデックス&#xD;&#xA;方式の&#xD;&#xA;統計単位地域" Style="color: Black; font-family: ＭＳ 明朝; font-size: 7pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtKeiToukeiCdDummy" Visible="0" Tag="" Left="510.2364" Top="12472.44" Width="1133.858" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiCityNmDummy" Visible="0" Tag="" Left="510.2364" Top="12699.21" Width="1133.858" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line20" Tag="" X1="1644.095" Y1="11338.58" X2="1644.095" Y2="14740.15" />
+      <Control Type="AR.Field" Name="txtKeiHitsuDummy" Visible="0" Tag="" Left="1644.095" Top="12472.44" Width="907.0866" Height="226.7717" Text="" OutputFormat="#,##0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiAreaSumDummy" Visible="0" Tag="" Left="1644.095" Top="12699.21" Width="907.0866" Height="226.7717" Text="" OutputFormat="#,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label55" Tag="" Left="1644.095" Top="11338.58" Width="907.0866" Height="453.5433" Caption="引受&#xD;&#xA;筆数" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label57" Tag="" Left="1644.095" Top="11792.13" Width="907.0866" Height="680.315" Caption="引受面積&#xD;&#xA;の合計" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label58" Tag="" Left="2551.181" Top="11792.12" Width="1020.472" Height="680.315" Caption="基準収穫量&#xD;&#xA;（注２）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line21" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="11792.12" X2="4915.276" Y2="11792.12" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Field" Name="txtKeiKijunRyo" Visible="0" Tag="" Left="2551.181" Top="12699.21" Width="1020.472" Height="226.7717" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label59" Tag="" Left="2551.181" Top="11338.58" Width="1020.472" Height="453.5433" Caption="基準生産&#xD;&#xA;金額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label60" Tag="" Left="3571.654" Top="11338.58" Width="1360.63" Height="453.5433" Caption="引受収量&#xD;&#xA;（共済限度額）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line22" Tag="" X1="4932.285" Y1="11338.58" X2="4932.285" Y2="14740.15" />
+      <Control Type="AR.Label" Name="Label62" Tag="" Left="3571.654" Top="11792.12" Width="1360.63" Height="680.315" Caption="適用単価&#xD;&#xA;（注３）" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtKeiHikiRyoDummy" Visible="0" Tag="" Left="3571.654" Top="12472.44" Width="1360.63" Height="226.7717" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiTankaDummy" Visible="0" Tag="" Left="3571.654" Top="12699.21" Width="1360.63" Height="226.7717" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line23" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="12699.21" X2="4915.276" Y2="12699.21" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Label" Name="Label63" Tag="" Left="4932.285" Top="11338.58" Width="1133.858" Height="1133.858" Caption="共済金額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtKeiKyoKinDummy" Visible="0" Tag="" Left="4932.285" Top="12472.44" Width="1133.858" Height="453.5432" Text="" OutputFormat="###,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: bottom; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line24" Tag="" X1="56.69308" Y1="12925.98" X2="10148.03" Y2="12925.98" />
+      <Control Type="AR.Line" Name="Line26" Tag="" X1="56.69308" Y1="13379.52" X2="10148.03" Y2="13379.52" />
+      <Control Type="AR.Line" Name="Line25" Tag="" X1="56.69308" Y1="13833.06" X2="10148.03" Y2="13833.06" />
+      <Control Type="AR.Line" Name="Line27" Tag="" X1="56.69308" Y1="14286.61" X2="10148.03" Y2="14286.61" />
+      <Control Type="AR.Line" Name="Line28" Tag="" X1="56.6924" Y1="14740.16" X2="10148.03" Y2="14740.16" />
+      <Control Type="AR.Label" Name="Label61" Tag="" Left="56.69307" Top="14286.61" Width="453.5433" Height="453.5433" Caption="合計" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtKeiKakePerDummy" Visible="0" Tag="" Left="6066.143" Top="12699.21" Width="963.7796" Height="226.7717" Text="" OutputFormat="##0.000" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label64" Tag="" Left="7029.921" Top="11565.35" Width="1020.472" Height="453.5433" Caption="総額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label65" Tag="" Left="9070.866" Top="11338.58" Width="1077.165" Height="1133.858" Caption="事務費&#xD;&#xA;賦課金" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Line" Name="Line29" Tag="" X1="6066.143" Y1="11338.58" X2="6066.143" Y2="14740.15" />
+      <Control Type="AR.Field" Name="txtKeiDangerKbnDummy" Visible="0" Tag="" Left="6066.143" Top="12472.44" Width="963.7796" Height="226.7717" Text="" OutputFormat="##0.000" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiKakeKinDummy" Visible="0" Tag="" Left="7029.921" Top="12472.44" Width="1020.472" Height="226.7717" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiKuniFutanDummy" Visible="0" Tag="" Left="7029.921" Top="12699.21" Width="1020.472" Height="226.7717" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label66" Tag="" Left="7029.921" Top="12018.89" Width="1020.472" Height="453.5433" Caption="国庫負&#xD;&#xA;担額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Label" Name="Label67" Tag="" Left="8050.394" Top="11565.35" Width="1020.472" Height="907.0866" Caption="加入者&#xD;&#xA;負担額" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" LineSpacing="1" />
+      <Control Type="AR.Field" Name="txtKeiKanyuFuntanDummy" Visible="0" Tag="" Left="8050.394" Top="12472.44" Width="1020.472" Height="453.5433" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: bottom; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKeiKafuKinDummy" Visible="0" Tag="" Left="9070.866" Top="12472.44" Width="1077.166" Height="453.5432" Text="" OutputFormat="##,###,##0.0" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: right; vertical-align: bottom; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Line" Name="Line30" Tag="" X1="10148.03" Y1="11338.58" X2="10148.03" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line31" Tag="" X1="2551.181" Y1="11338.58" X2="2551.181" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line32" Tag="" X1="3571.654" Y1="11338.58" X2="3571.654" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line33" Tag="" X1="7029.921" Y1="11565.35" X2="7029.921" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line34" Tag="" X1="8050.394" Y1="11565.35" X2="8050.394" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line35" Tag="" X1="9070.866" Y1="11338.58" X2="9070.866" Y2="14740.15" />
+      <Control Type="AR.Line" Name="Line36" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="12699.21" X2="8050.394" Y2="12699.21" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line37" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="12018.89" X2="8033.386" Y2="12018.89" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line38" Tag="" X1="6066.143" Y1="11565.35" X2="9070.866" Y2="11565.35" />
+      <Control Type="AR.Line" Name="Line39" Tag="" X1="510.2364" Y1="14740.15" X2="1700.787" Y2="14286.61" />
+      <Control Type="AR.Line" Name="Line40" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="13152.75" X2="4915.276" Y2="13152.75" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line41" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="13606.29" X2="4915.276" Y2="13606.29" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line42" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="14059.84" X2="4915.276" Y2="14059.84" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line43" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="1661.102" Y1="14513.38" X2="4915.276" Y2="14513.38" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line44" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="13152.75" X2="8033.386" Y2="13152.75" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line45" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="13606.29" X2="8033.386" Y2="13606.29" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line46" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="14059.84" X2="8033.386" Y2="14059.84" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Line" Name="Line47" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" X1="6083.149" Y1="14513.38" X2="8033.386" Y2="14513.38" LineStyle="2" LineWeight="2" />
+      <Control Type="AR.Subreport" Name="subReport1" Left="56.69291" Top="9240.944" Width="10091.34" Height="1814.173" CanGrow="0" CanShrink="0" ReportName="P107010Sub1.rpx" />
+      <Control Type="AR.Subreport" Name="subReport2" Left="56.69291" Top="12472.44" Width="10091.34" Height="1814.173" CanGrow="0" CanShrink="0" ReportName="P107010Sub2.rpx" />
+      <Control Type="AR.Subreport" Name="subReport2Sum" Left="56.69291" Top="14286.61" Width="10091.34" Height="453.5433" CanGrow="0" CanShrink="0" ReportName="P107010Sub2Sum.rpx" />
+      <Control Type="AR.Field" Name="txtPostalCd" DataField="郵便番号" Tag="" Left="680.315" Top="283.4646" Width="4535.433" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtDaihyoYakushoku" DataField="代表者役職名" Tag="" Left="5896.063" Top="1417.323" Width="1814.173" Height="283.4646" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; white-space: nowrap; ddo-char-set: 128; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtNensanDoc" DataField="年産_表示" Tag="" Left="170.0788" Top="3118.11" Width="566.9291" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Field" Name="txtKyosaiMokutekiDoc" DataField="共済目的名称" Tag="" Left="1133.858" Top="3118.11" Width="396.8504" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 9pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: true; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label56" Left="1530.709" Top="3118.11" Width="8620.157" Height="226.7717" Caption="については、農作物共済への加入申込みを下記のとおり承諾しました。" Style="font-family: ＭＳ Ｐ明朝; font-size: 9pt; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Label" Name="Label68" Tag="" Left="2480.315" Top="11055.12" Width="7639.372" Height="283.4646" Caption="（類区分ごと（地域インデックス方式にあっては類区分ごと及び統計単位地域ごと））" Style="color: Black; font-family: ＭＳ 明朝; font-size: 9pt; font-weight: normal; text-align: left; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: inherit" />
+      <Control Type="AR.Label" Name="Label7" Left="737.0079" Top="3118.11" Width="396.8504" Height="226.7717" Caption="年産" Style="font-family: ＭＳ Ｐ明朝; font-size: 9pt; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Label" Name="Label69" Tag="" Left="2409.449" Top="2551.181" Width="623.6221" Height="340.1575" Caption="年産" Style="color: Black; font-family: ＭＳ 明朝; font-size: 14pt; font-weight: normal; text-align: center; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" Multiline="0" />
+      <Control Type="AR.Field" Name="txtPage" DataField="ページ" Tag="" Left="56.69291" Top="14853.54" Width="10148.03" Height="226.7717" Text="" Multiline="0" CanGrow="0" Style="color: Black; font-family: ＭＳ Ｐ明朝; font-size: 10pt; font-weight: normal; text-align: right; white-space: nowrap; ddo-char-set: 1; ddo-wrap-mode: nowrap" SummaryDistinct="ページ" />
+    </Section>
+    <Section Type="PageFooter" Name="PageFooter" Height="0" BackColor="16777215" CanGrow="0" />
+  </Sections>
+  <ReportComponentTray />
+  <Script><![CDATA[using System.Linq;
+
+public void Detail_Format()
+{
+	// 組合代表者印 画像設定
+	this.picKumiaichoStamp.Image = daihyoStampFile;
+	
+	// 組合代表者印_表示設定
+	this.picKumiaichoStamp.Visible = (bool)rpt.Fields["組合代表者印_表示有無"].Value;
+
+	// 自動継続特約の有_表示設定
+	this.lblKeizokuAri.Visible = (bool) rpt.Fields["自動継続特約の有_表示有無"].Value;
+	
+	// 自動継続特約の有_表示設定
+	this.lblKeizokuNashi.Visible = (bool) rpt.Fields["自動継続特約の無_表示有無"].Value;
+
+	// サブレポート1 (2)引受方式等　表示
+	this.subReport1.Visible = (bool) rpt.Fields["SUB1_表示有無"].Value;
+	
+	// サブレポート２ (2)引受方式等　データ設定
+	if(this.subReport1.Visible)
+	{
+		// データソース設定
+		var detail = rpt.Fields;
+		var datas = sub1Model.Where(t => t.組合等コード == detail["組合等コード"].Value.ToString() &&
+									t.年産.ToString() == detail["年産"].Value.ToString() &&
+									t.共済目的コード == detail["共済目的コード"].Value.ToString() &&
+									t.支所コード ==  detail["支所コード"].Value.ToString() &&
+									t.引受回.ToString() == detail["引受回"].Value.ToString() &&
+									t.組合員等コード == detail["組合員等コード"].Value.ToString())
+					.OrderBy(t => t.類区分)
+					.ToList();
+
+		// データ取得時に設定
+		if(datas.Count > 0)
+		{
+			// サブレポート設定
+			var subrpt1 = new NskReportMain.Reports.BaseSectionReport(@"Reports\P107010\P107010Sub1.rpx");
+			subrpt1.DataSource = datas;
+			this.subReport1.Report = subrpt1;
+		}
+		else
+		{
+			//取得できなかった場合は表示しない
+			this.subReport1.Visible = false;
+		}
+	}
+	
+	// サブレポート2 (3)契約内容内訳　表示設定
+	this.subReport2.Visible = (bool) rpt.Fields["SUB2_表示有無"].Value;
+	this.subReport2Sum.Visible = (bool) rpt.Fields["SUB2_表示有無"].Value;
+
+	// サブレポート２ (2)引受方式等　データ設定
+	if(this.subReport2.Visible)
+	{
+		// データソース設定
+		var detail = rpt.Fields;
+		var datas = sub2Model.Where(t => t.組合等コード == detail["組合等コード"].Value.ToString() &&
+			t.年産.ToString() == detail["年産"].Value.ToString() &&
+			t.共済目的コード == detail["共済目的コード"].Value.ToString() &&
+			t.支所コード == detail["支所コード"].Value.ToString() &&
+			t.引受回.ToString() == detail["引受回"].Value.ToString() &&
+			t.組合員等コード == detail["組合員等コード"].Value.ToString())
+			.OrderBy(t => t.類区分)
+			.ToList();
+
+		// データ取得時に設定
+		if(datas.Count > 0)
+		{
+			// サブレポート設定
+			var subrpt2 = new NskReportMain.Reports.BaseSectionReport(@"Reports\P107010\P107010Sub2.rpx");
+			var subrpt2Sum = new NskReportMain.Reports.BaseSectionReport(@"Reports\P107010\P107010Sub2Sum.rpx");
+			subrpt2.DataSource = datas;
+			subrpt2Sum.DataSource = datas;
+			this.subReport2.Report = subrpt2;
+			this.subReport2Sum.Report = subrpt2Sum;		
+		}
+		else
+		{
+			//取得できなかった場合は表示しない
+			this.subReport2.Visible = false;
+			this.subReport2Sum.Visible = false;
+		}
+	}
+}
+
+]]></Script>
+  <PageSettings LeftMargin="850" RightMargin="850" TopMargin="850" BottomMargin="851" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="1" />
+  <Parameters />
+</ActiveReportsLayout>

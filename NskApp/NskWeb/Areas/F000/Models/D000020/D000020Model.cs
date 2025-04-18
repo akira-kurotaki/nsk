@@ -47,5 +47,14 @@ namespace NskWeb.Areas.F000.Models.D000020
         /// </summary>
         [Display(Name = "検索結果")]
         public D000020SearchResult SearchResult { get; set; }
+
+        /// <summary>
+        /// 名称取得用コード（要求）
+        /// </summary>
+        public string TargetCd {  get; set; }
+        /// <summary>
+        /// 名称取得用名称（戻り値）
+        /// </summary>
+        public string ReturnNm { get; set; }
     }
 }

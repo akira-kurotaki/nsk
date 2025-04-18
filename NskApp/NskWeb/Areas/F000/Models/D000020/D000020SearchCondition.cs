@@ -106,5 +106,11 @@ namespace NskWeb.Areas.F000.Models.D000020
         /// </summary>
         [Display(Name = "電話番号")]
         public string Tel { get; set; }
+
+        /// <summary>
+        /// 検索子画面からの戻り値をセットする項目のキー
+        /// </summary>
+        public string RetKey { get; set; }
+
     }
 }

@@ -12,6 +12,7 @@ using NskCommon = NskCommonLibrary.Core.Consts;
 using NskCommonUtil = NskCommonLibrary.Core.Utility;
 using NSK_B106070.Models;
 using ModelLibrary.Context;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace NSK_B106070
 {
@@ -637,8 +638,6 @@ namespace NSK_B106070
                                     saimokuRecord.特約区分,
                                     saimokuRecord.特約区分名称,
                                     tokeiKiken,
-                                    saimokuRecord.統計単位地域コード,
-                                    saimokuRecord.危険段階地域区分,
                                     saimokuRecord.危険段階区分,
                                     saimokuRecord.共済金額単価.ToString(),
                                     saimokuRecord.引受筆数.ToString(),
@@ -942,8 +941,8 @@ namespace NSK_B106070
             sql.Append($@"           AND t_11010_個人設定.共済目的コード = t_12040_組合員等別引受情報.共済目的コード ");
             sql.Append($@"           AND t_11010_個人設定.組合員等コード = t_12040_組合員等別引受情報.組合員等コード ");
             sql.Append($@"       LEFT JOIN v_nogyosha AS 地域集団");
-            sql.Append($@"           ON v_nogyosha.kumiaito_cd = t_11010_個人設定.組合等コード ");
-            sql.Append($@"           AND v_nogyosha.kumiaiinto_cd = t_11010_個人設定.地域集団コード ");
+            sql.Append($@"           ON 地域集団.kumiaito_cd = t_11010_個人設定.組合等コード ");
+            sql.Append($@"           AND 地域集団.kumiaiinto_cd = t_11010_個人設定.地域集団コード ");
             sql.Append($@"   WHERE ");
             sql.Append($@"    1 = 1 ");
             sql.Append($@"    AND t_12040_組合員等別引受情報.組合等コード = @組合等コード ");
@@ -975,72 +974,52 @@ namespace NSK_B106070
             sql.Append($@"        ELSE 1 = 1 ");
             sql.Append($@"    END ");
 
-            if (!(String.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) && String.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) && String.IsNullOrEmpty(batchJoken.JokenShuturyokujun3)))
+            sql.Append($"ORDER BY ");
+
+            // 出力順が指定されていない場合
+            if (String.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) &&
+                String.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) && 
+                String.IsNullOrEmpty(batchJoken.JokenShuturyokujun3))
             {
-                // 初回の判定
-                bool isFirst = true;
-                // ソート順と出力順のリスト化
-                List<SortOrder> sortOrders =
-                [
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun1, OrderBy = batchJoken.JokenShojunKojun1 },
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun2, OrderBy = batchJoken.JokenShojunKojun2 },
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun3, OrderBy = batchJoken.JokenShojunKojun3 }
-                ];
-
-                sql.Append($"ORDER BY ");
-
-                if (sortOrders.Count == 0)
+                sql.Append($@"  t_12040_組合員等別引受情報.組合等コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.年産 ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.引受回 ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.共済目的コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.支所コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.大地区コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.小地区コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.組合員等コード ASC ");
+                sql.Append($@"  , t_12040_組合員等別引受情報.類区分 ASC ");
+            }
+            // 出力順が指定されている場合
+            else
+            {
+                bool isPutOrder = false;
+                //  画面指定ソート順
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1))
                 {
-                    sql.Append($@"  t_12040_組合員等別引受情報.組合等コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.年産 ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.共済目的コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.類区分 ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.支所コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.大地区コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.小地区コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.収量等級コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.品種コード ASC, ");
-                    sql.Append($@"  t_12040_組合員等別引受情報.参酌コード ASC ");
+                    isPutOrder = true;
+                    sql.Append($" {batchJoken.JokenShuturyokujun1} {batchJoken.JokenShojunKojun1} ");
                 }
-                else
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2))
                 {
-                    foreach (SortOrder sort in sortOrders)
+                    if (isPutOrder)
                     {
-                        if (!String.IsNullOrEmpty(sort.OrderByKey))
-                        {
-                            if (isFirst)
-                            {
-                                isFirst = false;
-                            }
-                            else
-                            {
-                                sql.Append($"   , ");
-                            }
-
-                            if (sort.OrderByKey == batchJoken.JokenShuturyokujun1)
-                            {
-                                sql.Append($"   @出力順1 ");
-                            }
-                            else if (sort.OrderByKey == batchJoken.JokenShuturyokujun2)
-                            {
-                                sql.Append($"   @出力順2 ");
-                            }
-                            else if (sort.OrderByKey == batchJoken.JokenShuturyokujun3)
-                            {
-                                sql.Append($"   @出力順3 ");
-                            }
-
-                            switch ((Core.CoreConst.SortOrder)int.Parse(sort.OrderBy))
-                            {
-                                case Core.CoreConst.SortOrder.ASC:
-                                    sql.Append($"   ASC ");
-                                    break;
-                                case Core.CoreConst.SortOrder.DESC:
-                                    sql.Append($"   DESC ");
-                                    break;
-                            }
-                        }
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
                     }
+                    isPutOrder = true;
+                    sql.Append($" {batchJoken.JokenShuturyokujun2} {batchJoken.JokenShojunKojun2} ");
+                }
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3))
+                {
+                    if (isPutOrder)
+                    {
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
+                    }
+                    isPutOrder = true;
+                    sql.Append($" {batchJoken.JokenShuturyokujun3} {batchJoken.JokenShojunKojun3} ");
                 }
             }
 
@@ -1058,9 +1037,6 @@ namespace NSK_B106070
                 new("バッチ条件引受回", int.Parse(batchJoken.JokenHikiukeKai)),
                 new("都道府県コード", todofukenCd),
                 new("組合等コード", kumiaitoCd),
-                new("出力順1", batchJoken.JokenShuturyokujun1),
-                new("出力順2", batchJoken.JokenShuturyokujun2),
-                new("出力順3", batchJoken.JokenShuturyokujun3)
             ];
 
             // SQLのクエリ結果をListに格納する
