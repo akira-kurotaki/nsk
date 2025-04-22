@@ -75,7 +75,7 @@ namespace NskWeb.Areas.F205.Controllers
             if (md != null)
             {
                 model.D205050Info.SKyosaiMokutekiCd = md.SKyosaiMokutekiCd;
-                model.D205050Info.SNensanHikiuke = md.SNensanHikiuke;
+                model.D205050Info.SNensanHyoka = md.SNensanHyoka;
 
             }
             logger.Debug(md.SKyosaiMokutekiCd);
@@ -132,6 +132,9 @@ namespace NskWeb.Areas.F205.Controllers
                 return Json(new { success = false, message = MessageUtil.Get("ME00001", "支所","") });
             }
 
+            // NSKポータル情報の取得
+            NSKPortalInfoModel md = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
+
             // バッチ予約状況取得引数の設定
             BatchUtil.GetBatchYoyakuListParam param = new()
             {
@@ -169,14 +172,22 @@ namespace NskWeb.Areas.F205.Controllers
                         .Any(t =>
                             jokenIds.Contains(t.バッチ条件id) &&
                             t.条件名称 == JoukenNameConst.JOUKEN_SHISHO &&
-                            t.条件値 == selectedShisho);
+                            t.条件値 == selectedShisho &&
+                            db1.T01050バッチ条件s.Any(t2 =>
+                                t2.バッチ条件id == t.バッチ条件id &&
+                                t2.条件名称 == JoukenNameConst.JOUKEN_KYOSAI_MOKUTEKI_CD &&
+                                t2.条件値 == md.SKyosaiMokutekiCd) &&
+                            db1.T01050バッチ条件s.Any(t3 =>
+                                t3.バッチ条件id == t.バッチ条件id &&
+                                t3.条件名称 == JoukenNameConst.JOUKEN_NENSAN &&
+                                t3.条件値 == md.SNensanHyoka));
 
                     if (hasMatching)
                     {
                         return Json(new
                         {
                             success = false,
-                            message = MessageUtil.Get("ME10019", "選択された支所の仮渡し金計算処理（インデックス）")
+                            message = MessageUtil.Get("ME10019", "仮渡し金計算処理（インデックス）")
                         });
                     }
                 }
@@ -194,7 +205,7 @@ namespace NskWeb.Areas.F205.Controllers
 
             // 条件を登録する
             //InsertTJouken(model, strJoukenId, form.TorikomiFilePath, modelVar.FileHash);
-            strJoukenErrorMsg = InsertTJouken(dbConnectionInfo, model, strJoukenId, selectedShisho);
+            strJoukenErrorMsg = InsertTJouken(dbConnectionInfo, model, strJoukenId, selectedShisho, md);
             if (!string.IsNullOrEmpty(strJoukenErrorMsg))
             {
                 return Json(new { success = false, message = strJoukenErrorMsg });
@@ -228,7 +239,7 @@ namespace NskWeb.Areas.F205.Controllers
                 AppConst.FLG_OFF,
                 ref refMsg,
                 ref batchId,
-                F205Const.SCREEN_ID_NSK_D205050 + Syokuin.TodofukenCd
+                F205Const.SCREEN_ID_NSK_D205050 + Syokuin.TodofukenCd + selectedShisho
                 );
             }
             catch (Exception e)
@@ -290,20 +301,17 @@ namespace NskWeb.Areas.F205.Controllers
         /// <param name="joukenId">条件ID</param>
         /// <param name="filePath">ファイルパス</param>
         /// <returns>登録結果</returns>
-        private string InsertTJouken(DbConnectionInfo dbConnectionInfo, D205050Model model, string joukenId,string shishocd)
+        private string InsertTJouken(DbConnectionInfo dbConnectionInfo, D205050Model model, string joukenId,string shishocd, NSKPortalInfoModel md)
         {
             // ユーザID
             var userId = Syokuin.UserId;
             // システム日時
             var systemDate = DateUtil.GetSysDateTime();
 
-            // NSKポータル情報の取得
-            NSKPortalInfoModel md = SessionUtil.Get<NSKPortalInfoModel>(AppConst.SESS_NSK_PORTAL, HttpContext);
-
             // 連番を手動で初期化
             int serialNumber = 0;
 
-            logger.Debug("md.SNensanHikiuke : " + md.SNensanHikiuke);
+            logger.Debug("md.SNensanHyoka : " + md.SNensanHyoka);
 
 
             // DbContext を一度だけ使用する
@@ -321,7 +329,7 @@ namespace NskWeb.Areas.F205.Controllers
                         連番 = ++serialNumber,
                         条件名称 = JoukenNameConst.JOUKEN_NENSAN,
                         表示用条件値 = JoukenNameConst.JOUKEN_NENSAN,
-                        条件値 = md.SNensanHikiuke,
+                        条件値 = md.SNensanHyoka,
                         登録日時 = systemDate,
                         登録ユーザid = userId,
                         更新日時 = systemDate,

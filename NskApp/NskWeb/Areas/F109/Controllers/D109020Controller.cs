@@ -113,7 +113,7 @@ namespace NskWeb.Areas.F109.Controllers
             // ３．３．[組合等設定.引受計算支所実行単位区分]＝「2：本所支所」の場合、[本所・支所]ドロップダウンリストの空白行を選択する。
             if (sessionInfo.HikiukeJikkoTanniKbnHikiuke == "2")
             {
-                model.SearchCondition.ShishoList.Insert(0, new());
+                model.SearchCondition.ShishoLists.Insert(0, new());
             }
 
             // ３．４．本所・支所ドロップダウンリストで選択している支所コードを[変数：選択支所コード]に保持

@@ -63,7 +63,7 @@ namespace NskWeb.Areas.F105.Controllers
             // ２．１．セッションから「都道府県コード」「組合等コード」「共済目的」「年産」「利用可能な支所一覧」を取得する。
             D105036SessionInfo sessionInfo = new();
             sessionInfo.GetInfo(HttpContext);
-            D105036Model model = new(Syokuin, sessionInfo.ShishoList);
+            D105036Model model = new(Syokuin, sessionInfo.ShishoLists);
 
             model.DispKengen = F105Const.Authority.None;
             if (updKengen)

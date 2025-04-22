@@ -54,11 +54,11 @@
                             <fieldset>
                                 <legend class="visually-hidden">表示順２</legend>
                                 @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState, 
-                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.MEMBER.ToString(),
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.Member.ToString(),
                                                   new { @id = "KumiaiintoSettei_KanyuState_1", @class = "magic-radio", tabindex = tabIndex++ })
                                 <label for="KumiaiintoSettei_KanyuState_1">加入</label>
                                 @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
-                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NO_MEMBER.ToString(),
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NoMember.ToString(),
                                                   new { @id = "KumiaiintoSettei_KanyuState_2", @class = "magic-radio", tabindex = tabIndex++ })
                                 <label for="KumiaiintoSettei_KanyuState_2">未加入</label>
                             </fieldset>
@@ -133,7 +133,7 @@
                     </td>
                     <td rowspan="2">
                         @Html.DropDownListFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho,
-                                 Model.KumiaiintoSettei.KyotuShinseitoWaribikiHouhoList,
+                                 Model.KumiaiintoSettei.KyotuShinseitoWaribikiHouhoLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>

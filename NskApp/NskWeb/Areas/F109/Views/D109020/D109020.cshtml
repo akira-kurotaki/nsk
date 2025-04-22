@@ -61,7 +61,7 @@
                         if (Model.IsShishoDropdownListDisabled)
                             attrs.Add("disabled", "disabled");
                     }
-                    @Html.DropDownListFor(model => model.SearchCondition.ShishoCd, Model.SearchCondition.ShishoList, attrs)
+                    @Html.DropDownListFor(model => model.SearchCondition.ShishoCd, Model.SearchCondition.ShishoLists, attrs)
                 </td>
             </tr>
         </table>

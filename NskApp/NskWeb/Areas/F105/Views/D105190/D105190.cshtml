@@ -68,9 +68,9 @@
                 </td>
                 <td>
                     @Html.DropDownListFor(model => model.SearchCondition.RuiKbn, 
-                        Model.SearchCondition.RuiKbnList,
+                        Model.SearchCondition.RuiKbnLists,
                         "", new { @class = "form-select form-select-lg", tabindex = 100, @title = "選択項目" })
-                    <div>@Html.ValidationMessageFor(model => model.SearchCondition.RuiKbnList, "", new { @class = "text-danger"})</div>
+                    <div>@Html.ValidationMessageFor(model => model.SearchCondition.RuiKbnLists, "", new { @class = "text-danger"})</div>
                 </td>
 
             </tr>

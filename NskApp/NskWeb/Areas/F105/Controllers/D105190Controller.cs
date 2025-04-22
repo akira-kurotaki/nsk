@@ -70,7 +70,7 @@ namespace NskWeb.Areas.F105.Controllers
 
             D105190SessionInfo sessionInfo = new();
             sessionInfo.GetInfo(HttpContext);
-            model = new(Syokuin, sessionInfo.ShishoList);
+            model = new(Syokuin, sessionInfo.ShishoLists);
 
             // １．１．権限チェック
             // (1)	ログインユーザの権限が「参照」「更新権限」いずれも許可されていない場合、メッセージを設定し業務エラー画面を表示する。
@@ -99,11 +99,11 @@ namespace NskWeb.Areas.F105.Controllers
                 (x.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.共済目的名称 ?? string.Empty;
 
             // ２．２．「類区分情報リスト」を取得する。
-            model.SearchCondition.RuiKbnList.AddRange(dbContext.M00020類名称s.Where(m =>
+            model.SearchCondition.RuiKbnLists.AddRange(dbContext.M00020類名称s.Where(m =>
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(m => m.類区分).
                 Select(m => new SelectListItem($"{m.類区分} {m.類名称}", $"{m.類区分}")));
-            SelectListItem selected = model.SearchCondition.RuiKbnList.First();
+            SelectListItem selected = model.SearchCondition.RuiKbnLists.First();
             model.SearchCondition.RuiKbn = selected.Value;
             
             // ２．３．「支所情報リスト」を取得する。]
@@ -141,6 +141,13 @@ namespace NskWeb.Areas.F105.Controllers
             //    model.MessageArea2 = MessageUtil.Get("MI00011");
             //    ModelState.AddModelError("MessageArea2", model.MessageArea2);
             //}
+
+            // 初期表示時、支所グループリストを持つ場合、初期選択状態を空欄に設定する。
+            // [TODO] 共通部品に改修が入り処理が不要となった場合は削除をすること
+            if (!model.SearchCondition.TodofukenDropDownList.ShishoList.IsNullOrEmpty())
+            {
+                model.SearchCondition.TodofukenDropDownList.ShishoCd = "";
+            }
 
             // セッションに保存する
             SessionUtil.Set(SESS_D105190, model, HttpContext);
@@ -313,27 +320,27 @@ namespace NskWeb.Areas.F105.Controllers
 
             // ２．２．３．［画面：表示順］の選択値に重複がある場合（以下のいずれかの条件に該当する場合）、
             // エラーと判定し「メッセージリスト」にメッセージを設定する。
-            List<D105190SearchCondition.DisplaySortType> sortList = new List<D105190SearchCondition.DisplaySortType>();
+            List<D105190SearchCondition.DisplaySortType> sortTypes = new List<D105190SearchCondition.DisplaySortType>();
 
             // ［画面：表示順］が選択されている場合、配列に格納
             if (model.SearchCondition.DisplaySort1.HasValue)
             {
-                sortList.Add(model.SearchCondition.DisplaySort1.Value);
+                sortTypes.Add(model.SearchCondition.DisplaySort1.Value);
             }
 
             if (model.SearchCondition.DisplaySort2.HasValue)
             {
-                sortList.Add(model.SearchCondition.DisplaySort2.Value);
+                sortTypes.Add(model.SearchCondition.DisplaySort2.Value);
             }
 
             if (model.SearchCondition.DisplaySort3.HasValue)
             {
-                sortList.Add(model.SearchCondition.DisplaySort3.Value);
+                sortTypes.Add(model.SearchCondition.DisplaySort3.Value);
             }
 
             // 配列に格納した表示順の件数と重複除外した件数が一致するか判定し
             // 判定しない場合は重複と判断しエラーと判定する
-            bool hasDuplicates = sortList.Count != sortList.Distinct().Count();
+            bool hasDuplicates = sortTypes.Count != sortTypes.Distinct().Count();
 
             if (hasDuplicates)
             {
@@ -404,8 +411,8 @@ namespace NskWeb.Areas.F105.Controllers
             model.SearchResult.AddPageData();
 
             // 追加行のインデックスを取得
-            List<D105190ResultRecord> diff = model.SearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105190ResultRecord addRow = diff.FirstOrDefault();
+            List<D105190ResultRecord> diffs = model.SearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105190ResultRecord addRow = diffs.FirstOrDefault();
             int addRowIdx = model.SearchResult.DispRecords.IndexOf(addRow);
 
             // 検索条件と検索結果をセッションに保存する

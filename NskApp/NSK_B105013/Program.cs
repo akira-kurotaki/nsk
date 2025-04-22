@@ -10,6 +10,7 @@ using NskAppModelLibrary.Context;
 using NskCommon = NskCommonLibrary.Core.Consts;
 using NSK_B105013.Models;
 using NSK_B105013.Common;
+using NskCommonLibrary.Core.Consts;
 
 namespace NSK_B105013
 {
@@ -199,10 +200,10 @@ namespace NSK_B105013
                 // エラーメッセージ（出力パラメータ）
                 string message = string.Empty;
                 // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-                List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+                List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
                 // バッチ予約が存在しない場合、
-                if (batchYoyakuList.Count == 0)
+                if (batchYoyakus.Count == 0)
                 {
                     // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
                     //（"ME01645" 引数{0} ：パラメータの取得)
@@ -210,22 +211,20 @@ namespace NSK_B105013
                 }
 
                 // バッチ予約が存在する場合
-                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchId == nBid);
+                // [引数：バッチID]に一致する場合
+                if (batchYoyaku is not null)
                 {
-                    // [引数：バッチID]に一致する場合
-                    if (batchYoyaku.BatchId == nBid)
-                    {
-                        // 取得した「バッチ予約状況」から値を取得し変数に設定する。
-                        // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
-                        batchYoyakuId = batchYoyaku.BatchYoyakuId;
-                    }
-                    // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
-                    else
-                    {
-                        // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
-                        //（"ME01645" 引数{0} ：パラメータの取得)
-                        throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
-                    }
+                    // 取得した「バッチ予約状況」から値を取得し変数に設定する。
+                    // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
+                    batchYoyakuId = batchYoyaku.BatchYoyakuId;
+                }
+                // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
+                else
+                {
+                    // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
+                    //（"ME01645" 引数{0} ：パラメータの取得)
+                    throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
                 }
 
                 // ４．DB接続
@@ -254,10 +253,10 @@ namespace NSK_B105013
                     // ７．データ検索SQLを実行（ログ出力：あり）
                     // ７．１．対象データの取得
                     // ７．１．１．「細目データ（GISカンマ編集データ）」を取得する。
-                    List<SaimokuDataRecord> saimokuDatas = GetSaimokuData(dbContext, todofukenCd, kumiaitoCd, batchJoken);
+                    List<SaimokuDataRecord> saimokuDataRecs = GetSaimokuData(dbContext, todofukenCd, kumiaitoCd, batchJoken);
 
                     // ７．２．取得した件数が0件の場合
-                    if (saimokuDatas.Count == 0)
+                    if (saimokuDataRecs.Count == 0)
                     {
                         //  [変数：エラーメッセージ] に以下のメッセージを設定し、ERRORログに出力して「１０.」へ進む。
                         // （"ME10076" 引数{0}：0)
@@ -398,7 +397,7 @@ namespace NSK_B105013
 
                             // 2行目の出力
                             // 項目名の内容を配列にまとめる
-                            List<string> saimokuKoumokuName =
+                            List<string> saimokuKoumokuNames =
                                 [
                                     "共済目的コード",
                                     "組合員等コード",
@@ -433,23 +432,23 @@ namespace NSK_B105013
                                     "受委託者コード"
                                 ];
                             // 配列の内容を書き込む
-                            writer.Write(CsvUtil.GetLine(saimokuKoumokuName.ToArray()));
+                            writer.Write(CsvUtil.GetLine(saimokuKoumokuNames.ToArray()));
 
                             // 3行目の出力
                             // 3行目の内容を配列にまとめる
-                            List<string> dataStart =
+                            List<string> dataStartRowValues =
                                 [
                                     NskCommon.CoreConst.DATA_START,
                                     DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
                                 ];
                             // 配列の内容を書き込む
-                            writer.Write(CsvUtil.GetLine(dataStart.ToArray()));
+                            writer.Write(CsvUtil.GetLine(dataStartRowValues.ToArray()));
 
                             // 4行目以降の出力
                             // 取得した細目データを読み込む
-                            foreach (SaimokuDataRecord saimokuRecord in saimokuDatas)
+                            foreach (SaimokuDataRecord saimokuRecord in saimokuDataRecs)
                             {
-                                List<string> saimokuDataRecord =
+                                List<string> currentRowValues =
                                 [
                                     saimokuRecord.共済目的コード,
                                     saimokuRecord.組合員等コード,
@@ -457,9 +456,9 @@ namespace NSK_B105013
                                     saimokuRecord.分筆番号,
                                     saimokuRecord.類区分,
                                     saimokuRecord.地名地番,
-                                    saimokuRecord.耕地面積.ToString(),
-                                    saimokuRecord.引受面積.ToString(),
-                                    saimokuRecord.転作等面積.ToString(),
+                                    saimokuRecord.耕地面積?.ToString(),
+                                    saimokuRecord.引受面積?.ToString(),
+                                    saimokuRecord.転作等面積?.ToString(),
                                     saimokuRecord.受委託区分,
                                     saimokuRecord.備考,
                                     saimokuRecord.田畑区分,
@@ -468,35 +467,35 @@ namespace NSK_B105013
                                     saimokuRecord.品種コード,
                                     saimokuRecord.収量等級コード,
                                     saimokuRecord.参酌コード,
-                                    saimokuRecord.基準単収.ToString(),
-                                    saimokuRecord.基準収穫量.ToString(),
-                                    saimokuRecord.更新日時.ToString("yyyy/MM/dd"),
-                                    saimokuRecord.計算日付.ToString("yyyy/MM/dd"),
+                                    saimokuRecord.基準単収?.ToString(),
+                                    saimokuRecord.基準収穫量?.ToString(),
+                                    saimokuRecord.更新日時?.ToString("yyyy/MM/dd"),
+                                    saimokuRecord.計算日付?.ToString("yyyy/MM/dd"),
                                     saimokuRecord.年産.ToString(),
-                                    saimokuRecord.実量基準単収.ToString(),
+                                    saimokuRecord.実量基準単収?.ToString(),
                                     saimokuRecord.RS区分,
                                     saimokuRecord.GISデータ,
                                     saimokuRecord.統計市町村コード,
                                     saimokuRecord.統計単位地域コード,
-                                    saimokuRecord.統計単収.ToString(),
+                                    saimokuRecord.統計単収?.ToString(),
                                     saimokuRecord.用途区分,
                                     saimokuRecord.産地別銘柄コード,
                                     saimokuRecord.受委託者コード
                                 ];
 
                                 // 配列の内容を書き込む
-                                writer.Write(CsvUtil.GetLine(saimokuDataRecord.ToArray()));
+                                writer.Write(CsvUtil.GetLine(currentRowValues.ToArray()));
                             }
 
                             // 最終行の出力
                             // 最終行の内容を配列にまとめる
-                            List<string> dataEnd =
+                            List<string> dataEndRowValues =
                                 [
                                     NskCommon.CoreConst.DATA_END,
                                     DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
                                 ];
                             // 配列の内容を書き込む
-                            writer.Write(CsvUtil.GetLine(dataEnd.ToArray()));
+                            writer.Write(CsvUtil.GetLine(dataEndRowValues.ToArray()));
                         }
                     }
 
@@ -676,53 +675,61 @@ namespace NSK_B105013
 
             if (!(string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1) && string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2) && string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3)))
             {
-                // 初回の判定
-                bool isFirst = true;
-                // ソート順と出力順のリスト化
-                List<SortOrder> sortOrders =
-                [
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun1, OrderBy = batchJoken.JokenShojunKojun1 },
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun2, OrderBy = batchJoken.JokenShojunKojun2 },
-                    new() { OrderByKey = batchJoken.JokenShuturyokujun3, OrderBy = batchJoken.JokenShojunKojun3 }
-                ];
-
                 sql.Append($"ORDER BY ");
-
-                foreach (SortOrder sort in sortOrders)
+                bool isPutOrder = false;
+                //  画面指定ソート順
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun1))
                 {
-                    if (!string.IsNullOrEmpty(sort.OrderByKey))
+                    isPutOrder = true;
+                    switch (int.Parse(batchJoken.JokenShojunKojun1))
                     {
-                        if (isFirst)
-                        {
-                            isFirst = false;
-                        }
-                        else
-                        {
-                            sql.Append($"   , ");
-                        }
-
-                        if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun1))
-                        {
-                            sql.Append($"   @出力順1 ");
-                        }
-                        else if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun2))
-                        {
-                            sql.Append($"   @出力順2 ");
-                        }
-                        else if (sort.OrderByKey.Equals(batchJoken.JokenShuturyokujun3))
-                        {
-                            sql.Append($"   @出力順3 ");
-                        }
-
-                        switch (int.Parse(sort.OrderBy))
-                        {
-                            case (int)Core.CoreConst.SortOrder.ASC:
-                                sql.Append($"   ASC ");
-                                break;
-                            case (int)Core.CoreConst.SortOrder.DESC:
-                                sql.Append($"   DESC ");
-                                break;
-                        }
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順１」の入力がある場合、かつ「変数：昇順・降順１」が降順の場合
+                            sql.Append($" @出力順1 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順１」の入力がある場合、かつ「変数：昇順・降順１」が昇順の場合
+                            sql.Append($" @出力順1 {CoreConst.SortOrder.ASC} ");
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun2))
+                {
+                    if (isPutOrder)
+                    {
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
+                    }
+                    isPutOrder = true;
+                    switch (int.Parse(batchJoken.JokenShojunKojun2))
+                    {
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順２」の入力がある場合、かつ「変数：昇順・降順２」が降順の場合
+                            sql.Append($" @出力順2 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順２」の入力がある場合、かつ「変数：昇順・降順２」が昇順の場合
+                            sql.Append($" @出力順2 {CoreConst.SortOrder.ASC} ");
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(batchJoken.JokenShuturyokujun3))
+                {
+                    if (isPutOrder)
+                    {
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
+                    }
+                    switch (int.Parse(batchJoken.JokenShojunKojun3))
+                    {
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順３」の入力がある場合、かつ「変数：昇順・降順３」が降順の場合
+                            sql.Append($" @出力順3 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順３」の入力がある場合、かつ「変数：昇順・降順３」が昇順の場合
+                            sql.Append($" @出力順3 {CoreConst.SortOrder.ASC} ");
+                            break;
                     }
                 }
             }
@@ -748,9 +755,9 @@ namespace NSK_B105013
             ];
 
             // SQLのクエリ結果をListに格納する
-            List<SaimokuDataRecord> saimokuData = dbContext.Database.SqlQueryRaw<SaimokuDataRecord>(sql.ToString(), parameters.ToArray()).ToList();
+            List<SaimokuDataRecord> saimokuDataRecs = dbContext.Database.SqlQueryRaw<SaimokuDataRecord>(sql.ToString(), parameters.ToArray()).ToList();
 
-            return saimokuData;
+            return saimokuDataRecs;
         }
     }
 }

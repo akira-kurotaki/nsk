@@ -9,6 +9,7 @@ using CoreLibrary.Core.Utility;
 using NskAppModelLibrary.Context;
 using NskCommon = NskCommonLibrary.Core.Consts;
 using NSK_B105110.Models;
+using NskCommonLibrary.Core.Consts;
 
 namespace NSK_B105110
 {
@@ -174,10 +175,10 @@ namespace NSK_B105110
                 // エラーメッセージ（出力パラメータ）
                 string message = string.Empty;
                 // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-                List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+                List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
                 // バッチ予約が存在しない場合、
-                if (batchYoyakuList.Count == 0)
+                if (batchYoyakus.Count == 0)
                 {
                     // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
                     //（"ME01645" 引数{0} ：パラメータの取得)
@@ -186,23 +187,20 @@ namespace NSK_B105110
                 }
 
                 // バッチ予約が存在する場合
-                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchId == nBid);
+                // [引数：バッチID]に一致する場合
+                if (batchYoyaku is not null)
                 {
-                    // [引数：バッチID]に一致する場合
-                    if (batchYoyaku.BatchId == nBid)
-                    {
-                        // 取得した「バッチ予約状況」から値を取得し変数に設定する。
-                        // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
-                        batchYoyakuId = batchYoyaku.BatchYoyakuId;
-                    }
-                    // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
-                    else
-                    {
-                        // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
-                        //（"ME01645" 引数{0} ：パラメータの取得)
-                        errorMessage = MessageUtil.Get("ME01645", "パラメータの取得");
-                        throw new AppException("ME01645", errorMessage);
-                    }
+                    // 取得した「バッチ予約状況」から値を取得し変数に設定する。
+                    // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
+                    batchYoyakuId = batchYoyaku.BatchYoyakuId;
+                }
+                // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
+                else
+                {
+                    // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
+                    //（"ME01645" 引数{0} ：パラメータの取得)
+                    throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
                 }
 
                 // DB接続
@@ -509,53 +507,61 @@ namespace NSK_B105110
 
             if (!(string.IsNullOrEmpty(joken.OrderByKey1) && string.IsNullOrEmpty(joken.OrderByKey2) && string.IsNullOrEmpty(joken.OrderByKey3)))
             {
-                // 初回の判定
-                bool isFirst = true;
-                // ソート順と出力順のリスト化
-                List<SortOrder> sortOrders =
-                [
-                    new() { OrderByKey = joken.OrderByKey1, OrderBy = joken.OrderBy1 },
-                    new() { OrderByKey = joken.OrderByKey2, OrderBy = joken.OrderBy2 },
-                    new() { OrderByKey = joken.OrderByKey3, OrderBy = joken.OrderBy3 }
-                ];
-
                 sql.Append($"ORDER BY ");
-
-                foreach (SortOrder sort in sortOrders)
+                bool isPutOrder = false;
+                //  画面指定ソート順
+                if (!string.IsNullOrEmpty(joken.OrderByKey1))
                 {
-                    if (!string.IsNullOrEmpty(sort.OrderByKey))
+                    isPutOrder = true;
+                    switch (int.Parse(joken.OrderBy1))
                     {
-                        if (isFirst)
-                        {
-                            isFirst = false;
-                        }
-                        else
-                        {
-                            sql.Append($"   , ");
-                        }
-
-                        if (sort.OrderByKey == joken.OrderByKey1)
-                        {
-                            sql.Append($"   @出力順1 ");
-                        }
-                        else if (sort.OrderByKey == joken.OrderByKey2)
-                        {
-                            sql.Append($"   @出力順2 ");
-                        }
-                        else if (sort.OrderByKey == joken.OrderByKey3)
-                        {
-                            sql.Append($"   @出力順3 ");
-                        }
-
-                        switch ((Core.CoreConst.SortOrder)int.Parse(sort.OrderBy))
-                        {
-                            case Core.CoreConst.SortOrder.ASC:
-                                sql.Append($"   ASC ");
-                                break;
-                            case Core.CoreConst.SortOrder.DESC:
-                                sql.Append($"   DESC ");
-                                break;
-                        }
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順１」の入力がある場合、かつ「変数：昇順・降順１」が降順の場合
+                            sql.Append($" @出力順1 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順１」の入力がある場合、かつ「変数：昇順・降順１」が昇順の場合
+                            sql.Append($" @出力順1 {CoreConst.SortOrder.ASC} ");
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(joken.OrderByKey2))
+                {
+                    if (isPutOrder)
+                    {
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
+                    }
+                    isPutOrder = true;
+                    switch (int.Parse(joken.OrderBy2))
+                    {
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順２」の入力がある場合、かつ「変数：昇順・降順２」が降順の場合
+                            sql.Append($" @出力順2 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順２」の入力がある場合、かつ「変数：昇順・降順２」が昇順の場合
+                            sql.Append($" @出力順2 {CoreConst.SortOrder.ASC} ");
+                            break;
+                    }
+                }
+                if (!string.IsNullOrEmpty(joken.OrderByKey3))
+                {
+                    if (isPutOrder)
+                    {
+                        // ソート条件1が出力されていた場合、カンマを付与する
+                        sql.Append(", ");
+                    }
+                    switch (int.Parse(joken.OrderBy3))
+                    {
+                        case (int)CoreConst.SortOrder.DESC:
+                            // ※「変数：出力順３」の入力がある場合、かつ「変数：昇順・降順３」が降順の場合
+                            sql.Append($" @出力順3 {CoreConst.SortOrder.DESC} ");
+                            break;
+                        case (int)CoreConst.SortOrder.ASC:
+                            // ※「変数：出力順３」の入力がある場合、かつ「変数：昇順・降順３」が昇順の場合
+                            sql.Append($" @出力順3 {CoreConst.SortOrder.ASC} ");
+                            break;
                     }
                 }
             }

@@ -361,8 +361,8 @@ namespace NskWeb.Areas.F105.Controllers
             SessionUtil.Set(SESS_D105070, model, HttpContext);
 
             // 追加行のインデックスを取得
-            List<D105070HikiukeRecord> diff = model.HikiukeSearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105070HikiukeRecord? addRow = diff.LastOrDefault();
+            List<D105070HikiukeRecord> diffs = model.HikiukeSearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105070HikiukeRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {
@@ -790,8 +790,8 @@ namespace NskWeb.Areas.F105.Controllers
             SessionUtil.Set(SESS_D105070, model, HttpContext);
 
             // 追加行のインデックスを取得
-            List<D105070RuibetsuSetteiRecord> diff = model.RuibetsuSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105070RuibetsuSetteiRecord? addRow = diff.LastOrDefault();
+            List<D105070RuibetsuSetteiRecord> diffs = model.RuibetsuSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105070RuibetsuSetteiRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {

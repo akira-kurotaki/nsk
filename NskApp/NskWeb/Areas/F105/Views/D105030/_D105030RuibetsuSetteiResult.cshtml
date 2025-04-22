@@ -72,16 +72,16 @@
                                 attrs.Add("disabled", "disabled");
                         }
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HikiukeKbn,
-                                 Model.RuibetsuSettei.HikiukeKbnList, "", attrs)
+                                 Model.RuibetsuSettei.HikiukeKbnLists, "", attrs)
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HikiukeHoushiki,
-                                 Model.RuibetsuSettei.HikiukeHoushikiList,
+                                 Model.RuibetsuSettei.HikiukeHoushikiLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].HoshoWariai,
-                                 Model.RuibetsuSettei.HoshoWariaiList,
+                                 Model.RuibetsuSettei.HoshoWariaiLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
@@ -99,19 +99,19 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].IppitsuHansonTokuyaku,
-                                 Model.RuibetsuSettei.IppitsuHansonTokuyakuList,
+                                 Model.RuibetsuSettei.IppitsuHansonTokuyakuLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                 </tr>
                 <tr style="@hiddenRow">
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].SelectKyosaiKingaku,
-                                 Model.RuibetsuSettei.DispRecords[i].SelectKyosaiKingakuList,
+                                 Model.RuibetsuSettei.DispRecords[i].SelectKyosaiKingakuLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].KikenDankaiKbn,
-                                 Model.RuibetsuSettei.KikenDankaiKbnList,
+                                 Model.RuibetsuSettei.KikenDankaiKbnLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
@@ -125,7 +125,7 @@
 
                         }
                         @Html.DropDownListFor(model => model.RuibetsuSettei.DispRecords[i].SyukakuryoKakuninHouhou,
-                                 Model.RuibetsuSettei.SyukakuryoKakuninHouhouList, "", attrs)
+                                 Model.RuibetsuSettei.SyukakuryoKakuninHouhouLists, "", attrs)
                     </td>
                     <td colspan="2">
                         @{

@@ -40,7 +40,7 @@ namespace NskWeb.Areas.F110.Models.D110010
         /// <summary>
         /// 本所・支所リスト
         /// </summary>
-        public List<SelectListItem> HonshoShishoList { get; set; } = new();
+        public List<SelectListItem> HonshoShishoLists { get; set; } = new();
 
         #region "引受回"
         public D110010HikiukeKai HikiukeKai { get; set; } = new();
@@ -84,7 +84,7 @@ namespace NskWeb.Areas.F110.Models.D110010
         /// <param name="dbContext"></param>
         public void InitializeDropdonwList(NskAppContext dbContext, D110010SessionInfo sessionInfo)
         {
-            HonshoShishoList = new();
+            HonshoShishoLists = new();
 
             List<VShishoNm> shishoNms = new();
             // セッションから取得した「支所コード」
@@ -120,7 +120,7 @@ namespace NskWeb.Areas.F110.Models.D110010
                 // 自支所と利用可能支所
                 // 自支所
                 List<string> shishoCds = [sessionInfo.ShishoCd];
-                shishoCds.AddRange(sessionInfo.RiyokanoShishoList.Select(x => x.ShishoCd));
+                shishoCds.AddRange(sessionInfo.RiyokanoShishos.Select(x => x.ShishoCd));
 
                 // 利用可能支所
                 shishoNms.AddRange(dbContext.VShishoNms.Where(x =>
@@ -136,7 +136,7 @@ namespace NskWeb.Areas.F110.Models.D110010
             for (int i = 0; i < shishoNms.Count; i++)
             {
                 VShishoNm shisho = shishoNms[i];
-                HonshoShishoList.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
+                HonshoShishoLists.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
             }
 
             HonshoShishoCd = shishoNms[0]?.ShishoCd ?? string.Empty;

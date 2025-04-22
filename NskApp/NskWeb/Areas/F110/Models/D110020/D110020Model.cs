@@ -46,7 +46,7 @@ namespace NskWeb.Areas.F110.Models.D110020
         /// <summary>
         /// 本所・支所リスト
         /// </summary>
-        public List<SelectListItem> HonshoShishoList { get; set; } = new();
+        public List<SelectListItem> HonshoShishoLists { get; set; } = new();
 
         #region "引受回"
         public D110020HikiukeKai HikiukeKai { get; set; } = new();
@@ -90,7 +90,7 @@ namespace NskWeb.Areas.F110.Models.D110020
         /// <param name="dbContext"></param>
         public void InitializeDropdonwList(NskAppContext dbContext, D110020SessionInfo sessionInfo)
         {
-            HonshoShishoList = new();
+            HonshoShishoLists = new();
 
             List<VShishoNm> shishoNms = new();
             // セッションから取得した「支所コード」
@@ -139,7 +139,7 @@ namespace NskWeb.Areas.F110.Models.D110020
                 // 自支所と利用可能支所
                 // 自支所
                 List<string> shishoCds = [sessionInfo.ShishoCd];
-                shishoCds.AddRange(sessionInfo.RiyokanoShishoList.Select(x => x.ShishoCd));
+                shishoCds.AddRange(sessionInfo.RiyokanoShishos.Select(x => x.ShishoCd));
 
                 // 利用可能支所
                 shishoNms.AddRange(dbContext.VShishoNms.Where(x =>
@@ -155,7 +155,7 @@ namespace NskWeb.Areas.F110.Models.D110020
             for (int i = 0; i < shishoNms.Count; i++)
             {
                 VShishoNm shisho = shishoNms[i];
-                HonshoShishoList.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
+                HonshoShishoLists.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
             }
 
             HonshoShishoCd = shishoNms[0]?.ShishoCd ?? string.Empty;
@@ -376,10 +376,10 @@ namespace NskWeb.Areas.F110.Models.D110020
             // エラーメッセージ（出力パラメータ）
             string message = string.Empty;
             // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-            List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(batchYoyakuListparam, boolAllCntFlg, ref intAllCnt, ref message);
+            List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(batchYoyakuListparam, boolAllCntFlg, ref intAllCnt, ref message);
 
             // ２．１．１．取得したバッチ予約状況に画面指定の支所コードに対するバッチ予約（バッチ条件）があるか確認する。
-            foreach (BatchYoyaku yoyaku in batchYoyakuList)
+            foreach (BatchYoyaku yoyaku in batchYoyakus)
             {
                 // 処理待ち
                 if (yoyaku.BatchStatus == BatchUtil.BATCH_STATUS_WAITING)

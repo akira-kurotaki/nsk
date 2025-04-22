@@ -16,7 +16,7 @@ namespace NskWeb.Areas.F105.Models.D105030
     public class D105030KikenDankaiKbn : BasePager<D105030KikenDankaiKbnRecord>
     {
         /// <summary>危険段階区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> KikenDankaiKbnList { get; set; } = new();
+        public List<SelectListItem> KikenDankaiKbnLists { get; set; } = new();
 
         /// <summary>
         /// コンストラクタ
@@ -34,8 +34,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１７．[危険段階区分] ドロップダウンリスト項目を取得する。		
             // (1) m_10230_危険段階テーブルより、危険段階区分を取得する。
             // (2) 取得した結果をドロップダウンリストの項目として設定する。
-            KikenDankaiKbnList = new();
-            KikenDankaiKbnList.AddRange(dbContext.M10230危険段階s.Where(m =>
+            KikenDankaiKbnLists = new();
+            KikenDankaiKbnLists.AddRange(dbContext.M10230危険段階s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&

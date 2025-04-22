@@ -24,19 +24,19 @@ namespace NskWeb.Areas.F105.Models.D105030
 
 
         /// <summary>引受区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HikiukeKbnList { get; set; } = new();
+        public List<SelectListItem> HikiukeKbnLists { get; set; } = new();
         /// <summary>引受方式ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HikiukeHoushikiList { get; set; } = new();
+        public List<SelectListItem> HikiukeHoushikiLists { get; set; } = new();
         /// <summary>補償割合ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HoshoWariaiList { get; set; } = new();
+        public List<SelectListItem> HoshoWariaiLists { get; set; } = new();
         /// <summary>一筆半損特約ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> IppitsuHansonTokuyakuList { get; set; } = new();
+        public List<SelectListItem> IppitsuHansonTokuyakuLists { get; set; } = new();
         ///// <summary>選択共済金額ドロップダウンリスト選択値</summary>
         //public List<SelectListItem> SelectKyosaiKingakuList { get; set; } = new();
         /// <summary>危険段階区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> KikenDankaiKbnList { get; set; } = new();
+        public List<SelectListItem> KikenDankaiKbnLists { get; set; } = new();
         /// <summary>収穫量確認方法ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SyukakuryoKakuninHouhouList { get; set; } = new();
+        public List<SelectListItem> SyukakuryoKakuninHouhouLists { get; set; } = new();
 
         /// <summary>
         /// コンストラクタ
@@ -54,8 +54,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１２．[引受区分] ドロップダウンリスト項目を取得する。		
             // 	(1) m_10090_引受区分名称テーブルより、共済目的コードが「引受区分（水稲）」に一致する引受区分、引受区分名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HikiukeKbnList = new();
-            HikiukeKbnList.AddRange(dbContext.M10090引受区分名称s.Where(m =>
+            HikiukeKbnLists = new();
+            HikiukeKbnLists.AddRange(dbContext.M10090引受区分名称s.Where(m =>
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(m => m.引受区分).
                 Select(m => new SelectListItem($"{m.引受区分} {m.引受区分名称}", $"{m.引受区分}")));
@@ -63,9 +63,9 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１３．[引受方式] ドロップダウンリスト項目を取得する。		
             // 	(1) m_10080_引受方式名称テーブルより、引受方式、引受方式短縮名を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HikiukeHoushikiList = new();
+            HikiukeHoushikiLists = new();
             string[] hikiukeHoushikis = ["2", "3", "5", "6"];
-            HikiukeHoushikiList.AddRange(dbContext.M10080引受方式名称s.Where(m =>
+            HikiukeHoushikiLists.AddRange(dbContext.M10080引受方式名称s.Where(m =>
                 (hikiukeHoushikis.Contains(m.引受方式)))?.
                 OrderBy(m => m.引受方式).
                 Select(m => new SelectListItem($"{m.引受方式} {m.引受方式短縮名}", $"{m.引受方式}")));
@@ -73,16 +73,16 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１４．[補償割合] ドロップダウンリスト項目を取得する。		
             // 	(1) m_20030_補償割合名称テーブルより、補償割合コード、補償割合短縮名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HoshoWariaiList = new();
-            HoshoWariaiList.AddRange(dbContext.M20030補償割合名称s.
+            HoshoWariaiLists = new();
+            HoshoWariaiLists.AddRange(dbContext.M20030補償割合名称s.
                 OrderBy(m => m.補償割合コード).
                 Select(m => new SelectListItem($"{m.補償割合コード} {m.補償割合短縮名称}", $"{m.補償割合コード}")));
 
             // ２．１５．[特約] ドロップダウンリスト項目を取得する。		
             // 	(1) m_10100_特約区分名称テーブルより、特約区分、特約区分名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            IppitsuHansonTokuyakuList = new();
-            IppitsuHansonTokuyakuList.AddRange(dbContext.M10100特約区分名称s.
+            IppitsuHansonTokuyakuLists = new();
+            IppitsuHansonTokuyakuLists.AddRange(dbContext.M10100特約区分名称s.
                 OrderBy(m => m.特約区分).
                 Select(m => new SelectListItem($"{m.特約区分} {m.特約区分名称}", $"{m.特約区分}")));
 
@@ -90,8 +90,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１７．[危険段階区分] ドロップダウンリスト項目を取得する。		
             // (1) m_10230_危険段階テーブルより、危険段階区分を取得する。
             // (2) 取得した結果をドロップダウンリストの項目として設定する。
-            KikenDankaiKbnList = new();
-            KikenDankaiKbnList.AddRange(dbContext.M10230危険段階s.Where(m =>
+            KikenDankaiKbnLists = new();
+            KikenDankaiKbnLists.AddRange(dbContext.M10230危険段階s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
@@ -102,8 +102,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             // ２．１９．[収穫量確認方法] ドロップダウンリスト項目を取得する。		
             // (1) m_00070_収穫量確認方法名称テーブルから収穫量確認方法、収穫量確認方法名称を取得する。
             // (2) 取得した結果をドロップダウンリストの項目として設定する。
-            SyukakuryoKakuninHouhouList = new();
-            SyukakuryoKakuninHouhouList.AddRange(dbContext.M00070収穫量確認方法名称s.
+            SyukakuryoKakuninHouhouLists = new();
+            SyukakuryoKakuninHouhouLists.AddRange(dbContext.M00070収穫量確認方法名称s.
                 OrderBy(m => m.収穫量確認方法).
                 Select(m => new SelectListItem($"{m.収穫量確認方法} {m.収穫量確認方法名称}", $"{m.収穫量確認方法}")));
         }

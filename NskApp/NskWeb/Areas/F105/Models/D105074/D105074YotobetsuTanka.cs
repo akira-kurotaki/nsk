@@ -20,7 +20,7 @@ namespace NskWeb.Areas.F105.Models.D105074
         /// <summary>
         /// 作付時期リスト
         /// </summary>
-        public List<SelectListItem> SakutukeJikiList { get; set; } = new();
+        public List<SelectListItem> SakutukeJikiLists { get; set; } = new();
 
         /// <summary>
         /// コンストラクタ
@@ -61,8 +61,8 @@ namespace NskWeb.Areas.F105.Models.D105074
             ];
             List<SakutukeJikiRec> sakutukejikiRecords = new();
             sakutukejikiRecords.AddRange(dbContext.Database.SqlQueryRaw<SakutukeJikiRec>(sakutukejikiQuery.ToString(), sakutukejikiParams.ToArray()));
-            SakutukeJikiList = new();
-            SakutukeJikiList.AddRange(sakutukejikiRecords.Select(x => new SelectListItem($"{x.SakutukeJiki} {x.SeishikiNm}", x.SakutukeJiki)));
+            SakutukeJikiLists = new();
+            SakutukeJikiLists.AddRange(sakutukejikiRecords.Select(x => new SelectListItem($"{x.SakutukeJiki} {x.SeishikiNm}", x.SakutukeJiki)));
 
 
             // ２．４．[用途区分] ドロップダウンリスト項目を取得する。		
@@ -114,8 +114,8 @@ namespace NskWeb.Areas.F105.Models.D105074
                 ];
                 List<YotoKbnRec> yotoKbnRecords = new();
                 yotoKbnRecords.AddRange(dbContext.Database.SqlQueryRaw<YotoKbnRec>(yotoKbnQuery.ToString(), yotoKbnParams.ToArray()));
-                rec.YotoKbnList = new();
-                rec.YotoKbnList.AddRange(yotoKbnRecords.Select(x => new SelectListItem($"{x.YotoKbn} {x.YotoNm}", x.YotoKbn)));
+                rec.YotoKbnLists = new();
+                rec.YotoKbnLists.AddRange(yotoKbnRecords.Select(x => new SelectListItem($"{x.YotoKbn} {x.YotoNm}", x.YotoKbn)));
             }
         }
 
@@ -173,8 +173,8 @@ namespace NskWeb.Areas.F105.Models.D105074
                 ];
                 List<TekiyoTankaRec> tekiyoTankaRecords = new();
                 tekiyoTankaRecords.AddRange(dbContext.Database.SqlQueryRaw<TekiyoTankaRec>(tekiyoTankaQuery.ToString(), tekiyoTankaParams.ToArray()));
-                rec.TekiyoTankaList = new();
-                rec.TekiyoTankaList.AddRange(tekiyoTankaRecords.Select(x => new SelectListItem($"{x.TekiyoTanka}", $"{x.TekiyoTanka}")));
+                rec.TekiyoTankaLists = new();
+                rec.TekiyoTankaLists.AddRange(tekiyoTankaRecords.Select(x => new SelectListItem($"{x.TekiyoTanka}", $"{x.TekiyoTanka}")));
             }
         }
 

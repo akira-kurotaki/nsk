@@ -80,7 +80,7 @@ namespace NskWeb.Areas.F109.Models.D109020
         public void InitializeDropdonwList(NskAppContext dbContext, D109020SessionInfo sessionInfo)
         {
 
-            SearchCondition.ShishoList = new();
+            SearchCondition.ShishoLists = new();
 
             List<VShishoNm> shishoNms = new();
             if (sessionInfo.HikiukeJikkoTanniKbnHikiuke == "1")
@@ -100,7 +100,7 @@ namespace NskWeb.Areas.F109.Models.D109020
                 // 「利用可能支所一覧」に一致する支所情報を取得する。（支所コード、支所名）
 
                 List<string> shishoCds = new();
-                shishoCds.AddRange(sessionInfo.RiyokanoShishoList.Select(x => x.ShishoCd));
+                shishoCds.AddRange(sessionInfo.RiyokanoShishos.Select(x => x.ShishoCd));
                 shishoNms.AddRange(dbContext.VShishoNms.Where(x =>
                     (x.TodofukenCd == sessionInfo.TodofukenCd) &&
                     (x.KumiaitoCd == sessionInfo.KumiaitoCd) &&
@@ -127,7 +127,7 @@ namespace NskWeb.Areas.F109.Models.D109020
             for (int i = 0; i < shishoNms.Count; i++)
             {
                 VShishoNm shisho = shishoNms[i];
-                SearchCondition.ShishoList.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
+                SearchCondition.ShishoLists.Add(new($"{shisho.ShishoCd} {shisho.ShishoNm}", $"{shisho.ShishoCd}"));
             }
         }
 

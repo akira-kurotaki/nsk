@@ -19,9 +19,9 @@ namespace NskWeb.Areas.F105.Models.D105030
     public class D105030HikiukeSearchResult : BasePager<D105030HikiukeRecord>
     {
         /// <summary>種類ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SyuruiList { get; set; } = new();
+        public List<SelectListItem> SyuruiLists { get; set; } = new();
         /// <summary>区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> KbnList { get; set; } = new();
+        public List<SelectListItem> KbnLists { get; set; } = new();
         ///// <summary>市町村ドロップダウンリスト選択値</summary>
         //public List<SelectListItem> ShichosonList { get; set; } = new();
         ///// <summary>品種ドロップダウンリスト選択値</summary>
@@ -29,11 +29,11 @@ namespace NskWeb.Areas.F105.Models.D105030
         ///// <summary>産地銘柄ドロップダウンリスト選択値</summary>
         //public List<SelectListItem> SanchiMeigaraList { get; set; } = new();
         /// <summary>田畑ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> TahataList { get; set; } = new();
+        public List<SelectListItem> TahataLists { get; set; } = new();
         /// <summary>収量等級ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SyuryoTokyuList { get; set; } = new();
+        public List<SelectListItem> SyuryoTokyuLists { get; set; } = new();
         /// <summary>受委託者区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> JuitakusyaKbnList { get; set; } = new();
+        public List<SelectListItem> JuitakusyaKbnLists { get; set; } = new();
 
         public D105030SearchCondition SearchCondition { get; set; } = new();
 
@@ -63,16 +63,16 @@ namespace NskWeb.Areas.F105.Models.D105030
             //２．４．[種類] ドロップダウンリスト項目を取得する。		
             //	(1) m_10140_種類名称テーブルより、種類コード、種類名称を取得する。
             //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            SyuruiList = new();
-            SyuruiList.AddRange(dbContext.M10140種類名称s.Where(m => m.共済目的コード == sessionInfo.KyosaiMokutekiCd)?.
+            SyuruiLists = new();
+            SyuruiLists.AddRange(dbContext.M10140種類名称s.Where(m => m.共済目的コード == sessionInfo.KyosaiMokutekiCd)?.
                 OrderBy(m => m.種類コード).
                 Select(m => new SelectListItem($"{m.種類コード} {m.種類名称}", $"{m.種類コード}")));
 
             //２．５．[区分] ドロップダウンリスト項目を取得する。		
             //	(1) m_00030_区分名称テーブルより、区分コード、区分名称を取得する。
             //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            KbnList = new();
-            KbnList.AddRange(dbContext.M00030区分名称s.Where(m =>
+            KbnLists = new();
+            KbnLists.AddRange(dbContext.M00030区分名称s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) )?.
@@ -114,16 +114,16 @@ namespace NskWeb.Areas.F105.Models.D105030
             //２．９．[田畑] ドロップダウンリスト項目を取得する。		
             //	(1) m_00040_田畑名称テーブルより、田畑区分、田畑名称を取得する。
             //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            TahataList = new();
-            TahataList.AddRange(dbContext.M00040田畑名称s.
+            TahataLists = new();
+            TahataLists.AddRange(dbContext.M00040田畑名称s.
                 OrderBy(m => m.田畑区分).
                 Select(m => new SelectListItem($"{m.田畑区分} {m.田畑名称}", $"{m.田畑区分}")));
 
             //２．１０．[収量等級] ドロップダウンリスト項目を取得する。		
             //	(1) m_10060_収量等級テーブルより、収量等級コード、収量を取得する。
             //	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            SyuryoTokyuList = new();
-            SyuryoTokyuList.AddRange(dbContext.M10060収量等級s.Where(m =>
+            SyuryoTokyuLists = new();
+            SyuryoTokyuLists.AddRange(dbContext.M10060収量等級s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
@@ -133,7 +133,7 @@ namespace NskWeb.Areas.F105.Models.D105030
 
             // ２．１１．[受委託者区分] ドロップダウンリスト項目を設定する。		
             // 	(1) 「受託者区分」ドロップダウンリスト項目に以下を設定する。
-            JuitakusyaKbnList =
+            JuitakusyaKbnLists =
             [
                 new($"{(int)F105Const.JuitakusyaKbn.None} {F105Const.JuitakusyaKbn.None.ToDescription()}", $"{(int)F105Const.JuitakusyaKbn.None}"),
                 new($"{(int)F105Const.JuitakusyaKbn.Jutaku} {F105Const.JuitakusyaKbn.Jutaku.ToDescription()}", $"{(int)F105Const.JuitakusyaKbn.Jutaku}"),
