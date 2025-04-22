@@ -78,7 +78,11 @@ builder.Services.AddScoped<CustomCookieAuthenticationEvents>();
 // 認証ミドルウェアサービスを追加
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
+    // Cookieの有効期限
     options.ExpireTimeSpan = TimeSpan.FromMinutes(ConfigUtil.GetInt(CoreConst.AUTHENTICATION_COOKIE_TIMEOUT));
+    // スライド式有効期限（true：有効期間の半分を過ぎた場合に新しい有効期限で新しいCookieを再発行する）
+    options.SlidingExpiration = true;
+
     options.Cookie.SameSite = SameSiteMode.Lax;
     options.Cookie.Path = "/";
     options.Cookie.Domain = ConfigUtil.Get("HttpCookies_Domain");

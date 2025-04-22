@@ -270,6 +270,7 @@ namespace CoreLibrary.Core.Utility
         /// <param name="boolHeaderOnOff">ヘッダ有無</param>
         /// <param name="strSeparatorFont">セパレーター</param>
         /// <param name="boolBomOnOff">BOMコード有無</param>
+        /// <param name="boolZenkakuReplaceFlg">全角置換フラグ</param>
         /// <param name="db">DBコンテキスト</param>
         /// <param name="message">エラーメッセージ（出力パラメータ）</param>
         /// <returns>処理成否</returns>
@@ -283,6 +284,7 @@ namespace CoreLibrary.Core.Utility
                                         bool boolHeaderOnOff,
                                         string strSeparatorFont,
                                         bool boolBomOnOff,
+                                        bool boolZenkakuReplaceFlg,
                                         DbContext db,
                                         ref string message)
         {
@@ -302,6 +304,7 @@ namespace CoreLibrary.Core.Utility
                                             null,
                                             strSeparatorFont,
                                             boolBomOnOff,
+                                            boolZenkakuReplaceFlg,
                                             db,
                                             connection,
                                             false,
@@ -381,6 +384,7 @@ namespace CoreLibrary.Core.Utility
         /// <param name="listHeader">ヘッダ文字列リスト</param>
         /// <param name="strSeparatorFont">セパレーター</param>
         /// <param name="boolBomOnOff">BOMコード有無</param>
+        /// <param name="boolZenkakuReplaceFlg">全角置換フラグ</param>
         /// <param name="db">DBコンテキスト</param>
         /// <param name="message">エラーメッセージ（出力パラメータ）</param>
         /// <returns>処理成否</returns>
@@ -393,6 +397,7 @@ namespace CoreLibrary.Core.Utility
                                             List<string> listHeader,
                                             string strSeparatorFont,
                                             bool boolBomOnOff,
+                                            bool boolZenkakuReplaceFlg,
                                             DbContext db,
                                             ref string message)
         {
@@ -412,6 +417,7 @@ namespace CoreLibrary.Core.Utility
                                             listHeader,
                                             strSeparatorFont,
                                             boolBomOnOff,
+                                            boolZenkakuReplaceFlg,
                                             db,
                                             connection,
                                             true,
@@ -440,6 +446,7 @@ namespace CoreLibrary.Core.Utility
         /// <param name="boolHeaderOnOff">ヘッダ有無</param>
         /// <param name="strSeparatorFont">セパレーター</param>
         /// <param name="boolBomOnOff">BOMコード有無</param>
+        /// <param name="boolZenkakuReplaceFlg">全角置換フラグ</param>
         /// <param name="db">DBコンテキスト</param>
         /// <param name="isExecSql">SQL本体実行かどうか（true：SQL本体実行の場合）</param>
         /// <param name="message">エラーメッセージ（出力パラメータ）</param>
@@ -455,6 +462,7 @@ namespace CoreLibrary.Core.Utility
                                                 List<string> listHeader,
                                                 string strSeparatorFont,
                                                 bool boolBomOnOff,
+                                                bool boolZenkakuReplaceFlg,
                                                 DbContext db,
                                                 NpgsqlConnection connection,
                                                 bool isExecSql,
@@ -517,7 +525,7 @@ namespace CoreLibrary.Core.Utility
                         headerList = headerInfos.Select(x => x.LogicalName).ToList();
                     }
 
-                    headerList.ForEach(x => AddItem(headerStr, separator, x));
+                    headerList.ForEach(x => AddItem(headerStr, separator, boolZenkakuReplaceFlg, x));
                 }
 
                 // CSVファイル名
@@ -625,9 +633,20 @@ namespace CoreLibrary.Core.Utility
                         }
                         else
                         {
-                            // データ中にダブルクォーテーションがある場合は、直前にダブルクォーテーションをひとつ付加する。
-                            // データの囲み　→　データはすべて「""」で囲む。
-                            dataStr.Append(string.Format("\"{0}\"", record[i].ToString().Replace("\"", "\"\"")));
+                            if (boolZenkakuReplaceFlg)
+                            {
+                                // 全角置換
+                                // "（半角ダブルクオーテーション）をすべて”（全角ダブルクォーテーション）に置き換える。
+                                // ,（半角カンマ）をすべて，（全角カンマ）に置き換える。
+                                // データの囲み　→　データはすべて「""」で囲む。
+                                dataStr.Append(string.Format("\"{0}\"", record[i].ToString().Replace("\"", "”").Replace(",", "，")));
+                            }
+                            else
+                            {
+                                // データ中にダブルクォーテーションがある場合は、直前にダブルクォーテーションをひとつ付加する。
+                                // データの囲み　→　データはすべて「""」で囲む。
+                                dataStr.Append(string.Format("\"{0}\"", record[i].ToString().Replace("\"", "\"\"")));
+                            }
                         }
 
                         if (i == record.FieldCount - 1)
@@ -1047,8 +1066,9 @@ namespace CoreLibrary.Core.Utility
         /// </summary>
         /// <param name="sb">StringBuilder</param>
         /// <param name="separator">区切り文字</param>
+        /// <param name="isReplaceZenkaku">全角置換フラグ</param>
         /// <param name="item">値</param>
-        private static void AddItem(StringBuilder sb, string separator, string item)
+        private static void AddItem(StringBuilder sb, string separator, bool isReplaceZenkaku, string item)
         {
             if (sb.Length != 0)
             {
@@ -1063,9 +1083,20 @@ namespace CoreLibrary.Core.Utility
             }
             else
             {
-                // データ中にダブルクォーテーションがある場合は、直前にダブルクォーテーションをひとつ付加する。
-                // データの囲み　→　データはすべて「""」で囲む。
-                sb.Append(string.Format("\"{0}\"", item.Replace("\"", "\"\"")));
+                if (isReplaceZenkaku)
+                {
+                    // 全角置換
+                    // "（半角ダブルクオーテーション）をすべて”（全角ダブルクォーテーション）に置き換える。
+                    // ,（半角カンマ）をすべて，（全角カンマ）に置き換える。
+                    // データの囲み　→　データはすべて「""」で囲む。
+                    sb.Append(string.Format("\"{0}\"", item.Replace("\"", "”").Replace(",", "，")));
+                }
+                else
+                {
+                    // データ中にダブルクォーテーションがある場合は、直前にダブルクォーテーションをひとつ付加する。
+                    // データの囲み　→　データはすべて「""」で囲む。
+                    sb.Append(string.Format("\"{0}\"", item.Replace("\"", "\"\"")));
+                }
             }
         }
 
@@ -1418,6 +1449,8 @@ namespace CoreLibrary.Core.Utility
                         Separator = string.IsNullOrEmpty(joken.SeparatorFont) ? CoreConst.Separator.COMMA.ToString("d") : joken.SeparatorFont,
                         // BOMコード有無
                         BomCdUmu = CommonFuncUtil.GetFlagStr(joken.BomOnOff),
+                        // 全角置換フラグ
+                        ZenkakuReplaceFlg = CommonFuncUtil.GetFlagStr(joken.ZenkakuReplaceFlg),
                         // 登録ユーザID
                         InsertUserId = param.UserId,
                         // 登録日時
@@ -1538,6 +1571,7 @@ namespace CoreLibrary.Core.Utility
                                             joken.Headers,
                                             joken.SeparatorFont,
                                             joken.BomOnOff,
+                                            joken.ZenkakuReplaceFlg,
                                             db,
                                             connection,
                                             isExecSql,
@@ -1704,6 +1738,7 @@ namespace CoreLibrary.Core.Utility
                 HeaderOnOff = joken.HeaderOnOff;
                 SeparatorFont = GetSeparator(joken.SeparatorFont);
                 BomOnOff = joken.BomOnOff;
+                ZenkakuReplaceFlg = joken.ZenkakuReplaceFlg;
             }
 
             /// <summary>
@@ -1721,6 +1756,7 @@ namespace CoreLibrary.Core.Utility
                 Headers = joken.Headers;
                 SeparatorFont = GetSeparator(joken.SeparatorFont);
                 BomOnOff = joken.BomOnOff;
+                ZenkakuReplaceFlg = joken.ZenkakuReplaceFlg;
             }
 
             /// <summary>
@@ -1772,6 +1808,11 @@ namespace CoreLibrary.Core.Utility
             /// BOMコード有無
             /// </summary>
             public bool BomOnOff { get; set; }
+
+            /// <summary>
+            /// 全角置換フラグ
+            /// </summary>
+            public bool ZenkakuReplaceFlg { get; set; }
         }
 
         /// <summary>

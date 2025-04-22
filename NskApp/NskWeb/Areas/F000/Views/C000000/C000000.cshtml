@@ -13,7 +13,9 @@
 <body>
     <script>
         $(function () {
-            closeOtherWindows();
+            setTimeout(() => {
+                closeOtherWindows();
+            }, 1);
             window.open('@Url.Content("~/Static/Close.html")', '_self').close();
         });
 

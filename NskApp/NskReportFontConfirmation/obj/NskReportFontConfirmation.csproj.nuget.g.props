@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <RestoreSuccess Condition=" '$(RestoreSuccess)' == '' ">True</RestoreSuccess>
+    <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
+    <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
+    <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\a_kurotaki\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.13.2</NuGetToolVersion>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <SourceRoot Include="C:\Users\a_kurotaki\.nuget\packages\" />
+    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgMicrosoft_Web_WebView2 Condition=" '$(PkgMicrosoft_Web_WebView2)' == '' ">C:\Users\a_kurotaki\.nuget\packages\microsoft.web.webview2\1.0.864.35</PkgMicrosoft_Web_WebView2>
+    <PkgMicrosoft_CodeAnalysis_Analyzers Condition=" '$(PkgMicrosoft_CodeAnalysis_Analyzers)' == '' ">C:\Users\a_kurotaki\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.3</PkgMicrosoft_CodeAnalysis_Analyzers>
+    <PkgMESCIUS_ActiveReports_Core_DataProviders Condition=" '$(PkgMESCIUS_ActiveReports_Core_DataProviders)' == '' ">C:\Users\a_kurotaki\.nuget\packages\mescius.activereports.core.dataproviders\3.0.0</PkgMESCIUS_ActiveReports_Core_DataProviders>
+    <PkgMESCIUS_ActiveReports_ja Condition=" '$(PkgMESCIUS_ActiveReports_ja)' == '' ">C:\Users\a_kurotaki\.nuget\packages\mescius.activereports.ja\18.0.2</PkgMESCIUS_ActiveReports_ja>
+    <PkgMESCIUS_ActiveReports_Chart_Win_ja Condition=" '$(PkgMESCIUS_ActiveReports_Chart_Win_ja)' == '' ">C:\Users\a_kurotaki\.nuget\packages\mescius.activereports.chart.win.ja\18.0.2</PkgMESCIUS_ActiveReports_Chart_Win_ja>
+    <PkgMESCIUS_ActiveReports_Viewer_Common_ja Condition=" '$(PkgMESCIUS_ActiveReports_Viewer_Common_ja)' == '' ">C:\Users\a_kurotaki\.nuget\packages\mescius.activereports.viewer.common.ja\18.0.2</PkgMESCIUS_ActiveReports_Viewer_Common_ja>
+    <PkgMESCIUS_ActiveReports_Viewer_Win_ja Condition=" '$(PkgMESCIUS_ActiveReports_Viewer_Win_ja)' == '' ">C:\Users\a_kurotaki\.nuget\packages\mescius.activereports.viewer.win.ja\18.0.2</PkgMESCIUS_ActiveReports_Viewer_Win_ja>
+  </PropertyGroup>
+</Project>

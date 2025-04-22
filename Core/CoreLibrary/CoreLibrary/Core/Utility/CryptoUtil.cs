@@ -49,7 +49,7 @@ namespace CoreLibrary.Core.Utility
 
                     // Keyはハッシュ値を設定
                     var salt = GetSalt();
-                    var phrase = CoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
+                    var phrase = SystemCoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
                     aes.Key = GetSHA256(fileName, salt, phrase);
 
                     using (var outStream = new MemoryStream())
@@ -112,7 +112,7 @@ namespace CoreLibrary.Core.Utility
                     inStream.Read(salt, 0, salt.Length);
 
                     // Keyはハッシュ値を設定
-                    var phrase = CoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
+                    var phrase = SystemCoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
                     aes.Key = GetSHA256(fileName, salt, phrase);
 
                     using (var outStream = new MemoryStream())
@@ -168,7 +168,7 @@ namespace CoreLibrary.Core.Utility
                     inStream.Read(salt, 0, salt.Length);
 
                     // Keyはハッシュ値を設定
-                    var phrase = CoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
+                    var phrase = SystemCoreConfigUtil.Get(CoreConst.CORE_CONFIG_KEY_PHRASE);
                     aes.Key = GetSHA256(fileName, salt, phrase);
 
                     using (var outStream = new MemoryStream())

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj": {}
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj": {}
   },
   "projects": {
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj",
         "projectName": "CommonLibrary",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -100,14 +100,14 @@
         }
       }
     },
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj",
         "projectName": "CoreLibrary",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -129,14 +129,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
               },
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj"
               },
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj"
               }
             }
           }
@@ -185,14 +185,14 @@
         }
       }
     },
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj",
         "projectName": "ModelLibrary",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -214,8 +214,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
               }
             }
           }
@@ -273,14 +273,14 @@
         }
       }
     },
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj",
         "projectName": "ReportServiceClient",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\ReportServiceClient.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ReportServiceClient\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -302,8 +302,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
               }
             }
           }
@@ -343,14 +343,14 @@
         }
       }
     },
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj",
         "projectName": "NskAppModelLibrary",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -372,8 +372,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\ModelLibrary\\ModelLibrary.csproj"
               }
             }
           }
@@ -413,14 +413,14 @@
         }
       }
     },
-    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj": {
+    "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj",
+        "projectUniqueName": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj",
         "projectName": "NSK_B102101",
-        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj",
+        "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\NSK_B102101.csproj",
         "packagesPath": "C:\\Users\\a_kurotaki\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\obj\\",
+        "outputPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NSK_B102101\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -442,14 +442,14 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CommonLibrary\\CommonLibrary.csproj"
               },
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\Core\\CoreLibrary\\CoreLibrary\\CoreLibrary.csproj"
               },
-              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj": {
-                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn - コピー\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj"
+              "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj": {
+                "projectPath": "C:\\Users\\a_kurotaki\\Desktop\\ICS_資料\\svn\\trunk\\02_Source\\NOSAIWeb\\NskApp\\NskAppModelLibrary\\NskAppModelLibrary.csproj"
               }
             }
           }

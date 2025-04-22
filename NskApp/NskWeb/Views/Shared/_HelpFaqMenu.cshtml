@@ -7,7 +7,8 @@
     <ul>
         @foreach (var item in helpMenu)
         {
-            <li><a href="javascript: windowSizeOpen('@Url.Action("HelpLink", "C000000", new { area = "F000" })?hh=@item.Hash', 'help', 1000, 600);closeNavi();">
+            <li>
+                <a href="javascript: windowSizeOpen('@Url.Action("HelpLink", "C000000", new { area = "F000" })?hh=@item.Hash', 'help', window.outerWidth, window.outerHeight);closeNavi();">
                     <i class="bi bi-file-earmark-fill"></i><em>@item.Text</em>
                 </a>
             </li>
