@@ -36,7 +36,7 @@ namespace NskWeb.Areas.F105.Models.D105190
         /// <summary>
         /// 利用可能な支所一覧
         /// </summary>
-        public List<Shisho> ShishoList { get; set; } = new();
+        public List<Shisho> ShishoLists { get; set; } = new();
 
         /// <summary>
         /// セッション情報取得
@@ -60,7 +60,7 @@ namespace NskWeb.Areas.F105.Models.D105190
 
 
             // 利用可能な支所一覧
-            ShishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
+            ShishoLists = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
         }
     }
 }

@@ -414,8 +414,8 @@ namespace NskWeb.Areas.F105.Controllers
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
             // 追加行のインデックスを取得
-            List<D105030HikiukeRecord> diff = model.HikiukeSearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105030HikiukeRecord? addRow = diff.LastOrDefault();
+            List<D105030HikiukeRecord> diffs = model.HikiukeSearchResult.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030HikiukeRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {
@@ -886,8 +886,8 @@ namespace NskWeb.Areas.F105.Controllers
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
             // 追加行のインデックスを取得
-            List<D105030RuibetsuSetteiRecord> diff = model.RuibetsuSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105030RuibetsuSetteiRecord? addRow = diff.LastOrDefault();
+            List<D105030RuibetsuSetteiRecord> diffs = model.RuibetsuSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030RuibetsuSetteiRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {
@@ -1078,8 +1078,8 @@ namespace NskWeb.Areas.F105.Controllers
             SessionUtil.Set(SESS_D105030, model, HttpContext);
 
             // 追加行のインデックスを取得
-            List<D105030KikenDankaiKbnRecord> diff = model.KikenDankaiKbn.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105030KikenDankaiKbnRecord? addRow = diff.LastOrDefault();
+            List<D105030KikenDankaiKbnRecord> diffs = model.KikenDankaiKbn.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105030KikenDankaiKbnRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {
@@ -1356,9 +1356,9 @@ namespace NskWeb.Areas.F105.Controllers
                 target.InitializeDropdonwList(dbContext, sessionInfo);
 
                 options.Add("<option value=\"\"></option>");
-                for (int i = 0; i < target.SelectKyosaiKingakuList.Count; i++)
+                for (int i = 0; i < target.SelectKyosaiKingakuLists.Count; i++)
                 {
-                    options.Add($"<option value=\"{target.SelectKyosaiKingakuList[i].Value}\">{target.SelectKyosaiKingakuList[i].Text}</option>");
+                    options.Add($"<option value=\"{target.SelectKyosaiKingakuLists[i].Value}\">{target.SelectKyosaiKingakuLists[i].Text}</option>");
                 }
             }
 

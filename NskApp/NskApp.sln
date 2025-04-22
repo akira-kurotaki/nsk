@@ -124,6 +124,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSK_B107080", "NSK_B107080\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSK_B107100", "NSK_B107100\NSK_B107100.csproj", "{978C3107-7712-453B-89C6-12CEF15D1EB2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NSK_P103040", "NSK_P103040\NSK_P103040.csproj", "{EEA77538-638C-ED99-7AF7-81B8F359ADF5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -366,6 +368,10 @@ Global
 		{978C3107-7712-453B-89C6-12CEF15D1EB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{978C3107-7712-453B-89C6-12CEF15D1EB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{978C3107-7712-453B-89C6-12CEF15D1EB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EEA77538-638C-ED99-7AF7-81B8F359ADF5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EEA77538-638C-ED99-7AF7-81B8F359ADF5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EEA77538-638C-ED99-7AF7-81B8F359ADF5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EEA77538-638C-ED99-7AF7-81B8F359ADF5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

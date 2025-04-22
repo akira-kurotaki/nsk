@@ -354,6 +354,7 @@ namespace NSK_B105090.Models
                         // ソート条件1が出力されていた場合、カンマを付与する
                         query.Append(", ");
                     }
+                    isPutOrder = true;
                     switch (int.Parse(batchJoken.OrderBy2))
                     {
                         case (int)CoreLibrary.Core.Consts.CoreConst.SortOrder.DESC:

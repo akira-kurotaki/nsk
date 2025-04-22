@@ -192,16 +192,16 @@ namespace NSK_B111040
 
                 // ５．１．バッチ予約状況取得
                 // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-                BatchYoyaku? batchYoyakuList = GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message).FirstOrDefault();
+                BatchYoyaku? batchYoyaku = GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message).FirstOrDefault();
 
                 // ５．１．１．[引数：バッチID]に一致するバッチ予約状況が取得できない場合、[変数：エラーメッセージ]を設定し、「１０．」へ進む。
-                if (batchYoyakuList is not null && intAllCnt != 0)
+                if (batchYoyaku is not null && intAllCnt != 0)
                 {
 
                     // ５．１．２．取得した「バッチ予約状況」から値を取得し変数に設定する。
-                    if (batchYoyakuList.BatchYoyakuId != string.Empty)
+                    if (batchYoyaku.BatchYoyakuId != string.Empty)
                     {
-                        batchYoyakuId = batchYoyakuList.BatchYoyakuId;
+                        batchYoyakuId = batchYoyaku.BatchYoyakuId;
                     }
                     else
                     {

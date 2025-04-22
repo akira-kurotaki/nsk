@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ActiveReportsLayout Version="3.5" PrintWidth="16337.01" DocumentName="ActiveReports Document" ScriptLang="C#" MasterReport="0" CompatibilityMode="CrossPlatform">
+  <StyleSheet>
+    <Style Name="Normal" Value="font-style: normal; text-decoration: none; font-weight: normal; font-size: 10pt; background-color: transparent; color: Black; text-align: left; vertical-align: top; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading1" Value="font-size: 16pt; font-weight: bold; font-style: inherit; font-family: &quot;ＭＳ ゴシック&quot;; ddo-char-set: 186" />
+    <Style Name="Heading2" Value="font-size: 14pt; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; font-style: inherit; ddo-char-set: 186" />
+    <Style Name="Heading3" Value="font-size: 13pt; font-weight: bold; font-family: &quot;ＭＳ ゴシック&quot;; font-style: inherit; ddo-char-set: 186" />
+  </StyleSheet>
+  <Sections>
+    <Section Type="PageHeader" Name="PageHeader" Height="2080.898" BackColor="16777215">
+      <Control Type="AR.Label" Name="nensan" Tag="nensan" Left="4409.28" Top="351.36" Width="2160" Height="718.5601" Caption="令和 7年産" Style="font-size: 18pt; text-align: right; vertical-align: middle" />
+      <Control Type="AR.Label" Name="kyosaimokuteki" Tag="kyosaimokuteki_name" Left="6569.28" Top="351.36" Width="1260" Height="718.56" Caption="水稲" Style="font-size: 18pt; text-align: center; vertical-align: middle" />
+      <Control Type="AR.Label" Name="Label15" Tag="title" Left="7829.28" Top="351.36" Width="3409.921" Height="718.56" Caption="基準統計単収一覧" Style="font-size: 18pt; text-align: left; vertical-align: middle" />
+      <Control Type="AR.Label" Name="Label18" Tag="date_title" Left="105.12" Top="1349.28" Width="900" Height="439.2" Caption="類区分" Style="font-size: 12pt; text-align: center; vertical-align: middle" />
+      <Control Type="AR.Label" Name="ruikbnName" Tag="date_title" Left="2868.48" Top="1349.28" Width="4324.32" Height="439.2" Caption="" Style="font-size: 12pt; text-align: left; vertical-align: middle" />
+      <Control Type="AR.Label" Name="ruikbn" Tag="date_title" Left="1548" Top="1349.28" Width="900.0002" Height="439.2" Caption="" Style="font-size: 12pt; text-align: center; vertical-align: middle" />
+      <Control Type="AR.Field" Name="outputData" Left="13849.92" Top="551.52" Width="1990.081" Height="286.2992" Text="" CanGrow="0" Style="font-family: ＭＳ ゴシック; font-size: 10pt; text-align: center; vertical-align: middle; white-space: nowrap; ddo-char-set: 1; ddo-shrink-to-fit: none; ddo-wrap-mode: nowrap" />
+      <Control Type="AR.Label" Name="Label2" Left="13162.5" Top="551.52" Width="688.0037" Height="286.2992" Caption="日付：" Style="font-family: ＭＳ ゴシック; font-size: 10pt; text-align: left; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Line" Name="Line1" X1="106.56" Y1="1980" X2="15929.28" Y2="1980" LineWeight="3" />
+    </Section>
+    <Section Type="GroupHeader" Name="GroupHeader1" Height="598.0948" RepeatStyle="4" BackColor="16777215" NewPage="1">
+      <Control Type="AR.Field" Name="textBox21" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="105.12" Top="237.6" Width="2763.36" Height="360" Text="統計単収地域コード" Style="font-family: ＭＳ ゴシック; font-size: 12pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="textBox22" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="2868.48" Top="237.6" Width="3669.12" Height="360" Text="統計単収地域名" Style="font-family: ＭＳ ゴシック; font-size: 12pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+      <Control Type="AR.Field" Name="textBox23" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="6537.602" Top="237.6" Width="3126.24" Height="360" Text="統計単収" Style="font-family: ＭＳ ゴシック; font-size: 12pt; text-align: center; vertical-align: middle; ddo-char-set: 1" />
+    </Section>
+    <Section Type="Detail" Name="Detail" Height="332.5984" BackColor="16777215">
+      <Control Type="AR.Field" Name="txtNo" DataField="toukeitansyuChiikiCd" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="105.12" Top="-1.278977E-12" Width="2763.36" Height="360" Text="" calendar="Gregorian" Style="font-family: ＭＳ ゴシック; font-size: 10pt; text-align: center; vertical-align: middle" />
+      <Control Type="AR.Field" Name="txtKanyushaCd" DataField="toukeitansyuChiikMei" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="2868.48" Top="-1.278977E-12" Width="3669.12" Height="360" Text="" Style="font-family: ＭＳ ゴシック; font-size: 10pt; text-align: left; vertical-align: middle; ddo-char-set: 1" LineSpacing="3" />
+      <Control Type="AR.Field" Name="txtHojinFullNm" DataField="toukeitansyu" Tag="" BorderLeftStyle="1" BorderTopStyle="1" BorderRightStyle="1" BorderBottomStyle="1" Left="6537.602" Top="-1.278977E-12" Width="3126.24" Height="360" Text="" Style="font-family: ＭＳ ゴシック; font-size: 10pt; text-align: right; vertical-align: middle; white-space: inherit; ddo-char-set: 1; ddo-wrap-mode: char-wrap" LineSpacing="3" />
+    </Section>
+    <Section Type="GroupFooter" Name="GroupFooter1" Height="0" BackColor="16777215" />
+    <Section Type="PageFooter" Name="PageFooter" Height="1291.04" BackColor="16777215">
+      <Control Type="AR.Line" Name="Line2" X1="106.56" Y1="269.28" X2="15929.28" Y2="269.28" LineWeight="3" />
+      <Control Type="AR.ReportInfo" Name="ReportInfo1" Left="14400" Top="720" Width="1440" Height="288" FormatString="{PageNumber} / {PageCount}" Style="font-family: ＭＳ ゴシック; font-size: 10pt; font-weight: bold; text-align: right; vertical-align: middle; ddo-char-set: 1" />
+    </Section>
+  </Sections>
+  <ReportComponentTray />
+  <PageSettings LeftMargin="850" RightMargin="850" TopMargin="850" BottomMargin="850" PaperSize="9" PaperWidth="11906" PaperHeight="16838" PaperName="" Orientation="2" />
+  <Parameters />
+</ActiveReportsLayout>

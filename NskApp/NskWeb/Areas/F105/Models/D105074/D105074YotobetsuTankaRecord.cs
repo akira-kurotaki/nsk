@@ -25,10 +25,10 @@ namespace NskWeb.Areas.F105.Models.D105074
 
         /// <summary>用途区分ドロップダウンリスト選択値</summary>
         [NotMapped]
-        public List<SelectListItem> YotoKbnList { get; set; } = new();
+        public List<SelectListItem> YotoKbnLists { get; set; } = new();
         /// <summary>適用単価ドロップダウンリスト選択値</summary>
         [NotMapped]
-        public List<SelectListItem> TekiyoTankaList { get; set; } = new();
+        public List<SelectListItem> TekiyoTankaLists { get; set; } = new();
 
         /// <summary>
         /// srcオブジェクトとの比較

@@ -1,0 +1,178 @@
+@{
+    // Layout = "~/Views/Shared/_LayoutBodyOnly.cshtml";
+    ViewBag.HeaderPatternId = CoreConst.HEADER_PATTERN_ID_1;
+}
+@model NskWeb.Areas.F205.Models.D205080.D205080Model
+
+@using (Html.BeginForm("Init", "D205080", FormMethod.Post, new { id = "D205080Form", spellcheck = "false", autocomplete = "off" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="table-responsive table-thead-container">
+        <div class="main_title btn_group_left mt_5">
+            <h3>仮渡し金振込消込み（インターフェース）</h3>
+        </div>
+        <div class="clearfix"></div>
+    </div>
+    <br />
+    <div class="table-responsive table-thead-container" style="height:50rem">
+        <!-- Information Section -->
+        <div class="btn_area">
+            <label>年産:</label>
+            <label style="padding-left: 180px;">@Model.D205080Info.SNensanHyoka</label>
+            <br />
+            <label>共済目的:</label>
+            <label style="padding-left: 150px;">@Model.KyosaiMokutekiMeisho</label>
+            <br />
+        </div>
+        <br />
+        <br />
+
+        @* 計算処理 エリア*@
+        <h4 class="sub_title">
+            消込み
+        </h4>
+
+        <div style="display: flex; align-items: center; height: 1.5em;">
+            @Html.ValidationMessageFor(model => model.MessageArea, "", new { @class = "text-danger", @id = "validationMessage", style = "min-height: 1.5em; line-height: 1.5em; margin-top: 0.5rem; display: block;" })
+        </div>
+
+        <div class="table-responsive" style="width: 80%;">
+            <table class="table common_table" style="width: 70%; border: none;">
+                <colgroup class="td_label"></colgroup>
+                <tr>
+                    <td style="width: 300px;">支所</td>
+                    <td style="vertical-align: middle;" colspan="2">
+                            @Html.TodofukenDropDownList(TodofukenDropDownListUtil.KbnSbt.Shisho, Model.TodofukenDropDownList, "",
+                                         new { @class = "form-select form-select-lg", id = "ShishoCd", name = "ShishoCd", @title = "選択項目" })
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width: 300px;">対象データ振替日</td>
+                    <td style="vertical-align: middle;" colspan="2">
+                        <div class="input-group date date-picker">
+                            @Html.EditorFor(model => model.TaishoFurikaeDate,
+                                     new
+                                     {
+                                         htmlAttributes = new
+                                         {
+                                             id = "TaishoFurikaeDate",
+                                             @class = "form-control date-picker",
+                                             maxlength = 10,
+                                             tabindex = 103,
+                                             @readonly = "readonly",
+                                             style = "background-color: white;"
+                                         }
+                                     })
+                            <div class="input-group-text input-group-addon" title="カレンダーを表示">
+                                <span class="bi bi-calendar"></span>
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.TaishoFurikaeDate, "", new { @class = "text-danger" })
+                    </td>
+                </tr>
+
+
+            </table>
+        </div>
+
+        @* ボタンエリア *@
+        <br />
+        <br />
+        <div style="display: flex; justify-content: flex-end; width: 100%; position: absolute; right: 5%; padding: 0;">
+            <button type="button" class="btn btn-primary mt_15" id="homeBtn" style="width: 120px;">戻る</button>
+            <button type="button" class="btn btn-warning mt_15" id="exeBtn" style="width: 120px;">実行</button>
+        </div>
+
+    </div>
+    @* 実行ボタン押下時のダイアログ *@
+    @Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ90001", "仮渡し金振込消込み（インターフェース）バッチ"), "OK", "キャンセル")
+}
+
+@section scripts {
+    <script type="text/javascript">
+        // 更新権限が無い場合、「実行」ボタンを無効化
+        window.onload = function() {
+            var exeBtn = document.getElementById('exeBtn');
+
+            var updateKengenFlg = @Model.UpdateKengenFlg.ToString().ToLower();
+            console.log(updateKengenFlg);
+            if (updateKengenFlg) {
+                exeBtn.disabled = false;
+            } else {
+                exeBtn.disabled = true;
+            }
+        }
+
+        // 戻るボタン：確認OK押下時にポータル画面へ遷移
+        $("#homeBtn").on("click", function () {
+            // メッセージエリア1の初期化
+            validationMessage.textContent = "";
+            validationMessage.style.setProperty('color', 'red', 'important');
+
+            window.location.href = "/"; 
+        });
+
+        $(function () {
+        @* 実行ボタンを押下 *@
+            $("#exeBtn").click(function () {
+                // メッセージエリア1の初期化
+                validationMessage.textContent = "";
+                validationMessage.style.setProperty('color', 'red', 'important');
+
+                var shishoCd = $("#ShishoCd").val();
+                var taishoFurikaeDate = $("#TaishoFurikaeDate").val().trim();
+                if (!taishoFurikaeDate) {
+                    validationMessage.textContent = "@MessageUtil.Get("ME00001", "対象データ振替日", "")";
+                    return;
+                }
+
+                if (!shishoCd) {
+                    validationMessage.textContent = "@MessageUtil.Get("ME00001", "支所", "")";
+                    return;
+                }
+
+                if (!taishoFurikaeDate) {
+                validationMessage.textContent = "@MessageUtil.Get("ME00001", "対象データ振替日", "")";
+                return;
+                }
+          
+                @* 確認ダイアログを表示 *@
+                @Html.ShowConfirm("insertDialog");
+         });
+
+        @* 実行ボタン:確認ダイアログにOKを押下後の処理 *@
+            $("#insertConfirm").click(function () {
+
+                console.log($("#ShishoCd").val());
+                var url = '@Url.Action("CreatBatchReport", "D205080", new { area = "F205" })';
+                var formData = new FormData($('#D205080Form').get(0));
+                formData.append("ShishoCd", $("#ShishoCd").val());
+                @* 対象データ振替日も送信 *@
+                formData.append("TaishoFurikaeDate", $("#TaishoFurikaeDate").val());
+                console.log($("#TaishoFurikaeDate").val());
+
+                 $.ajax({
+                    type: 'POST',
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    data: formData,
+                    dataType: 'json',
+                    url: url,
+                }).done(function (data) {
+                    if (data.success) {
+                        // 処理成功時
+                        validationMessage.textContent = data.message;
+                        validationMessage.style.setProperty('color', 'black', 'important');
+                    } else {
+                        // エラー時
+                        validationMessage.textContent = data.message;
+                    }
+                }).fail(function (jqXHR, textStatus, errorThrown) {
+                    // AJAXリクエストが失敗した場合
+                    validationMessage.textContent = "@MessageUtil.Get("ME01645", "サーバーリクエスト")";
+                });
+            })
+        });
+    </script>
+}

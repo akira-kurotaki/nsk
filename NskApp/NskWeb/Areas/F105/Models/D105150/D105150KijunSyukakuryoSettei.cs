@@ -6,12 +6,8 @@ using System.Text;
 using NskAppModelLibrary.Models;
 using System.Data;
 using NskWeb.Common.Models;
-using NskWeb.Areas.F105.Models.D105030;
 using NskCommonLibrary.Core.Consts;
 using System.Reflection;
-using ModelLibrary.Models;
-using CoreLibrary.Core.Dto;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using CoreLibrary.Core.Utility;
 
 namespace NskWeb.Areas.F105.Models.D105150
@@ -27,7 +23,7 @@ namespace NskWeb.Areas.F105.Models.D105150
         public string MessageArea2 { get; set; } = string.Empty;
 
         /// <summary>類区分リスト</summary>
-        public List<SelectListItem> RuiKbnList { get; set; } = new();
+        public List<SelectListItem> RuiKbnLists { get; set; } = new();
 
         /// <summary>検索条件</summary>
         public D105150SearchCondition SearchCondition { get; set; } = new();
@@ -49,8 +45,8 @@ namespace NskWeb.Areas.F105.Models.D105150
         public void InitializeDropdonwList(NskAppContext dbContext, D105150SessionInfo sessionInfo)
         {
             // ２．３．「類区分情報リスト」を取得する。
-            RuiKbnList = new();
-            RuiKbnList.AddRange(dbContext.M00020類名称s.Where(x =>
+            RuiKbnLists = new();
+            RuiKbnLists.AddRange(dbContext.M00020類名称s.Where(x =>
                 (x.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(x => x.類区分).
                 Select(x => new SelectListItem($"{x.類区分} {x.類短縮名称}", $"{x.類区分}"))

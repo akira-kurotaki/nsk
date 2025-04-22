@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.EntityFrameworkCore.Storage;
+using ModelLibrary.Models;
 using NskAppModelLibrary.Context;
 using NskWeb.Areas.F111.Consts;
 using NskWeb.Areas.F111.Models.D111010;
@@ -185,36 +186,31 @@ namespace NskWeb.Areas.F111.Controllers
             // １．バッチ予約状況確認
             // １．１．バッチ予約状況取得
             // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-            List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+            List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
             // バッチ予約が存在する場合、
             if (intAllCnt >= 1)
             {
 
                 // バッチ予約が存在する場合
-                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchStatus == BatchUtil.BATCH_STATUS_WAITING);
+                if (batchYoyaku is not null)
                 {
+                    // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
+                    model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
 
-                    if (batchYoyaku.BatchStatus == BatchUtil.BATCH_STATUS_WAITING)
-                    {
-                        // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
-                        model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
+                    ModelState.AddModelError("MessageArea1", model.MessageArea1);
 
-                        ModelState.AddModelError("MessageArea1", model.MessageArea1);
+                    // 画面制御用パラメータ取得
+                    GetConrtollParam(ref model);
 
-                        // 画面制御用パラメータ取得
-                        GetConrtollParam(ref model);
+                    // メッセージ反映のため部分ビューを構築する
+                    // 返却用パラメータ
+                    JsonResult messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
 
-                        // メッセージ反映のため部分ビューを構築する
-                        // 返却用パラメータ
-                        JsonResult messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
-
-                        return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
-
-                    }
+                    return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
 
                 }
-
             }
 
 
@@ -278,32 +274,28 @@ namespace NskWeb.Areas.F111.Controllers
             // ２．バッチ予約状況確認
             // ２．１．バッチ予約状況取得
             // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-            List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+            List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
             // バッチ予約が存在する場合、
             if (intAllCnt >= 1)
             {
 
                 // バッチ予約が存在する場合
-                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchStatus == BatchUtil.BATCH_STATUS_WAITING);
+                if (batchYoyaku is not null)
                 {
+                    // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
+                    model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
 
-                    if (batchYoyaku.BatchStatus == BatchUtil.BATCH_STATUS_WAITING)
-                    {
-                        // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
-                        model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
+                    ModelState.AddModelError("MessageArea1", model.MessageArea1);
 
-                        ModelState.AddModelError("MessageArea1", model.MessageArea1);
+                    // 画面制御用パラメータ取得
+                    GetConrtollParam(ref model);
 
-                        // 画面制御用パラメータ取得
-                        GetConrtollParam(ref model);
+                    // メッセージ反映のため部分ビューを構築する
+                    messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
 
-                        // メッセージ反映のため部分ビューを構築する
-                        messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
-
-                        return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
-
-                    }
+                    return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
 
                 }
 
@@ -417,34 +409,29 @@ namespace NskWeb.Areas.F111.Controllers
             // ２．バッチ予約状況確認
             // ２．１．バッチ予約状況取得
             // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-            List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+            List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
             // バッチ予約が存在する場合、
             if (intAllCnt >= 1)
             {
 
                 // バッチ予約が存在する場合
-                foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchStatus == BatchUtil.BATCH_STATUS_WAITING);
+                if (batchYoyaku is not null)
                 {
+                    // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
+                    model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
 
-                    if (batchYoyaku.BatchStatus == BatchUtil.BATCH_STATUS_WAITING)
-                    {
-                        // １．２．未実行のバッチが予約されていた場合、[メッセージエリア１]に以下のメッセージを表示して処理を中止する。
-                        model.MessageArea1 = MessageUtil.Get("ME10019", "交付金計算");
+                    ModelState.AddModelError("MessageArea1", model.MessageArea1);
 
-                        ModelState.AddModelError("MessageArea1", model.MessageArea1);
+                    // 画面制御用パラメータ取得
+                    GetConrtollParam(ref model);
 
-                        // 画面制御用パラメータ取得
-                        GetConrtollParam(ref model);
+                    // メッセージ反映のため部分ビューを構築する
+                    // 返却用パラメータ
+                    JsonResult messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
 
-                        // メッセージ反映のため部分ビューを構築する
-                        // 返却用パラメータ
-                        JsonResult messageArea1 = PartialViewAsJson("_D111010KoufukinKeisan", model, model.MessageArea1);
-
-                        return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
-
-                    }
-
+                    return Json(new { messageArea1 = messageArea1.Value, model.noneKoufukaiFlg, model.batchYoyakuFlg, model.syokaiKoufukaiFlg, model.saishinChoshuGakuNyuryokuzumiFlg });
                 }
 
             }
@@ -722,23 +709,18 @@ namespace NskWeb.Areas.F111.Controllers
                 string message = string.Empty;
 
                 // バッチ予約状況取得（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-                List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
+                List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(param, boolAllCntFlg, ref intAllCnt, ref message);
 
                 // バッチ予約が存在する場合、
                 if (intAllCnt >= 1)
                 {
 
                     // バッチ予約が存在する場合
-                    foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                    BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchStatus == BatchUtil.BATCH_STATUS_WAITING);
+                    if (batchYoyaku is not null)
                     {
-
-                        if (batchYoyaku.BatchStatus == BatchUtil.BATCH_STATUS_WAITING)
-                        {
-                            // 未実行のバッチ予約が存在する場合
-                            model.batchYoyakuFlg = true;
-                            break;
-                        }
-
+                        // 未実行のバッチ予約が存在する場合
+                        model.batchYoyakuFlg = true;
                     }
                 }
 

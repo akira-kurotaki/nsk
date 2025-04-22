@@ -199,10 +199,10 @@ namespace NSK_B109040
                     // エラーメッセージ（出力パラメータ）
                     string message = string.Empty;
                     // バッチ予約状況取得登録（BatchUtil.GetBatchYoyakuList()）を呼び出し、バッチ予約状況を取得する。
-                    List<BatchYoyaku> batchYoyakuList = BatchUtil.GetBatchYoyakuList(batchYoyakuListparam, boolAllCntFlg, ref intAllCnt, ref message);
+                    List<BatchYoyaku> batchYoyakus = BatchUtil.GetBatchYoyakuList(batchYoyakuListparam, boolAllCntFlg, ref intAllCnt, ref message);
 
                     // バッチ予約が存在しない場合、
-                    if (batchYoyakuList.Count == 0)
+                    if (batchYoyakus.Count == 0)
                     {
                         // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
                         //（"ME01645" 引数{0} ：パラメータの取得)
@@ -210,11 +210,20 @@ namespace NSK_B109040
                     }
 
                     // バッチ予約が存在する場合
-                    foreach (BatchYoyaku batchYoyaku in batchYoyakuList)
+                    BatchYoyaku? batchYoyaku = batchYoyakus.FirstOrDefault(x => x.BatchId == nBid);
+                    // [引数：バッチID]に一致する場合
+                    if (batchYoyaku is not null)
                     {
                         // 取得した「バッチ予約状況」から値を取得し変数に設定する。
-                        // [変数：バッチ予約ユーザID] = [バッチ予約情報：予約ユーザID]
+                        // バッチ予約ユーザID = バッチ予約情報.予約ユーザID
                         batchYoyakuId = batchYoyaku.BatchYoyakuId;
+                    }
+                    // [引数：バッチID]に一致するバッチ予約状況が取得できない場合、
+                    else
+                    {
+                        // 以下のエラーメッセージを[変数：エラーメッセージ] に設定し、ERRORログに出力して「１０．」へ進む。
+                        //（"ME01645" 引数{0} ：パラメータの取得)
+                        throw new AppException("ME01645", MessageUtil.Get("ME01645", "パラメータの取得"));
                     }
 
                     // ４．DB接続
@@ -435,14 +444,14 @@ namespace NSK_B109040
                                     ];
 
                                     // 2行目の内容
-                                    List<string> dataStart =
+                                    List<string> dataStartRowValues =
                                     [
                                         NskCommon.CoreConst.DATA_START,
                                         DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
                                     ];
 
                                     // 最終行の内容
-                                    List<string> dataEnd =
+                                    List<string> dataEndRowValues =
                                     [
                                         NskCommon.CoreConst.DATA_END,
                                         DateUtil.GetSysDateTime().ToString("yyyy/MM/dd HH:mm:ss")
@@ -450,12 +459,12 @@ namespace NSK_B109040
 
                                     // 配列の内容を出力する
                                     writer.Write(CsvUtil.GetLine(header.ToArray()));
-                                    writer.Write(CsvUtil.GetLine(dataStart.ToArray()));
+                                    writer.Write(CsvUtil.GetLine(dataStartRowValues.ToArray()));
                                     foreach (List<string> dataRecord in dataRecords)
                                     {
                                         writer.Write(CsvUtil.GetLine(dataRecord.ToArray()));
                                     }
-                                    writer.Write(CsvUtil.GetLine(dataEnd.ToArray()));
+                                    writer.Write(CsvUtil.GetLine(dataEndRowValues.ToArray()));
                                 }
                             }
                         }

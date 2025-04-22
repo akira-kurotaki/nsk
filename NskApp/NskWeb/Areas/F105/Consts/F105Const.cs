@@ -76,10 +76,10 @@ namespace NskWeb.Areas.F105.Consts
         {
             /// <summary>加入</summary>
             [Description("加入")]
-            MEMBER,
+            Member,
             /// <summary>未加入</summary>
             [Description("未加入")]
-            NO_MEMBER,
+            NoMember,
         }
 
 
@@ -93,7 +93,7 @@ namespace NskWeb.Areas.F105.Consts
             Kojin = 1,
             /// <summary>農作物共済資格団体</summary>
             [Description("農作物共済資格団体")]
-            NSK,
+            Nsk,
             /// <summary>法人</summary>
             [Description("法人")]
             Hojin = 10,

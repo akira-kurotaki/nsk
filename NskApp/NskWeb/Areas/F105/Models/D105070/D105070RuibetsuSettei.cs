@@ -21,17 +21,17 @@ namespace NskWeb.Areas.F105.Models.D105070
         public string MessageArea5 { get; set; } = string.Empty;
 
         /// <summary>引受区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> RuiKbnList { get; set; } = new();
+        public List<SelectListItem> RuiKbnLists { get; set; } = new();
         /// <summary>引受方式ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HikiukeHoushikiList { get; set; } = new();
+        public List<SelectListItem> HikiukeHoushikiLists { get; set; } = new();
         /// <summary>補償割合ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> HoshoWariaiList { get; set; } = new();
+        public List<SelectListItem> HoshoWariaiLists { get; set; } = new();
         /// <summary>一筆半損特約ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> IppitsuHansonTokuyakuList { get; set; } = new();
+        public List<SelectListItem> IppitsuHansonTokuyakuLists { get; set; } = new();
         /// <summary>担い手区分ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> NinaiteKbnList { get; set; } = new();
+        public List<SelectListItem> NinaiteKbnLists { get; set; } = new();
         /// <summary>収穫量確認方法ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> SyukakuryoKakuninHouhouList { get; set; } = new();
+        public List<SelectListItem> SyukakuryoKakuninHouhouLists { get; set; } = new();
 
         /// <summary>
         /// コンストラクタ
@@ -52,8 +52,8 @@ namespace NskWeb.Areas.F105.Models.D105070
             // ２．３．１２．[類区分]ドロップダウンリスト項目を取得する。
             // 	(1) m_00020_類名称テーブルより、類区分、類名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            RuiKbnList = new();
-            RuiKbnList.AddRange(dbContext.M00020類名称s.Where(m =>
+            RuiKbnLists = new();
+            RuiKbnLists.AddRange(dbContext.M00020類名称s.Where(m =>
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(m => m.類区分).
                 Select(m => new SelectListItem($"{m.類区分} {m.類名称}", $"{m.類区分}")));
@@ -61,8 +61,8 @@ namespace NskWeb.Areas.F105.Models.D105070
             // ２．３．１３．[引受方式]ドロップダウンリスト項目を取得する。		
             // 	(1) m_10170_選択引受方式テーブルより、引受方式、引受方式名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HikiukeHoushikiList = new();
-            HikiukeHoushikiList.AddRange(dbContext.M10170選択引受方式s.Where(m =>
+            HikiukeHoushikiLists = new();
+            HikiukeHoushikiLists.AddRange(dbContext.M10170選択引受方式s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(m => m.引受方式).
@@ -71,32 +71,32 @@ namespace NskWeb.Areas.F105.Models.D105070
             // ２．３．１４．[補償割合]ドロップダウンリスト項目を取得する。	
             // 	(1) m_20030_補償割合名称テーブルより、補償割合コード、補償割合短縮名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            HoshoWariaiList = new();
-            HoshoWariaiList.AddRange(dbContext.M20030補償割合名称s.
+            HoshoWariaiLists = new();
+            HoshoWariaiLists.AddRange(dbContext.M20030補償割合名称s.
                 OrderBy(m => m.補償割合コード).
                 Select(m => new SelectListItem($"{m.補償割合コード} {m.補償割合短縮名称}", $"{m.補償割合コード}")));
 
             // ２．３．１５．[一筆半損特約]ドロップダウンリスト項目を取得する。	
             // 	(1) m_10100_特約区分名称テーブルより、特約区分、特約区分名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            IppitsuHansonTokuyakuList = new();
-            IppitsuHansonTokuyakuList.AddRange(dbContext.M10100特約区分名称s.
+            IppitsuHansonTokuyakuLists = new();
+            IppitsuHansonTokuyakuLists.AddRange(dbContext.M10100特約区分名称s.
                 OrderBy(m => m.特約区分).
                 Select(m => new SelectListItem($"{m.特約区分} {m.特約区分名称}", $"{m.特約区分}")));
 
             // ２．３．１６．[担い手]ドロップダウンリスト項目を取得する。		
             // 	(1) m_00180_担手農家区分名称テーブルより、担手農家区分、担手農家区分名称を取得する。
             // 	(2) 取得した結果をドロップダウンリストの項目として設定する。
-            NinaiteKbnList = new();
-            NinaiteKbnList.AddRange(dbContext.M00180担手農家区分名称s.
+            NinaiteKbnLists = new();
+            NinaiteKbnLists.AddRange(dbContext.M00180担手農家区分名称s.
                 OrderBy(m => m.担手農家区分).
                 Select(m => new SelectListItem($"{m.担手農家区分} {m.担手農家区分名称}", $"{m.担手農家区分}")));
 
             // ２．３．１７．[収穫量確認方法]ドロップダウンリスト項目を取得する。		
             // (1) m_00070_収穫量確認方法名称テーブルから収穫量確認方法、収穫量確認方法名称を取得する。
             // (2) 取得した結果をドロップダウンリストの項目として設定する。
-            SyukakuryoKakuninHouhouList = new();
-            SyukakuryoKakuninHouhouList.AddRange(dbContext.M00070収穫量確認方法名称s.
+            SyukakuryoKakuninHouhouLists = new();
+            SyukakuryoKakuninHouhouLists.AddRange(dbContext.M00070収穫量確認方法名称s.
                 OrderBy(m => m.収穫量確認方法).
                 Select(m => new SelectListItem($"{m.収穫量確認方法} {m.収穫量確認方法名称}", $"{m.収穫量確認方法}")));
         }
@@ -468,7 +468,7 @@ namespace NskWeb.Areas.F105.Models.D105070
         /// <returns></returns>
         public string GetRuiKbnNm(string ruiKbn)
         {
-            SelectListItem item = RuiKbnList.FirstOrDefault(x => x.Value == ruiKbn);
+            SelectListItem item = RuiKbnLists.FirstOrDefault(x => x.Value == ruiKbn);
             return item?.Text.Split(" ")[1] ?? string.Empty;
         }
 
@@ -479,7 +479,7 @@ namespace NskWeb.Areas.F105.Models.D105070
         /// <returns></returns>
         public string GetHikiukeHoushikiNm(string hikiukehoushikiCd)
         {
-            SelectListItem item = HikiukeHoushikiList.FirstOrDefault(x => x.Value == hikiukehoushikiCd);
+            SelectListItem item = HikiukeHoushikiLists.FirstOrDefault(x => x.Value == hikiukehoushikiCd);
             return item?.Text.Split(" ")[1] ?? string.Empty;
         }
 

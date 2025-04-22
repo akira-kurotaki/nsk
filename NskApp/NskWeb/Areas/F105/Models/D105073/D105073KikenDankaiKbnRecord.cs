@@ -26,7 +26,7 @@ namespace NskWeb.Areas.F105.Models.D105073
 
         /// <summary>危険段階区分ドロップダウンリスト選択値</summary>
         [NotMapped]
-        public List<SelectListItem> KikenDankaiKbnList { get; set; } = new();
+        public List<SelectListItem> KikenDankaiKbnLists { get; set; } = new();
 
         /// <summary>
         /// srcオブジェクトとの比較

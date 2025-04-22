@@ -32,8 +32,8 @@ namespace NskWeb.Areas.F105.Models.D105073
             {
                 // (1) m_10230_危険段階テーブルより、危険段階区分を取得する。
                 // (2) 取得した結果をドロップダウンリストの項目として設定する。
-                rec.KikenDankaiKbnList = new();
-                rec.KikenDankaiKbnList.AddRange(dbContext.M10230危険段階s.Where(m =>
+                rec.KikenDankaiKbnLists = new();
+                rec.KikenDankaiKbnLists.AddRange(dbContext.M10230危険段階s.Where(m =>
                     (m.組合等コード == sessionInfo.KumiaitoCd) &&
                     (m.年産 == sessionInfo.Nensan) &&
                     (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&

@@ -141,12 +141,12 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Syurui,
-                                                               Model.HikiukeSearchResult.SyuruiList,
+                                                               Model.HikiukeSearchResult.SyuruiLists,
                                                                "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Kbn,
-                                                               Model.HikiukeSearchResult.KbnList,
+                                                               Model.HikiukeSearchResult.KbnLists,
                                                                "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                 </tr>
@@ -200,12 +200,12 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].Tahata,
-                                    Model.HikiukeSearchResult.TahataList,
+                                    Model.HikiukeSearchResult.TahataLists,
                                     "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].SyuryoTokyu,
-                                    Model.HikiukeSearchResult.SyuryoTokyuList,
+                                    Model.HikiukeSearchResult.SyuryoTokyuLists,
                                     "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                 </tr>
@@ -237,7 +237,7 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.HikiukeSearchResult.DispRecords[i].JuitakushaKbn,
-                                    Model.HikiukeSearchResult.JuitakusyaKbnList,
+                                    Model.HikiukeSearchResult.JuitakusyaKbnLists,
                                     "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>

@@ -18,7 +18,7 @@
         <!-- Information Section -->
         <div class="btn_area">
             <label>年産:</label>
-            <label style="padding-left: 180px;">@Model.D205020Info.SNensanHikiuke</label>
+            <label style="padding-left: 180px;">@Model.D205020Info.SNensanHyoka</label>
             <br />
             <label>共済目的:</label>
             <label style="padding-left: 150px;">@Model.KyosaiMokutekiMeisho</label>
@@ -85,20 +85,25 @@
 
     @* 実行ボタン押下時のダイアログ *@
     @Html.Confirm("insertDialog", "insertConfirm", "確認", MessageUtil.Get("MQ90001", "仮渡し金計算処理（全相殺）バッチ"), "OK", "キャンセル")
-   
-    @* 戻るボタン押下時のダイアログ *@
-    @Html.Confirm("backDialog", "confirmBack", "確認", MessageUtil.Get("MQ00019", "ポータル"), "OK", "キャンセル")
 }
 
 @section scripts {
     <script type="text/javascript">
-        // 「戻る」ボタン押下 → 確認ダイアログ表示
-        $("#homeBtn").on("click", function () {
-        @Html.ShowConfirm("backDialog");
-        });
+        // 更新権限が無い場合、「実行」ボタンを無効化
+        window.onload = function() {
+            var exeBtn = document.getElementById('exeBtn');
 
-        // 戻るボタン：確認OK押下時にポータル画面へ遷移
-        $("#confirmBack").on("click", function () {
+            var updateKengenFlg = @Model.UpdateKengenFlg.ToString().ToLower();
+            console.log(updateKengenFlg);
+            if (updateKengenFlg) {
+                exeBtn.disabled = false;
+            } else {
+                exeBtn.disabled = true;
+            }
+        }
+
+        // 戻るボタン：押下時にポータル画面へ遷移
+        $("#homeBtn").on("click", function () {
             // メッセージエリア1の初期化
             validationMessage.textContent = "";
             validationMessage.style.setProperty('color', 'red', 'important');

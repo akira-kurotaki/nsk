@@ -21,7 +21,7 @@ namespace NskWeb.Areas.F105.Models.D105190
 
         /// <summary>類区分ドロップダウンリスト</summary>
         [Display(Name = "類区分ドロップダウンリスト")]
-        public List<SelectListItem> RuiKbnList { get; set; } = new();
+        public List<SelectListItem> RuiKbnLists { get; set; } = new();
 
         /// <summary>都道府県マルチドロップダウンリスト</summary>
         [Display(Name = "都道府県マルチドロップダウンリスト")]

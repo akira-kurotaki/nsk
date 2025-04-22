@@ -47,11 +47,11 @@ namespace NskWeb.Areas.F105.Models.D105150
 
 
         /// <summary>類区分リスト</summary>
-        public List<SelectListItem> RuiKbnList { get; set; } = new();
+        public List<SelectListItem> RuiKbnLists { get; set; } = new();
         /// <summary>営農対象外フラグリスト</summary>
-        public List<SelectListItem> EinoTaishogaiFlgList { get; set; } = new();
+        public List<SelectListItem> EinoTaishogaiFlgLists { get; set; } = new();
         /// <summary>産地別銘柄等コードリスト</summary>
-        public List<SelectListItem> SanchibetsuMeigaratoCdList { get; set; } = new();
+        public List<SelectListItem> SanchibetsuMeigaratoCdLists { get; set; } = new();
         
         #region "表示数・表示順"
         /// <summary>表示数</summary>
@@ -102,21 +102,21 @@ namespace NskWeb.Areas.F105.Models.D105150
         public void InitializeDropdonwList(NskAppContext dbContext, D105150SessionInfo sessionInfo)
         {
             // ２．３．「類区分情報リスト」を取得する。
-            RuiKbnList = new();
-            RuiKbnList.AddRange(dbContext.M00020類名称s.Where(x =>
+            RuiKbnLists = new();
+            RuiKbnLists.AddRange(dbContext.M00020類名称s.Where(x =>
                 (x.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.
                 OrderBy(x => x.類区分).
                 Select(x => new SelectListItem($"{x.類区分} {x.類短縮名称}", $"{x.類区分}")));
 
             // ２．４．「営農対象外フラグ情報リスト」を取得する。
-            EinoTaishogaiFlgList = new();
-            EinoTaishogaiFlgList.AddRange(dbContext.M00230営農対象名称s.
+            EinoTaishogaiFlgLists = new();
+            EinoTaishogaiFlgLists.AddRange(dbContext.M00230営農対象名称s.
                 OrderBy(x => x.営農対象外フラグ).
                 Select(x => new SelectListItem($"{x.営農対象外フラグ} {x.営農対象フラグ名称}", $"{x.営農対象外フラグ}")));
 
             // ２．５．「産地別銘柄等コード情報リスト」を取得する。
-            SanchibetsuMeigaratoCdList = new();
-            SanchibetsuMeigaratoCdList.AddRange(dbContext.M00130産地別銘柄名称設定s.Where(x =>
+            SanchibetsuMeigaratoCdLists = new();
+            SanchibetsuMeigaratoCdLists.AddRange(dbContext.M00130産地別銘柄名称設定s.Where(x =>
                 (x.組合等コード == sessionInfo.KumiaitoCd) &&
                 (x.年産 == sessionInfo.Nensan) &&
                 (x.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.

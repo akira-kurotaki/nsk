@@ -63,7 +63,7 @@
                                 sakutsukeJikiAttrs.Add("disabled", "true");
                         }
                         @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].SakutsukeJiki,
-                                 Model.YotobetsuTanka.SakutukeJikiList,
+                                 Model.YotobetsuTanka.SakutukeJikiLists,
                                  "", sakutsukeJikiAttrs)
                     </td>
                     <td>
@@ -74,11 +74,11 @@
                                 { "tabindex", tabIndex++ }
                             };
                             if (!Model.YotobetsuTanka.DispRecords[i].IsNewRec ||
-                                Model.YotobetsuTanka.DispRecords[i].YotoKbnList.Count == 0)
+                                Model.YotobetsuTanka.DispRecords[i].YotoKbnLists.Count == 0)
                                 yotoKbnAttrs.Add("disabled", "true");
                         }
                         @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].YotoKbn,
-                                 Model.YotobetsuTanka.DispRecords[i].YotoKbnList,
+                                 Model.YotobetsuTanka.DispRecords[i].YotoKbnLists,
                                  "", yotoKbnAttrs)
                     </td>
                     <td>
@@ -88,11 +88,11 @@
                                 { "class", "form-select form-select-lg" },
                                 { "tabindex", tabIndex++ }
                             };
-                            if (Model.YotobetsuTanka.DispRecords[i].TekiyoTankaList.Count == 0)
+                            if (Model.YotobetsuTanka.DispRecords[i].TekiyoTankaLists.Count == 0)
                                 tekiyoTankaAttrs.Add("disabled", "true");
                         }
                         @Html.DropDownListFor(model => model.YotobetsuTanka.DispRecords[i].TekiyoTanka,
-                                 Model.YotobetsuTanka.DispRecords[i].TekiyoTankaList,
+                                 Model.YotobetsuTanka.DispRecords[i].TekiyoTankaLists,
                                  "", tekiyoTankaAttrs)
                     </td>
                 </tr>

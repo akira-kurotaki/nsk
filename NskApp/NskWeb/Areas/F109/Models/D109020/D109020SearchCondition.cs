@@ -20,7 +20,7 @@ namespace NskWeb.Areas.F109.Models.D109020
         /// 支所リスト
         /// </summary>
         [NotMapped]
-        public List<SelectListItem> ShishoList { get; set; } = new();
+        public List<SelectListItem> ShishoLists { get; set; } = new();
 
         /// <summary>
         /// 画面入力値をこのこのクラスに反映する

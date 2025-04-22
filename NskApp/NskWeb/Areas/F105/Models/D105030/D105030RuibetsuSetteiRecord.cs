@@ -50,7 +50,7 @@ namespace NskWeb.Areas.F105.Models.D105030
 
         /// <summary>選択共済金額ドロップダウンリスト選択値</summary>
         [NotMapped]
-        public List<SelectListItem> SelectKyosaiKingakuList { get; set; } = new();
+        public List<SelectListItem> SelectKyosaiKingakuLists { get; set; } = new();
 
         /// <summary>
         /// srcオブジェクトとの比較
@@ -90,8 +90,8 @@ namespace NskWeb.Areas.F105.Models.D105030
             //      m_10210_単当共済金額用途.課税単価区分 = 0、かつm_10210_単当共済金額用途.推奨フラグ = 1のレコードを順位0として
             //      取得したデータを順位0となるようにドロップダウンリストに設定。
             //      それ以降にm_10210_単当共済金額用途.課税単価区分 = 0のレコードを追加で設定
-            SelectKyosaiKingakuList = new();
-            SelectKyosaiKingakuList.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
+            SelectKyosaiKingakuLists = new();
+            SelectKyosaiKingakuLists.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&
@@ -101,7 +101,7 @@ namespace NskWeb.Areas.F105.Models.D105030
                 )?.
                 OrderBy(m => m.単当共済金額順位).
                 Select(m => new SelectListItem($"0 {m.単当共済金額}", $"{m.単当共済金額順位}")));
-            SelectKyosaiKingakuList.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
+            SelectKyosaiKingakuLists.AddRange(dbContext.M10210単当共済金額用途s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) &&

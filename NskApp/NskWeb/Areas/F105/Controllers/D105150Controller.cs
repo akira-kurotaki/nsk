@@ -99,8 +99,8 @@ namespace NskWeb.Areas.F105.Controllers
                 (x.共済目的コード == sessionInfo.KyosaiMokutekiCd))?.共済目的名称 ?? string.Empty;
 
             // ２．２．「支所情報リスト」を取得する。
-            List<Shisho> shishoList = new();
-            shishoList.AddRange(dbContext.VShishoNms.Where(x =>
+            List<Shisho> shishos = new();
+            shishos.AddRange(dbContext.VShishoNms.Where(x =>
                 (x.KumiaitoCd == sessionInfo.KumiaitoCd) &&
                 (x.TodofukenCd == sessionInfo.TodofukenCd))?.
                 OrderBy(x => x.ShishoCd).
@@ -112,7 +112,7 @@ namespace NskWeb.Areas.F105.Controllers
                     ShishoNm = x.ShishoNm
                 }));
 
-            model = new (Syokuin, shishoList);
+            model = new (Syokuin, shishos);
 
             // ２．３．「類区分情報リスト」を取得する。
             // ２．４．「営農対象外フラグ情報リスト」を取得する。
@@ -348,8 +348,8 @@ namespace NskWeb.Areas.F105.Controllers
             model.KijunSyukakuryoSettei.AddPageData();
 
             // 追加行のインデックスを取得
-            List<D105150KijunSyukakuryoSetteiRecord> diff = model.KijunSyukakuryoSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
-            D105150KijunSyukakuryoSetteiRecord? addRow = diff.LastOrDefault();
+            List<D105150KijunSyukakuryoSetteiRecord> diffs = model.KijunSyukakuryoSettei.DispRecords.Except(beforeRecs)?.ToList() ?? new();
+            D105150KijunSyukakuryoSetteiRecord? addRow = diffs.LastOrDefault();
             int addRowIdx = -1;
             if (addRow is not null)
             {
@@ -708,8 +708,8 @@ namespace NskWeb.Areas.F105.Controllers
             string tokeiTanniChiikiNm = tokeiTaniChiiki?.統計単位地域名称 ?? string.Empty;
 
             // ２．２．[危険段階区分（料率）]ドロップダウンリスト項目を取得する。
-            List<SelectListItem> kikenDankaiKbnList = new();
-            kikenDankaiKbnList.AddRange(dbContext.M10230危険段階s.Where(m =>
+            List<SelectListItem> kikenDankaiKbns = new();
+            kikenDankaiKbns.AddRange(dbContext.M10230危険段階s.Where(m =>
                 (m.組合等コード == sessionInfo.KumiaitoCd) &&
                 (m.年産 == sessionInfo.Nensan) &&
                 (m.共済目的コード == sessionInfo.KyosaiMokutekiCd) //&&
@@ -725,9 +725,9 @@ namespace NskWeb.Areas.F105.Controllers
 
             List<string> options = new();
             options.Add("<option value=\"\"></option>");
-            for (int i = 0; i < kikenDankaiKbnList.Count; i++)
+            for (int i = 0; i < kikenDankaiKbns.Count; i++)
             {
-                options.Add($"<option value=\"{kikenDankaiKbnList[i].Value}\">{kikenDankaiKbnList[i].Text}</option>");
+                options.Add($"<option value=\"{kikenDankaiKbns[i].Value}\">{kikenDankaiKbns[i].Text}</option>");
             }
 
             // ２．３．部分ビューを構築する																																																						

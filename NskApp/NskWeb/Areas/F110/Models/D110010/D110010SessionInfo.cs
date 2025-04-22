@@ -40,7 +40,7 @@ namespace NskWeb.Areas.F110.Models.D110010
         /// <summary>
         /// 利用可能支所一覧
         /// </summary>
-        public List<Shisho> RiyokanoShishoList = new();
+        public List<Shisho> RiyokanoShishos = new();
 
         /// <summary>
         /// セッション情報取得
@@ -68,7 +68,7 @@ namespace NskWeb.Areas.F110.Models.D110010
             HikiukeJikkoTanniKbnHikiuke = potalModel?.SHikiukeJikkoTanniKbnHikiuke;
 
             // セッションから利用可能支所一覧情報取得
-            RiyokanoShishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
+            RiyokanoShishos = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
         }
     }
 }

@@ -27,7 +27,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <summary>加入状況</summary>
         [Display(Name = "加入状況")]
         [Required]
-        public F105Const.KanyuStateType? KanyuState { get; set; } = F105Const.KanyuStateType.NO_MEMBER;
+        public F105Const.KanyuStateType? KanyuState { get; set; } = F105Const.KanyuStateType.NoMember;
         /// <summary>加入形態</summary>
         [Display(Name = "加入形態")]
         [Required]
@@ -97,7 +97,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         public List<SelectListItem> KanyuKeitaiList { get; set; } = new();
 
         /// <summary>共通申請割引方法ドロップダウンリスト選択値</summary>
-        public List<SelectListItem> KyotuShinseitoWaribikiHouhoList { get; set; } = new();
+        public List<SelectListItem> KyotuShinseitoWaribikiHouhoLists { get; set; } = new();
 
         /// <summary>
         /// ドロップダウンリスト初期化
@@ -113,7 +113,7 @@ namespace NskWeb.Areas.F105.Models.D105030
             KanyuKeitaiList =
             [
                 new($"{(int)F105Const.KanyuKeitaiType.Kojin} {F105Const.KanyuKeitaiType.Kojin.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.Kojin}"),
-                new($"{(int)F105Const.KanyuKeitaiType.NSK} {F105Const.KanyuKeitaiType.NSK.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.NSK}"),
+                new($"{(int)F105Const.KanyuKeitaiType.Nsk} {F105Const.KanyuKeitaiType.Nsk.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.Nsk}"),
                 new($"{(int)F105Const.KanyuKeitaiType.Hojin} {F105Const.KanyuKeitaiType.Hojin.ToDescription()}", $"{(int)F105Const.KanyuKeitaiType.Hojin}"),
             ];
 
@@ -130,7 +130,7 @@ namespace NskWeb.Areas.F105.Models.D105030
         /// <param name="dbContext"></param>
         private void GetKyotuShinseitoWaribikiHouhoList(NskAppContext dbContext, D105030SessionInfo sessionInfo)
         {
-            KyotuShinseitoWaribikiHouhoList = new();
+            KyotuShinseitoWaribikiHouhoLists = new();
             StringBuilder query = new();
             query.Append(" SELECT ");         
             query.Append($"    共通申請等割引方法コード As \"{nameof(Query25Result.KyotuShinseitoWaribikiHohoCd)}\" ");       
@@ -152,7 +152,7 @@ namespace NskWeb.Areas.F105.Models.D105030
 
             List<Query25Result> results = new();
             results.AddRange(dbContext.Database.SqlQueryRaw<Query25Result>(query.ToString(), queryParams));
-            KyotuShinseitoWaribikiHouhoList.AddRange(results.Select(x =>
+            KyotuShinseitoWaribikiHouhoLists.AddRange(results.Select(x =>
                 new SelectListItem($"{x.KyotuShinseitoWaribikiHohoCd} {x.KyotuShinseitoWaribikiHohoNm}", x.KyotuShinseitoWaribikiHohoCd)));
         }
 

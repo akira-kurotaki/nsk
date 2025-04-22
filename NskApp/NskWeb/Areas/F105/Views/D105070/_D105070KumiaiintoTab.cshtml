@@ -54,11 +54,11 @@
                             <fieldset>
                                 <legend class="visually-hidden">加入状況</legend>
                                 @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
-                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.MEMBER.ToString(),
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.Member.ToString(),
                                                   new { @id = "KumiaiintoSettei_KanyuState_1", @class = "magic-radio", tabindex = tabIndex++ })
                                 <label for="KumiaiintoSettei_KanyuState_1">加入</label>
                                 @Html.RadioButtonFor(model => model.KumiaiintoSettei.KanyuState,
-                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NO_MEMBER.ToString(),
+                                                 NskWeb.Areas.F105.Consts.F105Const.KanyuStateType.NoMember.ToString(),
                                                   new { @id = "KumiaiintoSettei_KanyuState_2", @class = "magic-radio", tabindex = tabIndex++ })
                                 <label for="KumiaiintoSettei_KanyuState_2">未加入</label>
                             </fieldset>
@@ -72,7 +72,7 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.KumiaiintoSettei.KanyuKeitai,
-                                          Model.KumiaiintoSettei.KanyuKeitaiList,
+                                          Model.KumiaiintoSettei.KanyuKeitaiLists,
                                           "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                 </tr>
@@ -93,7 +93,7 @@
                     </td>
                     <td>
                         @Html.DropDownListFor(model => model.KumiaiintoSettei.KyosaiKingakuKaiteijiCd,
-                                          Model.KumiaiintoSettei.KyosaiKingakuKaiteijiList,
+                                          Model.KumiaiintoSettei.KyosaiKingakuKaiteijiLists,
                                           "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                 </tr>
@@ -150,7 +150,7 @@
                     </td>
                     <td rowspan="2">
                         @Html.DropDownListFor(model => model.KumiaiintoSettei.KyotuShinseiWaribikiHouho,
-                                 Model.KumiaiintoSettei.KyotuShinseitoWaribikiHouhoList,
+                                 Model.KumiaiintoSettei.KyotuShinseitoWaribikiHouhoLists,
                                  "", new { @class = "form-select form-select-lg", tabindex = tabIndex++ })
                     </td>
                     <td>

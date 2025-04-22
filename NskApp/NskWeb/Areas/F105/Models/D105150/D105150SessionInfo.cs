@@ -34,7 +34,7 @@ namespace NskWeb.Areas.F105.Models.D105150
         /// <summary>
         /// 利用可能な支所一覧
         /// </summary>
-        public List<Shisho> ShishoList { get; set; } = new();
+        public List<Shisho> ShishoLists { get; set; } = new();
 
         /// <summary>
         /// セッション情報取得
@@ -58,7 +58,7 @@ namespace NskWeb.Areas.F105.Models.D105150
             KyosaiMokutekiCd = potalModel?.SKyosaiMokutekiCd;
 
             // 利用可能な支所一覧
-            ShishoList = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
+            ShishoLists = SessionUtil.Get<List<Shisho>>(CoreConst.SESS_SHISHO_GROUP, context) ?? new();
         }
     }
 }

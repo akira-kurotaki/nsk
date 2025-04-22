@@ -70,5 +70,27 @@ namespace NskWeb.Areas.F205.Consts
         /// バッチID(205011BB)
         /// </summary>
         public const string BATCH_ID_NSK_205051B = "NSK_205051B";
+
+        // D205080
+
+        /// <summary>
+        /// 画面ID(D205080)
+        /// </summary>
+        public const string SCREEN_ID_D205080 = "D205080";
+
+        /// <summary>
+        /// セッションキー(D205080)
+        /// </summary>
+        public const string SESS_D205080 = "D205080_SCREEN";
+
+        /// <summary>
+        /// 予約を実行した処理名(205080D)
+        /// </summary>
+        public const string SCREEN_ID_NSK_D205080 = "NSK_205080D";
+
+        /// <summary>
+        /// バッチID(205081B)
+        /// </summary>
+        public const string BATCH_ID_NSK_205081B = "NSK_205081B";
     }
 }

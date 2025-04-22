@@ -151,7 +151,7 @@
                 </td>
                 <td>
                     @Html.DropDownListFor(model => model.SearchCondition.RuiKbn,
-                             Model.SearchCondition.RuiKbnList, "",
+                             Model.SearchCondition.RuiKbnLists, "",
                              new { @class = "form-select form-select-lg", tabindex = 111, @title = "選択項目" })
                 </td>
                 @*営農対象外フラグ*@
@@ -161,7 +161,7 @@
                 </td>
                 <td>
                     @Html.DropDownListFor(model => model.SearchCondition.EinoTaishogaiFlg,
-                             Model.SearchCondition.EinoTaishogaiFlgList, "",
+                             Model.SearchCondition.EinoTaishogaiFlgLists, "",
                              new { @class = "form-select form-select-lg", tabindex = 112, @title = "選択項目" })
                 </td>
             </tr>
@@ -175,7 +175,7 @@
                         <tr>
                             <td style="width:45%">
                                 @Html.DropDownListFor(model => model.SearchCondition.SanchibetsuMeigaratoCdFrom,
-                                         Model.SearchCondition.SanchibetsuMeigaratoCdList, "",
+                                         Model.SearchCondition.SanchibetsuMeigaratoCdLists, "",
                                          new { @class = "form-select form-select-lg", tabindex = 113, @title = "選択項目" })
                             </td>
                             <td class="text-center" style="width:10%">
@@ -183,7 +183,7 @@
                             </td>
                             <td style="width:45%">
                                 @Html.DropDownListFor(model => model.SearchCondition.SanchibetsuMeigaratoCdTo,
-                                         Model.SearchCondition.SanchibetsuMeigaratoCdList, "",
+                                         Model.SearchCondition.SanchibetsuMeigaratoCdLists, "",
                                          new { @class = "form-select form-select-lg", tabindex = 114, @title = "選択項目" })
                             </td>
                         </tr>
