@@ -139,5 +139,10 @@ namespace ModelLibrary.Context
         /// 一時ダンプファイル取得
         /// </summary>
         public DbSet<WDumpFileDownload> WDumpFileDownloads { get; set; }
+
+        /// <summary>
+        /// 一時ダンプファイル取得
+        /// </summary>
+        public DbSet<MCoreConfig> MCoreConfigs { get; set; }
     }
 }

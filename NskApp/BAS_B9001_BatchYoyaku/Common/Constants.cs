@@ -34,5 +34,6 @@
         /// 星：*
         /// </summary>
         public const string SYMBOL_STAR = "*";
+
     }
 }

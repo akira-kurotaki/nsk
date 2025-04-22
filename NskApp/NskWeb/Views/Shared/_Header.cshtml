@@ -125,7 +125,7 @@ else
 
         $('#UserInfoModifyConfirm').click(function () {
             $('#UserInfoModify').modal('hide');
-            myWindow = windowSizeOpen('@ConfigUtil.Get(InfraConst.USER_INFO_MODIFY_URL)?sm=@ScreenModeUtil.GetScreenMode(this.Context)', 'usermanagement', '1000', '600');
+            myWindow = windowSizeOpen('@ConfigUtil.Get(InfraConst.USER_INFO_MODIFY_URL)?sm=@ScreenModeUtil.GetScreenMode(this.Context)', 'usermanagement', window.outerWidth, window.outerHeight);
         });
 
         $('#toPortal').click(function () {

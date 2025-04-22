@@ -5,6 +5,7 @@ using CoreLibrary.Core.Dto;
 using CoreLibrary.Core.Exceptions;
 using CoreLibrary.Core.Extensions;
 using CoreLibrary.Core.Utility;
+using GrapeCity.DataVisualization.TypeScript;
 using ModelLibrary.Context;
 using ModelLibrary.Models;
 using NLog;
@@ -222,7 +223,7 @@ namespace BAS_B0002_CsvExp
                 if (result == Constants.BATCH_EXECUT_SUCCESS)
                 {
                     // 定数（設定ファイル）：CSV一時出力フォルダ\yyyyMMdd\HHmmss\（GUIDを生成したフォルダ名）\[変数：zipファイル名]の拡張子以外
-                    tempFolder = Path.Combine(ConfigUtil.Get(Constants.FILE_TEMP_FOLDER_PATH),
+                    tempFolder = Path.Combine(ConfigUtil.Get(Constants.FILE_TEMP_FOLDER_PATH).replace("{SystemKbn}", systemKbn),
                                                   systemDate.ToString("yyyyMMdd"),
                                                   systemDate.ToString("HHmmss"),
                                                   Guid.NewGuid().ToString(),
@@ -256,6 +257,7 @@ namespace BAS_B0002_CsvExp
                                                         Constants.FLG_1.Equals(csvJouken.HeaderUmu) ? true : false,
                                                         csvJouken.Separator,
                                                         Constants.FLG_1.Equals(csvJouken.BomCdUmu) ? true : false,
+                                                        Constants.FLG_1.Equals(csvJouken.ZenkakuReplaceFlg) ? true : false,
                                                         jigyoBb,
                                                         ref csvMessage);
 
@@ -273,6 +275,7 @@ namespace BAS_B0002_CsvExp
                                                             headerList,
                                                             csvJouken.Separator,
                                                             Constants.FLG_1.Equals(csvJouken.BomCdUmu) ? true : false,
+                                                            Constants.FLG_1.Equals(csvJouken.ZenkakuReplaceFlg) ? true : false,
                                                             jigyoBb,
                                                             ref csvMessage
                                                             );
@@ -303,9 +306,9 @@ namespace BAS_B0002_CsvExp
                         var zipFilePath = ZipUtil.CreateZip(tempFolder);
 
                         // Zipファイルを引数（設定ファイル）：zip保管フォルダ\yyyyMMdd\HHmmss\（GUIDを生成したフォルダ名）に移動する。
-                        var destDirPath = Path.Combine(ConfigUtil.Get(Constants.CSV_OUTPUT_FOLDER_PATH),
-                                                  systemDate.ToString("yyyyMMdd"),
-                                                  systemDate.ToString("HHmmss"),
+                        var destDirPath = Path.Combine(ConfigUtil.Get(Constants.CSV_OUTPUT_FOLDER_PATH).replace("{SystemKbn}", systemKbn),
+                                                          systemDate.ToString("yyyyMMdd"),
+                                                          systemDate.ToString("HHmmss"),
                                                           Guid.NewGuid().ToString());
                         FolderUtil.MoveFile(zipFilePath, destDirPath, Constants.BATCH_USER_ID, bid);
                     }

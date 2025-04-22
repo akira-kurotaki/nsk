@@ -91,5 +91,9 @@
         /// </summary>
         public const string D0401_UPLOAD_FOLDER = "D0401UploadFolder";
 
+        /// <summary>
+        /// 検索子画面呼び出し時の戻り値セット項目キー
+        /// </summary>
+        public const string SEARCH_COMMON_RETKEY = "key";
     }
 }

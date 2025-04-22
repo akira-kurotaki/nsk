@@ -49,5 +49,11 @@
         /// BOMコード有無
         /// </summary>
         public bool BomOnOff { get; set; }
+
+        /// <summary>
+        /// 全角置換フラグ
+        /// (デフォルト値：false）
+        /// </summary>
+        public bool ZenkakuReplaceFlg { get; set; }
     }
 }

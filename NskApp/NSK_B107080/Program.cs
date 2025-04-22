@@ -625,6 +625,8 @@ namespace NSK_B107080
                     errorMessage = MessageUtil.Get("MI10005");
                 }
 
+                int.Parse("str");
+
                 // ファイル出力終了ログ(END CSV作成 バッチ名)
                 logger.Info(
                     Core.CoreConst.LOG_END_KEYWORD + Core.CoreConst.HALF_WIDTH_SPACE +
@@ -813,8 +815,6 @@ namespace NSK_B107080
             sql.Append("    AND t_12040_組合員等別引受情報.共済目的コード = HK.共済目的コード");
             sql.Append("    AND t_12040_組合員等別引受情報.支所コード = HK.支所コード");
             sql.Append("    AND t_12040_組合員等別引受情報.引受回 = HK.引受回");
-            sql.Append("    WHERE t_12040_組合員等別引受情報.類区分 = '0' ");
-            sql.Append("    AND   t_12040_組合員等別引受情報.統計単位地域コード = '0' ");
             sql.Append(") ");
 
             // 取得項目
@@ -972,8 +972,8 @@ namespace NSK_B107080
             sql.Append("    AND HJ.共済目的コード = t_11010_個人設定.共済目的コード ");
             sql.Append("    AND HJ.組合員等コード = t_11010_個人設定.組合員等コード ");
             sql.Append("LEFT JOIN v_nogyosha AS NOGYOSHA2 ");
-            sql.Append("    ON  t_11010_個人設定.組合等コード = NOGYOSHA2.kumiaito_cd ");
-            sql.Append("    AND t_11010_個人設定.組合員等コード = NOGYOSHA2.kumiaiinto_cd ");
+            sql.Append("    ON  t_11010_個人設定.組合等コード = NOGYOSHA1.kumiaito_cd ");
+            sql.Append("    AND t_11010_個人設定.組合員等コード = NOGYOSHA1.kumiaiinto_cd ");
 
             // 検索条件
             sql.Append("WHERE 1 = 1 ");
@@ -1041,6 +1041,8 @@ namespace NSK_B107080
                 parameters.Add(new NpgsqlParameter("@KumiaiintoCdTo", batchJoken.JokenKumiaiintoCdEnd));
             }
 
+            sql.Append("AND HJ.類区分 = '0' ");
+            sql.Append("AND HJ.統計単位地域コード = '0' ");
             sql.Append("AND (COALESCE(HJ.納入額, 0) > 0 OR COALESCE(CJ.前回迄徴収額, 0) > 0) ");
 
             sql.Append($@"ORDER BY ");

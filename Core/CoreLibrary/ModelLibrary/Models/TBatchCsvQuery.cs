@@ -82,7 +82,7 @@ namespace ModelLibrary.Models
         public string HeaderUmu { get; set; }
 
         /// <summary>
-        /// ヘッダ文字列リスト
+        /// ヘッダリスト
         /// </summary>
         [Column("header_list")]
         public string HeaderList { get; set; }
@@ -102,6 +102,14 @@ namespace ModelLibrary.Models
         [Column("bom_cd_umu")]
         [StringLength(1)]
         public string BomCdUmu { get; set; }
+
+        /// <summary>
+        /// 全角置換フラグ
+        /// </summary>
+        [Required]
+        [Column("zenkaku_replace_flg")]
+        [StringLength(1)]
+        public string ZenkakuReplaceFlg { get; set; }
 
         /// <summary>
         /// 登録ユーザID

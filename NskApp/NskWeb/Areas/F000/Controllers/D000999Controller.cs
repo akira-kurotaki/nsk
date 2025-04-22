@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using ModelLibrary.Models;
 using System.Security.Claims;
+using System.Text;
 
 namespace NskWeb.Areas.F000.Controllers
 {
@@ -132,7 +133,7 @@ namespace NskWeb.Areas.F000.Controllers
                     var mSyokuin = getFimDb().MSyokuins.Where(
                                         s => s.UserId == model.UserId &&
                                         s.UserYukoStartYmd <= systemDate.Date &&
-                                        (s.UserYukoEndYmd == null || s.UserYukoEndYmd > systemDate.Date)).SingleOrDefault();
+                                        (s.UserYukoEndYmd == null || s.UserYukoEndYmd >= systemDate.Date)).SingleOrDefault();
                     if (mSyokuin == null)
                     {
                         // ユーザIDが存在しない
@@ -171,8 +172,9 @@ namespace NskWeb.Areas.F000.Controllers
                             // サーバーアクセスによる認証セッションの更新を許可するかどうか
                             AllowRefresh = true,
 
-                            // 認証チケットの有効期限、認証cookieタイムアウト（セッションタイムアウトと合わせる）
-                            ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(ConfigUtil.GetInt(CoreConst.SESSION_STATE_TIMEOUT)),
+                            // 認証チケットの有効期限、認証cookieタイムアウト、絶対的な有効期限
+                            // CookieAuthenticationOptions.ExpireTimeSpanより優先される
+                            //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(ConfigUtil.GetInt(CoreConst.SESSION_STATE_TIMEOUT)),
 
                             //cookieの有効期間を優先かsessionを優先か
                             //true:cookieが有効であれば、ブラウザを閉じても再ログインが必要ない
@@ -193,6 +195,7 @@ namespace NskWeb.Areas.F000.Controllers
                         Syokuin syokuin = new Syokuin
                         {
                             UserId = mSyokuin.UserId,
+                            UserKanriNo = mSyokuin.UserKanriNo,
                             TodofukenCd = mSyokuin.TodofukenCd,
                             KumiaitoCd = mSyokuin.KumiaitoCd,
                             ShishoCd = mSyokuin.ShishoCd,
@@ -274,7 +277,8 @@ namespace NskWeb.Areas.F000.Controllers
             }
 
             // パスワードチェック
-            if (!PasswordUtil.VerifyHashedPassword(mShokuin, mShokuin.Pwd, model.Password))
+            var oldPwdFlg = string.Empty;
+            if (!VerifyPassword(model, mShokuin, ref oldPwdFlg))
             {
                 // ログイン失敗
                 result = false;
@@ -300,6 +304,13 @@ namespace NskWeb.Areas.F000.Controllers
                 mShokuin.LoginDate = DateUtil.GetSysDateTime();
                 mShokuin.LockFlg = "0";
                 mShokuin.LoginFailCnt = 0;
+
+                // [変数：旧パスワードフラグ]が1（フラグON）の場合、[画面：パスワード]を[共通部品：パスワード暗号化]で暗号化した値を設定する。
+                // [変数：旧パスワードフラグ]が1（フラグON）でない場合は、変更しない。
+                if (CoreConst.FLG_ON.Equals(oldPwdFlg))
+                {
+                    mShokuin.Pwd = PasswordUtil.HashPassword(mShokuin, model.Password);
+                }
             }
             mShokuin.UpdateUserId = mShokuin.UserId;
             mShokuin.UpdateDate = DateUtil.GetSysDateTime();
@@ -333,8 +344,9 @@ namespace NskWeb.Areas.F000.Controllers
                 // サーバーアクセスによる認証セッションの更新を許可するかどうか
                 AllowRefresh = true,
 
-                // 認証チケットの有効期限、認証cookieタイムアウト（セッションタイムアウトと合わせる）
-                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(ConfigUtil.GetInt(CoreConst.SESSION_STATE_TIMEOUT)),
+                // 認証チケットの有効期限、認証cookieタイムアウト、絶対的な有効期限
+                // CookieAuthenticationOptions.ExpireTimeSpanより優先される
+                //ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(ConfigUtil.GetInt(CoreConst.SESSION_STATE_TIMEOUT)),
 
                 //cookieの有効期間を優先かsessionを優先か
                 //true:cookieが有効であれば、ブラウザを閉じても再ログインが必要ない
@@ -540,5 +552,37 @@ namespace NskWeb.Areas.F000.Controllers
                 AddClaimRole(claims, role);
             }
         }
+
+        /// <summary>
+        /// パスワードチェック
+        /// 新方式、旧方式の順にパスワード認証を行う
+        /// 旧方式のパスワード認証に成功した場合、旧パスワードフラグをON(1)にする。
+        /// </summary>
+        /// <param name="model">画面モデル</param>
+        /// <param name="mShokuin">ユーザ情報</param>
+        /// <param name="oldPwdFlg">旧パスワードフラグ（出力パラメータ）</param>
+        /// <returns>true：認証成功、false：認証失敗</returns>
+        private bool VerifyPassword(D000999Model model, MSyokuin mShokuin, ref string oldPwdFlg)
+        {
+            // [変数：旧パスワードフラグ]を"0"（フラグOFF）で作成する。
+            oldPwdFlg = CoreConst.FLG_OFF;
+
+            // 新方式パスワードチェック
+            if (PasswordUtil.VerifyHashedPassword(mShokuin, mShokuin.Pwd, model.Password))
+            {
+                return true;
+            }
+
+            // 旧方式パスワードチェック
+            if (mShokuin.Pwd == CryptoUtil.GetSHA256Hex(Encoding.ASCII.GetBytes(model.Password)))
+            {
+                // [変数：旧パスワードフラグ]をONにする。
+                oldPwdFlg = CoreConst.FLG_ON;
+                return true;
+            }
+
+            return false;
+        }
+
     }
 }

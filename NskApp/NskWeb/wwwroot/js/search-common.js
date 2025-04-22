@@ -40,7 +40,7 @@ function searchCommon(fnc, idCode, idName) {
     }
     url = "/" + aid + "/" + sid + "?key=" + idx;
     //alert("[" + url + "," + sid + "," + aid + "," + idx + "]");
-    const childwindow = window.open(url, 'childwindow', 'width=1000,height=600');
+    const childwindow = window.open(url, 'childwindow', 'width=1000,height=800');
 
 }
 function receiveValueFromChild(key, arr) {
@@ -76,7 +76,7 @@ function searchCommonSetName(fnc, idCode, idName) {
         default:
             return;
     }
-    url = "/" + aid + "/" + sid + "/GetNameByCode?key";
+    url = "/" + aid + "/" + sid + "/GetNameByCode";
     var targetCd = $("#" + idCode).val();
     var data = { "TargetCd": targetCd }
     $("#" + idName).val("");
